@@ -46,11 +46,12 @@ BaselineOfNewTools >> baseline: spec [
 					with: [ "Debugger Selector" ";
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #('NewTools-SpTextPresenterDecorators') ];
 			package: 'NewTools-DebuggerSelector';
-			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ]" spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ] ]
+			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #('NewTools-DebuggerSelector') ]" spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];
+		postLoadDoIt: #forceReloadSpecDev  ]
 ]
 
 { #category : #dependencies }
-BaselineOfNewTools >> postloadDoIt [
+BaselineOfNewTools >> forceReloadSpecDev [
 	Metacello new
 		githubUser: 'pharo-spec'
 			project: 'Spec'
