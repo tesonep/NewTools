@@ -11,7 +11,6 @@ BaselineOfNewTools >> baseline: spec [
 		for: #common
 		do: [ self
 				taskit: spec;
-				spec: spec;
 				sindarin: spec.
 
 			spec
@@ -51,19 +50,25 @@ BaselineOfNewTools >> baseline: spec [
 ]
 
 { #category : #dependencies }
+BaselineOfNewTools >> postloadDoIt [
+	Metacello new
+		githubUser: 'pharo-spec'
+			project: 'Spec'
+			commitish: 'master'
+			path: 'src';
+		baseline: 'Spec2';
+		onConflict: [ :e | e useIncoming ];
+		onUpgrade: [ :e | e useIncoming ];
+		ignoreImage;
+		load
+]
+
+{ #category : #dependencies }
 BaselineOfNewTools >> sindarin: spec [
 
 	spec 
 		baseline: 'Sindarin' 
 		with: [ spec repository: 'github://dupriezt/ScriptableDebugger' ]
-]
-
-{ #category : #dependencies }
-BaselineOfNewTools >> spec: spec [
-
-	spec 
-		baseline: 'Spec2'
-		with: [ spec repository: 'github://pharo-spec/Spec:master/src' ]
 ]
 
 { #category : #dependencies }
