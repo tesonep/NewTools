@@ -22,7 +22,7 @@ StDependencyAnalyser >> initializePresenters [
 			
 	treePresenter := self newTree
 		roots: self rootsForTest;
-		children: [ :aNode | aNode children ];
+		children: [ :aNode | self retrieveChildren: aNode ];
 		display: [ :aNode | aNode label ];
 		icon: [ :aNode | aNode icon ];
 		yourself.
@@ -46,6 +46,19 @@ StDependencyAnalyser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Dependency Analyser';
 		initialExtent: 1200@800
+]
+
+{ #category : #initialization }
+StDependencyAnalyser >> retrieveChildren: aNode [
+
+ 	^ aNode children 
+		collect: [ :each | 
+			DAPackageUnderAnalysisNode new
+				content: each;
+				cycle: false;
+				"treeModelParent: self;
+				browser: self browser;"
+				yourself ]
 ]
 
 { #category : #initialization }
