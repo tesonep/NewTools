@@ -10,12 +10,31 @@ Class {
 	#category : #'NewTools-CriticsBrowser'
 }
 
+{ #category : #example }
+StPackageChooserPresenter class >> example [
+
+	self new openWithSpec
+]
+
 { #category : #actions }
 StPackageChooserPresenter >> addAll [
+
+	selectedPackagesList items: 
+		(selectedPackagesList items, 
+		(packageList items sorted: #packageName ascending)).
+	packageList items: #().
+	packageList selectedItems: #()
+	
 ]
 
 { #category : #actions }
 StPackageChooserPresenter >> addSelected [
+
+	selectedPackagesList items: 
+		(selectedPackagesList items, 
+		(packageList selectedItems sorted: #packageName ascending)).
+	packageList items: ((packageList items \ packageList selectedItems) sorted: #packageName ascending).
+	packageList selectedItems: #()
 ]
 
 { #category : #initialization }
@@ -30,12 +49,13 @@ StPackageChooserPresenter >> initializePresenters [
 				add: (packageList := (self instantiate: SpFilteringSelectableListPresenter));
 				add: (buttonBar := SpBoxLayout newTopToBottom) expand: false;
 				yourself);
-			add: (selectedPackagesList := self newList);
+			add: (selectedPackagesList := (self instantiate: SpFilteringSelectableListPresenter));
 			yourself);
 		add: (actionBar := SpBoxLayout newLeftToRight hAlignEnd) expand: false;
 		yourself).
 
 	packageList display: [ :each | each packageName ].
+	selectedPackagesList display: [ :each | each packageName ].
 		
 	buttonBar 
 		add: (self newButton
@@ -81,15 +101,22 @@ StPackageChooserPresenter >> initializeWindow: aWindowPresenter [
 { #category : #accessing }
 StPackageChooserPresenter >> packages [
 
-	^ RPackageOrganizer default packages
+	^ RPackageOrganizer default packages sorted: #packageName ascending
 ]
 
 { #category : #actions }
 StPackageChooserPresenter >> removeAll [
+
+	selectedPackagesList items: #().
+	packageList items: self packages
 ]
 
 { #category : #actions }
 StPackageChooserPresenter >> removeSelected [
+
+	packageList items: ((packageList items, packageList selectedItems) sorted: #packageName ascending).
+	selectedPackagesList items: ((selectedPackagesList items \ selectedPackagesList selectedItems)  sorted: #packageName ascending).
+	selectedPackagesList selectedItems: #()
 ]
 
 { #category : #initialization }
