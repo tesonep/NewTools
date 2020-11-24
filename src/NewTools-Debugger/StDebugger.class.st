@@ -463,7 +463,9 @@ StDebugger >> createMissingMethod [
 		               self interruptedContext receiver class.
 	self createMissingMethodFor: msg in: chosenClass ]
 		on: Abort
-		do: [ ^ self ]
+		do: [ ^ self ].
+		
+	code takeKeyboardFocus 
 ]
 
 { #category : #actions }
@@ -696,6 +698,12 @@ StDebugger >> initializeStack [
 					  method isCompiledBlock
 						  ifTrue: [ method sourceNode sourceCode ]
 						  ifFalse: [ method selector ] ])
+				 sortFunction: nil;
+				 yourself);
+		addColumn: ((SpStringTableColumn
+				  title: 'Package'
+				  evaluated: [ :item | 
+					  item method methodClass package name asString ])
 				 sortFunction: nil;
 				 yourself).
 	stackTable transmitDo: [ :context | 
