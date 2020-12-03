@@ -91,18 +91,6 @@ StPlaygroundPagePresenter >> activateOnSingleClick [
 	"For compatibility, playground will not activate on single or double click (but in <meta+g>)"
 ]
 
-{ #category : #'private builder' }
-StPlaygroundPagePresenter >> buildMenu [
-	| menuSpec |
-	
-	menuSpec := (PragmaMenuBuilder 
-		pragmaKeyword: WorldState discoveredMenuPragmaKeyword 
-		model: self)
-		menuSpec.
-	^ menuSpec asMenuBarPresenter
-	
-]
-
 { #category : #accessing }
 StPlaygroundPagePresenter >> contents: aString [
 
@@ -113,6 +101,13 @@ StPlaygroundPagePresenter >> contents: aString [
 StPlaygroundPagePresenter >> defaultKeyboardFocus [
 
 	^ text
+]
+
+{ #category : #commands }
+StPlaygroundPagePresenter >> doEvaluateAllAndGo [
+
+	self selectAll.
+	self doEvaluateAndGo
 ]
 
 { #category : #commands }
@@ -127,7 +122,7 @@ StPlaygroundPagePresenter >> doEvaluateAndGo [
 			text insertErrorPopover: (SpCodePopoverErrorPresenter 
 				newCode: text 
 				message: e messageText) 
-		atIndex: text selectionInterval end - 1 ].
+		atIndex: text selectionInterval last - 1 ].
 	
 	activationBlock value: (StEvaluatedSelectionModel newValue: value)
 ]
@@ -144,13 +139,13 @@ StPlaygroundPagePresenter >> initializePresenters [
 	self initializeToolbar.
 	self initializeStatusbar.
 
-	text := self newCode
+	(text := self newCode)
 		interactionModel: StPlaygroundInteractionModel new;
 		lineNumbers: self showLineNumbers;
-		contextMenu: [ self menuActions asMenuPresenter ];
-		contextKeyBindings: self menuActions asKMCategory;
-		whenTextChangedDo: [ :aString | page contents: aString ];
-		yourself.
+		overridingContextMenu;
+		contextMenu: [ (self menuActionsFor: text) asMenuPresenter ];
+		contextKeyBindings: (self menuActionsFor: text) asKMCategory;
+		whenTextChangedDo: [ :aString | page contents: aString ].
 		
 	text eventHandler 
 		whenKeyUpDo: [ :event | self updateLineNumber ];
@@ -215,11 +210,16 @@ StPlaygroundPagePresenter >> loadPage: aFileReference [
 ]
 
 { #category : #private }
-StPlaygroundPagePresenter >> menuActions [
+StPlaygroundPagePresenter >> menuActionsFor: aCodePresenter [
 
 	^ CmCommandGroup forSpec
 		beRoot;
-		register: (StEvaluateCommand forSpecContext: self);
+		register: ((CmCommandGroup named: 'Extra') asSpecGroup
+			beDisplayedAsGroup;
+			register: (StEvaluateCommand forSpecContext: self);
+			yourself);
+		register: (aCodePresenter rootCommandsGroup name: 'Code');
+		register: (aCodePresenter editionCommandsGroup name: 'Edition');
 		register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
