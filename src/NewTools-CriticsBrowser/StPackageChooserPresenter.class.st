@@ -23,7 +23,7 @@ StPackageChooserPresenter >> addAll [
 		(selectedPackagesList items, 
 		(packageList items sorted: #packageName ascending)).
 	packageList items: #().
-	packageList selectedItems: #()
+	packageList selectItems: #()
 	
 ]
 
@@ -34,7 +34,67 @@ StPackageChooserPresenter >> addSelected [
 		(selectedPackagesList items, 
 		(packageList selectedItems sorted: #packageName ascending)).
 	packageList items: ((packageList items \ packageList selectedItems) sorted: #packageName ascending).
-	packageList selectedItems: #()
+	packageList selectItems: #()
+]
+
+{ #category : #initialization }
+StPackageChooserPresenter >> initalizeSelectedPackageList [
+	
+	selectedPackagesList 
+		contextMenu: self selectedPackageListMenu;		
+		display: [ :each | each packageName ]
+]
+
+{ #category : #initialization }
+StPackageChooserPresenter >> initializeActionBar [
+
+	actionBar
+		add: (self newButton
+			label: 'Accept';
+			yourself)
+]
+
+{ #category : #initialization }
+StPackageChooserPresenter >> initializeButtonBar [
+			
+	buttonBar 
+		add: (self newButton
+				addStyle: 'small';
+				label: '>';
+				help: 'Add selected packages to selected list.';
+				action: [ self addSelected ];
+				yourself)
+			expand: false;
+		add: (self newButton
+				addStyle: 'small';
+				label: '>>';
+				help: 'Add all packages to selected list.';
+				action: [ self addAll ];
+				yourself)
+			expand: false;
+		add: (self newButton
+				addStyle: 'small';
+				label: '<';
+				help: 'Remove selected packages from selected list.';
+				action: [ self removeSelected ];
+				yourself)
+			expand: false;
+		add: (self newButton
+				addStyle: 'small';
+				label: '<<';
+				help: 'Remove all packages from selected list.';
+				action: [ self removeAll ];
+				yourself)
+			expand: false
+
+]
+
+{ #category : #initialization }
+StPackageChooserPresenter >> initializePackageList [
+	
+	packageList 
+		contextMenu: self packageListMenu;
+		display: [ :each | each packageName ]
 ]
 
 { #category : #initialization }
@@ -54,39 +114,10 @@ StPackageChooserPresenter >> initializePresenters [
 		add: (actionBar := SpBoxLayout newLeftToRight hAlignEnd) expand: false;
 		yourself).
 
-	packageList display: [ :each | each packageName ].
-	selectedPackagesList display: [ :each | each packageName ].
-		
-	buttonBar 
-		add: (self newButton
-				addStyle: 'small';
-				label: '>';
-				action: [ self addSelected ];
-				yourself)
-			expand: false;
-		add: (self newButton
-				addStyle: 'small';
-				label: '>>';
-				action: [ self addAll ];
-				yourself)
-			expand: false;
-		add: (self newButton
-				addStyle: 'small';
-				label: '<';
-				action: [ self removeSelected ];
-				yourself)
-			expand: false;
-		add: (self newButton
-				addStyle: 'small';
-				label: '<<';
-				action: [ self removeAll ];
-				yourself)
-			expand: false.
-	
-	actionBar
-		add: (self newButton
-			label: 'Accept';
-			yourself).
+	self initializePackageList.
+	self initalizeSelectedPackageList.
+	self initializeButtonBar.		
+	self initializeActionBar
 ]
 
 { #category : #initialization }
@@ -96,6 +127,15 @@ StPackageChooserPresenter >> initializeWindow: aWindowPresenter [
 		title: 'Choose Packages';
 		initialExtent: 700@500
 
+]
+
+{ #category : #private }
+StPackageChooserPresenter >> packageListMenu [
+		
+	^ self newMenu
+		addItem: [ :item | item name: 'Add selected'; action: [ self addSelected ] ];
+		addItem: [ :item | item name: 'Add all'; action: [ self addAll ] ];
+		yourself
 ]
 
 { #category : #accessing }
@@ -114,9 +154,18 @@ StPackageChooserPresenter >> removeAll [
 { #category : #actions }
 StPackageChooserPresenter >> removeSelected [
 
-	packageList items: ((packageList items, packageList selectedItems) sorted: #packageName ascending).
+	packageList items: ((packageList items, selectedPackagesList selectedItems) sorted: #packageName ascending).
 	selectedPackagesList items: ((selectedPackagesList items \ selectedPackagesList selectedItems)  sorted: #packageName ascending).
-	selectedPackagesList selectedItems: #()
+	selectedPackagesList selectItems: #()
+]
+
+{ #category : #private }
+StPackageChooserPresenter >> selectedPackageListMenu [
+		
+	^ self newMenu
+		addItem: [ :item | item name: 'Remove selected'; action: [ self removeSelected ] ];
+		addItem: [ :item | item name: 'Remove all'; action: [ self removeAll ] ];
+		yourself
 ]
 
 { #category : #initialization }
