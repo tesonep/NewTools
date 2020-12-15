@@ -90,17 +90,8 @@ StPackageChooserPresenter >> initializeButtonBar [
 ]
 
 { #category : #initialization }
-StPackageChooserPresenter >> initializePackageList [
+StPackageChooserPresenter >> initializeLayout [
 	
-	packageList 
-		contextMenu: self packageListMenu;
-		display: [ :each | each packageName ]
-]
-
-{ #category : #initialization }
-StPackageChooserPresenter >> initializePresenters [
-	<script: 'self new openWithSpec'>
-
 	self layout: (SpBoxLayout newTopToBottom
 		spacing: 5;
 		add: (SpPanedLayout newLeftToRight
@@ -112,8 +103,22 @@ StPackageChooserPresenter >> initializePresenters [
 			add: (selectedPackagesList := (self instantiate: SpFilteringSelectableListPresenter));
 			yourself);
 		add: (actionBar := SpBoxLayout newLeftToRight hAlignEnd) expand: false;
-		yourself).
+		yourself)
+]
 
+{ #category : #initialization }
+StPackageChooserPresenter >> initializePackageList [
+	
+	packageList 
+		contextMenu: self packageListMenu;
+		display: [ :each | each packageName ]
+]
+
+{ #category : #initialization }
+StPackageChooserPresenter >> initializePresenters [
+	<script: 'self new openWithSpec'>
+
+	self initializeLayout.
 	self initializePackageList.
 	self initalizeSelectedPackageList.
 	self initializeButtonBar.		
