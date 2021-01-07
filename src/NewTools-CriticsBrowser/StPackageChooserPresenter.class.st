@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'packageList',
 		'selectedPackagesList',
-		'buttonBar',
-		'actionBar'
+		'buttonBar'
 	],
 	#category : #'NewTools-CriticsBrowser'
 }
@@ -37,21 +36,18 @@ StPackageChooserPresenter >> addSelected [
 	packageList selectItems: #()
 ]
 
+{ #category : #actions }
+StPackageChooserPresenter >> doAccept [
+
+	self window close
+]
+
 { #category : #initialization }
 StPackageChooserPresenter >> initalizeSelectedPackageList [
 	
 	selectedPackagesList 
 		contextMenu: self selectedPackageListMenu;		
 		display: [ :each | each packageName ]
-]
-
-{ #category : #initialization }
-StPackageChooserPresenter >> initializeActionBar [
-
-	actionBar
-		add: (self newButton
-			label: 'Accept';
-			yourself)
 ]
 
 { #category : #initialization }
@@ -90,6 +86,13 @@ StPackageChooserPresenter >> initializeButtonBar [
 ]
 
 { #category : #initialization }
+StPackageChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
+
+	aDialogWindowPresenter
+		addButton: 'Accept' do: [ self doAccept ]
+]
+
+{ #category : #initialization }
 StPackageChooserPresenter >> initializeLayout [
 	
 	self layout: (SpBoxLayout newTopToBottom
@@ -102,7 +105,6 @@ StPackageChooserPresenter >> initializeLayout [
 				yourself);
 			add: (selectedPackagesList := (self instantiate: SpFilteringSelectableListPresenter));
 			yourself);
-		add: (actionBar := SpBoxLayout newLeftToRight hAlignEnd) expand: false;
 		yourself)
 ]
 
@@ -121,8 +123,7 @@ StPackageChooserPresenter >> initializePresenters [
 	self initializeLayout.
 	self initializePackageList.
 	self initalizeSelectedPackageList.
-	self initializeButtonBar.		
-	self initializeActionBar
+	self initializeButtonBar
 ]
 
 { #category : #initialization }

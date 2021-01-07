@@ -31,7 +31,6 @@ StCriticPackageChooserPresenter >> initializeLayout [
 				yourself);
 			add: (selectedPackagesList := (self instantiate: SpFilteringSelectableListPresenter));
 			yourself);
-		add: (actionBar := SpBoxLayout newLeftToRight hAlignEnd) expand: false;
 		yourself)
 ]
 
