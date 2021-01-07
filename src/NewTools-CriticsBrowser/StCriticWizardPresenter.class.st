@@ -72,7 +72,6 @@ StCriticWizardPresenter >> newWizardPresenters [
 	^ {  
 	StCriticPackageChooserPresenter new.
 	StCriticRuleChooserPresenter new.
-	StCriticPackageChooserPresenter new.
 	}
 ]
 
