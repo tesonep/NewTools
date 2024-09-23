@@ -50,10 +50,10 @@ StSettingsTree >> nodeList: aCollection [
 ]
 
 { #category : 'private - queries' }
-StSettingsTree >> processSearch: aString on: aStSettingsToolbarPresenter [ 
+StSettingsTree >> processSearch: aString [
+	"Recursively collect the nodes matching aString in the receiver"
 
-	^ self treeRoots select: [ : settingNode |
-		settingNode matches: aString ]
+	^ self treeRoots flatCollect: [ : settingNode | settingNode matches: aString ]
 ]
 
 { #category : 'instance creation' }

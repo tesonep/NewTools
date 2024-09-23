@@ -18,6 +18,25 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'adding' }
+StSettingsMainPresenter >> addSearchResults: aCollection [ 
+	"Process the search results in aCollection. 
+	If there is only a single item as result, we follow the path to that node.
+	Otherwise, we present a new tab with the results"
+	
+	| results |
+	
+	results := OrderedCollection new.
+	aCollection size = 1
+		ifTrue: [ 
+			| singleResult |
+			singleResult := aCollection anyOne.
+			results add: singleResult.
+			self followPath: singleResult in: results  ]
+		ifFalse: [ self halt ].
+	self halt.
+]
+
 { #category : 'initialization' }
 StSettingsMainPresenter >> browserTitle [ 
 
@@ -59,6 +78,15 @@ StSettingsMainPresenter >> defaultLayout [
 StSettingsMainPresenter >> defaultOutputPort [ 
 
 	^ mainCategoriesPresenter
+]
+
+{ #category : 'searching' }
+StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
+
+	^ aStSettingNode hasParent
+		ifTrue: [ (self followPath: aStSettingNode parentNode in: aCollection) ]
+		ifFalse: [ aCollection add: aStSettingNode ].
+
 ]
 
 { #category : 'initialization' }
