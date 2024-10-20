@@ -10,9 +10,18 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'instance creation' }
+StSettingsPageNotebookPresenter class >> onResults: aCollection [
+
+	 ^ self new 
+		initializeWithResults: aCollection;
+		yourself
+
+]
+
 { #category : 'adding' }
 StSettingsPageNotebookPresenter >> add: aStSettingSectionPresenter expand: aBoolean [ 
-
+	
 	settingsBox add: aStSettingSectionPresenter expand: aBoolean 
 ]
 
@@ -29,6 +38,13 @@ StSettingsPageNotebookPresenter >> initializePresenters [
 	settingsBox := SpBoxLayout newTopToBottom 
 			spacing: 5;
 			yourself
+]
+
+{ #category : 'initialization' }
+StSettingsPageNotebookPresenter >> initializeWithResults: aCollection [
+
+	aCollection do: [ : aStSettingNode |
+		self add: aStSettingNode expand: true ]
 ]
 
 { #category : 'accessing' }

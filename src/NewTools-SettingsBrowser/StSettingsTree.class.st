@@ -53,7 +53,9 @@ StSettingsTree >> nodeList: aCollection [
 StSettingsTree >> processSearch: aString [
 	"Recursively collect the nodes matching aString in the receiver"
 
-	^ self treeRoots flatCollect: [ : settingNode | settingNode matches: aString ]
+	^ self treeRoots 
+		flatCollect: [ : settingNode | settingNode matches: aString ]
+		as: Set
 ]
 
 { #category : 'instance creation' }

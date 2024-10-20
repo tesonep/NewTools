@@ -27,14 +27,33 @@ StSettingsMainPresenter >> addSearchResults: aCollection [
 	| results |
 	
 	results := OrderedCollection new.
-	aCollection size = 1
+	^ aCollection size = 1
 		ifTrue: [ 
 			| singleResult |
 			singleResult := aCollection anyOne.
 			results add: singleResult.
-			self followPath: singleResult in: results  ]
-		ifFalse: [ self halt ].
-	self halt.
+			self followPath: singleResult in: results.
+			results  ]
+		ifFalse: [ self addTab: aCollection ].
+]
+
+{ #category : 'adding' }
+StSettingsMainPresenter >> addTab: aCollection [ 
+	
+	| newPage |
+	newPage := SpNotebookPage new
+				 icon: (self iconNamed: #smallQuestion);
+				 presenterProvider: [ StSettingsPageNotebookPresenter on: 
+					((StSettingNode with: PragmaSetting new) item name: 'temp') ];
+				 title: 'Search Results';
+				 yourself.
+
+	aCollection do: [ :aStSettingNode |
+		| nodePresenter |
+
+		nodePresenter := self newNodePresenterFrom: aStSettingNode level: 2.
+		newPage presenterProvider value add: nodePresenter expand: false ].
+	
 ]
 
 { #category : 'initialization' }
@@ -115,4 +134,10 @@ StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
 		title: self browserTitle;
 		initialExtent: 1200 @ 700;
 		centered
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> pagePresenter [ 
+
+	^ detailsPresenter
 ]

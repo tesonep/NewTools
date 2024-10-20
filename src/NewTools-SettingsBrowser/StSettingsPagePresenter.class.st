@@ -23,7 +23,7 @@ StSettingsPagePresenter >> activePage [
 	^ notebook selectedPage activePresenter
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> addDefaultGeneralTabFrom: aStSettingNode [
 	"Private - Add General Settings default"
 
@@ -39,7 +39,7 @@ StSettingsPagePresenter >> addDefaultGeneralTabFrom: aStSettingNode [
 				 yourself).
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage [
 	"Private - We add a 'General' header (2nd level) for those nodes without parent other than the root"
 
@@ -54,7 +54,31 @@ StSettingsPagePresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage [
 		expand: false
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
+StSettingsPagePresenter >> addSearchResultTabFrom: resultStSettingNodes [
+	"Private - Add General Settings default"
+
+	| searchResultSettingNode presenterNodes title |
+	
+	title := 'Search Results'.
+	presenterNodes := resultStSettingNodes collect: [ :aSettingNode |
+		| nodePresenter |
+		(nodePresenter := self
+			                  instantiate: aSettingNode presenterClass
+			                  on: aSettingNode) hasChildren 
+			ifTrue: [ nodePresenter sectionTitleStyle: 'sectionTitleL1' ] ].
+	
+	
+	searchResultSettingNode := StSettingNode with: PragmaSetting new.
+	searchResultSettingNode item name: title.
+	notebook addPage: (SpNotebookPage new
+				 icon: (self iconNamed: #smallQuestion);
+				 presenterProvider: [ StSettingsPageNotebookPresenter onResults: presenterNodes ];
+				 title: title;
+				 yourself).
+]
+
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> addTabsFrom: aStSettingNode [
 
 	aStSettingNode allChildren do: [ :aSettingNode |
@@ -95,7 +119,7 @@ StSettingsPagePresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> generalTitle [
 
 	^ 'General'
@@ -114,7 +138,7 @@ StSettingsPagePresenter >> initializePresenters [
 	settingDocPresenter := self newText
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> newGeneralSetting: aSpNotebookPage [
 
 	| currentParent generalSettingNode |
@@ -124,17 +148,6 @@ StSettingsPagePresenter >> newGeneralSetting: aSpNotebookPage [
 	generalSettingNode item name: self generalTitle.
 	generalSettingNode parentName: (currentParent ifNotNil: [ currentParent name ]).
 	^ generalSettingNode
-]
-
-{ #category : 'callbacks' }
-StSettingsPagePresenter >> newNodePresenterFrom: aSettingNode level: anInteger [
-
-	| nodePresenter |
-	nodePresenter := self
-		                 instantiate: aSettingNode presenterClass
-		                 on: aSettingNode.
-	nodePresenter sectionTitleStyle: 'sectionTitleL' , anInteger asString.
-	^ nodePresenter
 ]
 
 { #category : 'callbacks' }
@@ -162,7 +175,7 @@ StSettingsPagePresenter >> setModel: aNode [
 
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> updatePages: aStSettingNode [
 	"Private - Recursively iterate aStSettingNode children using anInteger as 'level' indicator for title styling purposes"
 
@@ -192,7 +205,7 @@ StSettingsPagePresenter >> updatePresenterTree: aStSettingNode level: anInteger 
 		self updatePresenterTree: aSettingNode level: anInteger + 1 ]
 ]
 
-{ #category : 'callbacks' }
+{ #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> updateSelectedPage: aSpNotebookPage [
 	
 	aSpNotebookPage ifNotNil: [ 
