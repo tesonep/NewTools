@@ -19,7 +19,7 @@ Class {
 { #category : 'accessing' }
 StPlaygroundPageVersionsPresenter class >> preferredExtent [
 
-	^ (700@400) scaledByDisplayScaleFactor
+	^ (700@400)
 ]
 
 { #category : 'actions' }
@@ -83,7 +83,8 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 		
 	versionList
 		 display: [ :anEntry | self displayValueFor: (anEntry tagAt: #timestamp) ];
-		 contextMenu: [ self versionsActions asMenuPresenter ].
+		 actions: self versionsActions.
+
 	sourceCode 
 		beForScripting;
 		beNotEditable.

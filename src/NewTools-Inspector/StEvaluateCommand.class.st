@@ -19,7 +19,7 @@ StEvaluateCommand class >> defaultDescription [
 { #category : 'default' }
 StEvaluateCommand class >> defaultIconName [
 
-	^ #glamorousGo
+	^ #go
 ]
 
 { #category : 'default' }
@@ -31,9 +31,7 @@ StEvaluateCommand class >> defaultName [
 { #category : 'default' }
 StEvaluateCommand class >> defaultShortcutKey [
 
-	^ $g command mac 
-		| $g control win
-		| $g control unix
+	^ $g actionModifier
 ]
 
 { #category : 'documentation' }

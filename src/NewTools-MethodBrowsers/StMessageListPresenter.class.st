@@ -52,7 +52,7 @@ StMessageListPresenter >> allScopes [
 { #category : 'private - scopes' }
 StMessageListPresenter >> browserEnvironment [
 
-	^ ClyNavigationEnvironment currentImageScope asRBEnvironment label: 'current image'
+	^ RBBrowserEnvironment default label: 'current image'
 ]
 
 { #category : 'testing' }
@@ -232,10 +232,7 @@ StMessageListPresenter >> initializePresenters [
 		beResizable.
 
 	listPresenter outputActivationPort transmitDo: [ :aMethod | self doBrowseMethod ].
-		
-	listPresenter 
-		contextMenu: self messageListActions asMenuPresenter;
-		contextKeyBindings: self messageListActions asKMCategory
+	listPresenter actions: self messageListActions
 ]
 
 { #category : 'accessing' }

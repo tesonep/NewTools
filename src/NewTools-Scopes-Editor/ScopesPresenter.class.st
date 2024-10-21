@@ -88,6 +88,52 @@ ScopesPresenter >> andWithScope: anItem [
 ]
 
 { #category : 'menu commands' }
+ScopesPresenter >> argumentsListActions [
+
+	^ SpActionGroup new 
+		addActionWith: [ :anItem | anItem
+			name: 'Delete';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			iconName: #glamorousTrash;
+			action: [ self deleteSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Edit';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			iconName: #glamorousEdit;
+			action: [ self editSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Rename';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self renameSelectedScope ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Inspect';
+			iconName: #glamorousSearch;
+			action: [ scopesTree selectedItem inspect ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Open in browser';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self openOnCalypso: scopesTree selectedItem value ] ];
+		addActionWith: [ :anItem | anItem 
+			name: 'Browse';
+			actionEnabled: [ scopesTree selectedItem isScopeNode not ];
+			iconName: #glamorousBrowse;
+			action: [ self browseSelectedItem ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'Class references';
+			actionEnabled: [ scopesTree selectedItem isClassNode ];
+			action: [ self showReferencesToClass: scopesTree selectedItem value ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'OR';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self orWithScope: scopesTree selectedItem ] ];
+		addActionWith: [ :anItem | anItem
+			name: 'AND';
+			actionEnabled: [ scopesTree selectedItem isScopeNode ];
+			action: [ self andWithScope: scopesTree selectedItem ] ];
+		yourself
+]
+
+{ #category : 'menu commands' }
 ScopesPresenter >> argumentsListMenu [
 
 	^ self newMenu addGroup: [ :aGroup |
@@ -96,13 +142,13 @@ ScopesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'Delete';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  iconName: #glamorousTrash;
+					  iconName: #trash;
 					  action: [ self deleteSelectedScope ] ];
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Edit';
 					  visibleIf: [ scopesTree selectedItem isScopeNode ];
-					  iconName: #glamorousEdit;
+					  iconName: #edit;
 					  action: [ self editSelectedScope ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -112,7 +158,7 @@ ScopesPresenter >> argumentsListMenu [
 			  addItem: [ :anItem |
 				  anItem
 					  name: 'Inspect';
-					  iconName: #glamorousSearch;
+					  iconName: #search;
 					  action: [ scopesTree selectedItem inspect ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -123,7 +169,7 @@ ScopesPresenter >> argumentsListMenu [
 				  anItem
 					  name: 'Browse';
 					  visibleIf: [ scopesTree selectedItem isScopeNode not ];
-					  iconName: #glamorousBrowse;
+					  iconName: #browse;
 					  action: [ self browseSelectedItem ] ];
 			  addItem: [ :anItem |
 				  anItem
@@ -458,13 +504,13 @@ ScopesPresenter >> toolbarButtons [
 			 yourself).
 
 	buttons add: (buttonEdit := self newToolbarButton
-			               icon: (self iconNamed: #glamorousEdit);
+			               icon: (self iconNamed: #edit);
 			               help: 'Edit selected scope';
 			               action: [ self editSelectedScope ];
 			               yourself).
 
 	buttons add: (buttonDelete := self newToolbarButton
-			                 icon: (self iconNamed: #glamorousTrash);
+			                 icon: (self iconNamed: #trash);
 			                 help: 'Delete selected scope';
 			                 action: [ self deleteSelectedScope ];
 			                 yourself).

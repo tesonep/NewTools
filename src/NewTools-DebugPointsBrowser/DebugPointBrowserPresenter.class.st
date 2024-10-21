@@ -26,7 +26,7 @@ DebugPointBrowserPresenter class >> menuCommandOn: aBuilder [
 		action: [ self new open ];
 		order: -3;
 		help: 'opens a browser to visualize and configure debug points';
-		icon: (self iconNamed: #glamorousBug)
+		icon: (self iconNamed: #bug)
 ]
 
 { #category : 'instance creation' }
@@ -127,7 +127,7 @@ DebugPointBrowserPresenter >> initializePresenters [
 { #category : 'presenter building' }
 DebugPointBrowserPresenter >> initializeTable [
 
-	dpTable := DebugPointTablePresenter new.
+	dpTable := self instantiate: DebugPointTablePresenter.
 
 	dpTable whenSelectionChangedDo: [ :sel |
 		dpEditor debugPoint: dpTable selectedItem.
@@ -146,7 +146,7 @@ DebugPointBrowserPresenter >> initializeWindow: aWindowPresenter [
 	
 	aWindowPresenter
 		title: 'Debug Point Browser';		
-		windowIcon: (self application iconNamed: #glamorousBug);
+		windowIcon: (self application iconNamed: #bug);
 		initialExtent: 800@550
 ]
 

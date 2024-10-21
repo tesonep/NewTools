@@ -76,7 +76,7 @@ StPlaygroundPresenter class >> defaultCacheDirectory [
 { #category : 'accessing' }
 StPlaygroundPresenter class >> defaultExtent [
 
-	^ (600@400) scaledByDisplayScaleFactor
+	^ (600@400)
 ]
 
 { #category : 'accessing' }
@@ -175,7 +175,7 @@ StPlaygroundPresenter >> newDefaultPlaygroundPage [
 
 { #category : 'private - factory' }
 StPlaygroundPresenter >> newInspectorFor: aModel [
-	| isPlayground  inspector |
+	| isPlayground inspector |
 
 	isPlayground := millerList pages isEmpty and: [ aModel isNil ].
 

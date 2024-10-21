@@ -227,7 +227,6 @@ StDebuggerTest >> testClose [
 	debugger := self debuggerOn: session.
 	actionModel := debugger debuggerActionModel.
 	windowPresenter presenter: debugger.
-	debugger initializeWindow: windowPresenter.
 
 	"We trigger the closing from the presenter instead of the debugger itself,
 	because the window is not really open so the debugger will not close through debugger close."
@@ -617,6 +616,42 @@ StDebuggerTest >> testDiscardCodeChangesFor [
 	self assert: dbg code text equals: firstContext sourceCode
 	
 	
+]
+
+{ #category : 'tests - code pane' }
+StDebuggerTest >> testDynamicVariableEvaluation [
+	|activeProcess debuggedProcess|
+	self skipOnPharoCITestingEnvironment.
+	debugger := StTestDebuggerProvider new
+		            debuggerWithDynamicVariableSuspendedContext.
+	debugger initializeCode.
+	activeProcess := Processor activeProcess.
+	debuggedProcess := debugger debuggerActionModel interruptedProcess.
+	
+	"The active process and the debugged process are different"
+	self
+		deny: activeProcess
+		identicalTo: debuggedProcess.
+	self deny: debuggedProcess isActive.
+	self assert: activeProcess isActive.
+		
+	"The debugged process holds the dynamic variable value"
+	self assert: (debuggedProcess psValueAt: TestDynamicVariable soleInstance index) equals: 42.
+		
+	"The standard code presenters evaluates code from the active process"	
+	self
+		assert: (SpCodePresenter basicNew
+				 evaluate: 'TestDynamicVariable value'
+				 onCompileError: [  ]
+				 onError: [ :e |  ])
+		equals: nil.
+	"The debugger code presenters evaluates code from the debugged process"
+	self
+		assert: (debugger code
+				 evaluate: 'TestDynamicVariable value'
+				 onCompileError: [  ]
+				 onError: [ :e |  ])
+		equals: 42
 ]
 
 { #category : 'tests' }
