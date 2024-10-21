@@ -38,9 +38,7 @@ StSettingsToolbarPresenter >> doSettingSearch: aString [
 	aString size >= 3
 		ifFalse: [ ^ self ].
 
-	self halt.
 	colOfStSettingNode := self settingsTree processSearch: aString.
-	"self owner addTab: (self owner addSearchResults:)."
 	mainPresenter := self owner.
 	mainPresenter pagePresenter addSearchResultTabFrom: colOfStSettingNode.
 ]

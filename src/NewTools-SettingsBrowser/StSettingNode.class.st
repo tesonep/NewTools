@@ -132,7 +132,10 @@ StSettingNode >> label: aString [
 StSettingNode >> matchBlock [
 
 	^ matchBlock
-		ifNil: [ matchBlock := [ : node : pattern | node label asLowercase beginsWith: pattern asLowercase ] ]
+		ifNil: [ 
+			matchBlock := [ : node : pattern | 
+				node label substrings anySatisfy: [ : substr |
+					substr asLowercase beginsWith: pattern asLowercase ] ] ]
 ]
 
 { #category : 'enumerating' }

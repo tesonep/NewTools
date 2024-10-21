@@ -20,7 +20,12 @@ Class {
 { #category : 'private' }
 StSettingsPagePresenter >> activePage [
 
-	^ notebook selectedPage activePresenter
+	| selectedPage |
+	
+	selectedPage := notebook selectedPage.
+	selectedPage activePresenter
+		ifNil: [ selectedPage retrievePresenter ].
+	^ selectedPage activePresenter
 ]
 
 { #category : 'callbacks - tabs' }
@@ -34,7 +39,7 @@ StSettingsPagePresenter >> addDefaultGeneralTabFrom: aStSettingNode [
 	generalSettingNode parentName: aStSettingNode name.
 	notebook addPage: (SpNotebookPage new
 				 icon: (self iconNamed: #smallQuestion);
-				 presenterProvider: [ StSettingsPageNotebookPresenter on: generalSettingNode ];
+				 presenterProvider: [ StSettingsNotebookPagePresenter on: generalSettingNode ];
 				 title: self generalTitle;
 				 yourself).
 ]
@@ -56,26 +61,17 @@ StSettingsPagePresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage [
 
 { #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> addSearchResultTabFrom: resultStSettingNodes [
-	"Private - Add General Settings default"
+	"Private - Add a tab with search results from resultStSettingNodes in the receiver's notebook"
 
-	| searchResultSettingNode presenterNodes title |
+	| resultSearchNodes searchResultPage |
 	
-	title := 'Search Results'.
-	presenterNodes := resultStSettingNodes collect: [ :aSettingNode |
-		| nodePresenter |
-		(nodePresenter := self
-			                  instantiate: aSettingNode presenterClass
-			                  on: aSettingNode) hasChildren 
-			ifTrue: [ nodePresenter sectionTitleStyle: 'sectionTitleL1' ] ].
-	
-	
-	searchResultSettingNode := StSettingNode with: PragmaSetting new.
-	searchResultSettingNode item name: title.
-	notebook addPage: (SpNotebookPage new
-				 icon: (self iconNamed: #smallQuestion);
-				 presenterProvider: [ StSettingsPageNotebookPresenter onResults: presenterNodes ];
-				 title: title;
-				 yourself).
+	resultSearchNodes := self collectResultNodes: resultStSettingNodes.
+	searchResultPage := (notebook hasPageNamed: self resultsTitle)
+		ifFalse: [ notebook addPageFirst: (self newResultPageOn: resultSearchNodes) ]
+		ifTrue: [ (notebook pageNamed: self resultsTitle) presenterProvider: [ StSettingsNotebookPagePresenter onResults: resultSearchNodes ] ].
+	notebook selectPage: searchResultPage.
+	self notebook selectedPage resetContent.
+
 ]
 
 { #category : 'callbacks - tabs' }
@@ -87,12 +83,26 @@ StSettingsPagePresenter >> addTabsFrom: aStSettingNode [
 			                  instantiate: aSettingNode presenterClass
 			                  on: aSettingNode) hasChildren 
 			ifTrue: [
-				nodePresenter sectionTitleStyle: 'sectionTitleL1'.
+				nodePresenter sectionTitleStyle: self sectionTitleString.
 				notebook addPage: (SpNotebookPage new
-						 icon: (self iconNamed: #smallQuestion);
-						 presenterProvider: [ StSettingsPageNotebookPresenter on: aSettingNode ];
+					 icon: (self iconNamed: #smallQuestion);
+					 presenterProvider: [ StSettingsNotebookPagePresenter on: aSettingNode ];
 					 title: aSettingNode label;
 					 yourself) ] ]
+]
+
+{ #category : 'private' }
+StSettingsPagePresenter >> collectResultNodes: aCollection [
+	"Private - Select and answer those nodes that do not represent section titles"
+	
+	| nodePresenters |
+	nodePresenters := aCollection collect: [ :aSettingNode |
+		                  self
+			                  instantiate: aSettingNode presenterClass
+			                  on: aSettingNode ].
+	^ nodePresenters 
+		reject: [ :nodePresenter | nodePresenter hasChildren ]
+
 ]
 
 { #category : 'initialization' }
@@ -150,6 +160,17 @@ StSettingsPagePresenter >> newGeneralSetting: aSpNotebookPage [
 	^ generalSettingNode
 ]
 
+{ #category : 'instance creation' }
+StSettingsPagePresenter >> newResultPageOn: aCollection [ 
+
+	^ SpNotebookPage new
+		 icon: (self iconNamed: #smallQuestion);
+		 presenterProvider: [ StSettingsNotebookPagePresenter onResults: aCollection ];
+		 beCloseable;				
+		 title: self resultsTitle;
+		 yourself
+]
+
 { #category : 'callbacks' }
 StSettingsPagePresenter >> newSectionNodePresenterFrom: aSettingNode level: anInteger [
 	"Private - This is a temporary method until finding a proper solution for 'hand-wired' sections, since some settings declarations are not grouped"
@@ -158,8 +179,28 @@ StSettingsPagePresenter >> newSectionNodePresenterFrom: aSettingNode level: anIn
 	nodePresenter := self
 		                 instantiate: StSettingSectionPresenter
 		                 on: aSettingNode.
-	nodePresenter sectionTitleStyle: 'sectionTitleL' , anInteger asString.
+	nodePresenter sectionTitleStyle: self sectionTitleString , anInteger asString.
 	^ nodePresenter
+]
+
+{ #category : 'initialization' }
+StSettingsPagePresenter >> notebook [
+
+	^ notebook 
+	
+]
+
+{ #category : 'callbacks - tabs' }
+StSettingsPagePresenter >> resultsTitle [
+
+	^ 'Results'
+]
+
+{ #category : 'callbacks' }
+StSettingsPagePresenter >> selectFirstPage [
+	
+	self notebook selectPageIndex: 1.
+	self updateSelectedPage: self notebook selectedPage.
 ]
 
 { #category : 'accessing - model' }
@@ -207,16 +248,34 @@ StSettingsPagePresenter >> updatePresenterTree: aStSettingNode level: anInteger 
 
 { #category : 'callbacks - tabs' }
 StSettingsPagePresenter >> updateSelectedPage: aSpNotebookPage [
-	
+	"Private - Update the receiver's notebook with aSpNotebookPage. The first time the notebook is opened, a #selectedPage event is triggered and aSpNotebookPage will be nil"
+
 	aSpNotebookPage ifNotNil: [ 
-		| tabNode |
-		aSpNotebookPage activePresenter removeAll.
-		"Do not add a 'General' header if we are already in the General tab" 
-		aSpNotebookPage title = self generalTitle
-			ifFalse: [ self addHeaderForSettingsWithoutParent: aSpNotebookPage ]
-			ifTrue: [ self updatePresenterGeneralNodes: (settingTree reject: [ : node | node hasChildren ]) ].
-		tabNode := aSpNotebookPage activePresenter parentNode.
-		self updatePresenterTree: tabNode level: 2 ]
+		aSpNotebookPage activePresenter ifNotNil: [ : activePresenter | activePresenter removeAll ].
+		self updateSelectedSpecialCases: aSpNotebookPage.
+		self updateSelectedPageTree: aSpNotebookPage ]
+]
+
+{ #category : 'private' }
+StSettingsPagePresenter >> updateSelectedPageTree: aSpNotebookPage [ 
+
+	aSpNotebookPage activePresenter 
+		ifNil: [ aSpNotebookPage retrievePresenter ]
+		ifNotNil: [ : activePresenter |
+			activePresenter parentNode
+				ifNotNil: [ : tabNode | self updatePresenterTree: tabNode level: 2 ]
+				ifNil: [ self updatePresenterTree: aSpNotebookPage activePresenter level: 2  ] ]
+]
+
+{ #category : 'callbacks - tabs' }
+StSettingsPagePresenter >> updateSelectedSpecialCases: aSpNotebookPage [ 
+	"Do not add a 'General' header if we are already in the General tab" 
+	
+	aSpNotebookPage title = self resultsTitle
+		ifFalse: [ 
+			aSpNotebookPage title = self generalTitle
+				ifFalse: [ self addHeaderForSettingsWithoutParent: aSpNotebookPage ]
+				ifTrue: [ self updatePresenterGeneralNodes: (settingTree reject: [ : node | node hasChildren ]) ] ]
 ]
 
 { #category : 'callbacks' }

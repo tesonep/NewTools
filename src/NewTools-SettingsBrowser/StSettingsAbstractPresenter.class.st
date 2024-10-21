@@ -13,8 +13,14 @@ StSettingsAbstractPresenter >> newNodePresenterFrom: aSettingNode level: anInteg
 	nodePresenter := self
 		                 instantiate: aSettingNode presenterClass
 		                 on: aSettingNode.
-	nodePresenter sectionTitleStyle: 'sectionTitleL' , anInteger asString.
+	nodePresenter sectionTitleStyle: self sectionTitleString , anInteger asString.
 	^ nodePresenter
+]
+
+{ #category : 'callbacks' }
+StSettingsAbstractPresenter >> sectionTitleString [
+
+	^ 'sectionTitleL'
 ]
 
 { #category : 'accessing' }

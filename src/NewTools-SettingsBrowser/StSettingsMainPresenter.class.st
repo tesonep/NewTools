@@ -18,44 +18,6 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'adding' }
-StSettingsMainPresenter >> addSearchResults: aCollection [ 
-	"Process the search results in aCollection. 
-	If there is only a single item as result, we follow the path to that node.
-	Otherwise, we present a new tab with the results"
-	
-	| results |
-	
-	results := OrderedCollection new.
-	^ aCollection size = 1
-		ifTrue: [ 
-			| singleResult |
-			singleResult := aCollection anyOne.
-			results add: singleResult.
-			self followPath: singleResult in: results.
-			results  ]
-		ifFalse: [ self addTab: aCollection ].
-]
-
-{ #category : 'adding' }
-StSettingsMainPresenter >> addTab: aCollection [ 
-	
-	| newPage |
-	newPage := SpNotebookPage new
-				 icon: (self iconNamed: #smallQuestion);
-				 presenterProvider: [ StSettingsPageNotebookPresenter on: 
-					((StSettingNode with: PragmaSetting new) item name: 'temp') ];
-				 title: 'Search Results';
-				 yourself.
-
-	aCollection do: [ :aStSettingNode |
-		| nodePresenter |
-
-		nodePresenter := self newNodePresenterFrom: aStSettingNode level: 2.
-		newPage presenterProvider value add: nodePresenter expand: false ].
-	
-]
-
 { #category : 'initialization' }
 StSettingsMainPresenter >> browserTitle [ 
 
@@ -68,6 +30,7 @@ StSettingsMainPresenter >> connectPresenters [
 	mainCategoriesPresenter 
 		transmitTo: detailsPresenter
 		transform: [ : aCategoryItemPresenter | aCategoryItemPresenter node ]
+		postTransmission: [ : selectedPage | selectedPage selectFirstPage  ]
 ]
 
 { #category : 'layout' }
