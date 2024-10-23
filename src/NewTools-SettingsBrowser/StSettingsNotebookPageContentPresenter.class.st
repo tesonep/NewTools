@@ -1,5 +1,8 @@
+"
+This is the **provider** of a `SpNotebookPage` in a category of the Settings Browser. The notebook pages are contained in a `StSettingsDetailsPresenter`.
+"
 Class {
-	#name : 'StSettingsNotebookPagePresenter',
+	#name : 'StSettingsNotebookPageContentPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'settingsBox',
@@ -10,58 +13,49 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'instance creation' }
-StSettingsNotebookPagePresenter class >> onResults: aCollection [
-
-	 ^ self new 
-		initializeWithResults: aCollection;
-		yourself
-
-]
-
 { #category : 'adding' }
-StSettingsNotebookPagePresenter >> add: aStSettingSectionPresenter expand: aBoolean [ 
+StSettingsNotebookPageContentPresenter >> add: aStSettingSectionPresenter expand: aBoolean [ 
 	
 	settingsBox add: aStSettingSectionPresenter expand: aBoolean 
 ]
 
 { #category : 'layout' }
-StSettingsNotebookPagePresenter >> defaultLayout [
+StSettingsNotebookPageContentPresenter >> defaultLayout [
 
 	^ SpScrollableLayout with: settingsBox
 		
 ]
 
 { #category : 'initialization' }
-StSettingsNotebookPagePresenter >> initializePresenters [
+StSettingsNotebookPageContentPresenter >> initializePresenters [
 
 	settingsBox := SpBoxLayout newTopToBottom 
 			spacing: 5;
 			yourself
 ]
 
-{ #category : 'initialization' }
-StSettingsNotebookPagePresenter >> initializeWithResults: aCollection [
+{ #category : 'TOREMOVE' }
+StSettingsNotebookPageContentPresenter >> initializeWithResults: aCollection [
 
 	aCollection do: [ : aStSettingNode |
 		self add: aStSettingNode expand: true ]
 ]
 
 { #category : 'accessing' }
-StSettingsNotebookPagePresenter >> pagePresenter [
+StSettingsNotebookPageContentPresenter >> pagePresenter [
 	"Answer the receiver's <StSettingsPagePresenter>"
 
 	^ self owner owner
 ]
 
 { #category : 'accessing' }
-StSettingsNotebookPagePresenter >> parentNode [
+StSettingsNotebookPageContentPresenter >> parentNode [
 
 	^ parentNode
 ]
 
 { #category : 'printing' }
-StSettingsNotebookPagePresenter >> printOn: aStream [
+StSettingsNotebookPageContentPresenter >> printOn: aStream [
 
 	settingsBox
 		ifNotNil: [ : sb | 
@@ -74,14 +68,14 @@ StSettingsNotebookPagePresenter >> printOn: aStream [
 ]
 
 { #category : 'removing' }
-StSettingsNotebookPagePresenter >> removeAll [
+StSettingsNotebookPageContentPresenter >> removeAll [
 	"Remove all presenters in the layout"
 
 	settingsBox removeAll
 ]
 
 { #category : 'accessing - model' }
-StSettingsNotebookPagePresenter >> setModelBeforeInitialization: aNode [
+StSettingsNotebookPageContentPresenter >> setModelBeforeInitialization: aNode [
 
 	parentNode := aNode
 ]
