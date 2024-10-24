@@ -63,11 +63,10 @@ StSettingsDetailsPresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage
 StSettingsDetailsPresenter >> addSearchResultTabFrom: resultStSettingNodes [
 	"Private - Add a tab with search results from resultStSettingNodes in the receiver's notebook"
 
-	| newResultPage rootSearchResultNode rsSettingNodes rsRootResultNode |
+	| rootSearchResultNode rsSettingNodes rsRootResultNode |
 	
 	notebook hasPages ifTrue: [ notebook removeAll ].
 
-	self halt.
 	rsSettingNodes := resultStSettingNodes copy asOrderedCollection.
 	"Create a new settings tree with the results"
 	rsRootResultNode := StSettingsTree new nodeList: rsSettingNodes; yourself.
@@ -83,11 +82,9 @@ StSettingsDetailsPresenter >> addSearchResultTabFrom: resultStSettingNodes [
 			parentName: rootSearchResultNode name;
 			model: rsRootResultNode ].
 
-	newResultPage := self newResultPageOn: rootSearchResultNode.
-	newResultPage retrievePresenter.
-	notebook addPage: newResultPage.
-	notebook selectPage: newResultPage.
-	self notebook selectedPage resetContent.
+	notebook addPage: (self newResultPageOn: rootSearchResultNode).
+	self selectFirstPage.
+
 
 ]
 
@@ -168,7 +165,7 @@ StSettingsDetailsPresenter >> newResultPageOn: aStSettingNode [
 
 	^ SpNotebookPage new
 		 icon: (self iconNamed: #smallQuestion);
-		 presenterProvider: [ StSettingsNotebookPageContentPresenter on: aStSettingNode ];
+		 presenterProvider: [ self instantiate: StSettingsNotebookPageContentPresenter on: aStSettingNode ];
 		 beCloseable;				
 		 title: self resultsTitle;
 		 yourself
@@ -239,6 +236,7 @@ StSettingsDetailsPresenter >> updatePresenterGeneralNodes: aCollection [
 	| nodePresenter |
 	aCollection do: [ :settingNode |
 		nodePresenter := self newNodePresenterFrom: settingNode level: 2.
+		"Here the owner of each node presenter will be updated to a StSettingsNotebookPageContentPresenter"
 		self activePage add: nodePresenter expand: false ]
 ]
 
@@ -246,14 +244,16 @@ StSettingsDetailsPresenter >> updatePresenterGeneralNodes: aCollection [
 StSettingsDetailsPresenter >> updatePresenterTree: aStSettingNode level: anInteger [
 	"Private - Recursively iterate aStSettingNode children using anInteger as 'level' indicator for title styling purposes"
 
-	"self haltIf: [ (aStSettingNode respondsTo: #allChildren) or: [ aStSettingNode canUnderstand: #allChildren ] ]."
 	aStSettingNode allChildren do: [ :aSettingNode |
 		| nodePresenter |
 		nodePresenter := self
 			                 newNodePresenterFrom: aSettingNode
 			                 level: anInteger.
+		"The activePage here should be a StSettingsNotebookPageContentPresenter"
 		self activePage add: nodePresenter expand: false.
-		self updatePresenterTree: aSettingNode level: anInteger + 1 ]
+		self updatePresenterTree: aSettingNode level: anInteger + 1 ].
+
+
 ]
 
 { #category : 'callbacks - tabs' }
@@ -275,9 +275,7 @@ StSettingsDetailsPresenter >> updateSelectedPageTree: aSpNotebookPage [
 		ifNil: [ aSpNotebookPage retrievePresenter ]
 		ifNotNil: [ aSpNotebookPage activePresenter ].
 
-	updatedPage parentNode
-		ifNotNil: [ : tabNode | self updatePresenterTree: tabNode level: 2 ]
-		ifNil: [ self updatePresenterTree: updatedPage level: 2  ]
+	self updatePresenterTree: updatedPage parentNode level: 2
 ]
 
 { #category : 'callbacks - tabs' }

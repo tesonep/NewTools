@@ -34,13 +34,6 @@ StSettingsNotebookPageContentPresenter >> initializePresenters [
 			yourself
 ]
 
-{ #category : 'TOREMOVE' }
-StSettingsNotebookPageContentPresenter >> initializeWithResults: aCollection [
-
-	aCollection do: [ : aStSettingNode |
-		self add: aStSettingNode expand: true ]
-]
-
 { #category : 'accessing' }
 StSettingsNotebookPageContentPresenter >> pagePresenter [
 	"Answer the receiver's <StSettingsPagePresenter>"
