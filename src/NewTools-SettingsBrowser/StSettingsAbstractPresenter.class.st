@@ -10,6 +10,7 @@ Class {
 StSettingsAbstractPresenter >> newNodePresenterFrom: aSettingNode level: anInteger [
 
 	| nodePresenter |
+	
 	nodePresenter := self
 		                 instantiate: aSettingNode presenterClass
 		                 on: aSettingNode.

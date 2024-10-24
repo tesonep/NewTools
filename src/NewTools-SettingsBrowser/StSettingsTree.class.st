@@ -51,6 +51,13 @@ StSettingsTree >> newTreeHolder [
 ]
 
 { #category : 'accessing' }
+StSettingsTree >> nodeList [
+
+	^ nodeList
+		ifNil: [ self newSettingTreeBuilderNodes ]
+]
+
+{ #category : 'accessing' }
 StSettingsTree >> nodeList: aCollection [ 
 
 	nodeList := aCollection

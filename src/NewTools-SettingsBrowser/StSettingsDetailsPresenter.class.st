@@ -34,7 +34,7 @@ StSettingsDetailsPresenter >> addDefaultGeneralTabFrom: aStSettingNode [
 
 	| generalSettingNode |
 	
-	generalSettingNode := StSettingNode with: PragmaSetting new.
+	generalSettingNode := self newSettingNode.
 	generalSettingNode item name: self generalTitle.
 	generalSettingNode parentName: aStSettingNode name.
 	notebook addPage: (SpNotebookPage new
@@ -63,16 +63,28 @@ StSettingsDetailsPresenter >> addHeaderForSettingsWithoutParent: aSpNotebookPage
 StSettingsDetailsPresenter >> addSearchResultTabFrom: resultStSettingNodes [
 	"Private - Add a tab with search results from resultStSettingNodes in the receiver's notebook"
 
-	| newResultPage rootSearchResultNode |
+	| newResultPage rootSearchResultNode rsSettingNodes rsRootResultNode |
 	
 	notebook hasPages ifTrue: [ notebook removeAll ].
-	"resultSearchNodes := self collectResultNodes: resultStSettingNodes."
-	rootSearchResultNode := StSettingNode new
-		parentName: #Root;
-		declaration: SettingDeclaration new;
-		model: (StSettingsTree new nodeList: resultStSettingNodes; yourself)
+
+	self halt.
+	rsSettingNodes := resultStSettingNodes copy asOrderedCollection.
+	"Create a new settings tree with the results"
+	rsRootResultNode := StSettingsTree new nodeList: rsSettingNodes; yourself.
+	"Create a new parent node "
+	rootSearchResultNode := self newSettingNode
+		parentName: 'Results';
+		model: rsRootResultNode;
 		yourself.
+	
+	"Set the model of each result node"
+	rsSettingNodes do: [ : snc | 
+		snc
+			parentName: rootSearchResultNode name;
+			model: rsRootResultNode ].
+
 	newResultPage := self newResultPageOn: rootSearchResultNode.
+	newResultPage retrievePresenter.
 	notebook addPage: newResultPage.
 	notebook selectPage: newResultPage.
 	self notebook selectedPage resetContent.
@@ -94,20 +106,6 @@ StSettingsDetailsPresenter >> addTabsFrom: aStSettingNode [
 					 presenterProvider: [ StSettingsNotebookPageContentPresenter on: aSettingNode ];
 					 title: aSettingNode label;
 					 yourself) ] ]
-]
-
-{ #category : 'TOREMOVE' }
-StSettingsDetailsPresenter >> collectResultNodes: aCollection [
-	"Private - Select and answer those nodes that do not represent section titles"
-	
-	| nodePresenters |
-	nodePresenters := aCollection collect: [ :aSettingNode |
-		                  self
-			                  instantiate: aSettingNode presenterClass
-			                  on: aSettingNode ].
-	^ nodePresenters 
-		reject: [ :nodePresenter | nodePresenter hasChildren ]
-
 ]
 
 { #category : 'initialization' }
@@ -186,6 +184,12 @@ StSettingsDetailsPresenter >> newSectionNodePresenterFrom: aSettingNode level: a
 		                 on: aSettingNode.
 	nodePresenter sectionTitleStyle: self sectionTitleString , anInteger asString.
 	^ nodePresenter
+]
+
+{ #category : 'callbacks - tabs' }
+StSettingsDetailsPresenter >> newSettingNode [
+
+	^ StSettingNode with: PragmaSetting new.
 ]
 
 { #category : 'initialization' }
@@ -285,9 +289,6 @@ StSettingsDetailsPresenter >> updateSelectedSpecialCases: aSpNotebookPage [
 			aSpNotebookPage title = self generalTitle
 				ifFalse: [ self addHeaderForSettingsWithoutParent: aSpNotebookPage ]
 				ifTrue: [ self updatePresenterGeneralNodes: (settingTree reject: [ : node | node hasChildren ]) ] ]
-		ifTrue: [
-			aSpNotebookPage activePresenter 
-				ifNotNil: [ 	 self halt. ] ]
 ]
 
 { #category : 'callbacks' }
