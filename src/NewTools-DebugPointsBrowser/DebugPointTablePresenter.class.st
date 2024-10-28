@@ -47,6 +47,13 @@ DebugPointTablePresenter >> debugPointActions [
 ]
 
 { #category : 'initialization' }
+DebugPointTablePresenter >> initialize [
+
+	super initialize.
+	self initializeDebugPointTable 
+]
+
+{ #category : 'initialization' }
 DebugPointTablePresenter >> initializeDebugPointTable [
 
 	self beResizable.
@@ -91,10 +98,4 @@ DebugPointTablePresenter >> initializeDebugPointTable [
 		(self itemAt: item row) addBehavior: ChainBehavior new.
 		((self itemAt: item row) getBehavior: ChainBehavior) putChild:
 			item passenger first ]
-]
-
-{ #category : 'initialization' }
-DebugPointTablePresenter >> initializePresenters [
-
-	self initializeDebugPointTable 
 ]
