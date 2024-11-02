@@ -29,7 +29,7 @@ StSettingsCategoryItemPresenter >> defaultLayout [
 StSettingsCategoryItemPresenter >> iconMapAt: aString [ 
 	"Answer a <Symbol> representing an icon selector matching aString"
 
-	^ self application iconMapAt: aString
+	^ (self application propertyAt: #iconMap) at: aString
 ]
 
 { #category : 'accessing' }

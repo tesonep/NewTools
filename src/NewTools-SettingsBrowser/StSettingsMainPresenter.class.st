@@ -28,12 +28,11 @@ Class {
 { #category : 'accessing' }
 StSettingsMainPresenter class >> application [
 
-	self haltOnce.
 	^ StPharoApplication current
-		propertyAt: #settingsStree put: StSettingsTree new;
-		"propertyAt: #iconMap put: self iconMap;"
+		propertyAt: #settingsTree put: StSettingsTree new;
+		propertyAt: #iconMap put: self iconMap;
 		styleSheet: self styleSheet;
-		"iconProvider: self iconProvider;"
+		iconProvider: StSettingsBrowserIconProvider new;
 		yourself.
 	
 ]
@@ -58,13 +57,6 @@ StSettingsMainPresenter class >> iconMapAt: aString [
 	^ self application iconMap 
 		at: aString
 		ifAbsent: [ #info ]
-]
-
-{ #category : 'accessing' }
-StSettingsMainPresenter class >> iconProvider [
-
-	^ iconProvider
-		ifNil: [ iconProvider := self newIconProvider ]
 ]
 
 { #category : 'accessing' }
@@ -95,13 +87,6 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
-]
-
-{ #category : 'world menu' }
-StSettingsMainPresenter class >> newApplication: anApplication [
-	
-	self haltOnce.
-	super newApplication: anApplication
 ]
 
 { #category : 'accessing - icons' }

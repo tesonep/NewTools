@@ -28,5 +28,5 @@ StSettingsAbstractPresenter >> sectionTitleString [
 StSettingsAbstractPresenter >> settingsTree [
 	"Answer the receiver's <StSettingsTree>, the settings model"
 
-	^ self application settingsTree.
+	^ self application propertyAt: #settingsTree.
 ]
