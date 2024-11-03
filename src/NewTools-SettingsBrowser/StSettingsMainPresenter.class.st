@@ -30,9 +30,7 @@ StSettingsMainPresenter class >> application [
 
 	^ StPharoApplication current
 		propertyAt: #settingsTree put: StSettingsTree new;
-		propertyAt: #iconMap put: self iconMap;
 		styleSheet: self styleSheet;
-		iconProvider: StSettingsBrowserIconProvider new;
 		yourself.
 	
 ]
@@ -41,39 +39,6 @@ StSettingsMainPresenter class >> application [
 StSettingsMainPresenter class >> descriptionBackgroundColor [
 
 	^ Smalltalk ui theme lightBackgroundColor asHexString
-]
-
-{ #category : 'accessing' }
-StSettingsMainPresenter class >> iconMap [
-
-	^ iconMap
-		ifNil: [ iconMap := self initializeIconMap ]
-]
-
-{ #category : 'accessing' }
-StSettingsMainPresenter class >> iconMapAt: aString [ 
-	"Answer a <Symbol> specifying an icon name. Defaults to a generic icon if the application does not provide one"
-
-	^ self application iconMap 
-		at: aString
-		ifAbsent: [ #info ]
-]
-
-{ #category : 'accessing' }
-StSettingsMainPresenter class >> initializeIconMap [
-
-	^ Dictionary new
-		at: #appearance put: #appearanceIcon;
-		at: #codeBrowsing put: #browsingIcon;
-		at: #compiler put: #compilerIcon;
-		at: #network put: #networkingIcon;
-		at: #pharoSystem put: #systemIcon;
-		at: #refactoring put: #refactoringIcon;
-		at: #shortcuts put: #shortcutsIcon;
-		at: #taskitExecution put: #taskitIcon;
-		at: #codeEditing put: #texteditorIcon;
-		at: #tools put: #toolsIcon;
-		yourself
 ]
 
 { #category : 'world menu' }
@@ -87,12 +52,6 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
-]
-
-{ #category : 'accessing - icons' }
-StSettingsMainPresenter class >> newIconProvider [
-
-	^ StSettingsBrowserIconProvider new , SpPharoThemeIconProvider new
 ]
 
 { #category : 'accessing - styles' }

@@ -48,7 +48,7 @@ StSettingsCategoryItemPresenter >> iconPresenter: anObject [
 StSettingsCategoryItemPresenter >> initializePresenters [ 
 
 	labelPresenter := self newLabel label: node label.
-	iconPresenter := self iconNamed: (self iconMapAt: node name).
+	iconPresenter := self iconNamed: node name.
 
 ]
 
