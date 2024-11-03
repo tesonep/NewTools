@@ -10,6 +10,13 @@ SettingDeclaration >> asSettingPresenter [
 ]
 
 { #category : '*NewTools-SettingsBrowser' }
+SettingDeclaration >> findDeclarationDefault [
+	"Answer a default object according to the receiver's type"
+	
+	^ self typeClass settingDeclarationDefault
+]
+
+{ #category : '*NewTools-SettingsBrowser' }
 SettingDeclaration >> getColorFor: aPresenter [
 
 	| colorPickerPresenter |
