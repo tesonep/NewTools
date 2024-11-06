@@ -47,11 +47,11 @@ StFinderExampleSearch >> computeDataObjects: aString [
 		dataObjects do: [ : e | e evaluateWithTimeOut: self evaluationTimeout ] ]
 	on: CodeError , RuntimeSyntaxError
 	do: [ :e |
-		self inform: 'Error: ' , e messageText.
+		UIManager default inform: 'Error: ' , e messageText.
 		^ #(  ) ] .
 
 	dataObjects size < 2 ifFalse: [ ^ dataObjects ].
-	self inform:
+	UIManager default inform:
 		'If you are giving an example of receiver, \args, and result, please put periods between the parts.\Otherwise just type one selector fragment'
 			withCRs.
 	^ #(  )
