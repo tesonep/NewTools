@@ -25,6 +25,7 @@ StSettingsBrowserTest >> classToTest [
 { #category : 'running' }
 StSettingsBrowserTest >> setUp [
 
+	StSettingsMainPresenter initialize.
 	super setUp.	
 	categoriesPresenter := presenter presenterAt: #mainCategoriesPresenter.
 	toolbarPresenter := presenter presenterAt: #toolbarPresenter.

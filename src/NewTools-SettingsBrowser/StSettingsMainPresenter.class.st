@@ -29,9 +29,6 @@ Class {
 StSettingsMainPresenter class >> application [
 
 	^ StPharoApplication current
-		propertyAt: #settingsTree put: StSettingsTree new;
-		styleSheet: self styleSheet;
-		yourself.
 	
 ]
 
@@ -39,6 +36,14 @@ StSettingsMainPresenter class >> application [
 StSettingsMainPresenter class >> descriptionBackgroundColor [
 
 	^ Smalltalk ui theme lightBackgroundColor asHexString
+]
+
+{ #category : 'class initialization' }
+StSettingsMainPresenter class >> initialize [
+
+	self application
+		propertyAt: #settingsTree put: StSettingsTree new;
+		styleSheet: self styleSheet
 ]
 
 { #category : 'world menu' }
