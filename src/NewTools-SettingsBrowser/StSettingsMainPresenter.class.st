@@ -16,10 +16,6 @@ Class {
 		'detailsPresenter',
 		'mainCategoriesPresenter'
 	],
-	#classInstVars : [
-		'iconProvider',
-		'iconMap'
-	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
 	#tag : 'UI'
