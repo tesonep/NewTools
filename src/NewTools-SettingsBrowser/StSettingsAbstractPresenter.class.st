@@ -182,6 +182,12 @@ StSettingsAbstractPresenter class >> toolsIconContents [
 ]
 
 { #category : 'accessing' }
+StSettingsAbstractPresenter >> application [ 
+
+	^ StPharoApplication current
+]
+
+{ #category : 'accessing' }
 StSettingsAbstractPresenter >> iconNamed: aSymbol [
 	"Returns the icon with the given name"
 	
