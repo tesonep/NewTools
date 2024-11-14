@@ -1,6 +1,6 @@
 Class {
 	#name : 'StSettingsAbstractPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#classVars : [
 		'IconCache'
 	],
@@ -182,9 +182,9 @@ StSettingsAbstractPresenter class >> toolsIconContents [
 ]
 
 { #category : 'accessing' }
-StSettingsAbstractPresenter >> application [ 
+StSettingsAbstractPresenter >> currentApplication [ 
 
-	^ StPharoApplication current
+	^ self class currentApplication 
 ]
 
 { #category : 'accessing' }
@@ -216,5 +216,5 @@ StSettingsAbstractPresenter >> sectionTitleString [
 StSettingsAbstractPresenter >> settingsTree [
 	"Answer the receiver's <StSettingsTree>, the settings model"
 
-	^ self application propertyAt: #settingsTree.
+	^ self currentApplication propertyAt: #settingsTree.
 ]

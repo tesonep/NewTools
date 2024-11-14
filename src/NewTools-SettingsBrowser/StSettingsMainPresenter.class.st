@@ -21,25 +21,10 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'accessing' }
-StSettingsMainPresenter class >> application [
-
-	^ StPharoApplication current
-	
-]
-
 { #category : 'adding' }
 StSettingsMainPresenter class >> descriptionBackgroundColor [
 
 	^ Smalltalk ui theme lightBackgroundColor asHexString
-]
-
-{ #category : 'class initialization' }
-StSettingsMainPresenter class >> initialize [
-
-	self application
-		propertyAt: #settingsTree put: StSettingsTree new;
-		styleSheet: self styleSheet
 ]
 
 { #category : 'world menu' }
@@ -49,7 +34,7 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 	(aBuilder item: #'New Settings Browser')
 		parent: #NewToolsMenu;
 		label: 'New Settings Browser';
-		action: [ (self newApplication: self application) open ];
+		action: [ (self newApplication: self currentApplication) open ];
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
@@ -149,6 +134,15 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 		ifTrue: [ (self followPath: aStSettingNode parentNode in: aCollection) ]
 		ifFalse: [ aCollection add: aStSettingNode ].
 
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> initialize [
+
+	super initialize.
+	self currentApplication
+		propertyAt: #settingsTree ifAbsentPut: StSettingsTree new;
+		styleSheet: self class styleSheet
 ]
 
 { #category : 'initialization' }
