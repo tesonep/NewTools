@@ -226,16 +226,40 @@ StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
 		centered
 ]
 
-{ #category : 'menu' }
+{ #category : 'loading' }
 StSettingsMainPresenter >> loadSettings [
 	"Load the settings from the system settings file, if exists"
 
-	self settingsTree hasSettingsFile
-		ifTrue: [ self settingsTree updateSettingNodes ]
+	self settingsTree settingsFileDirectory
+		ifNotNil: [ : settingsDirectory | 
+			settingsDirectory hasFiles 
+				ifTrue: [ self loadSettingsFrom: (self selectDialog: settingsDirectory files) ]
+				ifFalse: [ self inform: 'No settings files were found in the settings directory' ] ]
+]
+
+{ #category : 'loading' }
+StSettingsMainPresenter >> loadSettingsFrom: aFileReference [ 
+
+	self settingsTree persistence fileReference: aFileReference.
+	self settingsTree updateSettingNodes.
+	self inform: 'Settings were loaded from ' , aFileReference fullName
 ]
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> pagePresenter [ 
 
 	^ detailsPresenter
+]
+
+{ #category : 'execution' }
+StSettingsMainPresenter >> selectDialog: fileReferneces [
+
+	^ SpSelectDialog new 
+		title: 'Settings Browser Selector';
+		label: 'Select a Stored Settings File';
+		items: fileReferneces;
+		display: [ :each | each basename ];
+		displayIcon: [ :each | self iconNamed: each systemIconName ];
+		openModal.
+
 ]

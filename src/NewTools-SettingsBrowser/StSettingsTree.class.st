@@ -72,6 +72,12 @@ StSettingsTree >> processSearch: aString [
 		as: Set
 ]
 
+{ #category : 'as yet unclassified' }
+StSettingsTree >> settingsFileDirectory [
+
+	^ self persistence fileReference parent
+]
+
 { #category : 'testing' }
 StSettingsTree >> settingsFileReference [
 	"Answer a <String> with the name of the file where settings are stored"
