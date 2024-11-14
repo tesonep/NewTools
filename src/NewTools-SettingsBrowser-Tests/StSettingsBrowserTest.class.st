@@ -13,7 +13,7 @@ Class {
 { #category : 'running' }
 StSettingsBrowserTest >> application [
 
-	^  self classToTest application
+	^  self classToTest currentApplication
 
 ]
 

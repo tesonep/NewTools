@@ -34,7 +34,7 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 	(aBuilder item: #'New Settings Browser')
 		parent: #NewToolsMenu;
 		label: 'New Settings Browser';
-		action: [ (self newApplication: self application) open ];
+		action: [ (self newApplication: self currentApplication) open ];
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
@@ -140,7 +140,7 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 StSettingsMainPresenter >> initialize [
 
 	super initialize.
-	self application
+	self currentApplication
 		propertyAt: #settingsTree ifAbsentPut: StSettingsTree new;
 		styleSheet: self class styleSheet
 ]
