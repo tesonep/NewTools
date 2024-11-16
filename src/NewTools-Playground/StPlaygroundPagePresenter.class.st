@@ -337,6 +337,12 @@ StPlaygroundPagePresenter >> preferredExtent: aSize [
 	self class preferredExtent: aSize
 ]
 
+{ #category : 'actions' }
+StPlaygroundPagePresenter >> removeAllBindings [
+
+	self interactionModel removeAllBindings
+]
+
 { #category : 'accessing' }
 StPlaygroundPagePresenter >> selectAll [
 	
