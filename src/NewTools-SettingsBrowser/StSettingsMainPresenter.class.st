@@ -139,10 +139,10 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 { #category : 'initialization' }
 StSettingsMainPresenter >> initialize [
 
-	super initialize.
 	self currentApplication
-		propertyAt: #settingsTree ifAbsentPut: StSettingsTree new;
-		styleSheet: self class styleSheet
+		propertyAt: #settingsTree ifAbsentPut: [ StSettingsTree new ];
+		styleSheet: self class styleSheet.
+	super initialize.
 ]
 
 { #category : 'initialization' }
