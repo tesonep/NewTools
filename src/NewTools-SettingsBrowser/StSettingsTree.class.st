@@ -72,7 +72,7 @@ StSettingsTree >> processSearch: aString [
 		as: Set
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StSettingsTree >> settingsFileDirectory [
 
 	^ self persistence fileReference parent
