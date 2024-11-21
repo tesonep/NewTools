@@ -16,6 +16,16 @@ Class {
 	#tag : 'Search'
 }
 
+{ #category : 'as yet unclassified' }
+StMethodFinderSend class >> receiver: r selector: s1 withArguments: args [
+
+	^ self new
+		receiver: r;
+		selector: s1;
+		arguments: args;
+		yourself
+]
+
 { #category : 'comparing' }
 StMethodFinderSend >> = aStMethodFinderSend [
 
