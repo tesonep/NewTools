@@ -67,6 +67,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 			"Debug points"
 			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-SpTextPresenterDecorators' )];
+			package: 'NewTools-DebugPointsBrowser-Tests' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' ) ];
 			package: 'NewTools-ObjectCentricDebugPoints' with: [spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
@@ -132,6 +133,7 @@ BaselineOfNewTools >> baseline: spec [
 				    	'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Utils'
 						'NewTools-DebugPointsBrowser'
+						'NewTools-DebugPointsBrowser-Tests'
 						'NewTools-ObjectCentricDebugPoints' );
 			group: 'Spotter' with: #( 
 						'NewTools-Morphic-Spotter' 
@@ -246,6 +248,6 @@ BaselineOfNewTools >> sindarin: spec [
 
 	spec baseline: 'Sindarin' with: [
 		spec
-			repository: (self class environment at: #BaselineOfPharo) scriptableDebuggerRepository;
+			repository: (self classNamed: #BaselineOfPharo) scriptableDebuggerRepository;
 			loads: 'default' ]
 ]
