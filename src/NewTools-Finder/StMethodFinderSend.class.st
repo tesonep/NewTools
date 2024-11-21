@@ -16,7 +16,7 @@ Class {
 	#tag : 'Search'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StMethodFinderSend class >> receiver: r selector: s1 withArguments: args [
 
 	^ self new
