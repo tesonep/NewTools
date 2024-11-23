@@ -28,13 +28,6 @@ Class {
 	#tag : 'Senders'
 }
 
-{ #category : 'tools registration' }
-StMessageBrowser class >> beDefaultBrowser [
-	<script>
-	
-	self registerToolsOn: self currentApplication tools
-]
-
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"

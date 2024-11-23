@@ -248,7 +248,7 @@ StFinderResult >> sendersAction [
 StFinderResult >> versionBrowser [
 	"We should check how to do it via the stApplication but ok for now"
 
-	^ self application tools versionBrowser
+	^ application tools versionBrowser
 ]
 
 { #category : 'action' }
