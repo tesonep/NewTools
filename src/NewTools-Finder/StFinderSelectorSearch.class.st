@@ -23,6 +23,8 @@ StFinderSelectorSearch >> buildResult: aListOfMethods [
 		| foundResult |
 
 		foundResult := StFinderResult newFor: method.
+		foundResult application: application.
+		
 		results
 			detect: [ :elem | elem content = method selector ]
 			ifFound: [ :elem | elem addChild: foundResult ]
