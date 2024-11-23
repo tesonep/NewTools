@@ -10,12 +10,6 @@ Class {
 	#tag : 'Commands'
 }
 
-{ #category : 'executing' }
-StFileBrowserSelectionCommand >> application [
-
-	^ self context application
-]
-
 { #category : 'accessing' }
 StFileBrowserSelectionCommand >> currentDirectory [ 
 	"Answer a <FileReference> with the receiver's current directory"

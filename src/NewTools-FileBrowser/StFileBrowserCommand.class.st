@@ -10,6 +10,12 @@ Class {
 	#tag : 'Commands'
 }
 
+{ #category : 'executing' }
+StFileBrowserCommand >> application [
+
+	^ self context application
+]
+
 { #category : 'accessing' }
 StFileBrowserCommand >> iconProvider [ 
 
