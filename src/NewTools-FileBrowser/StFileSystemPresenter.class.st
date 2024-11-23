@@ -39,13 +39,6 @@ StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCo
 				yourself)
 ]
 
-{ #category : 'class initialization' }
-StFileSystemPresenter class >> initialize [
-	"Register myself as the file list tool once I'm loaded."
-
-	self currentApplication tools fileListTool: self
-]
-
 { #category : 'defaults' }
 StFileSystemPresenter class >> lastVisitedDirectory [
 
@@ -68,6 +61,12 @@ StFileSystemPresenter class >> open [
 	<script>
 
 	^ self new open
+]
+
+{ #category : 'class initialization' }
+StFileSystemPresenter class >> registerToolsOn: aRegistry [
+
+	aRegistry register: self as: #fileList
 ]
 
 { #category : 'accessing - bookmarks' }
