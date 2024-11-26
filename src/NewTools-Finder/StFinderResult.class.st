@@ -12,7 +12,8 @@ Class {
 	#instVars : [
 		'content',
 		'parent',
-		'children'
+		'children',
+		'application'
 	],
 	#category : 'NewTools-Finder-Result',
 	#package : 'NewTools-Finder',
@@ -37,6 +38,12 @@ StFinderResult >> addChild: aFinderResult [
 	children add: aFinderResult
 ]
 
+{ #category : 'system tool access' }
+StFinderResult >> application: anApplication [
+
+	application := anApplication 
+]
+
 { #category : 'action' }
 StFinderResult >> browseAction [
 	"Default does nothing. Subclasses may implement their own action for browsing."
@@ -46,8 +53,8 @@ StFinderResult >> browseAction [
 StFinderResult >> browser [
 	"We should check how to do it via the stApplication but ok for now"
 
-	self flag: #comeBack.
-	^ Smalltalk tools browser
+	
+	^ application tools browser
 ]
 
 { #category : 'accessing' }
@@ -240,8 +247,8 @@ StFinderResult >> sendersAction [
 { #category : 'system tool access' }
 StFinderResult >> versionBrowser [
 	"We should check how to do it via the stApplication but ok for now"
-	self flag: #comeBack.
-	^ Smalltalk tools versionBrowser
+
+	^ application tools versionBrowser
 ]
 
 { #category : 'action' }

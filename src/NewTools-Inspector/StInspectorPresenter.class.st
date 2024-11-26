@@ -135,17 +135,12 @@ StInspectorPresenter class >> preferredExtent: aPoint [
 ]
 
 { #category : 'tools registry' }
-StInspectorPresenter class >> register [
-	<script>
-
-	self registerToolsOn: self currentApplication tools
-]
-
-{ #category : 'tools registry' }
 StInspectorPresenter class >> registerToolsOn: registry [
-	"self registerToolsOn: Smalltalk tools " 
+	"self registerToolsOn: self currentApplication tools
+	But do not use self currentApplication this is a global." 
+	
 	registry register: self as: #inspector.
-	registry register: self as: #basicInspector
+	registry register: self as: #basicInspctor
 ]
 
 { #category : 'settings' }

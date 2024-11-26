@@ -106,8 +106,8 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 
 { #category : 'instance creation' }
 StPlaygroundPresenter class >> open [
-
 	<script>
+	
 	^ self new open
 ]
 
@@ -121,16 +121,8 @@ StPlaygroundPresenter class >> openContents: aString [
 ]
 
 { #category : 'tools registry' }
-StPlaygroundPresenter class >> register [
-	"Add ourselves to registry. See [Smalltalk tools]" 
-	<script>
-
-	self registerToolsOn: self currentApplication tools
-]
-
-{ #category : 'tools registry' }
 StPlaygroundPresenter class >> registerToolsOn: registry [
-	"Add ourselves to registry. See [Smalltalk tools]" 
+
 
 	registry register: self as: #workspace
 
