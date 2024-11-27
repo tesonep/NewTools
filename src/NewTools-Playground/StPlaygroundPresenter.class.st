@@ -85,13 +85,6 @@ StPlaygroundPresenter class >> defaultTitle [
 	^ 'Playground'
 ]
 
-{ #category : 'class initialization' }
-StPlaygroundPresenter class >> initialize [
-
-	"Make playground active by default"
-	self register
-]
-
 { #category : 'world menu' }
 StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
