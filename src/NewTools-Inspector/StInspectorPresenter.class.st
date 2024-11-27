@@ -77,12 +77,6 @@ StInspectorPresenter class >> indexableDisplayLimit: aNumber [
 	IndexableDisplayLimit := aNumber
 ]
 
-{ #category : 'class initialization' }
-StInspectorPresenter class >> initialize [
-
-	self register
-]
-
 { #category : 'instance creation' }
 StInspectorPresenter class >> inspect: anObject [
 
@@ -140,7 +134,7 @@ StInspectorPresenter class >> registerToolsOn: registry [
 	But do not use self currentApplication this is a global." 
 	
 	registry register: self as: #inspector.
-	registry register: self as: #basicInspctor
+	registry register: self as: #basicInspector
 ]
 
 { #category : 'settings' }
