@@ -50,6 +50,12 @@ StFileBrowserSettings class >> defaultDirectoryOn: aBuilder [
 ]
 
 { #category : 'settings' }
+StFileBrowserSettings class >> defaultTerminalProgram [
+
+	^ 'Terminal'
+]
+
+{ #category : 'settings' }
 StFileBrowserSettings class >> groupSettingsOn: aBuilder [
 	<systemsettings>
 
@@ -76,7 +82,7 @@ StFileBrowserSettings class >> linuxTerminalProgram: aString [
 StFileBrowserSettings class >> macTerminalProgram [
 
 	^ MacTerminalProgram
-		ifNil: [ MacTerminalProgram := 'Terminal' ]
+		ifNil: [ MacTerminalProgram := self defaultTerminalProgram ]
 ]
 
 { #category : 'settings' }
