@@ -34,21 +34,21 @@ StFileBrowserOpenTerminalCommandTest >> terminalShellCommandTest: aBlock withPat
 StFileBrowserOpenTerminalCommandTest >> testOpenLinuxTerminalShellCommand [
 
 	self terminalShellCommandTest: [ :command :path |
-		command openLinuxTerminalShellCommand: path ]
+		command terminalInterface openLinuxTerminalShellCommand: path ]
 ]
 
 { #category : 'tests' }
 StFileBrowserOpenTerminalCommandTest >> testOpenMacTerminalShellCommand [
 
 	self terminalShellCommandTest: [ :command :path |
-		command openMacTerminalShellCommand: path ]
+		command terminalInterface openMacTerminalShellCommand: path ]
 ]
 
 { #category : 'tests' }
 StFileBrowserOpenTerminalCommandTest >> testOpenWindowsTerminalShellCommand [
 
 	self terminalShellCommandTest: [ :command :path |
-		command openWindowsTerminalCommand: path ]
+		command terminalInterface openWindowsTerminalCommand: path ]
 ]
 
 { #category : 'tests' }
@@ -56,5 +56,5 @@ StFileBrowserOpenTerminalCommandTest >> testTerminalShellCommand [
 	"tests for a current platform"
 
 	self terminalShellCommandTest: [ :command :path |
-		command terminalShellCommand: path ]
+		command terminalInterface terminalShellCommand: path ]
 ]
