@@ -154,7 +154,8 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-DebuggerSelector'
 				   		'NewTools-DebuggerSelector-Tests' );
 			group: 'FileBrowser' with: #( 
-						'NewTools-FileBrowser' 
+						'NewTools-FileBrowser'
+						'NewTools-FileBrowser-Morphic'
 						'NewTools-FileBrowser-Tests' );
       			group: 'RewriterTools' with: #(
 				    		'NewTools-RewriterTools-Backend'
