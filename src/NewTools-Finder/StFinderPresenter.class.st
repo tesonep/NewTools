@@ -139,7 +139,7 @@ StFinderPresenter class >> menuFinderCommandOn: aBuilder [
 	<worldMenu>
 
 	(aBuilder item: #NewFinder)
-		parent: #NewToolsMenu;
+		parent: #Searching ;
 		action: [ StFinderPresenter open ];
 		label: 'New Finder';
 		order: 2; 
