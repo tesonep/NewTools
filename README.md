@@ -1,5 +1,5 @@
 # NewTools
-All development tools for Pharo, developed with Spec.
+All development tools for Pharo, developed with Spec2.
 Available by default in Pharo 10.
 
 [![NewTools-Pharo-Integration](https://github.com/pharo-spec/NewTools/actions/workflows/newtools-all.yml/badge.svg)](https://github.com/pharo-spec/NewTools/actions/workflows/newtools-all.yml)  
