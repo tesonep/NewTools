@@ -1360,23 +1360,12 @@ StDebugger >> updateCodeFromContext: aContext [
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
 	self code removeAllTextSegmentDecorations.
-	
-	"This decorates the receiver and the next node with an underline"
-	"self code
-		addTextSegmentDecoration:
-			(SpTextPresenterDecorator new
-				underlineColor: Color orange;
-				interval: (aContext currentNode start to: aContext currentNode stop + 1);
-				yourself)."
-				
+
 	"This decorates the next executing node"
 	self code addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
 		interval: (selectionInterval first to: selectionInterval last + 1);
 		yourself)
-				
-	"	icon: (self iconNamed: #warning);
-		iconBlock: [ :n | n inspect ];
-		title: 'Click me!';"
+	
 ]
 
 { #category : 'updating' }
