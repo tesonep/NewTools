@@ -4,7 +4,8 @@ Extension { #name : 'SpMorphicBaseTextAdapter' }
 SpMorphicBaseTextAdapter >> addTextSegmentDecoration: aDecorationSegment [
 	
 	self widgetDo: [ :w | 
-		w addSegment: (RubUnderlinedSegmentMorph on: aDecorationSegment) ]
+		w addSegment: (RubUnderlinedSegmentMorph on: aDecorationSegment).
+		w withTextSegmentIcons ] 
 ]
 
 { #category : '*NewTools-SpTextPresenterDecorators' }
