@@ -528,6 +528,33 @@ StDebugger >> debuggerInspectorModelClass [
 	^ StDebuggerInspectorModel
 ]
 
+{ #category : 'updating - presenters' }
+StDebugger >> decorateCodeForBreakpointsInContext: aContext [
+
+	| debugPoints decorators |
+	debugPoints := DebugPoint all select: [ :dp |
+		               dp link nodes anySatisfy: [ :n |
+			               n methodNode compiledMethod
+			               == aContext method ] ].
+	decorators := debugPoints collect: [ :dp | 
+		              dp link nodes collect: [ :n |
+			              dp name
+			              ->
+			              (DebugPointIconStyler new buildIconStyleFor: dp to: n) ] ].
+
+	decorators flattened do: [ :d |
+		| styler |
+		styler := d value.
+		self code addTextSegmentDecoration:
+			(SpTextPresenterDecorator forHighlight
+				 interval: styler interval;
+				 icon: styler icon;
+				 iconBlock: styler iconBlock;
+				 highlightColor: styler color;
+				 title: d key asString;
+				 yourself) ].
+]
+
 { #category : 'layout' }
 StDebugger >> defaultLayout [
 	^ SpPanedLayout newTopToBottom
@@ -1359,8 +1386,12 @@ StDebugger >> updateCodeFromContext: aContext [
 { #category : 'updating - presenters' }
 StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selectionInterval [
 	
+	
+	
 	self code removeAllTextSegmentDecorations.
 
+	self decorateCodeForBreakpointsInContext: aContext.
+	
 	"This decorates the next executing node"
 	self code addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
 		interval: (selectionInterval first to: selectionInterval last + 1);
