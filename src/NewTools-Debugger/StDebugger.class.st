@@ -532,11 +532,8 @@ StDebugger >> debuggerInspectorModelClass [
 StDebugger >> decorateCodeForBreakpointsInContext: aContext [
 
 	| debugPoints decorators |
-	debugPoints := DebugPoint all select: [ :dp |
-		               dp link nodes anySatisfy: [ :n |
-			               n methodNode compiledMethod
-			               == aContext method ] ].
-	decorators := debugPoints collect: [ :dp | 
+	debugPoints := DebugPoint allInstalledInMethod: aContext method.
+	decorators := debugPoints collect: [ :dp |
 		              dp link nodes collect: [ :n |
 			              dp name
 			              ->
@@ -552,7 +549,7 @@ StDebugger >> decorateCodeForBreakpointsInContext: aContext [
 				 iconBlock: styler iconBlock;
 				 highlightColor: styler color;
 				 title: d key asString;
-				 yourself) ].
+				 yourself) ]
 ]
 
 { #category : 'layout' }
@@ -1389,7 +1386,6 @@ StDebugger >> updateCodeTextSegmentDecoratorsIn: aContext forInterval: selection
 	
 	
 	self code removeAllTextSegmentDecorations.
-
 	self decorateCodeForBreakpointsInContext: aContext.
 	
 	"This decorates the next executing node"
