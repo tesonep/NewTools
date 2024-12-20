@@ -2,40 +2,46 @@ Extension { #name : 'AbstractFileReference' }
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionCompressedItems [
+
 	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
 	| items children root |
-
 	root := (FileSystem zip: self) open workingDirectory.
-	children := root directories, root files.
-	items := self isRoot 
-		ifTrue: [ children ]
-		ifFalse: [ 
-			children asOrderedCollection 
-				addFirst: self parent;
-				yourself ].
+	children := root directories , root files.
+	items := self isRoot
+		         ifTrue: [ children ]
+		         ifFalse: [
+			         children asOrderedCollection
+				         addFirst: self parent;
+				         yourself ].
 
 	^ SpTablePresenter new
-		items: items;
-		addColumn: (SpCompositeTableColumn new
-			title: 'Name';
-			addColumn: (SpImageTableColumn evaluated: [ :each | 
-				self iconNamed: (each isDirectory 
-					ifTrue: [ #folder ] 
-					ifFalse: [ #browse ]) ]);
-			addColumn: (SpStringTableColumn evaluated: [ :each | 
-					self parent = each 
-						ifTrue: [ '..' ] 
-						ifFalse: [ each basename ] ]));
-		addColumn: (SpStringTableColumn 
-			title: 'Size' 
-			evaluated: [ :each | each humanReadableSize ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Creation' 
-			evaluated: [ :each | 
-				String streamContents: [ :stream | 
-					each creationTime printYMDOn: stream.
-					stream nextPut: Character space.
-					each creationTime printHMSOn: stream ] ])
+		  items: items;
+		  addColumn: (SpCompositeTableColumn new
+				   title: 'Name';
+				   addColumn: (SpImageTableColumn evaluated: [ :each |
+							    self iconNamed: (each isDirectory
+										     ifTrue: [ #folder ]
+										     ifFalse: [ #browse ]) ]);
+				   addColumn: (SpStringTableColumn evaluated: [ :each |
+							    self parent = each
+								    ifTrue: [ '..' ]
+								    ifFalse: [ each basename ] ]));
+		  addColumn: (SpStringTableColumn new
+				   title: 'Size';
+				   evaluated: [ :each | each size ];
+				   formatted: [ :size | size humanReadableSISizeString ]);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Creation';
+				   evaluated: [ :each | each creationTime ];
+				   formatted: [ :time |
+					   [
+					   String streamContents: [ :s |
+							   time printYMDOn: s.
+							   s nextPut: Character space.
+							   time printHMSOn: s ] ]
+						   on: Error
+						   do: [ 'N/A' translated ] ];
+				   beSortable)
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
@@ -103,46 +109,46 @@ AbstractFileReference >> inspectionGifContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItems [
+
 	<inspectorPresentationOrder: 0 title: 'Items'>
 	| items |
-	
-	items := 	self directories, self files.
-	self isRoot ifFalse: [ 
-		items := items copyWithFirst: self parent ]. 
+	items := self directories , self files.
+	self isRoot ifFalse: [ items := items copyWithFirst: self parent ].
 
-	^ SpTablePresenter new 
-		beResizable;
-		items: items;
-		addColumn: (SpCompositeTableColumn new 
-			title: 'Name';
-			width: 300;
-			addColumn: (SpImageTableColumn evaluated: [ :each |
-				each isDirectory 
-					ifTrue: [ self iconNamed: #folder ] 
-					ifFalse: [ self iconNamed: #browse ] ]) 
-				beNotExpandable;
-			addColumn: (SpStringTableColumn evaluated: [ :each | 
-				(self isChildOf: each) 
-					ifTrue: [ '..' ] 
-					ifFalse: [ each basename ] ]);
-			yourself);
-		addColumn: (SpStringTableColumn new 
-			title: 'Size';
-			width: 100;
-			evaluated: [ :each | 
-				[ each humanReadableSize ]
-					on: Error 
-					do: [ 'N/A' translated ] ]);
-		addColumn: (SpStringTableColumn 
-			title: 'Creation'
-			evaluated: [ :each | 
-				[ String streamContents: [ :s | 
-					each creationTime printYMDOn: s.
-					s nextPut: Character space.
-					each creationTime printHMSOn: s ] ]
-				on: Error 
-				do: [ 'N/A' translated  ] ]);
-		yourself
+	^ SpTablePresenter new
+		  beResizable;
+		  items: items;
+		  addColumn: (SpCompositeTableColumn new
+				   title: 'Name';
+				   width: 300;
+				   addColumn: (SpImageTableColumn evaluated: [ :each |
+							    each isDirectory
+								    ifTrue: [ self iconNamed: #folder ]
+								    ifFalse: [ self iconNamed: #browse ] ]) beNotExpandable;
+				   addColumn: (SpStringTableColumn evaluated: [ :each |
+							    (self isChildOf: each)
+								    ifTrue: [ '..' ]
+								    ifFalse: [ each basename ] ]);
+				   yourself);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Size';
+				   width: 100;
+				   evaluated: [ :each | each size ];
+				   formatted: [ :size | size humanReadableSISizeString ];
+				   beSortable);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Creation';
+				   evaluated: [ :each | each creationTime ];
+				   formatted: [ :time |
+					   [
+					   String streamContents: [ :s |
+							   time printYMDOn: s.
+							   s nextPut: Character space.
+							   time printHMSOn: s ] ]
+						   on: Error
+						   do: [ 'N/A' translated ] ];
+				   beSortable);
+		  yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

@@ -2,17 +2,21 @@ Extension { #name : 'Dictionary' }
 
 { #category : '*NewTools-Inspector-Extensions' }
 Dictionary >> inspectionItems: aBuilder [
-	<inspectorPresentationOrder: 0 title: 'Items'> 
-	
-	^ aBuilder newTable 
-		addColumn: (SpStringTableColumn 
-			title: 'Key'
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each key ])
-			beSortable;
-		addColumn: (SpStringTableColumn 
-			title: 'Value' 
-			evaluated: [ :each | StObjectPrinter asTruncatedTextFrom: each value ])
-			beSortable;
-		items: (self associations collect: [:e | StInspectorAssociationNode hostObject: e ]);
-		yourself
+
+	<inspectorPresentationOrder: 0 title: 'Items'>
+	^ aBuilder newTable
+		  addColumn: (SpStringTableColumn new
+				   title: 'Key';
+				   evaluated: [ :each | each key ];
+				   formatted: [ :key | StObjectPrinter asTruncatedTextFrom: key ];
+				   beSortable);
+		  addColumn: (SpStringTableColumn new
+				   title: 'Value';
+				   evaluated: [ :each | each value ];
+				   formatted: [ :value |
+					   StObjectPrinter asTruncatedTextFrom: value ];
+				   beSortable);
+		  items: (self associations collect: [ :e |
+				   StInspectorAssociationNode hostObject: e ]);
+		  yourself
 ]
