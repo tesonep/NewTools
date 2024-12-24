@@ -130,9 +130,9 @@ BaselineOfNewTools >> baseline: spec [
 
 						'NewTools-Debugger-Morphic'
 				    		'NewTools-ObjectCentricBreakpoints'
-				    		'NewTools-Sindarin-Tools' 
+				    		"'NewTools-Sindarin-Tools' 
 
-					 	"'NewTools-Sindarin-Commands'
+					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'"
 				    	'NewTools-Debugger-Breakpoints-Tools'
 				    	'NewTools-Debugger-Tests' 
