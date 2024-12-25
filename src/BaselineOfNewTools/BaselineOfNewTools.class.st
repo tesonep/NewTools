@@ -16,7 +16,7 @@ BaselineOfNewTools >> baseline: spec [
 		spec preLoadDoIt: #preload:package:.
 		spec postLoadDoIt: #postload:package:.
 
-		"self sindarin: spec."
+		self sindarin: spec.
 		self chest: spec.
 		self colorPicker: spec.
 
@@ -72,18 +72,11 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader';
 			package: 'NewTools-ProjectLoader-Microdown';
 			"Object-centric breakpoints"
-			
-			
 			package: 'NewTools-ObjectCentricBreakpoints';
 			"Sindarin"
-			
-			"
 			package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
-			"
-			
-			
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-DebuggerSelector-Tests' with: [ spec requires: #( 'NewTools-DebuggerSelector' ) ];
@@ -130,10 +123,10 @@ BaselineOfNewTools >> baseline: spec [
 
 						'NewTools-Debugger-Morphic'
 				    		'NewTools-ObjectCentricBreakpoints'
-				    		"'NewTools-Sindarin-Tools' 
+				    		'NewTools-Sindarin-Tools' 
 
 					 	'NewTools-Sindarin-Commands'
-				    	'NewTools-Sindarin-Commands-Tests'"
+				    	'NewTools-Sindarin-Commands-Tests'
 				    	'NewTools-Debugger-Breakpoints-Tools'
 				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
