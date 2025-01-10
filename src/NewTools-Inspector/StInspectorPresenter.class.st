@@ -24,9 +24,6 @@ Class {
 		'IndexableDisplayLimit',
 		'InspectorDiveOnSingleClick'
 	],
-	#classInstVars : [
-		'preferredExtent'
-	],
 	#category : 'NewTools-Inspector-View',
 	#package : 'NewTools-Inspector',
 	#tag : 'View'
@@ -49,7 +46,7 @@ StInspectorPresenter class >> defaultLayout [
 { #category : 'accessing' }
 StInspectorPresenter class >> defaultPreferredExtent [
 
-	^ (700@500)
+	^ 700 @ 500
 ]
 
 { #category : 'accessing' }
@@ -116,18 +113,6 @@ StInspectorPresenter class >> openOn: anObject [
 	^ (self onObject: anObject) open
 ]
 
-{ #category : 'accessing' }
-StInspectorPresenter class >> preferredExtent [
-	
-	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
-]
-
-{ #category : 'accessing' }
-StInspectorPresenter class >> preferredExtent: aPoint [
-	
-	preferredExtent := aPoint
-]
-
 { #category : 'tools registry' }
 StInspectorPresenter class >> registerToolsOn: registry [
 	"self registerToolsOn: self currentApplication tools
@@ -192,12 +177,11 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self windowTitle;
 		windowIcon: self windowIcon;
-		initialExtent: self class preferredExtent;
+		initialExtent: self class defaultPreferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startProcessing ];
 		whenFocusLostDo: [ self stopProcessing ];
-		whenClosedDo: [ self stopProcessing ];
-		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
+		whenClosedDo: [ self stopProcessing ]
 ]
 
 { #category : 'transmission' }
@@ -254,15 +238,6 @@ StInspectorPresenter >> newInspectorFor: aModel [
 				pages last selectedPageName } ].
 		
 	^ newInspector
-]
-
-{ #category : 'private' }
-StInspectorPresenter >> preferredExtent: aSize [
-
-	(self window isMaximized 
-		or: [ self window isMinimized ])
-		ifTrue: [ ^ self ].
-	self class preferredExtent: aSize
 ]
 
 { #category : 'private' }
