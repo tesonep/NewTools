@@ -20,9 +20,6 @@ Class {
 	#classVars : [
 		'UsingLayout'
 	],
-	#classInstVars : [
-		'preferredExtent'
-	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'

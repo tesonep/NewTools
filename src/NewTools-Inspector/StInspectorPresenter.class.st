@@ -24,9 +24,6 @@ Class {
 		'IndexableDisplayLimit',
 		'InspectorDiveOnSingleClick'
 	],
-	#classInstVars : [
-		'preferredExtent'
-	],
 	#category : 'NewTools-Inspector-View',
 	#package : 'NewTools-Inspector',
 	#tag : 'View'
@@ -44,12 +41,6 @@ StInspectorPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #millerList;
 		yourself
-]
-
-{ #category : 'accessing' }
-StInspectorPresenter class >> defaultPreferredExtent [
-
-	^ (700@500)
 ]
 
 { #category : 'accessing' }
