@@ -20,9 +20,11 @@ CompiledMethod >> inspectionPragmasContext: aContext [
 CompiledMethod >> inspectionSource [
 	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	
+	
+	
 	^ SpCodePresenter new 
 		beForMethod: self method;
-		text: self sourceCode;
+		text: (self sourceCode ifNil: [ 'Apparently method ', self methodClass name, '>>#', self selector, ' is missing its source!']);
 		actionsWith: [ :group | group 
 			addActionWith: [ :action | action
 				name: 'Browse method class'; 
