@@ -1,7 +1,7 @@
-Extension { #name : 'ASTProgramNode' }
+Extension { #name : 'OCProgramNode' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionAST [
+OCProgramNode >> inspectionAST [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
 	^ SpTreePresenter new 
@@ -13,24 +13,24 @@ ASTProgramNode >> inspectionAST [
 					stream
 						nextPutAll: each class name;
 						nextPut: $(;
-						nextPutAll: ((each formattedCode truncateTo: 50) copyReplaceAll: String cr with: String space);
+						nextPutAll: ((each sourceCode truncateTo: 50) copyReplaceAll: String cr with: String space);
 						nextPut: $)
 			 ] ];
 		yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionASTDump [
-	<inspectorPresentationOrder: 50 title: 'AST Dump'>
+OCProgramNode >> inspectionASTDump [
 
-	^ SpCodePresenter new 
-		text: (RBParser parseExpression: self dump) formattedCode; 
-		beForScripting; "this is an expression"
-		yourself
+	  <inspectorPresentationOrder: 50 title: 'AST Dump'>
+	  ^ SpCodePresenter new
+		    text: (OCParser parseExpression: self dump) formattedCode;
+		    beForScripting;
+		    "this is an expression"yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-ASTProgramNode >> inspectionSource [
+OCProgramNode >> inspectionSource [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
 	^ SpCodePresenter new 
