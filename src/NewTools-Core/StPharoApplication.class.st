@@ -65,7 +65,10 @@ StPharoApplication >> initialize [
 StPharoApplication >> initializeConfiguration [
 
 	self resetConfiguration.
-	self class codeSupportAnnouncer weak when: UIThemeChanged send: #resetConfiguration to: self
+	self class codeSupportAnnouncer weak 
+		when: UIThemeChanged 
+		send: #resetConfiguration 
+		to: self
 ]
 
 { #category : 'private - factory' }
