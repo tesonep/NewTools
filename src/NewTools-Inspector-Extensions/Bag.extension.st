@@ -10,16 +10,15 @@ Bag >> inspectionItems: aBuilder [
 	^ aBuilder newTable
 		  addColumn: (SpStringTableColumn new
 				   title: 'Items';
-				   evaluated: [ :each |
-					   StObjectPrinter asTruncatedTextFrom: each key ];
+				   evaluated: [ :each | each key ];
+				   formatted: [ :each | StObjectPrinter asTruncatedTextFrom: each ];
 				   beNotExpandable;
 				   beSortable;
 				   yourself);
 		  addColumn: (SpStringTableColumn new
 				   title: 'Occurences';
-				   evaluated: [ :each |
-					   StObjectPrinter asTruncatedTextFrom:
-							   (self occurrencesOf: each key) ];
+				   evaluated: [ :each | self occurrencesOf: each key ];
+				   formatted: [ :each | StObjectPrinter asTruncatedTextFrom: each ];
 				   beSortable;
 				   yourself);
 		  items: (contents associations sort: sortFuction);

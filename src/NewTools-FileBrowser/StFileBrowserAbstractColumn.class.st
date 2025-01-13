@@ -50,6 +50,11 @@ StFileBrowserAbstractColumn class >> evaluateOn: aFileReference [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'templateMethod' }
+StFileBrowserAbstractColumn class >> formatOn: aValue [
+	^ self subclassResponsibility
+]
+
 { #category : 'testing' }
 StFileBrowserAbstractColumn class >> isAbstract [
 

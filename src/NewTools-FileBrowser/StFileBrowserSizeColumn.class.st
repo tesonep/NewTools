@@ -13,6 +13,7 @@ Class {
 StFileBrowserSizeColumn class >> addConstraintTo: aTableColumn [
 
 	aTableColumn
+		formatted: [ :e | self formatOn: e ];
 		width: 70;
 		beSortable
 ]
@@ -21,11 +22,20 @@ StFileBrowserSizeColumn class >> addConstraintTo: aTableColumn [
 StFileBrowserSizeColumn class >> evaluateOn: aFileReference [
 
 	^ aFileReference isDirectory
-		  ifTrue: [ '--' ]
+		  ifTrue: [ 0 ]
 		  ifFalse: [
-			  [ aFileReference humanReadableSize ]
+			  [ aFileReference size ]
 				  on: Error
-				  do: [ 'N/A' ] ]
+				  do: [ 0 ] ]
+]
+
+{ #category : 'templateMethod' }
+StFileBrowserSizeColumn class >> formatOn: aSize [
+
+	^ aSize ifNil: [ 'N/A' ] ifNotNil: [
+		  [ aSize humanReadableSISizeString ]
+			  on: Error
+			  do: [ 'N/A' ] ]
 ]
 
 { #category : 'sorting' }

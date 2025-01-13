@@ -3,26 +3,18 @@ I'm a column use to display the modification date of a file in a File dialog.
 "
 Class {
 	#name : 'StFileBrowserModificationDateColumn',
-	#superclass : 'StFileBrowserAbstractColumn',
+	#superclass : 'StFileBrowserDateColumn',
 	#category : 'NewTools-FileBrowser-Columns',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Columns'
 }
 
-{ #category : 'adding' }
-StFileBrowserModificationDateColumn class >> addConstraintTo: aTableColumn [
-
-	aTableColumn
-		width: 150;
-		beSortable
-]
-
 { #category : 'templateMethod' }
 StFileBrowserModificationDateColumn class >> evaluateOn: aFileReference [
 
-	^ [ aFileReference modificationTime fileDialogFormat ]
+	^ [ aFileReference modificationTime ]
 		  on: Error
-		  do: [ 'N/A' ]
+		  do: [ nil ]
 ]
 
 { #category : 'sorting' }
