@@ -328,15 +328,6 @@ StPlaygroundPagePresenter >> page [
 	^ page
 ]
 
-{ #category : 'private' }
-StPlaygroundPagePresenter >> preferredExtent: aSize [
-
-	(self window isMaximized 
-		or: [ self window isMinimized ])
-		ifTrue: [ ^ self ].
-	self class preferredExtent: aSize
-]
-
 { #category : 'actions' }
 StPlaygroundPagePresenter >> removeAllBindings [
 
