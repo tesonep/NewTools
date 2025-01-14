@@ -37,12 +37,6 @@ StPharoJobManager class >> enable [
 		when: JobEnd send: #jobEnd: to: self
 ]
 
-{ #category : 'class initialization' }
-StPharoJobManager class >> initialize [
-
-	"self enable"
-]
-
 { #category : 'private' }
 StPharoJobManager class >> isHeadless [
 

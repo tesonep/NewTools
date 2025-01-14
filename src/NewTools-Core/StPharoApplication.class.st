@@ -108,12 +108,6 @@ StPharoApplication >> run [
 StPharoApplication >> shutDown: quitting [
 ]
 
-{ #category : 'private - running' }
-StPharoApplication >> start [
-
-	"do nothing"
-]
-
 { #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
