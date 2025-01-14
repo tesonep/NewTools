@@ -114,18 +114,6 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 
 ]
 
-{ #category : 'accessing' }
-StMessageBrowser class >> preferredExtent [
-
-	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
-]
-
-{ #category : 'accessing' }
-StMessageBrowser class >> preferredExtent: aPoint [
-
-	preferredExtent := aPoint
-]
-
 { #category : 'tool registration' }
 StMessageBrowser class >> registerToolsOn: registry [
 
