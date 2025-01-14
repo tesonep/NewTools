@@ -69,8 +69,3 @@ StInspectionPresenter >> setModelBeforeInitialization: anInspectionModel [
 
 	model := anInspectionModel
 ]
-
-{ #category : 'stepping' }
-StInspectionPresenter >> step [
-	"do nothing, it depends on my children"
-]

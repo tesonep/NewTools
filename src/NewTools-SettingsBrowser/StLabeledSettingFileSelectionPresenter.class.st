@@ -16,12 +16,9 @@ Class {
 
 { #category : 'examples' }
 StLabeledSettingFileSelectionPresenter class >> example [
+	<example>
 
-	^ (self 
-		label: 'Label Example' 
-		input: SpTextPresenter new
-		description: 'Description string') open
-
+	^ (self label: 'Label Example' input: SpTextPresenter new description: 'Description string') open
 ]
 
 { #category : 'initialization' }
