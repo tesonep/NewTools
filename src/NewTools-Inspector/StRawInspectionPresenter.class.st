@@ -23,14 +23,6 @@ StRawInspectionPresenter class >> buildCommandsGroupWith: presenter forRoot: aCm
 		register: (SpBrowsePointersToCommand forSpecContext: presenter)
 ]
 
-{ #category : 'layout' }
-StRawInspectionPresenter class >> defaultLayout [
-
-	^ SpBoxLayout newTopToBottom 
-		add: #attributeTable;
-		yourself
-]
-
 { #category : 'accessing' }
 StRawInspectionPresenter class >> label [
 
@@ -59,6 +51,14 @@ StRawInspectionPresenter >> addValuesColumn [
 StRawInspectionPresenter >> addVariablesColumn [
 
 	attributeTable addColumn: self variablesColumn
+]
+
+{ #category : 'layout' }
+StRawInspectionPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom 
+		add: attributeTable;
+		yourself
 ]
 
 { #category : 'ports' }
