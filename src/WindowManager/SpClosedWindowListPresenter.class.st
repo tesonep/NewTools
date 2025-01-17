@@ -1,5 +1,5 @@
 Class {
-	#name : 'SpClosedWindowList',
+	#name : 'SpClosedWindowListPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'title',
@@ -15,12 +15,12 @@ Class {
 }
 
 { #category : 'layout' }
-SpClosedWindowList class >> defaultLayout [
+SpClosedWindowListPresenter class >> defaultLayout [
 	^ self layoutWithOrdering
 ]
 
 { #category : 'as yet unclassified' }
-SpClosedWindowList class >> exampleClosedWindowsList [
+SpClosedWindowListPresenter class >> exampleClosedWindowsList [
 
 	<sampleInstance>
 	| presenter |
@@ -36,7 +36,7 @@ SpClosedWindowList class >> exampleClosedWindowsList [
 ]
 
 { #category : 'layout' }
-SpClosedWindowList class >> layoutWithOrdering [
+SpClosedWindowListPresenter class >> layoutWithOrdering [
 
 	| listLayout |
 	listLayout := SpBoxLayout newLeftToRight
@@ -54,7 +54,7 @@ SpClosedWindowList class >> layoutWithOrdering [
 ]
 
 { #category : 'initialization' }
-SpClosedWindowList >> connectPresenters [
+SpClosedWindowListPresenter >> connectPresenters [
 
 	super connectPresenters.
 
@@ -68,13 +68,13 @@ SpClosedWindowList >> connectPresenters [
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> display: aBlock [
+SpClosedWindowListPresenter >> display: aBlock [
 
 	list display: aBlock
 ]
 
 { #category : 'initialization' }
-SpClosedWindowList >> initialize [
+SpClosedWindowListPresenter >> initialize [
 
 	super initialize.
 
@@ -92,17 +92,7 @@ SpClosedWindowList >> initialize [
 ]
 
 { #category : 'initialization' }
-SpClosedWindowList >> initializeDialogWindow: aWindow [
-
-	aWindow addDefaultButton: 'Ok' do: [ :presenter | 
-		self performOkAction. 
-		presenter close ].
-
-	
-]
-
-{ #category : 'initialization' }
-SpClosedWindowList >> initializePresenters [
+SpClosedWindowListPresenter >> initializePresenters [
 
 	label := self newLabel.
 	list := self newList.
@@ -121,33 +111,33 @@ SpClosedWindowList >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-SpClosedWindowList >> initializeWindow: aWindowPresenter [
+SpClosedWindowListPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: self title;
 	initialExtent: 310@185.
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> items [
+SpClosedWindowListPresenter >> items [
 	^ list model items
 ]
 
 { #category : 'private' }
-SpClosedWindowList >> items: anItemList [
+SpClosedWindowListPresenter >> items: anItemList [
 	list items: anItemList.
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> label: aString [
+SpClosedWindowListPresenter >> label: aString [
 	label label: aString 
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> list [
+SpClosedWindowListPresenter >> list [
 	^ list
 ]
 
 { #category : 'initialization' }
-SpClosedWindowList >> newList [
+SpClosedWindowListPresenter >> newList [
 	"Default list collection is an Array.
 	As this presenter aims to add / remove items from the list, we need a growable collection"
 	^ super newList
@@ -156,63 +146,63 @@ SpClosedWindowList >> newList [
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> refresh [
+SpClosedWindowListPresenter >> refresh [
 
 	self items: self items.
 	self resetSelection
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> removeButton [
+SpClosedWindowListPresenter >> removeButton [
 	^ removeButton
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> removeItem: anObject [
+SpClosedWindowListPresenter >> removeItem: anObject [
 
 	self items remove: anObject.
 	"self resetSelection "
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> removeItemBlock: aBlock [
+SpClosedWindowListPresenter >> removeItemBlock: aBlock [
 	removeItemBlock := aBlock.
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> resetSelection [
+SpClosedWindowListPresenter >> resetSelection [
 	list selection basicSelectIndex: 1.
 
 
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> selectedItem [
+SpClosedWindowListPresenter >> selectedItem [
 	^ list selection selectedItem
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> title [
+SpClosedWindowListPresenter >> title [
 	^ title
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> title: aTitle [
+SpClosedWindowListPresenter >> title: aTitle [
 	title := aTitle 
 ]
 
 { #category : 'accessing' }
-SpClosedWindowList >> unhideButton [
+SpClosedWindowListPresenter >> unhideButton [
 	^ unhideButton 
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> unhideItemBlock: aBlock [
+SpClosedWindowListPresenter >> unhideItemBlock: aBlock [
 	unhideItemBlock := aBlock.
 ]
 
 { #category : 'api' }
-SpClosedWindowList >> whenSelectionChangedDo: aBlock [
+SpClosedWindowListPresenter >> whenSelectionChangedDo: aBlock [
 
 	list whenSelectionChangedDo: aBlock
 ]
