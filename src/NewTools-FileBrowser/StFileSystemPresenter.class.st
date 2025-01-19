@@ -39,6 +39,12 @@ StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCo
 				yourself)
 ]
 
+{ #category : 'accessing' }
+StFileSystemPresenter class >> defaultPreferredExtent [
+
+	^ (1100 @ 700)
+]
+
 { #category : 'defaults' }
 StFileSystemPresenter class >> lastVisitedDirectory [
 
@@ -149,12 +155,6 @@ StFileSystemPresenter >> fileNavigationSystem [
 ]
 
 { #category : 'initialization' }
-StFileSystemPresenter >> initialExtentForWindow [
-
-	^ (1100 @ 700)
-]
-
-{ #category : 'initialization' }
 StFileSystemPresenter >> initialTitle [
 
 	^ 'File Browser'
@@ -200,7 +200,7 @@ StFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
 
 	self setTitleTo: aSpWindowPresenter.
 	self setWindowIconTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
+	
 ]
 
 { #category : 'utilities' }
@@ -210,12 +210,6 @@ StFileSystemPresenter >> openFolder: aFileReference [
 	model openFolder: aFileReference.
 	self expandPath: aFileReference.
 
-]
-
-{ #category : 'initialization' }
-StFileSystemPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
 ]
 
 { #category : 'initialization' }
