@@ -84,6 +84,20 @@ StRawInspectionPresenter >> initializePresenters [
 	attributeTable := self newTreeTable
 		beResizable;
 		actions: self rootCommandsGroup;
+		dragEnabled: true;
+		whenDragStartDo: [ :announcement |
+			announcement transfer description: announcement transfer passenger first stringValue ];
+		wantsDrop: [ :transfer |
+			transfer target notNil and: [
+				transfer target canSave and: [
+					transfer passenger isArray and: [
+						transfer passenger size = 1 and: [
+							transfer passenger first isKindOf: StInspectorNode ] ] ] ] ];
+		acceptDrop: [ :transfer |
+			| value |
+			value := transfer passenger first value.
+			transfer target save: (transfer shouldCopy ifTrue: [ value copy ] ifFalse: [ value ]).
+			self step ];
 		yourself.
 	self addVariablesColumn.
 	self addValuesColumn.
