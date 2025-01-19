@@ -37,7 +37,7 @@ StFinderPragmaSearch >> buildResult: aDictionary [
 
 		methods do: [ :method |
 			| classResult |
-			classResult := StFinderClassResult new content: method methodClass.
+			classResult := StFinderClassResult new content: method methodClass; application: application.
 			pragmaResult children
 				detect: [ :elem | elem content = method selector ]
 				ifFound: [ :elem | elem addChild: classResult ]
@@ -45,6 +45,7 @@ StFinderPragmaSearch >> buildResult: aDictionary [
 					| selectorResult |
 					selectorResult := StFinderSelectorResult new
 						                  content: method;
+												application: application;
 						                  addChild: classResult;
 						                  yourself.
 					pragmaResult addChild: selectorResult ] ].
