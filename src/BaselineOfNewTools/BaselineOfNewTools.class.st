@@ -282,6 +282,22 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 	MCMethodDefinition initializersEnabled: true
 ]
 
+{ #category : 'accessing' }
+BaselineOfNewTools >> repositoryLocation [
+
+	| locationFromIceberg repo |
+	repo := (self class environment classNamed: #IceRepository)
+		        ifNotNil: [ :iceberg |
+			        iceberg registry
+				        detect: [ :each | each name = 'NewTools' ]
+				        ifNone: [ nil ] ].
+	
+	repo ifNotNil: [ locationFromIceberg := repo repositoryDirectory ].
+
+	^ locationFromIceberg ifNil: [
+		  self packageRepository directory asFileReference parent ]
+]
+
 { #category : 'external projects' }
 BaselineOfNewTools >> sindarin: spec [
 
