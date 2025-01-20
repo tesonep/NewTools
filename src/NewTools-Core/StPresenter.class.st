@@ -7,9 +7,3 @@ Class {
 	#package : 'NewTools-Core',
 	#tag : 'Presenters'
 }
-
-{ #category : 'accessing' }
-StPresenter class >> defaultPreferredExtent [
-	
-	^ 600@400
-]
