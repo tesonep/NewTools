@@ -32,6 +32,6 @@ StRewriterOpenHelpBrowserCommand class >> defaultName [
 { #category : 'executing' }
 StRewriterOpenHelpBrowserCommand >> execute [
 
-	^ StRewriterHelpBrowserPresenter new open
-	
+	^ (StRewriterHelpBrowserPresenter
+			newApplication: self application) open
 ]

@@ -31,7 +31,7 @@ StRewriterOpenRuleLoaderCommand class >> defaultName [
 
 { #category : 'executing' }
 StRewriterOpenRuleLoaderCommand >> execute [
-	
-	^  StRewriterRuleLoaderPresenter new open.
-	
+
+	^ (StRewriterRuleLoaderPresenter
+			newApplication: self application) open
 ]

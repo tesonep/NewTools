@@ -43,5 +43,8 @@ StRewriterApplyRuleOnAllClassesCommand >> execute [
 
 	changes := StRewriterAbstractApplier defaultEngineApplier
 		calculateAllChangesForRules: (OrderedCollection with: ruleHolder).
-	^ (StChangesBrowserPresenter changes: changes) open
+
+	^ (StChangesBrowserPresenter
+			newApplication: self application
+			model: changes) open
 ]
