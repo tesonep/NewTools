@@ -138,7 +138,6 @@ StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
-		initialExtent: self initialExtent;
 		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
