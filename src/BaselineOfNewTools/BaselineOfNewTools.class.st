@@ -242,6 +242,19 @@ BaselineOfNewTools >> microdown: spec [
 ]
 
 { #category : 'accessing' }
+BaselineOfNewTools >> packageRepository [
+	" Tries to determine a repository from which the baseline is being loaded. Useful for 
+	refering other baselines in the same repository. "
+
+	^ (self class package mcWorkingCopy repositoryGroup repositories reject: [ :each | each = MCCacheRepository uniqueInstance ])
+		  ifNotEmpty: [ :repositories |
+			  repositories
+				  detect: [ :each | each description beginsWith: 'tonel://' ]
+				  ifNone: [ repositories anyOne ] ]
+		  ifEmpty: [ nil ]
+]
+
+{ #category : 'accessing' }
 BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
 	
