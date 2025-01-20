@@ -134,6 +134,12 @@ The ''Select classes'' button opened a dialog window  to select which classes wi
 The ''All classes'' button is used to reset the classes selection.'
 ]
 
+{ #category : 'accessing' }
+StFinderPresenter class >> defaultPreferredExtent [
+
+	^ (800 @ 500)
+]
+
 { #category : 'world menu' }
 StFinderPresenter class >> menuFinderCommandOn: aBuilder [
 	<worldMenu>
@@ -366,12 +372,6 @@ StFinderPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> initialExtentForWindow [
-
-	^ (800 @ 500)
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> initializeFocus [
 
 	self focusOrder 
@@ -430,7 +430,7 @@ StFinderPresenter >> initializeWindow: aSpWindowPresenter [
 
 	self setTitleTo: aSpWindowPresenter.
 	self setWindowIconTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
+	
 ]
 
 { #category : 'updating - widgets' }
@@ -539,12 +539,6 @@ StFinderPresenter >> selectedResults: aCollection [
 	^ self application 
 		propertyAt: #selectedResults
 		put: aCollection asSet
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
 ]
 
 { #category : 'initialization' }

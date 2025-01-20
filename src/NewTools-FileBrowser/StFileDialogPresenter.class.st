@@ -109,6 +109,12 @@ StFileDialogPresenter class >> defaultOkActionBlock [
 	^ [ :fileReference | fileReference ]
 ]
 
+{ #category : 'accessing' }
+StFileDialogPresenter class >> defaultPreferredExtent [ 
+
+	^ (1050 @ 750)
+]
+
 { #category : 'accessing - Class' }
 StFileDialogPresenter class >> extensions: aCollectionOfExtensions [
 
@@ -232,12 +238,6 @@ StFileDialogPresenter >> iconFor: anEntry [
 		  at: ext
 		  ifPresent: [ :icon | icon ]
 		  ifAbsent: [ self iconNamed: #page ]
-]
-
-{ #category : 'initialization' }
-StFileDialogPresenter >> initialExtentForWindow [
-
-	^ (1050 @ 750)
 ]
 
 { #category : 'initialization' }

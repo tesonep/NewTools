@@ -12,6 +12,13 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'accessing' }
+StSaveFilePresenter class >> defaultPreferredExtent [ 
+
+	^ (1050 @ 550)
+	
+]
+
 { #category : 'examples' }
 StSaveFilePresenter class >> example [
 
@@ -54,12 +61,6 @@ StSaveFilePresenter >> connectPresenters [
 StSaveFilePresenter >> existingFileMessage: entry [
 
 	^ 'File named "{1}" already exists. Do you want to overwrite it?' format: { entry basename }
-]
-
-{ #category : 'initialization' }
-StSaveFilePresenter >> initialExtentForWindow [ 
-
-	^ (1050 @ 550)
 ]
 
 { #category : 'hooks' }

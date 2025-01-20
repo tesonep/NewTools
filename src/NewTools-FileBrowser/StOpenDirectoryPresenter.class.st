@@ -13,6 +13,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'accessing' }
+StOpenDirectoryPresenter class >> defaultPreferredExtent [ 
+
+	^ (1050 @ 550)
+]
+
 { #category : 'examples' }
 StOpenDirectoryPresenter class >> example [
 
@@ -37,12 +43,6 @@ StOpenDirectoryPresenter class >> navigationSystemClass [
 StOpenDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
 
 	^ true
-]
-
-{ #category : 'initialization' }
-StOpenDirectoryPresenter >> initialExtentForWindow [
-
-	^ (1050 @ 550)
 ]
 
 { #category : 'hooks' }
