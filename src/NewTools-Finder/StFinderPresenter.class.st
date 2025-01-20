@@ -215,6 +215,13 @@ The Method Finder is not trying all methods in the system so if it will find not
 
 ]
 
+{ #category : 'instance creation' }
+StFinderPresenter class >> newApplication: anApplication model: aModel [
+
+	aModel application: anApplication.
+	^ super newApplication: anApplication model: aModel.
+]
+
 { #category : 'opening' }
 StFinderPresenter class >> open [
 	<script>
