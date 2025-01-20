@@ -19,6 +19,7 @@ BaselineOfNewTools >> baseline: spec [
 		self sindarin: spec.
 		self chest: spec.
 		self colorPicker: spec.
+		self microdown: spec.
 
 		spec
 			package: 'NewTools-Core';
@@ -108,7 +109,9 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
 			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
 			
-			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
+
+			package: 'NewTools-WelcomeBrowser' with: [ spec requires: 'Microdown' ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
@@ -181,6 +184,8 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
+						
+			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -191,12 +196,13 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            			'RewriterTools'
+		            			'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser' ) ]
+						'SettingsBrowser'
+						'WelcomeBrowser' ) ]
 ]
 
 { #category : 'external projects' }
@@ -217,6 +223,24 @@ BaselineOfNewTools >> colorPicker: spec [
 		with: [ spec repository: 'github://pharo-spec/ColorPicker/src' ].
 ]
 
+{ #category : 'actions' }
+BaselineOfNewTools >> loadThemeImages [
+
+	| themeClass location |
+	themeClass := self class environment classNamed: #StWelcomeTheme.
+	location := self repositoryLocation.
+	themeClass loadAllImagesFrom: location / 'resources' / 'themes'
+]
+
+{ #category : 'external projects' }
+BaselineOfNewTools >> microdown: spec [
+
+	spec baseline: 'Microdown' with: [
+		spec
+			repository: (Smalltalk classNamed: #BaselineOfPharo) microdown repository;
+			loads: #( 'RichText' ) ]
+]
+
 { #category : 'accessing' }
 BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 	| url |
@@ -234,7 +258,8 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 { #category : 'actions' }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
-	MCMethodDefinition initializersEnabled: initializersEnabled
+	MCMethodDefinition initializersEnabled: initializersEnabled.
+	self loadThemeImages
 ]
 
 { #category : 'actions' }
