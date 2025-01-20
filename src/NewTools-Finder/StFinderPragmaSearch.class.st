@@ -33,11 +33,17 @@ StFinderPragmaSearch >> buildResult: aDictionary [
 			                ifFound: [ :result |
 				                isNewResult := false.
 				                result ]
-			                ifNone: [ StFinderPragmaResult new content: pragma; yourself ].
+			                ifNone: [ StFinderPragmaResult new 
+												content: pragma;
+												application: application;
+												 yourself ].
 
 		methods do: [ :method |
 			| classResult |
-			classResult := StFinderClassResult new content: method methodClass; application: application.
+			classResult := StFinderClassResult new 
+									content: method methodClass; 
+									application: application; 
+									yourself.
 			pragmaResult children
 				detect: [ :elem | elem content = method selector ]
 				ifFound: [ :elem | elem addChild: classResult ]
