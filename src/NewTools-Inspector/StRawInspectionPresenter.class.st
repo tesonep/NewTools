@@ -152,9 +152,7 @@ StRawInspectionPresenter >> selectedPath [
 { #category : 'building' }
 StRawInspectionPresenter >> setAttributeTable [
 
-	attributeTable
-		roots: self inspectorNodes;
-		children: [ :node | node children ]
+	attributeTable children: [ :node | node children ]
 ]
 
 { #category : 'stepping' }
@@ -169,6 +167,12 @@ StRawInspectionPresenter >> step [
 
 	mementoNodes := rootNodes collect: #mementoValue.
 	attributeTable updateRootsKeepingSelection: rootNodes
+]
+
+{ #category : 'building' }
+StRawInspectionPresenter >> updatePresenter [
+
+	attributeTable roots: self inspectorNodes
 ]
 
 { #category : 'building' }
