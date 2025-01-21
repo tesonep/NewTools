@@ -32,10 +32,9 @@ StRewriterOpenRuleEditorCommand class >> defaultName [
 { #category : 'executing' }
 StRewriterOpenRuleEditorCommand >> execute [
 
-	| window |
-	window := StRewriterRuleEditorPresenter new open.
-	window presenter
-		lhs: self context lhs;
-		rhs: self context rhs.
-	^ window
+	^ (StRewriterRuleEditorPresenter
+			newApplication: self application)
+			lhs: self context lhs;
+			rhs: self context rhs;
+			open
 ]
