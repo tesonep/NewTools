@@ -19,7 +19,6 @@ BaselineOfNewTools >> baseline: spec [
 		self sindarin: spec.
 		self chest: spec.
 		self colorPicker: spec.
-		self microdown: spec.
 
 		spec
 			package: 'NewTools-Core';
@@ -111,7 +110,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
 
-			package: 'NewTools-WelcomeBrowser' with: [ spec requires: 'Microdown' ].
+			package: 'NewTools-WelcomeBrowser'.
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
@@ -230,15 +229,6 @@ BaselineOfNewTools >> loadThemeImages [
 	themeClass := self class environment classNamed: #StWelcomeTheme.
 	location := self repositoryLocation.
 	themeClass loadAllImagesFrom: location / 'resources' / 'themes'
-]
-
-{ #category : 'external projects' }
-BaselineOfNewTools >> microdown: spec [
-
-	spec baseline: 'Microdown' with: [
-		spec
-			repository: (Smalltalk classNamed: #BaselineOfPharo) microdown repository;
-			loads: #( 'RichText' ) ]
 ]
 
 { #category : 'accessing' }
