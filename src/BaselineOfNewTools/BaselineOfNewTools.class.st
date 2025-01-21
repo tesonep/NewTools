@@ -18,7 +18,6 @@ BaselineOfNewTools >> baseline: spec [
 
 		self sindarin: spec.
 		self chest: spec.
-		self colorPicker: spec.
 
 		spec
 			package: 'NewTools-Core';
@@ -110,7 +109,10 @@ BaselineOfNewTools >> baseline: spec [
 			
 			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
 
-			package: 'NewTools-WelcomeBrowser'.
+			package: 'NewTools-WelcomeBrowser';
+			
+			package: 'ColorPicker';
+			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
@@ -185,6 +187,8 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-SettingsBrowser-Tests');
 						
 			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
+			
+			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -201,7 +205,8 @@ BaselineOfNewTools >> baseline: spec [
 						'Finder'
 						'Profiler'
 						'SettingsBrowser'
-						'WelcomeBrowser' ) ]
+						'WelcomeBrowser'
+						'ColorPickerGroup' ) ]
 ]
 
 { #category : 'external projects' }
@@ -212,14 +217,6 @@ BaselineOfNewTools >> chest: spec [
 			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
-]
-
-{ #category : 'external projects' }
-BaselineOfNewTools >> colorPicker: spec [
-
-	spec
-		baseline: 'ColorPicker' 
-		with: [ spec repository: 'github://pharo-spec/ColorPicker/src' ].
 ]
 
 { #category : 'actions' }
