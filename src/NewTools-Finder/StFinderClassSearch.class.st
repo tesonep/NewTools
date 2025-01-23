@@ -19,7 +19,7 @@ StFinderClassSearch >> buildResult: aListOfClasses [
 	^ aListOfClasses
 		  collect: [ :each |
 			  | newResult |
-			  newResult := StFinderClassResult new content: each.
+			  newResult := StFinderClassResult new content: each; application: application.
 			  each selectors sort do: [ :selector |
 				 newResult addChild: (StFinderSelectorResult new content: selector) ].
 			  newResult ]

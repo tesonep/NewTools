@@ -19,9 +19,13 @@ StFinderPackageSearch >> buildResult: aListOfPackages [
 	^ aListOfPackages
 		  collect: [ :each |
 			  | newResult |
-			  newResult := StFinderPackageResult new content: each.
+			  newResult := StFinderPackageResult new 
+						content: each; 
+						application: application.
 			  each definedClasses do: [ : class |
-				 newResult addChild: (StFinderClassResult new content: class) ].
+				 newResult addChild: (StFinderClassResult new 
+													content: class; 
+													application: application) ].
 			  newResult  ]
 		  as: OrderedCollection
 ]

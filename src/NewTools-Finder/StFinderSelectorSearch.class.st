@@ -32,6 +32,7 @@ StFinderSelectorSearch >> buildResult: aListOfMethods [
 				| newResult |
 				newResult := StFinderSelectorResult new
 					             content: method selector;
+									 application: application;
 					             addChild: foundResult;
 					             yourself.
 				results add: newResult ] ].
