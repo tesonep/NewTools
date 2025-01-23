@@ -8,8 +8,7 @@ Class {
 		'unhideItemBlock',
 		'label',
 		'removeItemBlock',
-		'title',
-		'lastClosedWindows'
+		'title'
 	],
 	#classInstVars : [
 		'lastClosedWindows'
@@ -20,38 +19,6 @@ Class {
 
 { #category : 'layout' }
 SpClosedWindowListPresenter class >> defaultLayout [
-	^ self layoutWithOrdering
-]
-
-{ #category : 'accessing' }
-SpClosedWindowListPresenter class >> defaultPreferredExtent [
-
-	^ 310 @ 185
-]
-
-{ #category : 'example' }
-SpClosedWindowListPresenter class >> exampleClosedWindowsList [
-
-	<sampleInstance>
-	| presenter |
-	presenter := self new
-		             items: SpWindow allInstances ;
-		             unhideItemBlock: [ 1 ];
-		             openWithLayout: self layoutWithOrdering;
-		             yourself.
-
-
-	^ presenter
-]
-
-{ #category : 'accessing' }
-SpClosedWindowListPresenter class >> lastClosedWindows [
-
-	^ lastClosedWindows ifNil: [  lastClosedWindows := OrderedCollection new ]
-]
-
-{ #category : 'layout' }
-SpClosedWindowListPresenter class >> layoutWithOrdering [
 
 	| listLayout |
 	listLayout := SpBoxLayout newLeftToRight
@@ -68,24 +35,38 @@ SpClosedWindowListPresenter class >> layoutWithOrdering [
 		  yourself
 ]
 
-{ #category : 'instance creation' }
-SpClosedWindowListPresenter class >> open [
+{ #category : 'accessing' }
+SpClosedWindowListPresenter class >> defaultPreferredExtent [
 
-	<script>
-	self new
-		items: lastClosedWindows;
-		openWithLayout: self layoutWithOrdering.
-	self new resetSelection.
-	^ self
+	^ 310 @ 185
+]
+
+{ #category : 'example' }
+SpClosedWindowListPresenter class >> exampleClosedWindowsList [
+
+	<sampleInstance>
+	| presenter |
+	presenter := self new
+		             items: SpWindow allInstances;
+		             unhideItemBlock: [ 1 ];
+		             open;
+		             yourself.
+	^ presenter
+]
+
+{ #category : 'accessing' }
+SpClosedWindowListPresenter class >> lastClosedWindows [
+
+	^ lastClosedWindows ifNil: [  lastClosedWindows := OrderedCollection new ]
 ]
 
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
-
+	
 	self lastClosedWindows size >= 5 ifTrue: [
 		self lastClosedWindows removeLast close ].
 	self lastClosedWindows addFirst: aModel.
-
+   self refresh
 ]
 
 { #category : 'initialization' }
@@ -106,7 +87,7 @@ SpClosedWindowListPresenter >> connectPresenters [
 SpClosedWindowListPresenter >> initialize [
 
 	super initialize.
-	title:= 'Last Closed Windows'.
+	title := 'Last Closed Windows'.
 	removeItemBlock := [ :item |
 	                   item ifNotNil: [
 		                   self items remove: item.
@@ -121,9 +102,8 @@ SpClosedWindowListPresenter >> initialize [
 { #category : 'initialization' }
 SpClosedWindowListPresenter >> initializePresenters [
 
-	label := self newLabel.
 	list := self newList
-		        items: OrderedCollection new;
+		        items: self lastClosedWindows ;
 		        display: [ :s | s displayString ].
 	unhideButton := self newButton.
 	removeButton := self newButton.
@@ -136,7 +116,8 @@ SpClosedWindowListPresenter >> initializePresenters [
 		addStyle: 'small';
 		addStyle: 'flat';
 		icon: (self iconNamed: #remove);
-		help: 'Remove a item from the list'
+		help: 'Remove a item from the list'.
+		self resetSelection 
 ]
 
 { #category : 'accessing' }
@@ -148,11 +129,6 @@ SpClosedWindowListPresenter >> items [
 { #category : 'private' }
 SpClosedWindowListPresenter >> items: anItemList [
 	(list items: anItemList) whenActivatedDo: [ :selection | unhideItemBlock cull: selection selectedItem ]
-]
-
-{ #category : 'accessing' }
-SpClosedWindowListPresenter >> label: aString [
-	label label: aString 
 ]
 
 { #category : 'accessing' }
