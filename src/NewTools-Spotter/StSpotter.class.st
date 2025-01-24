@@ -78,6 +78,14 @@ StSpotter class >> createTips [
 ]
 
 { #category : 'accessing' }
+StSpotter class >> defaultPreferredExtent [
+
+	^ self isShowingPreview 
+		ifTrue: [ (750@650) ]
+		ifFalse: [ (500@650) ]
+]
+
+{ #category : 'accessing' }
 StSpotter class >> hidePreview [
 	<script>
 
@@ -455,15 +463,6 @@ StSpotter >> hideSpinner [
 StSpotter >> historize: aCandidateLink [
 
 	self class historize: aCandidateLink
-]
-
-{ #category : 'initialization' }
-StSpotter >> initialExtent [
-
-	self flag: #TODO. "Maybe calculate coordinates?"
-	^ self isShowingPreview 
-		ifTrue: [ (750@450) ]
-		ifFalse: [ (500@450) ]
 ]
 
 { #category : 'initialization' }
