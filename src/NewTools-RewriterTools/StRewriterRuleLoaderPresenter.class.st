@@ -16,6 +16,12 @@ Class {
 	#tag : 'Loader'
 }
 
+{ #category : 'specs' }
+StRewriterRuleLoaderPresenter class >> defaultPreferredExtent [
+
+	^ 700 @ 450
+]
+
 { #category : 'accessing' }
 StRewriterRuleLoaderPresenter class >> descriptionText [
 
@@ -77,9 +83,6 @@ StRewriterRuleLoaderPresenter >> initializeTableSelector [
 StRewriterRuleLoaderPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
-		title: self class title;
-		initialExtent: 700 @ 450;
-		windowIcon: self class icon;
 		askOkToClose: false;
 		aboutText: self class descriptionText
 ]
@@ -94,4 +97,16 @@ StRewriterRuleLoaderPresenter >> lhs [
 StRewriterRuleLoaderPresenter >> rhs [
 
 	^ rulesTableSelector rhs
+]
+
+{ #category : 'initialization' }
+StRewriterRuleLoaderPresenter >> windowIcon [ 
+
+	^ self class iconName
+]
+
+{ #category : 'initialization' }
+StRewriterRuleLoaderPresenter >> windowTitle [ 
+
+	^ 'Rewrite rule loader'
 ]
