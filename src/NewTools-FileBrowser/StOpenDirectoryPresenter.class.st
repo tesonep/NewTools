@@ -45,11 +45,6 @@ StOpenDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
 	^ true
 ]
 
-{ #category : 'hooks' }
-StOpenDirectoryPresenter >> initialTitle [
-	^ 'Select Directory To Open'
-]
-
 { #category : 'accessing' }
 StOpenDirectoryPresenter >> selectedEntry [
 
@@ -57,4 +52,9 @@ StOpenDirectoryPresenter >> selectedEntry [
 		fileReference isDirectory ifTrue: [ ^ fileReference ] ].
 	self inform: 'You must select a directory'.
 	^ nil
+]
+
+{ #category : 'hooks' }
+StOpenDirectoryPresenter >> windowTitle [
+	^ 'Select Directory To Open'
 ]

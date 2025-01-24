@@ -21,8 +21,7 @@ Class {
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',
-		'bookmarksTreeTable',
-		'title'
+		'bookmarksTreeTable'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -155,13 +154,6 @@ StFileSystemPresenter >> fileNavigationSystem [
 ]
 
 { #category : 'initialization' }
-StFileSystemPresenter >> initialTitle [
-
-	^ 'File Browser'
-
-]
-
-{ #category : 'initialization' }
 StFileSystemPresenter >> initializeBookmarksTreeTable [
 
 	bookmarksTreeTable := self newTreeTable.
@@ -202,33 +194,6 @@ StFileSystemPresenter >> openFolder: aFileReference [
 
 ]
 
-{ #category : 'initialization' }
-StFileSystemPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: self title
-
-]
-
-{ #category : 'initialization' }
-StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
-
-]
-
-{ #category : 'accessing' }
-StFileSystemPresenter >> title [
-
-	^ title
-		ifNil: [ title := self initialTitle ]
-]
-
-{ #category : 'accessing' }
-StFileSystemPresenter >> title: aString [
-
-	title := aString.
-]
-
 { #category : 'accessing' }
 StFileSystemPresenter >> treeNavigationSystem [
 	^ treeNavigationSystem
@@ -255,7 +220,7 @@ StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [
 	fileNavigationSystem updateWidgetWithFileReference: aFileReference
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 StFileSystemPresenter >> windowIcon [ 
 
 	^ self iconNamed: #open
@@ -265,6 +230,5 @@ StFileSystemPresenter >> windowIcon [
 { #category : 'accessing' }
 StFileSystemPresenter >> windowTitle [
 
-	^ title
-		ifNil: [ title := self initialTitle ]
+	^  'File browser'
 ]

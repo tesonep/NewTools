@@ -96,3 +96,8 @@ StSaveFilePresenter >> selectedEntry [
 		ifTrue: [ ^ confirmedOverwrite := entry ].
 	^ nil
 ]
+
+{ #category : 'hooks' }
+StSaveFilePresenter >> windowTitle [
+	^ 'Save As'
+]

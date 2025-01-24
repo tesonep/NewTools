@@ -543,20 +543,6 @@ StFinderPresenter >> selectedResults: aCollection [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: 'Finder'
-
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setWindowIconTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter	windowIcon: (self iconNamed: #smallFind).
-
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> subscribeToAnnouncements [
 
 	self model whenSearchStarted: [ self notifySearchStarted ].
