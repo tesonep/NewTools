@@ -169,8 +169,6 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self windowTitle;
-		windowIcon: self windowIcon;
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startProcessing ];
 		whenFocusLostDo: [ self stopProcessing ];
@@ -289,7 +287,7 @@ StInspectorPresenter >> updateTitle [
 { #category : 'initialization' }
 StInspectorPresenter >> windowIcon [
 	
-	^ self application iconNamed: #smallInspectIt
+	^ self iconNamed: #smallInspectIt
 ]
 
 { #category : 'initialization' }
