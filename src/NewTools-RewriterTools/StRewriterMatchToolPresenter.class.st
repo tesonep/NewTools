@@ -25,6 +25,12 @@ Class {
 	#tag : 'MatchTool'
 }
 
+{ #category : 'specs' }
+StRewriterMatchToolPresenter class >> defaultPreferredExtent [ 
+
+	^ 800 @ 450
+]
+
 { #category : 'accessing' }
 StRewriterMatchToolPresenter class >> descriptionText [
 	^ 'MatchTool is a simple UI for experimenting with the matching functionality of a rewrite rule'
@@ -59,12 +65,6 @@ StRewriterMatchToolPresenter class >> menuCommandOn: aBuilder [
 		parent: #Tools;
 		help: self descriptionText;
 		iconName: self iconName
-]
-
-{ #category : 'specs' }
-StRewriterMatchToolPresenter class >> title [
-
-	^ 'Match Tool'
 ]
 
 { #category : 'initialization' }
@@ -182,11 +182,9 @@ StRewriterMatchToolPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 StRewriterMatchToolPresenter >> initializeWindow: aWindowPresenter [
-
+	
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self class title;
-		initialExtent: 800 @ 450;
-		windowIcon: self class icon;
 		askOkToClose: false;
 		aboutText: self class descriptionText
 ]
@@ -248,4 +246,16 @@ StRewriterMatchToolPresenter >> selectedMatchChanged: selection [
 		ifNotNil: [
 			bindingsTable items: (self getBindingsItemsForMatch: selectedMatch value).
 			codeEditor selectionInterval: selectedMatch key sourceInterval ]
+]
+
+{ #category : 'accessing' }
+StRewriterMatchToolPresenter >> windowIcon [ 
+
+	^ self iconNamed: self class iconName
+]
+
+{ #category : 'accessing' }
+StRewriterMatchToolPresenter >> windowTitle [
+
+	^ 'Match Tool'
 ]
