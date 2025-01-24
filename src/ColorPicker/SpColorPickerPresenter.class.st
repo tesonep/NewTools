@@ -3,7 +3,7 @@ Provides a color picker with a toolbar to confirm or cancel the selected color.
 
 "
 Class {
-	#name : 'SpColorPickerWindow',
+	#name : 'SpColorPickerPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'colorPickerPresenter',
@@ -13,15 +13,21 @@ Class {
 	#package : 'ColorPicker'
 }
 
+{ #category : 'accessing' }
+SpColorPickerPresenter class >> defaultPreferredExtent [
+
+	^ 350 @ 550
+]
+
 { #category : 'instance creation' }
-SpColorPickerWindow class >> open [
+SpColorPickerPresenter class >> open [
 	<script>
 
 	^ self new open
 ]
 
 { #category : 'layout' }
-SpColorPickerWindow >> defaultLayout [ 
+SpColorPickerPresenter >> defaultLayout [ 
 
 	^ SpBoxLayout newTopToBottom 
 		add: colorPickerPresenter;
@@ -30,13 +36,7 @@ SpColorPickerWindow >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-SpColorPickerWindow >> initialExtentForWindow [
-
-	^ (350 @ 550) scaledByDisplayScaleFactor
-]
-
-{ #category : 'initialization' }
-SpColorPickerWindow >> initializePresenters [
+SpColorPickerPresenter >> initializePresenters [
 
 	colorPickerPresenter := self newColorPicker.
 	toolbar := self newToolbar.
@@ -44,22 +44,15 @@ SpColorPickerWindow >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-SpColorPickerWindow >> initializeWindow: aWindowPresenter [
+SpColorPickerPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
-		initialExtent: self initialExtentForWindow;
+	aWindowPresenter
 		whenClosedDo: [ self owner color: colorPickerPresenter color ]
 ]
 
 { #category : 'initialization' }
-SpColorPickerWindow >> title [
-
-	^ 'Color Picker'
-]
-
-{ #category : 'initialization' }
-SpColorPickerWindow >> toolbarButtons [
+SpColorPickerPresenter >> toolbarButtons [
 	| buttons |
 
 	buttons := OrderedCollection new.
@@ -81,7 +74,13 @@ SpColorPickerWindow >> toolbarButtons [
 ]
 
 { #category : 'initialization' }
-SpColorPickerWindow >> windowIcon [
+SpColorPickerPresenter >> windowIcon [
 
 	^ self iconNamed: #smallPaint
+]
+
+{ #category : 'initialization' }
+SpColorPickerPresenter >> windowTitle [
+
+	^ 'Color Picker'
 ]
