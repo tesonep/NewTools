@@ -17,6 +17,12 @@ Class {
 }
 
 { #category : 'system menu' }
+StSystemReporterPresenter class >> defaultPreferredExtent [ 
+
+	^ 500@ 600
+]
+
+{ #category : 'system menu' }
 StSystemReporterPresenter class >> systemReporterMenuOn: aBuilder [ 
 	<worldMenu>
 	
@@ -32,12 +38,6 @@ StSystemReporterPresenter >> connectPresenters [
 
 	super connectPresenters.
 	topicList  selectIndex: 1.
-]
-
-{ #category : 'utils' }
-StSystemReporterPresenter >> extent [
-
-	^ 500@ 600
 ]
 
 { #category : 'initialization' }
@@ -263,11 +263,6 @@ StSystemReporterPresenter >> reportWin32VMConfig: aStream [
 
 ]
 
-{ #category : 'utils' }
-StSystemReporterPresenter >> title [ 
-	^ 'System Reporter'
-]
-
 { #category : 'initialization' }
 StSystemReporterPresenter >> topicSpec [
 	
@@ -297,4 +292,9 @@ StSystemReporterPresenter >> topicSpec [
 	self isLinux 
 		ifTrue: [ topics add: #'OS Details' -> #reportLinuxOSDetails: ].
 	^ topics
+]
+
+{ #category : 'utils' }
+StSystemReporterPresenter >> windowTitle [ 
+	^ 'System Reporter'
 ]
