@@ -434,16 +434,6 @@ StFinderPresenter >> initializeResultTree [
 		yourself
 ]
 
-{ #category : 'initialization' }
-StFinderPresenter >> initializeWindow: aSpWindowPresenter [
-
-	super initializeWindow: aSpWindowPresenter.
-
-	self setTitleTo: aSpWindowPresenter.
-	self setWindowIconTo: aSpWindowPresenter.
-	
-]
-
 { #category : 'updating - widgets' }
 StFinderPresenter >> notifySearchStarted [
 	"Do nothing for now"
@@ -657,4 +647,11 @@ StFinderPresenter >> updateStatusBarTextFrom: results time: time [
 			<< ' results and took ';
 			<< time asStringWithCommas;
 			<< ' ms' ]
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowTitle [
+
+	^ self iconNamed: #smallFind
+
 ]

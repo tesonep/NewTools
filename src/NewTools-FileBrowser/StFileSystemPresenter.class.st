@@ -193,16 +193,6 @@ StFileSystemPresenter >> initializePresenters [
 	self initializeBookmarksTreeTable.
 ]
 
-{ #category : 'initialization' }
-StFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
-
-	super initializeWindow: aSpWindowPresenter.
-
-	self setTitleTo: aSpWindowPresenter.
-	self setWindowIconTo: aSpWindowPresenter.
-	
-]
-
 { #category : 'utilities' }
 StFileSystemPresenter >> openFolder: aFileReference [
 
@@ -263,4 +253,18 @@ StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [
 StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
 
 	fileNavigationSystem updateWidgetWithFileReference: aFileReference
+]
+
+{ #category : 'initialization' }
+StFileSystemPresenter >> windowIcon [ 
+
+	^ self iconNamed: #open
+
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> windowTitle [
+
+	^ title
+		ifNil: [ title := self initialTitle ]
 ]
