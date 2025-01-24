@@ -61,12 +61,6 @@ StWelcomeBrowser class >> openForRelease [
 			extent: self windowExtent ]
 ]
 
-{ #category : 'accessing' }
-StWelcomeBrowser class >> windowExtent [
-
-	^ (720@550) scaledByDisplayScaleFactor
-]
-
 { #category : 'private' }
 StWelcomeBrowser >> addPresenter: aPresenter [
 
