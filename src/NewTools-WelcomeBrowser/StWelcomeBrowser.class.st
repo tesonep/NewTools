@@ -16,6 +16,12 @@ Class {
 }
 
 { #category : 'accessing' }
+StWelcomeBrowser class >> defaultPreferredExtent [
+
+	^ 720@550
+]
+
+{ #category : 'accessing' }
 StWelcomeBrowser class >> logo [
 
 	^ ImageMorph withFormSet: (self iconFormSetNamed: #pharoBig)
@@ -211,10 +217,9 @@ StWelcomeBrowser >> initializePresenters [
 
 { #category : 'initialization' }
 StWelcomeBrowser >> initializeWindow: aWindowPresenter [
-
+	
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: 'Welcome';
-		initialExtent: self class windowExtent;
 		bindKeyCombination: Character arrowRight asKeyCombination toAction: [ self selectNext ]; 
 		bindKeyCombination: Character arrowLeft asKeyCombination toAction: [ self selectPrevious ]; 
 		centered
@@ -406,4 +411,10 @@ For more information, please visit here: [http://pharo.org](http://pharo.org)'
 StWelcomeBrowser >> welcomeLabel [
 
 	^ 'Welcome to Pharo ', self version
+]
+
+{ #category : 'accessing' }
+StWelcomeBrowser >> windowTitle [
+
+	^ 'Welcome'
 ]
