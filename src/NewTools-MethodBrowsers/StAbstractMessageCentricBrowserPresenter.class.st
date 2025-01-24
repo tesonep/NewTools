@@ -14,6 +14,12 @@ Class {
 	#tag : 'Base'
 }
 
+{ #category : 'accessing' }
+StAbstractMessageCentricBrowserPresenter class >> defaultPreferredExtent [
+
+	^ 900 @ 600
+]
+
 { #category : 'testing' }
 StAbstractMessageCentricBrowserPresenter class >> isAbstract [ 
 	 ^self name = #StAbstractMessageCentricBrowserPresenter
@@ -34,12 +40,6 @@ StAbstractMessageCentricBrowserPresenter >> initializePresenters [
 	toolbarPresenter := self newMessageToolbar
 		messageList: messageList;
 		yourself
-]
-
-{ #category : 'initialization' }
-StAbstractMessageCentricBrowserPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter initialExtent: 900@600
 ]
 
 { #category : 'private - testing' }
