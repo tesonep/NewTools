@@ -22,6 +22,12 @@ Class {
 }
 
 { #category : 'instance creation' }
+StCritiquePackageSelectorPresenter class >> defaultPreferredExtent [ 
+
+	^ 450 @ 360
+]
+
+{ #category : 'instance creation' }
 StCritiquePackageSelectorPresenter class >> open [
 
 	<example>
@@ -32,12 +38,6 @@ StCritiquePackageSelectorPresenter class >> open [
 StCritiquePackageSelectorPresenter >> chooserPackages [
 
 	^chooserPackages 
-]
-
-{ #category : 'initialization' }
-StCritiquePackageSelectorPresenter >> defaultTitle [
-
-	^ 'Select packages'
 ]
 
 { #category : 'initialization' }
@@ -70,14 +70,6 @@ StCritiquePackageSelectorPresenter >> initializePresenters [
 	self initializeLayout
 ]
 
-{ #category : 'initialization' }
-StCritiquePackageSelectorPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self defaultTitle;
-		initialExtent: 450 @ 360
-]
-
 { #category : 'adding' }
 StCritiquePackageSelectorPresenter >> nextAction [
 
@@ -102,4 +94,10 @@ StCritiquePackageSelectorPresenter >> setChooserPackages [
 	chooser sourceList displayIcon: [ self iconNamed: #package ].
 	chooser targetList displayIcon: [ self iconNamed: #package ].
 	^ chooser
+]
+
+{ #category : 'initialization' }
+StCritiquePackageSelectorPresenter >> windowTitle [
+
+	^ 'Select packages'
 ]

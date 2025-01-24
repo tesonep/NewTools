@@ -67,9 +67,14 @@ StCritiqueBrowserPresenter class >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter class >> defaultPreferredExtent [
+
+	^ 760 @ 370
+]
+
 { #category : 'icons' }
 StCritiqueBrowserPresenter class >> icon [
-
 	"Answer an icon for the receiver."
 
 	^ self iconNamed: self iconName
@@ -368,14 +373,6 @@ StCritiqueBrowserPresenter >> initializePresenters [
 		add: critiqueModel
 ]
 
-{ #category : 'initialization' }
-StCritiqueBrowserPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self defaultTitle;
-		initialExtent: 760 @ 370
-]
-
 { #category : 'accessing' }
 StCritiqueBrowserPresenter >> logButton [
 	^ logButton 
@@ -656,4 +653,16 @@ StCritiqueBrowserPresenter >> updateTree [
 
 	critiqueModel updateList.
 	rulesModel update
+]
+
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter >> windowIcon [ 
+
+	^ self iconNamed: #smallQA
+]
+
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter >> windowTitle [
+
+	^ 'Critique Browser'
 ]

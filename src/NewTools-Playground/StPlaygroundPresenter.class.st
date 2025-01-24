@@ -80,9 +80,9 @@ StPlaygroundPresenter class >> defaultExtent [
 ]
 
 { #category : 'accessing' }
-StPlaygroundPresenter class >> defaultTitle [ 
+StPlaygroundPresenter class >> defaultPreferredExtent [
 
-	^ 'Playground'
+	^ (600@400)
 ]
 
 { #category : 'world menu' }
@@ -200,11 +200,11 @@ StPlaygroundPresenter >> stopProcessing [
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowIcon [
 	
-	^ self application iconNamed: #workspace
+	^ self iconNamed: #workspace
 ]
 
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowTitle [
 
-	^ self class defaultTitle
+	^ 'Playground'
 ]
