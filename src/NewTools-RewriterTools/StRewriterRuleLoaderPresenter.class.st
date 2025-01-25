@@ -82,6 +82,7 @@ StRewriterRuleLoaderPresenter >> initializeTableSelector [
 { #category : 'initialization' }
 StRewriterRuleLoaderPresenter >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		askOkToClose: false;
 		aboutText: self class descriptionText
