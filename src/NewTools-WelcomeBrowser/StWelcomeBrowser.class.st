@@ -61,6 +61,12 @@ StWelcomeBrowser class >> openForRelease [
 			extent: self windowExtent ]
 ]
 
+{ #category : 'instance creation' }
+StWelcomeBrowser class >> windowExtent [
+
+	^ (720@550)
+]
+
 { #category : 'private' }
 StWelcomeBrowser >> addPresenter: aPresenter [
 
