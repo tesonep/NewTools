@@ -13,6 +13,12 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'accessing' }
+DebugPointSelectDialogPresenter class >> defaultPreferredExtent [
+
+	^ 800@400
+]
+
 { #category : 'layout' }
 DebugPointSelectDialogPresenter >> defaultLayout [
 
@@ -54,16 +60,6 @@ DebugPointSelectDialogPresenter >> initializeVariableTargetPresenter [
 
 	variableTargetPresenter := DebugPointVariableTargetPresenter new.
 	variableTargetPresenter layout: variableTargetPresenter dialogLayout
-]
-
-{ #category : 'initialization' }
-DebugPointSelectDialogPresenter >> initializeWindow: aWindowPresenter [ 
-	
-	aWindowPresenter
-		title: 'Debug Points';		
-		windowIcon: (self application iconNamed: #bug);
-		initialExtent: 800@400
-
 ]
 
 { #category : 'api' }
@@ -127,4 +123,17 @@ DebugPointSelectDialogPresenter >> variableTargetLayout [
 				   positionOfSlider: 30 percent;
 				   yourself);
 		  yourself
+]
+
+{ #category : 'initialization' }
+DebugPointSelectDialogPresenter >> windowIcon [
+
+	^ self iconNamed: #bug
+	
+]
+
+{ #category : 'initialization' }
+DebugPointSelectDialogPresenter >> windowTitle [
+	^ 'Debug Points'		
+		
 ]
