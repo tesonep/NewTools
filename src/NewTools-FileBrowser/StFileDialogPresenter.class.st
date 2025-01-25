@@ -241,11 +241,6 @@ StFileDialogPresenter >> iconFor: anEntry [
 ]
 
 { #category : 'initialization' }
-StFileDialogPresenter >> initialTitle [
-	^ self subclassResponsibility
-]
-
-{ #category : 'initialization' }
 StFileDialogPresenter >> initialize [
 
 	super initialize.
@@ -354,6 +349,13 @@ StFileDialogPresenter >> showDirectory: aFileReference [
 	"Set the directory to be displayed to aFileReference"
 
 	self fileNavigationSystem currentDirectory: aFileReference
+]
+
+{ #category : 'accessing' }
+StFileDialogPresenter >> title [
+
+	^ title
+		ifNil: [ title := self windowTitle ]
 ]
 
 { #category : 'accessing - history' }
