@@ -339,7 +339,7 @@ StPlaygroundPagePresenter >> selectedPageName [
 	 page presenter (which is the playground itself) needs to respond to which kind of page 
 	 is selected."
 
-	^ self class defaultTitle
+	^ self windowTitle
 ]
 
 { #category : 'accessing' }
