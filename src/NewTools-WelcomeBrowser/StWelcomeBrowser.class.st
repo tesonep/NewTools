@@ -408,6 +408,12 @@ StWelcomeBrowser >> welcomeLabel [
 ]
 
 { #category : 'accessing' }
+StWelcomeBrowser >> windowExtent [
+
+	^ 500@500
+]
+
+{ #category : 'accessing' }
 StWelcomeBrowser >> windowTitle [
 
 	^ 'Welcome'

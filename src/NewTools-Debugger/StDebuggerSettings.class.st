@@ -63,9 +63,8 @@ StDebuggerSettings class >> initialize [
 { #category : 'initialization' }
 StDebuggerSettings class >> initializeWindow: aWindowPresenter [
 	"Set global window position and extent using window data in aStDebugger"
-
+	"Pay attention this is not a presenter so the method name is misleading."
 	
-	super initializeWindow: aWindowPresenter. 
 	self preserveWindowPositionAndExtent ifFalse: [ ^ self ].
 	aWindowPresenter whenClosedDo: [
 		self
