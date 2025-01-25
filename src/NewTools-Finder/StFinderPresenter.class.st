@@ -636,8 +636,15 @@ StFinderPresenter >> updateStatusBarTextFrom: results time: time [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> windowTitle [
+StFinderPresenter >> windowIcon [
 
 	^ self iconNamed: #smallFind
+
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowTitle [
+
+	^ 'Finder'
 
 ]

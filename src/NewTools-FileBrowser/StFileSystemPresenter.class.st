@@ -21,7 +21,8 @@ Class {
 	#instVars : [
 		'treeNavigationSystem',
 		'fileNavigationSystem',
-		'bookmarksTreeTable'
+		'bookmarksTreeTable',
+		'title'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -195,6 +196,12 @@ StFileSystemPresenter >> openFolder: aFileReference [
 ]
 
 { #category : 'accessing' }
+StFileSystemPresenter >> title: aString [
+
+	title := aString.
+]
+
+{ #category : 'accessing' }
 StFileSystemPresenter >> treeNavigationSystem [
 	^ treeNavigationSystem
 ]
@@ -230,5 +237,5 @@ StFileSystemPresenter >> windowIcon [
 { #category : 'accessing' }
 StFileSystemPresenter >> windowTitle [
 
-	^  'File browser'
+	^  title ifNil: [ title := 'File browser' ]
 ]
