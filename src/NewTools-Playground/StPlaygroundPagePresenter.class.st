@@ -65,12 +65,6 @@ StPlaygroundPagePresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'accessing' }
-StPlaygroundPagePresenter class >> defaultTitle [ 
-
-	^ 'Playground'
-]
-
 { #category : 'private commands' }
 StPlaygroundPagePresenter class >> extendedMenuCommands [
 
@@ -263,8 +257,6 @@ StPlaygroundPagePresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self class defaultTitle;
-		windowIcon: self windowIcon;
 		whenOpenedDo: [ text takeKeyboardFocus ]
 ]
 
@@ -431,5 +423,11 @@ StPlaygroundPagePresenter >> whenActivatedDo: aBlock [
 { #category : 'initialization' }
 StPlaygroundPagePresenter >> windowIcon [
 	
-	^ self application iconNamed: #workspace
+	^ self iconNamed: #workspace
+]
+
+{ #category : 'accessing' }
+StPlaygroundPagePresenter >> windowTitle [
+
+	^ 'Playground'
 ]

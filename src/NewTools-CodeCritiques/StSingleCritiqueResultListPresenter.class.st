@@ -31,16 +31,6 @@ Class {
 	#tag : 'Parts'
 }
 
-{ #category : 'specs' }
-StSingleCritiqueResultListPresenter class >> defaultSpec [
-
-	^ SpBoxLayout newTopToBottom
-		  add: #critiquesModel;
-		  add: #toolbarModel height: 25;
-		  add: #sourceCodeModel;
-		  yourself
-]
-
 { #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> exclamationIcon [ 
 

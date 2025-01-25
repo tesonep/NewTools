@@ -137,13 +137,6 @@ StReporterPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StReporterPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter title: self title.
-	aWindowPresenter initialExtent: self extent
-]
-
-{ #category : 'initialization' }
 StReporterPresenter >> topicSpec [
 
 	^ topics

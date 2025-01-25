@@ -370,17 +370,6 @@ StMessageBrowser >> initializePresenters [
 	self initializeDropList
 ]
 
-{ #category : 'initialization' }
-StMessageBrowser >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: self title;
-		initialExtent: self class preferredExtent;
-		windowIcon: (self iconNamed: self class taskbarIconName);
-		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
-]
-
 { #category : 'private' }
 StMessageBrowser >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
@@ -586,12 +575,6 @@ StMessageBrowser >> textConverter: aTextConverter [
 	textPresenter text: self textConverter getText.
 ]
 
-{ #category : 'private' }
-StMessageBrowser >> title [
-
-	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
-]
-
 { #category : 'accessing' }
 StMessageBrowser >> title: aString [
 
@@ -639,8 +622,21 @@ StMessageBrowser >> whenSelectedItemChanged: aBlock [
 	messageList whenSelectedItemChanged: aBlock 
 ]
 
+{ #category : 'initialization' }
+StMessageBrowser >> windowIcon [
+
+	^ self iconNamed: self class taskbarIconName
+		
+]
+
 { #category : 'private' }
 StMessageBrowser >> windowIsClosing [
 
 	self class codeChangeAnnouncer unsubscribe: self
+]
+
+{ #category : 'private' }
+StMessageBrowser >> windowTitle [
+
+	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
 ]

@@ -30,6 +30,12 @@ Class {
 	#package : 'ColorPicker'
 }
 
+{ #category : 'accessing' }
+SpColorPicker class >> defaultPreferredExtent [
+
+	^ 300 @ 450
+]
+
 { #category : 'specs' }
 SpColorPicker class >> open [
 
@@ -117,15 +123,6 @@ SpColorPicker >> initializePresenters [
 		              alphaSlider }.
 ]
 
-{ #category : 'initialization' }
-SpColorPicker >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: 'Color picker';
-		initialExtent: 300 @ 450;
-		windowIcon: self windowIcon
-]
-
 { #category : 'update' }
 SpColorPicker >> setColor: aColor [
 
@@ -171,4 +168,16 @@ SpColorPicker >> updateSaturation: s brightness: v [
 SpColorPicker >> whenColorChangedDo: aBlock [
 
 	actionBlock := aBlock
+]
+
+{ #category : 'initialization' }
+SpColorPicker >> windowIcon [
+
+	^ self iconNamed: #smallPaint
+]
+
+{ #category : 'initialization' }
+SpColorPicker >> windowTitle [
+	^ 'Color picker'
+		
 ]

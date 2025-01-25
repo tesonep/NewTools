@@ -54,6 +54,15 @@ StRewriteCritiqueChangesBrowserPresenter class >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'accessing' }
+StRewriteCritiqueChangesBrowserPresenter class >> defaultPreferredExtent [ 
+
+	| fontWidth rowHeight |
+	fontWidth := (StandardFonts defaultFont widthOfString: 'M').
+	rowHeight := self class inputTextHeight.
+	^ (70@20) * (fontWidth @ rowHeight)
+]
+
 { #category : 'specs' }
 StRewriteCritiqueChangesBrowserPresenter class >> open [
 
@@ -239,16 +248,6 @@ StRewriteCritiqueChangesBrowserPresenter >> initializePresenters [
 	changeSplitOption := self newSplitRadioButton.
 	changeSplitOption associatedRadioButtons: { changeUnifiedOption }.
 	changeTree whenSelectionChangedDo: [ :selection | self buildDiffFor: selection selectedItem ]
-]
-
-{ #category : 'initialization' }
-StRewriteCritiqueChangesBrowserPresenter >> initializeWindow: aWindowPresenter [
-	| fontWidth rowHeight |
-	fontWidth := (StandardFonts defaultFont widthOfString: 'M').
-	rowHeight := self class inputTextHeight.
-	aWindowPresenter
-		title: self windowTitle;
-		initialExtent: (70@20) * (fontWidth @ rowHeight)
 ]
 
 { #category : 'accessing' }

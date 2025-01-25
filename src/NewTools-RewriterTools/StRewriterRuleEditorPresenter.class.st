@@ -31,6 +31,12 @@ Class {
 	#tag : 'RuleEditor'
 }
 
+{ #category : 'specs' }
+StRewriterRuleEditorPresenter class >> defaultPreferredExtent [
+
+	^ 700 @ 500
+]
+
 { #category : 'accessing' }
 StRewriterRuleEditorPresenter class >> descriptionText [
 
@@ -58,12 +64,6 @@ StRewriterRuleEditorPresenter class >> menuCommandOn: aBuilder [
 		parent: #Tools;
 		help: self descriptionText;
 		iconName: self iconName
-]
-
-{ #category : 'specs' }
-StRewriterRuleEditorPresenter class >> title [
-
-	^ 'Rewrite Basic Editor'
 ]
 
 { #category : 'layout' }
@@ -141,10 +141,8 @@ StRewriterRuleEditorPresenter >> initializeTextCheatSheet [
 { #category : 'initialization' }
 StRewriterRuleEditorPresenter >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self class title;
-		initialExtent: 700 @ 500;
-		windowIcon: self class icon;
 		aboutText: self class descriptionText
 ]
 
@@ -178,4 +176,16 @@ StRewriterRuleEditorPresenter >> rhs: aCode [
 StRewriterRuleEditorPresenter >> scopeSelectorPresenter [
 
 	^ scopeSelectorPresenter
+]
+
+{ #category : 'initialization' }
+StRewriterRuleEditorPresenter >> windowIcon [ 
+
+	^ self iconNamed: self class iconName
+]
+
+{ #category : 'as yet unclassified' }
+StRewriterRuleEditorPresenter >> windowTile [
+
+	^ 'Rewrite Basic Editor'
 ]

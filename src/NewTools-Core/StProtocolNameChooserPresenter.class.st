@@ -128,7 +128,6 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'New protocol name'.
-
 	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
 ]
 

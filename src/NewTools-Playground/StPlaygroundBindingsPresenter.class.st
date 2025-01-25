@@ -19,15 +19,9 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundBindingsPresenter class >> defaultExtent [
+StPlaygroundBindingsPresenter class >> defaultPreferredExtent [ 
 
 	^ (600@400)
-]
-
-{ #category : 'accessing' }
-StPlaygroundBindingsPresenter class >> defaultTitle [
-
-	^ 'Bindings'
 ]
 
 { #category : 'accessing' }
@@ -147,15 +141,6 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 
 ]
 
-{ #category : 'initialization' }
-StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
-		title: self title;
-		initialExtent: self class defaultExtent
-]
-
 { #category : 'testing' }
 StPlaygroundBindingsPresenter >> isLocalBinding: aBinding [
 
@@ -255,7 +240,7 @@ StPlaygroundBindingsPresenter >> title [
 
 	parent withWindowDo: [ :w | 
 		^ 'Bindings for {1}' format: { w title } ].
-	^ self class defaultTitle
+	^ self windowTitle
 ]
 
 { #category : 'actions' }
@@ -304,4 +289,10 @@ StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 	bindingList items: newBindings.
 	newBindings = oldBindings ifTrue: [ ^ self ].
 	newBindings ifNotEmpty: aBlock
+]
+
+{ #category : 'accessing' }
+StPlaygroundBindingsPresenter >> windowTitle [
+
+	^ 'Bindings'
 ]

@@ -63,6 +63,12 @@ In this case first `#(1 2 3)` will be matched by the literal node and then teste
 '
 ]
 
+{ #category : 'accessing' }
+StRewriterHelpBrowserPresenter class >> defaultPreferredExtent [ 
+
+	^ 570 @ 500
+]
+
 { #category : 'api' }
 StRewriterHelpBrowserPresenter class >> getParsedText [
 
@@ -267,8 +273,12 @@ StRewriterHelpBrowserPresenter >> initializePresenters [
 { #category : 'initialization' }
 StRewriterHelpBrowserPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter
-		title: 'Rewrite rules syntax help';
-		initialExtent: 570 @ 500;
-		askOkToClose: false
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter askOkToClose: false
+]
+
+{ #category : 'accessing' }
+StRewriterHelpBrowserPresenter >> windowTitle [ 
+
+	^ 'Rewrite rules syntax help'
 ]

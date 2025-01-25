@@ -198,6 +198,12 @@ StDebugger class >> defaultDebuggerRank [
 ]
 
 { #category : 'accessing' }
+StDebugger class >> defaultPreferredExtent [ 
+	
+	^ self settings lastKnownExtent
+]
+
+{ #category : 'accessing' }
 StDebugger class >> enableStackColoring [
 
 	^ EnableStackColoring
@@ -870,10 +876,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self debuggerActionModel statusStringForContext;
-		initialExtent: self settings lastKnownExtent;
 		initialPosition: self settings lastKnownPosition;
-		windowIcon: (self iconNamed: #smallDebug);
 		whenClosedDo: [ self clear ].
 
 	self settings initializeWindow: aWindowPresenter.
@@ -1543,4 +1546,17 @@ StDebugger >> warning: aString for: aPresenter [
 						  yourself);
 				 yourself);
 		popup
+]
+
+{ #category : 'initialization' }
+StDebugger >> windoTitle [
+
+	^  self debuggerActionModel statusStringForContext
+]
+
+{ #category : 'initialization' }
+StDebugger >> windowIcon [
+		
+	^ self iconNamed: #smallDebug
+		
 ]
