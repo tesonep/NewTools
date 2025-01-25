@@ -169,7 +169,7 @@ StCritiqueBrowserPresenter >> applyRules [
 		           self setTitle: windowTitle.
 		           checker runRules: rules onPackage: package withoutTestCase: removeTestCase ].
 	           checker rule: rules.
-	           self setTitle: self defaultTitle.
+	           self setTitle: self windowTitle.
 	           cache packages: rbEnvironment.
 	           cache initCache.
 	           self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).
@@ -252,19 +252,13 @@ StCritiqueBrowserPresenter >> connectPresenters [
 				rule: rule;
 				setTextModelForNil ].
 		self setTitle:
-			(rule ifNil: [ self defaultTitle ] ifNotNil: [ rule name ]) ]
+			(rule ifNil: [ self windowTitle ] ifNotNil: [ rule name ]) ]
 ]
 
 { #category : 'accessing' }
 StCritiqueBrowserPresenter >> critiquesModel [
 
 	^ critiqueModel critiquesModel
-]
-
-{ #category : 'api' }
-StCritiqueBrowserPresenter >> defaultTitle [
-
-	^ 'Critique Browser'
 ]
 
 { #category : 'accessing' }
@@ -351,7 +345,7 @@ StCritiqueBrowserPresenter >> initialize [
 { #category : 'initialization' }
 StCritiqueBrowserPresenter >> initializePresenters [
 
-	title := self defaultTitle.
+	title := self windowTitle.
 	rulesModel := self newTreeTable.
 	resetButton := self newButton.
 	updateButton := self newButton.
