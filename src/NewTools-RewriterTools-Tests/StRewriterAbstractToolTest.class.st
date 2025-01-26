@@ -31,12 +31,6 @@ StRewriterAbstractToolTest >> testIconName [
 	self assert: self toolClass iconName isSymbol
 ]
 
-{ #category : 'tests' }
-StRewriterAbstractToolTest >> testTitle [
-
-	self deny: self toolClass title equals: 'Untitled window'
-]
-
 { #category : 'accessing' }
 StRewriterAbstractToolTest >> toolClass [
 

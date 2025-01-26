@@ -40,12 +40,6 @@ StRewriterRuleLoaderPresenter class >> iconName [
 	^ #smallLoadProject
 ]
 
-{ #category : 'specs' }
-StRewriterRuleLoaderPresenter class >> title [
-
-	^ 'Rewrite rule loader'
-]
-
 { #category : 'layout' }
 StRewriterRuleLoaderPresenter >> defaultLayout [
 
