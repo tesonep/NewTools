@@ -46,12 +46,6 @@ SpColorCodePresenter >> chessPaintFor: aPoint [
 	^ canvas asForm
 ]
 
-{ #category : 'initialization' }
-SpColorCodePresenter >> connectPresenters [
-
-	"rCodeInput whenTextChangedDo: [  self updateColorCode ] "
-]
-
 { #category : 'layout' }
 SpColorCodePresenter >> defaultLayout [
 

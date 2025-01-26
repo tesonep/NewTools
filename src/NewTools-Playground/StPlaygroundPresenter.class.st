@@ -79,12 +79,6 @@ StPlaygroundPresenter class >> defaultExtent [
 	^ (600@400)
 ]
 
-{ #category : 'accessing' }
-StPlaygroundPresenter class >> defaultPreferredExtent [
-
-	^ (600@400)
-]
-
 { #category : 'world menu' }
 StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>

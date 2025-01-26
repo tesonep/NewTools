@@ -52,12 +52,6 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 		help: self descriptionText
 ]
 
-{ #category : 'specs' }
-StRewriterExpressionFinderPresenter class >> title [
-
-	^ 'Expression Finder'
-]
-
 { #category : 'initialization' }
 StRewriterExpressionFinderPresenter >> connectPresenters [
 
