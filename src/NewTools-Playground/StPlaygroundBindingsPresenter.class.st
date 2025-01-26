@@ -19,12 +19,6 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundBindingsPresenter class >> defaultPreferredExtent [ 
-
-	^ (600@400)
-]
-
-{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> emptyMessage [
 
 	^ 'There are no bindings to list.'

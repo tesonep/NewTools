@@ -18,12 +18,6 @@ Class {
 }
 
 { #category : 'accessing' }
-StSizeReporterPresenter class >> defaultPreferredExtent [ 
-
-	^ 600@ 400
-]
-
-{ #category : 'accessing' }
 StSizeReporterPresenter >> baselineClassLoc [
 	^ data at: #baselineClassLoc ifAbsent: [ self computeLocs. data at: #baselineClassLoc ]
 ]

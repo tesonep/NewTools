@@ -91,12 +91,6 @@ StMessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : 'accessing' }
-StMessageBrowser class >> defaultPreferredExtent [
-
-	^ 900@600
-]
-
 { #category : 'instance creation - old' }
 StMessageBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
