@@ -1,3 +1,31 @@
+"
+A SpClosedWindowListPresenter is a presenter that manages and displays a list of recently closed windows in the Pharo image.
+It maintains a history of the last 5 closed windows and provides functionality to either
+permanently close them or restore them to their previous state.
+
+Class Instance Variable:
+
+    lastClosedWindows    <OrderedCollection>     Collection holding up to 5 recently closed window 
+
+Example usage:
+```smalltalk
+SpClosedWindowListPresenter new open
+```
+Implementation Points:
+- Uses a fixed-size ring buffer (max 5 elements) to track closed windows
+- Windows can be restored to their original position and state
+- Updates the list automatically when windows are closed or restored
+
+Public API:
+- #addClosedWindow: aWindow    Add a window to the history
+
+
+
+
+
+
+
+"
 Class {
 	#name : 'SpClosedWindowListPresenter',
 	#superclass : 'SpPresenter',
