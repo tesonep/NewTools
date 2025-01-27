@@ -41,23 +41,40 @@ SpClosedWindowListPresenter class >> defaultPreferredExtent [
 	^ 310 @ 185
 ]
 
-{ #category : 'example' }
-SpClosedWindowListPresenter class >> exampleClosedWindowsList [
-
-	<sampleInstance>
-	| presenter |
-	presenter := self new
-		             items: SpWindow allInstances;
-		             unhideItemBlock: [ 1 ];
-		             open;
-		             yourself.
-	^ presenter
-]
-
 { #category : 'accessing' }
 SpClosedWindowListPresenter class >> lastClosedWindows [
 
 	^ lastClosedWindows ifNil: [  lastClosedWindows := OrderedCollection new ]
+]
+
+{ #category : 'world menu items' }
+SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
+	"To inject your custom items in a specific place, note that each item increases in order by 1. For example, if you wanted your item to be the second item, you could give it an #order: 1.5"
+
+	<windowMenu>
+	|  announcement |
+	(aBuilder item: #FakeClose)
+		order: 1.0;
+		action: [
+			aBuilder model hide.
+			announcement := WindowClosed new
+				                window: aBuilder model;
+				                yourself.
+			self currentWorld announcer announce: announcement ];
+		iconName: #windowCloseInactive;
+		enabledBlock: [ aBuilder model allowedToClose ];
+		withSeparatorAfter.
+]
+
+{ #category : 'menu items' }
+SpClosedWindowListPresenter class >> windowsOn: aBuilder [
+
+	<worldMenu>
+	(aBuilder group: #Windows) with: [
+		(aBuilder item: #'Unclose window')
+			order: 90;
+			action: [ self new open ];
+			help: 'Show last 5 closed Windows' ]
 ]
 
 { #category : 'adding' }
@@ -87,7 +104,8 @@ SpClosedWindowListPresenter >> connectPresenters [
 SpClosedWindowListPresenter >> initialize [
 
 	super initialize.
-	title := 'Last Closed Windows'.
+	self unsubscribeFromWindowEvents .
+	self subscribeToWindowClosedAnnoucements.
 	removeItemBlock := [ :item |
 	                   item ifNotNil: [
 		                   self items remove: item.
@@ -179,15 +197,17 @@ SpClosedWindowListPresenter >> selectedItem [
 	^ list selection selectedItem
 ]
 
-{ #category : 'accessing' }
-SpClosedWindowListPresenter >> title [
-	^ title
+{ #category : 'events subscription' }
+SpClosedWindowListPresenter >> subscribeToWindowClosedAnnoucements [
+
+	self currentWorld announcer
+		when: WindowClosed
+		do: [ :ann |  self addClosedWindow: ann window ] for: self
 ]
 
 { #category : 'accessing' }
-SpClosedWindowListPresenter >> title: aTitle [
-
-	title := aTitle
+SpClosedWindowListPresenter >> title [
+	^ 'Last Closed Windows'
 ]
 
 { #category : 'accessing' }
@@ -198,4 +218,18 @@ SpClosedWindowListPresenter >> unhideButton [
 { #category : 'api' }
 SpClosedWindowListPresenter >> unhideItemBlock: aBlock [
 	unhideItemBlock := aBlock.
+]
+
+{ #category : 'unsubscribing' }
+SpClosedWindowListPresenter >> unsubscribeFromWindowEvents [
+	"Unsubscribe from all window-related events"
+
+	(self currentWorld announcer subscriptions subscriptionsForClass:
+		 self class) do: [ :subscription |
+		self currentWorld announcer unsubscribe: subscription ]
+]
+
+{ #category : 'accessing' }
+SpClosedWindowListPresenter >> windowTitle [
+	^ 'Last Closed Windows'
 ]
