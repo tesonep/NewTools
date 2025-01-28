@@ -184,7 +184,7 @@ StRewriterRuleEditorPresenter >> windowIcon [
 	^ self iconNamed: self class iconName
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StRewriterRuleEditorPresenter >> windowTile [
 
 	^ 'Rewrite Basic Editor'
