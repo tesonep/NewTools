@@ -281,7 +281,7 @@ StInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
-		window title: self title ].
+		window title: self windowTitle ].
 ]
 
 { #category : 'initialization' }
@@ -292,16 +292,18 @@ StInspectorPresenter >> windowIcon [
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
-
-	^ self model windowTitle
+	
+	^ self model ifNotNil: [ :m | m windowTitle ] ifNil: [ 'Inspector']
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar [
-	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
+
+	 ^ withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar: bool [
+
 	withHeaderBar := bool
 ]

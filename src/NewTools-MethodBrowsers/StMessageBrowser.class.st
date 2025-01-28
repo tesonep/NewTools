@@ -122,12 +122,6 @@ StMessageBrowser class >> taskbarIconName [
 	^#references
 ]
 
-{ #category : 'specs' }
-StMessageBrowser class >> title [
-
-	^ 'Message Browser'
-]
-
 { #category : 'private' }
 StMessageBrowser class >> usingLayout [
 
@@ -632,5 +626,5 @@ StMessageBrowser >> windowIsClosing [
 { #category : 'private' }
 StMessageBrowser >> windowTitle [
 
-	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
+	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
 ]

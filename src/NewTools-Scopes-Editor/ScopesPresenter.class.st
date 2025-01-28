@@ -70,11 +70,6 @@ ScopesPresenter class >> refreshAllInstances [
 	self allInstances do: [ :each | each refresh ]
 ]
 
-{ #category : 'specs' }
-ScopesPresenter class >> title [
-	^ 'Scopes Editor'
-]
-
 { #category : 'api' }
 ScopesPresenter >> addScopeToTree: aRBEnvironment [
 
@@ -535,4 +530,10 @@ ScopesPresenter >> updateEnabled [
 ScopesPresenter >> updateScopesTree [
 
 	scopesTree updateRootsKeepingSelection: self scopeNodes
+]
+
+{ #category : 'accessing' }
+ScopesPresenter >> windowTitle [
+
+	^ 'Scope Editor'
 ]

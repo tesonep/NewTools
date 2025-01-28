@@ -28,11 +28,6 @@ StSindarinDebuggerPresenter class >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'specs' }
-StSindarinDebuggerPresenter class >> title [
-	^'Sindarin Debugger'
-]
-
 { #category : 'initialization' }
 StSindarinDebuggerPresenter >> buildToolbar [
 	| group |
@@ -92,4 +87,9 @@ StSindarinDebuggerPresenter >> stepIn [
 StSindarinDebuggerPresenter >> stepOver [ 
 	self model stepOver.
 	self refresh
+]
+
+{ #category : 'stepping' }
+StSindarinDebuggerPresenter >> windowTitle [
+	^'Sindarin Debugger'
 ]
