@@ -79,7 +79,7 @@ StSpotter class >> createTips [
 
 { #category : 'accessing' }
 StSpotter class >> defaultPreferredExtent [
-	self halt. 
+	
 	^ self isShowingPreview 
 		ifTrue: [ (750@850) ]
 		ifFalse: [ (500@850) ]
