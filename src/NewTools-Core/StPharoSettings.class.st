@@ -35,6 +35,29 @@ StPharoSettings class >> defaultToolbarDisplayMode [
 	^ SpToolbarDisplayMode modeIconAndLabel
 ]
 
+{ #category : 'world menu' }
+StPharoSettings class >> openPharoAbout [
+
+	SpInformDialog new
+		title: 'About Pharo';
+		icon: (self iconNamed: #pharo);
+		label: Smalltalk systemInformationString withCRs;
+		acceptLabel: 'Close';
+		openDialog
+]
+
+{ #category : 'world menu' }
+StPharoSettings class >> pharoAboutOn: aBuilder [
+
+	<worldMenu>
+	(aBuilder item: #'About...')
+		order: 99;
+		iconName: #smallInfo;
+		parent: #Help;
+		help: 'Informations about this version of Pharo.';
+		action: [ self openPharoAbout ]
+]
+
 { #category : 'settings' }
 StPharoSettings class >> settingsOn: aBuilder [
 	<systemsettings>
