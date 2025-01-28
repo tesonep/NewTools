@@ -51,11 +51,6 @@ ScopeNodesPresenter class >> reset [
 	LastSearch := nil
 ]
 
-{ #category : 'specs' }
-ScopeNodesPresenter class >> title [
-	^ 'Scope creator'
-]
-
 { #category : 'private - actions' }
 ScopeNodesPresenter >> activateItem: scopeNode [
 
@@ -469,4 +464,10 @@ ScopeNodesPresenter >> validate [
 
 	checkedScopeNodes ifEmpty: [ ^ false ].
 	^ true
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> windowTitle [
+
+	^ 'Scope creator'
 ]

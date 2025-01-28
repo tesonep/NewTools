@@ -198,7 +198,7 @@ StFileSystemPresenter >> openFolder: aFileReference [
 { #category : 'accessing' }
 StFileSystemPresenter >> title: aString [
 
-	title := aString.
+	title := aString
 ]
 
 { #category : 'accessing' }

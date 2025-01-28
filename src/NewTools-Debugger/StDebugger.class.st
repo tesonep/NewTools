@@ -1549,14 +1549,14 @@ StDebugger >> warning: aString for: aPresenter [
 ]
 
 { #category : 'initialization' }
-StDebugger >> windoTitle [
-
-	^  self debuggerActionModel statusStringForContext
-]
-
-{ #category : 'initialization' }
 StDebugger >> windowIcon [
 		
 	^ self iconNamed: #smallDebug
 		
+]
+
+{ #category : 'initialization' }
+StDebugger >> windowTitle [
+
+	^  self debuggerActionModel statusStringForContext
 ]

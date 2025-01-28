@@ -60,6 +60,12 @@ StPlaygroundBindingsPresenter >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'initialization' }
+StPlaygroundBindingsPresenter >> defaultWindowTitle [
+
+	^ 'Bindings'
+]
+
 { #category : 'testing' }
 StPlaygroundBindingsPresenter >> hasSelectedBinding [
 
@@ -229,14 +235,6 @@ StPlaygroundBindingsPresenter >> sortedBindingAssociations [
 	^ self bindings associations sort: [ :a | self isLocalBinding: a ] ascending
 ]
 
-{ #category : 'initialization' }
-StPlaygroundBindingsPresenter >> title [
-
-	parent withWindowDo: [ :w | 
-		^ 'Bindings for {1}' format: { w title } ].
-	^ self windowTitle
-]
-
 { #category : 'actions' }
 StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 
@@ -285,8 +283,10 @@ StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 	newBindings ifNotEmpty: aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> windowTitle [
 
-	^ 'Bindings'
+	parent withWindowDo: [ :w | 
+		^ 'Bindings for {1}' format: { w windowTitle } ].
+	^ self defaultWindowTitle
 ]
