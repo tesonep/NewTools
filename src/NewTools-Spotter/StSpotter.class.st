@@ -81,8 +81,8 @@ StSpotter class >> createTips [
 StSpotter class >> defaultPreferredExtent [
 	
 	^ self isShowingPreview 
-		ifTrue: [ (750@850) ]
-		ifFalse: [ (500@850) ]
+		ifTrue: [ (750@680) ]
+		ifFalse: [ (500@680) ]
 ]
 
 { #category : 'accessing' }
@@ -556,7 +556,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Spotter';
 		withoutDecorations;
-		initialExtent: self initialExtent;
+		initialExtent: self preferredExtent;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ 
 			self stopProcessing.
