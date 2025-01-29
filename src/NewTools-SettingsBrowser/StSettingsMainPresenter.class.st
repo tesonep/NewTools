@@ -217,13 +217,6 @@ StSettingsMainPresenter >> initializePresenters [
 	self initializeFocus.
 ]
 
-{ #category : 'initialization' }
-StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
-	
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter centered
-]
-
 { #category : 'loading' }
 StSettingsMainPresenter >> loadSettings [
 	"Load the settings from the system settings file, if exists"

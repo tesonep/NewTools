@@ -221,8 +221,7 @@ StWelcomeBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		bindKeyCombination: Character arrowRight asKeyCombination toAction: [ self selectNext ]; 
-		bindKeyCombination: Character arrowLeft asKeyCombination toAction: [ self selectPrevious ]; 
-		centered
+		bindKeyCombination: Character arrowLeft asKeyCombination toAction: [ self selectPrevious ]
 ]
 
 { #category : 'accessing - contents' }
