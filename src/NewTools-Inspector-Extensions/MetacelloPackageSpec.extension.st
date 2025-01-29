@@ -1,12 +1,12 @@
 Extension { #name : 'MetacelloPackageSpec' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-MetacelloPackageSpec >> inspectionRequires [
+MetacelloPackageSpec >> inspectionRequires: aBuilder [
 	<inspectorPresentationOrder: 10 title: 'Require'>
 	| specs |
 
 	specs := self project version spec packageSpecsInLoadOrder.
-	^ SpListPresenter new
+	^ aBuilder newList
 		items: (specs select: [ :each | self requires includes: each name ]);
 		display: [ :aSpec | aSpec name ];
 		yourself

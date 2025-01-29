@@ -1,10 +1,10 @@
 Extension { #name : 'IRMethod' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-IRMethod >> inpectionIr [
+IRMethod >> inpectionIr: aBuilder [
 	<inspectorPresentationOrder: 40 title: 'Symbolic'>
 
-	^ SpTextPresenter new 
+	^ aBuilder newText 
 		text: (self ir longPrintString trimmed);
 		yourself
 ]

@@ -36,7 +36,7 @@ StDebuggerRawObjectInspector >> defaultLayout [
 StDebuggerRawObjectInspector >> initializePresenters [
 
 
-	raw := self model inspectionRaw.
+	raw := self model inspectionRaw: self.
 	raw beForDebugger.
 	raw owner: self.
 	self addActivationTo: raw.

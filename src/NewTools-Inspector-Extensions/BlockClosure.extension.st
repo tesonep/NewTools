@@ -1,22 +1,22 @@
 Extension { #name : 'BlockClosure' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-BlockClosure >> inpectionIr [
+BlockClosure >> inpectionIr: aBuilder [
 	<inspectorPresentationOrder: 35 title: 'IR'>
 
-	^ self method ir inpectionIr
+	^ self method ir inpectionIr: aBuilder
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-BlockClosure >> inspectionAST [
+BlockClosure >> inspectionAST: aBuilder [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
-	^ self sourceNode inspectionAST
+	^ self sourceNode inspectionAST: aBuilder
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-BlockClosure >> inspectionSource [
+BlockClosure >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
-	^ self sourceNode inspectionSource
+	^ self sourceNode inspectionSource: aBuilder
 ]

@@ -1,10 +1,10 @@
 Extension { #name : 'Text' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Text >> inspectionText [
+Text >> inspectionText: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Text'>
 
-	^ SpMorphPresenter new
+	^ aBuilder newMorph
 		morph: (RubScrolledTextMorph new
 			setText: self;
 			in: [ :this | this textArea

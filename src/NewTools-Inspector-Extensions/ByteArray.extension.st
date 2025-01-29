@@ -1,16 +1,16 @@
 Extension { #name : 'ByteArray' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-ByteArray >> inspectBytes: specBuilder [
+ByteArray >> inspectBytes: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Bytes'>
 
 	^ self size > 1000 
 		ifTrue: [
-			(StSimpleInspectorBuilder on: specBuilder)
+			(StSimpleInspectorBuilder on: aBuilder)
 				key: 'error' value: 'too many bytes, size is ' , self size asString;
 				table ]
 		ifFalse: [
-			(StSimpleInspectorBuilder on: specBuilder)
+			(StSimpleInspectorBuilder on: aBuilder)
 				key: 'hex string' value: (String streamContents: [ :out | 
 					self do: [ :each | each printOn: out base: 16 nDigits: 2 ] ]);
 				key: 'hex lines' value: (String streamContents: [ :out |

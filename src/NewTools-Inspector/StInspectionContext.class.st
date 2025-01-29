@@ -38,15 +38,16 @@ StInspectionContext >> active: aBoolean [
 ]
 
 { #category : 'private - factory' }
-StInspectionContext >> basicNewInspectionPresenter [
+StInspectionContext >> basicNewInspectionPresenter: aBuilder [
 
 	^ self methodSelectorNeedsBuilder 
 		ifTrue: [ 
 			self inspectedObject 
 				inspectorPerform: self methodSelector 
-				with: self newPresenterBuilder ]
+				with: aBuilder ]
 		ifFalse: [ 
-			self inspectedObject inspectorPerform: self methodSelector ]
+			Warning signal: 'Inspections made without presenter builder are no longer supported. Please rewrite your inspection using it (chech in the system for examples)'.
+			^ nil ]
 ]
 
 { #category : 'accessing' }
@@ -72,7 +73,7 @@ StInspectionContext >> contextMethodSelector [
 ]
 
 { #category : 'initialization' }
-StInspectionContext >> debugInspectorPresenter [
+StInspectionContext >> debugInspectorPresenter: aBuilder [
 
 	"Create a debug inspector presenter.
 	
@@ -96,7 +97,7 @@ StInspectionContext >> debugInspectorPresenter [
 
 	"I am itself an evaluator, no need to some other one."
 	self withoutEvaluator.
-	^ SpCodePresenter new
+	^ aBuilder newCode
 		beForObject: self inspectedObject;
 		text: debugExpression;
 		yourself
@@ -168,23 +169,26 @@ StInspectionContext >> methodSelectorNeedsBuilder [
 ]
 
 { #category : 'private - factory' }
-StInspectionContext >> newInspectionPresenter [
+StInspectionContext >> newInspectionPresenterOnApplication: anApplication [
+	| builder |
 
+	builder := self newPresenterBuilderOnApplication: anApplication.
 	"Create an inspection presenter for the current object and pragma.
 	If creation fails, create a debug inspector instead"
-	^ [self basicNewInspectionPresenter]
-		on: Exception do: [ :error |
-			self debugInspectorPresenter ]
+	^ [ self basicNewInspectionPresenter: builder ]
+		on: Exception 
+		do: [ :error | self debugInspectorPresenter: builder ]
 ]
 
 { #category : 'factory' }
-StInspectionContext >> newInspectionView [
+StInspectionContext >> newInspectionViewOnApplication: anApplication [
 	| presenter |
 
-	presenter := self newInspectionPresenter.
-	^ presenter asInspection
-		context: self;
-		yourself
+	presenter := self newInspectionPresenterOnApplication: anApplication.
+	^ presenter ifNotNil: [ 
+		presenter asInspection
+			context: self;
+			yourself ]
 ]
 
 { #category : 'private - factory' }
@@ -192,6 +196,14 @@ StInspectionContext >> newPresenterBuilder [
 
 	^ SpPresenterBuilder new
 		application: StPharoApplication current;
+		yourself
+]
+
+{ #category : 'private - factory' }
+StInspectionContext >> newPresenterBuilderOnApplication: anApplication [
+
+	^ SpPresenterBuilder new
+		application: anApplication;
 		yourself
 ]
 

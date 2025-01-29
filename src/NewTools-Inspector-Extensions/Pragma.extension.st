@@ -1,12 +1,12 @@
 Extension { #name : 'Pragma' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Pragma >> inspectionSourceCodeMethod [
+Pragma >> inspectionSourceCodeMethod: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method'>
 	| interval |
 	
 	interval := self sourceNode sourceInterval.
-	^ SpCodePresenter new 
+	^ aBuilder newCode 
 		beForMethod: method ast;
 		text: method sourceCode;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight

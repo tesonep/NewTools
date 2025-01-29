@@ -1,7 +1,7 @@
 Extension { #name : 'AbstractFileReference' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionCompressedItems [
+AbstractFileReference >> inspectionCompressedItems: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
 	| items children root |
 
@@ -14,7 +14,7 @@ AbstractFileReference >> inspectionCompressedItems [
 				addFirst: self parent;
 				yourself ].
 
-	^ SpTablePresenter new
+	^ aBuilder newTabl
 		items: items;
 		addColumn: (SpCompositeTableColumn new
 			title: 'Name';
@@ -45,7 +45,7 @@ AbstractFileReference >> inspectionCompressedItemsContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionContents [
+AbstractFileReference >> inspectionContents: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Contents'> 
 	| maxBytes buffer atEnd stringContents displayStream displayString |
 	
@@ -66,7 +66,7 @@ AbstractFileReference >> inspectionContents [
 			buffer hexDumpOn: displayStream max: maxBytes.
 			displayString := displayStream contents ].
 	
-	^ SpCodePresenter new
+	^ aBuilder newCode
 		withoutSyntaxHighlight;
 		text: displayString;
 		whenSubmitDo: [ :text | 
@@ -87,10 +87,10 @@ AbstractFileReference >> inspectionFuelContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionGif [
+AbstractFileReference >> inspectionGif: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpImagePresenter new
+	^ aBuilder newImage
 		image: (self binaryReadStreamDo: [ :stream | GIFReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -102,7 +102,7 @@ AbstractFileReference >> inspectionGifContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionItems [
+AbstractFileReference >> inspectionItems: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Items'>
 	| items |
 	
@@ -110,7 +110,7 @@ AbstractFileReference >> inspectionItems [
 	self isRoot ifFalse: [ 
 		items := items copyWithFirst: self parent ]. 
 
-	^ SpTablePresenter new 
+	^  aBuilder newTable 
 		beResizable;
 		items: items;
 		addColumn: (SpCompositeTableColumn new 
@@ -152,10 +152,10 @@ AbstractFileReference >> inspectionItemsContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionJpeg [
+AbstractFileReference >> inspectionJpeg: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpImagePresenter new
+	^ aBuilder newImage
 		image: (self binaryReadStreamDo: [ :stream | ImageReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -167,10 +167,10 @@ AbstractFileReference >> inspectionJpegContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionPng [
+AbstractFileReference >> inspectionPng: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Picture'>
 	
-	^ SpImagePresenter new
+	^ aBuilder newImage
 		image: (self binaryReadStreamDo: [ :stream | PNGReadWriter formFromStream: stream ]);
 		yourself
 ]
@@ -182,10 +182,10 @@ AbstractFileReference >> inspectionPngContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-AbstractFileReference >> inspectionStScript [
+AbstractFileReference >> inspectionStScript: aBuilder [
 	<inspectorPresentationOrder: 0 title: 'Script'>
 	
-	^ SpCodePresenter new 
+	^ aBuilder newCode 
 		text: (self readStreamDo: #contents);
 		whenSubmitDo: [ :text | 
 			self writeStreamDo: [ :s | s nextPutAll: text string ] ];

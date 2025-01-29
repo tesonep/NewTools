@@ -1,10 +1,10 @@
 Extension { #name : 'CompiledMethod' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledMethod >> inspectionPragmas [
+CompiledMethod >> inspectionPragmas: aBuilder [
 	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
 
-	^ SpListPresenter new
+	^ aBuilder newList
 		items: self pragmas;
 		display: [ :aPragma | aPragma printString ];
 		yourself
@@ -17,10 +17,10 @@ CompiledMethod >> inspectionPragmasContext: aContext [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-CompiledMethod >> inspectionSource [
+CompiledMethod >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	
-	^ SpCodePresenter new 
+	^ aBuilder newCode 
 		beForMethod: self method;
 		text: self sourceCode;
 		actionsWith: [ :group | group 

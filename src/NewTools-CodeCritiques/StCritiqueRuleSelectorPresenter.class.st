@@ -198,10 +198,9 @@ StCritiqueRuleSelectorPresenter >> initializeLayout [
 
 { #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeList [
-
 	| rulesToSelectChildrenBlock |
 	
-	list := self instantiate: SpTreePresenter.
+	list := self newTree.
 
 	rulesToSelectChildrenBlock := [ :rule | 
 	                              rule isComposite
@@ -239,10 +238,10 @@ StCritiqueRuleSelectorPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 StCritiqueRuleSelectorPresenter >> initializeSelectedList [
-
 	| selectedRulesChildrenBlock |
-	selectedList := self instantiate: SpTreePresenter.
 	
+	selectedList := self newTree.
+
 	selectedRules := Set new.
 	selectedRulesChildrenBlock := [ :rule | 
 	                              rule isComposite
