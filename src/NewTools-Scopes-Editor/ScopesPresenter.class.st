@@ -89,12 +89,12 @@ ScopesPresenter >> argumentsListActions [
 		addActionWith: [ :anItem | anItem
 			name: 'Delete';
 			actionEnabled: [ scopesTree selectedItem isScopeNode ];
-			iconName: #glamorousTrash;
+			iconName: #trash;
 			action: [ self deleteSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Edit';
 			actionEnabled: [ scopesTree selectedItem isScopeNode ];
-			iconName: #glamorousEdit;
+			iconName: #edit;
 			action: [ self editSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Rename';
@@ -102,7 +102,7 @@ ScopesPresenter >> argumentsListActions [
 			action: [ self renameSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Inspect';
-			iconName: #glamorousSearch;
+			iconName: #search;
 			action: [ scopesTree selectedItem inspect ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Open in browser';
@@ -111,7 +111,7 @@ ScopesPresenter >> argumentsListActions [
 		addActionWith: [ :anItem | anItem 
 			name: 'Browse';
 			actionEnabled: [ scopesTree selectedItem isScopeNode not ];
-			iconName: #glamorousBrowse;
+			iconName: #browse;
 			action: [ self browseSelectedItem ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Class references';
