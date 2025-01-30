@@ -42,6 +42,8 @@ BaselineOfNewTools >> baseline: spec [
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 			package: 'NewTools-Playground-Tests' with: [ spec requires: #( 'NewTools-Playground' ) ];
+			"closed windows"
+			package: 'NewTools-WindowManager';
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 			"system reporter"

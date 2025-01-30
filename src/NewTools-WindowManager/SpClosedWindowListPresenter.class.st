@@ -45,24 +45,6 @@ Class {
 	#package : 'NewTools-WindowManager'
 }
 
-{ #category : 'layout' }
-SpClosedWindowListPresenter class >> defaultLayout [
-
-	| listLayout |
-	listLayout := SpBoxLayout newLeftToRight
-		              add: #list;
-		              yourself.
-
-	^ SpBoxLayout newTopToBottom
-		  add: listLayout;
-		  add: (SpBoxLayout newLeftToRight
-				   addLast: #unhideButton expand: false;
-				   addLast: #removeButton expand: false;
-				   yourself)
-		  expand: false;
-		  yourself
-]
-
 { #category : 'accessing' }
 SpClosedWindowListPresenter class >> defaultPreferredExtent [
 
@@ -77,7 +59,6 @@ SpClosedWindowListPresenter class >> lastClosedWindows [
 
 { #category : 'world menu items' }
 SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
-	"To inject your custom items in a specific place, note that each item increases in order by 1. For example, if you wanted your item to be the second item, you could give it an #order: 1.5"
 
 	<windowMenu>
 	|  announcement |
@@ -126,6 +107,24 @@ SpClosedWindowListPresenter >> connectPresenters [
 	removeButton action: [
 		list items isNotEmpty ifTrue: [
 			removeItemBlock cull: self selectedItem ] ]
+]
+
+{ #category : 'layout' }
+SpClosedWindowListPresenter >> defaultLayout [
+
+	| listLayout |
+	listLayout := SpBoxLayout newLeftToRight
+		              add: #list;
+		              yourself.
+
+	^ SpBoxLayout newTopToBottom
+		  add: listLayout;
+		  add: (SpBoxLayout newLeftToRight
+				   addLast: #unhideButton expand: false;
+				   addLast: #removeButton expand: false;
+				   yourself)
+		  expand: false;
+		  yourself
 ]
 
 { #category : 'initialization' }
