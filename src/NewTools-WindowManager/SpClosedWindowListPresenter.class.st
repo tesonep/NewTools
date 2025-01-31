@@ -34,8 +34,7 @@ Class {
 		'unhideButton',
 		'removeButton',
 		'unhideItemBlock',
-		'removeItemBlock',
-		'title'
+		'removeItemBlock'
 	],
 	#classInstVars : [
 		'lastClosedWindows'
@@ -88,9 +87,10 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
-	
+
 	self lastClosedWindows size >= 5 ifTrue: [
-		self lastClosedWindows removeLast close ].
+		5 to: self lastClosedWindows size do: [ :i |
+		self lastClosedWindows removeLast close ] ].
 	aModel labelString = 'Last Closed Windows' ifFalse: [
 		self lastClosedWindows addFirst: aModel ].
 	self refresh

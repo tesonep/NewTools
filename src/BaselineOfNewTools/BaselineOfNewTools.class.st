@@ -263,7 +263,8 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
 	MCMethodDefinition initializersEnabled: initializersEnabled.
-	self loadThemeImages
+	self loadThemeImages.
+	SystemWindow useHideForClose: true
 ]
 
 { #category : 'actions' }
