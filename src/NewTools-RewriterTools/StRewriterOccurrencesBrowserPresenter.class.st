@@ -22,9 +22,9 @@ StRewriterOccurrencesBrowserPresenter class >> critiques: critiques [
 ]
 
 { #category : 'specs' }
-StRewriterOccurrencesBrowserPresenter class >> title [
+StRewriterOccurrencesBrowserPresenter class >> defaultPreferredExtent [ 
 
-	^ 'Occurrences matches'
+	^ 800 @ 500
 ]
 
 { #category : 'initialization' }
@@ -70,8 +70,12 @@ StRewriterOccurrencesBrowserPresenter >> initializePresenters [
 { #category : 'initialization' }
 StRewriterOccurrencesBrowserPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter
-		title: self class title;
-		initialExtent: 800 @ 500;
-		askOkToClose: false
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter askOkToClose: false
+]
+
+{ #category : 'initialization' }
+StRewriterOccurrencesBrowserPresenter >> windowTitle [ 
+
+	^ 'Occurrences matches'
 ]

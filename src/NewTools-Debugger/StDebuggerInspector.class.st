@@ -43,11 +43,6 @@ StDebuggerInspector class >> openOn: anObject [
 ]
 
 { #category : 'specs' }
-StDebuggerInspector class >> title [
-	 ^'Debugger Inspection'
-]
-
-{ #category : 'specs' }
 StDebuggerInspector class >> toggleMaximizeAssertionSpec [
 	self maximizeAssertionSpec: self maximizeAssertionSpec not
 ]
@@ -308,4 +303,10 @@ StDebuggerInspector >> updateWith: inspectedObject [
 	self model: (self debuggerInspectorModelClass on: inspectedObject).
 	self updateEvaluationPaneReceiver.
 	self restoreRawInspectionSelectionForContext: newContext
+]
+
+{ #category : 'accessing' }
+StDebuggerInspector >> windowTitle [
+
+	 ^'Debugger Inspection'
 ]

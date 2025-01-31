@@ -32,8 +32,8 @@ StRewriterOpenExpressionFinderCommand class >> defaultName [
 { #category : 'executing' }
 StRewriterOpenExpressionFinderCommand >> execute [
 
-	| window |
-	window := StRewriterExpressionFinderPresenter new open.
-	window presenter patternCode: self context lhs.
-	^ window
+	^ (StRewriterExpressionFinderPresenter
+			newApplication: self application)
+			patternCode: self context lhs;
+			open
 ]

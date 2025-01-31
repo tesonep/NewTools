@@ -134,6 +134,12 @@ The ''Select classes'' button opened a dialog window  to select which classes wi
 The ''All classes'' button is used to reset the classes selection.'
 ]
 
+{ #category : 'accessing' }
+StFinderPresenter class >> defaultPreferredExtent [
+
+	^ (800 @ 500)
+]
+
 { #category : 'world menu' }
 StFinderPresenter class >> menuFinderCommandOn: aBuilder [
 	<worldMenu>
@@ -215,15 +221,26 @@ The Method Finder is not trying all methods in the system so if it will find not
 
 ]
 
+{ #category : 'instance creation' }
+StFinderPresenter class >> newApplication: anApplication model: aModel [
+
+	aModel application: anApplication.
+	^ super newApplication: anApplication model: aModel.
+]
+
 { #category : 'opening' }
 StFinderPresenter class >> open [
 	<script>
-	
 	| model presenter |
+	
 	model := StFinderModel new.
-	presenter := self on: model.
+	presenter := self 
+		newApplication: StPresenter currentApplication 
+		model: model.
+
 	model application: presenter application. 
 	presenter open.
+	
 	^ presenter
 ]
 
@@ -366,12 +383,6 @@ StFinderPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> initialExtentForWindow [
-
-	^ (800 @ 500)
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> initializeFocus [
 
 	self focusOrder 
@@ -421,16 +432,6 @@ StFinderPresenter >> initializeResultTree [
 			action: [ self resultTree selectedItem referencesAction ] ];
 		actions: self rootCommandsGroup / 'StFinderSelContextualMenu';
 		yourself
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> initializeWindow: aSpWindowPresenter [
-
-	super initializeWindow: aSpWindowPresenter.
-
-	self setTitleTo: aSpWindowPresenter.
-	self setWindowIconTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
 ]
 
 { #category : 'updating - widgets' }
@@ -542,26 +543,6 @@ StFinderPresenter >> selectedResults: aCollection [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: 'Finder'
-
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setWindowIconTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter	windowIcon: (self iconNamed: #smallFind).
-
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> subscribeToAnnouncements [
 
 	self model whenSearchStarted: [ self notifySearchStarted ].
@@ -652,4 +633,18 @@ StFinderPresenter >> updateStatusBarTextFrom: results time: time [
 			<< ' results and took ';
 			<< time asStringWithCommas;
 			<< ' ms' ]
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowIcon [
+
+	^ self iconNamed: #smallFind
+
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowTitle [
+
+	^ 'Finder'
+
 ]

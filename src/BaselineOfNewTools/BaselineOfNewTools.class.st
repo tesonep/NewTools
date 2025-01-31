@@ -18,7 +18,6 @@ BaselineOfNewTools >> baseline: spec [
 
 		self sindarin: spec.
 		self chest: spec.
-		self colorPicker: spec.
 
 		spec
 			package: 'NewTools-Core';
@@ -110,7 +109,12 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-SettingsBrowser' with: [ spec requires: #('ColorPicker') ];
 			package: 'NewTools-SettingsBrowser-Tests' with: [ spec requires: #('NewTools-SettingsBrowser') ];
 			
-			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ].			
+			package: 'NewTools-Utils' with: [ spec requires: #('NewTools-FileBrowser') ];
+
+			package: 'NewTools-WelcomeBrowser';
+			
+			package: 'ColorPicker';
+			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
@@ -183,6 +187,10 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SettingsBrowser' with: #(
 						'NewTools-SettingsBrowser'
 						'NewTools-SettingsBrowser-Tests');
+						
+			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
+			
+			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 
 			group: 'default' with: #( 
 						'Playground' 
@@ -193,12 +201,14 @@ BaselineOfNewTools >> baseline: spec [
 						'FontChooser' 
 						'Methods'
 				   		'Spotter'
-            			'RewriterTools'
+		            			'RewriterTools'
 						'ScopesEditor'
 						'FileBrowser'
 						'Finder'
 						'Profiler'
-						'SettingsBrowser' ) ]
+						'SettingsBrowser'
+						'WelcomeBrowser'
+						'ColorPickerGroup' ) ]
 ]
 
 { #category : 'external projects' }
@@ -211,12 +221,26 @@ BaselineOfNewTools >> chest: spec [
 			loads: 'default' ]
 ]
 
-{ #category : 'external projects' }
-BaselineOfNewTools >> colorPicker: spec [
+{ #category : 'actions' }
+BaselineOfNewTools >> loadThemeImages [
 
-	spec
-		baseline: 'ColorPicker' 
-		with: [ spec repository: 'github://pharo-spec/ColorPicker/src' ].
+	| themeClass location |
+	themeClass := self class environment classNamed: #StWelcomeTheme.
+	location := self repositoryLocation.
+	themeClass loadAllImagesFrom: location / 'resources' / 'themes'
+]
+
+{ #category : 'accessing' }
+BaselineOfNewTools >> packageRepository [
+	" Tries to determine a repository from which the baseline is being loaded. Useful for 
+	refering other baselines in the same repository. "
+
+	^ (self class package mcWorkingCopy repositoryGroup repositories reject: [ :each | each = MCCacheRepository uniqueInstance ])
+		  ifNotEmpty: [ :repositories |
+			  repositories
+				  detect: [ :each | each description beginsWith: 'tonel://' ]
+				  ifNone: [ repositories anyOne ] ]
+		  ifEmpty: [ nil ]
 ]
 
 { #category : 'accessing' }
@@ -236,7 +260,8 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 { #category : 'actions' }
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
-	MCMethodDefinition initializersEnabled: initializersEnabled
+	MCMethodDefinition initializersEnabled: initializersEnabled.
+	self loadThemeImages
 ]
 
 { #category : 'actions' }
@@ -244,6 +269,22 @@ BaselineOfNewTools >> preload: loader package: packageSpec [
 
 	initializersEnabled := MCMethodDefinition initializersEnabled.
 	MCMethodDefinition initializersEnabled: true
+]
+
+{ #category : 'accessing' }
+BaselineOfNewTools >> repositoryLocation [
+
+	| locationFromIceberg repo |
+	repo := (self class environment classNamed: #IceRepository)
+		        ifNotNil: [ :iceberg |
+			        iceberg registry
+				        detect: [ :each | each name = 'NewTools' ]
+				        ifNone: [ nil ] ].
+	
+	repo ifNotNil: [ locationFromIceberg := repo repositoryDirectory ].
+
+	^ locationFromIceberg ifNil: [
+		  self packageRepository directory asFileReference parent ]
 ]
 
 { #category : 'external projects' }

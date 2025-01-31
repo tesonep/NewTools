@@ -39,6 +39,12 @@ StFileSystemPresenter class >> buildCommandsGroupWith: presenter forRoot: rootCo
 				yourself)
 ]
 
+{ #category : 'accessing' }
+StFileSystemPresenter class >> defaultPreferredExtent [
+
+	^ (1100 @ 700)
+]
+
 { #category : 'defaults' }
 StFileSystemPresenter class >> lastVisitedDirectory [
 
@@ -149,19 +155,6 @@ StFileSystemPresenter >> fileNavigationSystem [
 ]
 
 { #category : 'initialization' }
-StFileSystemPresenter >> initialExtentForWindow [
-
-	^ (1100 @ 700)
-]
-
-{ #category : 'initialization' }
-StFileSystemPresenter >> initialTitle [
-
-	^ 'File Browser'
-
-]
-
-{ #category : 'initialization' }
 StFileSystemPresenter >> initializeBookmarksTreeTable [
 
 	bookmarksTreeTable := self newTreeTable.
@@ -193,16 +186,6 @@ StFileSystemPresenter >> initializePresenters [
 	self initializeBookmarksTreeTable.
 ]
 
-{ #category : 'initialization' }
-StFileSystemPresenter >> initializeWindow: aSpWindowPresenter [
-
-	super initializeWindow: aSpWindowPresenter.
-
-	self setTitleTo: aSpWindowPresenter.
-	self setWindowIconTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
-]
-
 { #category : 'utilities' }
 StFileSystemPresenter >> openFolder: aFileReference [
 
@@ -212,37 +195,10 @@ StFileSystemPresenter >> openFolder: aFileReference [
 
 ]
 
-{ #category : 'initialization' }
-StFileSystemPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
-]
-
-{ #category : 'initialization' }
-StFileSystemPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: self title
-
-]
-
-{ #category : 'initialization' }
-StFileSystemPresenter >> setWindowIconTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter	windowIcon: (self iconNamed: #open).
-
-]
-
-{ #category : 'accessing' }
-StFileSystemPresenter >> title [
-
-	^ title
-		ifNil: [ title := self initialTitle ]
-]
-
 { #category : 'accessing' }
 StFileSystemPresenter >> title: aString [
 
-	title := aString.
+	title := aString
 ]
 
 { #category : 'accessing' }
@@ -269,4 +225,17 @@ StFileSystemPresenter >> updateTreeNavigationWithFileReference: aFileReference [
 StFileSystemPresenter >> updateWidgetWithFileReference: aFileReference [ 
 
 	fileNavigationSystem updateWidgetWithFileReference: aFileReference
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> windowIcon [ 
+
+	^ self iconNamed: #open
+
+]
+
+{ #category : 'accessing' }
+StFileSystemPresenter >> windowTitle [
+
+	^  title ifNil: [ title := 'File browser' ]
 ]

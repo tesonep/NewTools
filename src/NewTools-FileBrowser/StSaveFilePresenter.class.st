@@ -12,6 +12,13 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'accessing' }
+StSaveFilePresenter class >> defaultPreferredExtent [ 
+
+	^ (1050 @ 550)
+	
+]
+
 { #category : 'examples' }
 StSaveFilePresenter class >> example [
 
@@ -56,12 +63,6 @@ StSaveFilePresenter >> existingFileMessage: entry [
 	^ 'File named "{1}" already exists. Do you want to overwrite it?' format: { entry basename }
 ]
 
-{ #category : 'initialization' }
-StSaveFilePresenter >> initialExtentForWindow [ 
-
-	^ (1050 @ 550)
-]
-
 { #category : 'hooks' }
 StSaveFilePresenter >> initialTitle [
 	^ 'Save As'
@@ -94,4 +95,9 @@ StSaveFilePresenter >> selectedEntry [
 	(self application confirm: (self existingFileMessage: entry))
 		ifTrue: [ ^ confirmedOverwrite := entry ].
 	^ nil
+]
+
+{ #category : 'hooks' }
+StSaveFilePresenter >> windowTitle [
+	^ 'Save As'
 ]

@@ -34,7 +34,6 @@ Class {
 		'unhideButton',
 		'removeButton',
 		'unhideItemBlock',
-		'label',
 		'removeItemBlock',
 		'title'
 	],
@@ -91,9 +90,11 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 	
 	self lastClosedWindows size >= 5 ifTrue: [
 		self lastClosedWindows removeLast close ].
-	self lastClosedWindows addFirst: aModel.
-	aModel setProperty: #isClosed toValue: true.
-   self refresh
+	aModel labelString = 'Last Closed Windows' ifFalse: [
+		self lastClosedWindows addFirst: aModel.
+  	aModel setProperty: #isClosed toValue: true ].
+	self refresh
+
 ]
 
 { #category : 'initialization' }

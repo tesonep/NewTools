@@ -13,6 +13,12 @@ StInspectorAssociationNode class >> hostObject: anObject index: index [
 		yourself
 ]
 
+{ #category : 'testing' }
+StInspectorAssociationNode >> canSave [
+
+	^ true
+]
+
 { #category : 'accessing' }
 StInspectorAssociationNode >> key [
 

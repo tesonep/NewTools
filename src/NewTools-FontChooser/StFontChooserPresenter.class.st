@@ -42,23 +42,10 @@ StFontChooserPresenter class >> defaultLayout [
 			
 ]
 
-{ #category : 'specs' }
-StFontChooserPresenter class >> defaultSpec [ 
+{ #category : 'accessing' }
+StFontChooserPresenter class >> defaultPreferredExtent [
 
-	^ SpPanedLayout newTopToBottom
-		add: (SpPanedLayout newLeftToRight 
-					add: (SpPanedLayout newLeftToRight
-						add: #fontFamilyList;
-						add: #fontStyleList;
-						yourself);
-					add: (SpPanedLayout newLeftToRight
-						add: #fontSizeList;
-						add: #languageList;
-						yourself);
-					yourself);
-		add: (SpScrollableLayout with: #previewText);	
-		yourself
-			
+	^ 800@580
 ]
 
 { #category : 'interface building' }
@@ -198,13 +185,6 @@ StFontChooserPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StFontChooserPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter initialExtent: 800@580.
-	aWindowPresenter title: self model title
-]
-
-{ #category : 'initialization' }
 StFontChooserPresenter >> modelChanged [  
 	
 	self updateWithFont: self model font
@@ -318,12 +298,6 @@ StFontChooserPresenter >> selectedFontStyle [
 	^ fontStyleList selectedItem
 ]
 
-{ #category : 'initialization' }
-StFontChooserPresenter >> title [ 
-
-	^ 'Font Chooser'
-]
-
 { #category : 'events' }
 StFontChooserPresenter >> updateFonts [
 	
@@ -373,4 +347,10 @@ StFontChooserPresenter >> updateWithFont: aFont [
 	fontSizeList selectItem: aFont pointSize.
 
 	self updatePreview
+]
+
+{ #category : 'initialization' }
+StFontChooserPresenter >> windowTitle [ 
+
+	^ self model title
 ]

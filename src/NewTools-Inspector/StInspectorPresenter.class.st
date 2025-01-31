@@ -169,9 +169,6 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self windowTitle;
-		windowIcon: self windowIcon;
-		initialExtent: self class defaultPreferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startProcessing ];
 		whenFocusLostDo: [ self stopProcessing ];
@@ -284,27 +281,29 @@ StInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
-		window title: self title ].
+		window title: self windowTitle ].
 ]
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowIcon [
 	
-	^ self application iconNamed: #smallInspectIt
+	^ self iconNamed: #smallInspectIt
 ]
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
-
-	^ self model windowTitle
+	
+	^ self model ifNotNil: [ :m | m windowTitle ] ifNil: [ 'Inspector']
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar [
-	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
+
+	 ^ withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar: bool [
+
 	withHeaderBar := bool
 ]

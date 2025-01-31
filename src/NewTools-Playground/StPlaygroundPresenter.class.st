@@ -79,12 +79,6 @@ StPlaygroundPresenter class >> defaultExtent [
 	^ (600@400)
 ]
 
-{ #category : 'accessing' }
-StPlaygroundPresenter class >> defaultTitle [ 
-
-	^ 'Playground'
-]
-
 { #category : 'world menu' }
 StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
@@ -200,11 +194,11 @@ StPlaygroundPresenter >> stopProcessing [
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowIcon [
 	
-	^ self application iconNamed: #workspace
+	^ self iconNamed: #workspace
 ]
 
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowTitle [
 
-	^ self class defaultTitle
+	^ 'Playground'
 ]

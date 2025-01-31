@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundPageVersionsPresenter class >> preferredExtent [
+StPlaygroundPageVersionsPresenter class >> defaultPreferredExtent [
 
 	^ (700@400)
 ]
@@ -97,15 +97,6 @@ StPlaygroundPageVersionsPresenter >> initializePresenters [
 				ifNil: [ 'no source' ] ]
 ]
 
-{ #category : 'initialization' }
-StPlaygroundPageVersionsPresenter >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
-		title: 'Versions';
-		initialExtent: self class preferredExtent
-]
-
 { #category : 'private' }
 StPlaygroundPageVersionsPresenter >> parent [
 	"a synonym to be clearer"
@@ -127,4 +118,10 @@ StPlaygroundPageVersionsPresenter >> versionsActions [
 		register: (StPlaygroundAdoptVersionCommand forSpecContext: self);
 		register: (StPlaygroundAdoptVersionOnNewPlaygroundCommand forSpecContext: self);
 		yourself
+]
+
+{ #category : 'initialization' }
+StPlaygroundPageVersionsPresenter >> windowTitle [ 
+
+	^ 'Versions'
 ]

@@ -20,15 +20,16 @@ Class {
 }
 
 { #category : 'specs' }
+StResetWindowPresenter class >> defaultPreferredExtent [ 
+	
+	^ 450@30
+]
+
+{ #category : 'specs' }
 StResetWindowPresenter class >> open [
 
 	<example>
 	^ self new open
-]
-
-{ #category : 'specs' }
-StResetWindowPresenter class >> title [
-	^ 'Critique Browser' 
 ]
 
 { #category : 'accessing' }
@@ -56,14 +57,6 @@ StResetWindowPresenter >> initializePresenters [
 	self setFocusOrder.
 	self setResetModel.
 	self setCurrentConfigurationModel
-]
-
-{ #category : 'initialization' }
-StResetWindowPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title:  self title;
-		initialExtent: 450@30
 ]
 
 { #category : 'initialization' }
@@ -110,4 +103,10 @@ StResetWindowPresenter >> setResetModel [
 		action: [ 
 			self openPackagesChooser.
 			self delete ]
+]
+
+{ #category : 'accessing' }
+StResetWindowPresenter >> windowTitle [
+
+	^ 'Critique Browser' 
 ]

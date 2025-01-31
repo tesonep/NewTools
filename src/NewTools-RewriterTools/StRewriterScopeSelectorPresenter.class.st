@@ -22,6 +22,12 @@ Class {
 }
 
 { #category : 'accessing' }
+StRewriterScopeSelectorPresenter class >> defaultPreferredExtent [
+
+	^ 530 @ 330
+]
+
+{ #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> descriptionText [
 
 	^ 'Apply your custom rewrite rules to any packages or classes'
@@ -35,18 +41,6 @@ StRewriterScopeSelectorPresenter class >> icon [
 { #category : 'accessing' }
 StRewriterScopeSelectorPresenter class >> iconName [
 	^ #objects
-]
-
-{ #category : 'specs' }
-StRewriterScopeSelectorPresenter class >> title [
-
-	^ 'Select the classes'
-]
-
-{ #category : 'accessing' }
-StRewriterScopeSelectorPresenter class >> windowExtent [
-
-	^ 530 @ 330
 ]
 
 { #category : 'instance creation' }
@@ -131,14 +125,6 @@ StRewriterScopeSelectorPresenter >> initializePresenters [
 	self doNotAllowMethodSelection
 ]
 
-{ #category : 'initialization' }
-StRewriterScopeSelectorPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self class title;
-		extent: self class windowExtent
-]
-
 { #category : 'api' }
 StRewriterScopeSelectorPresenter >> initializeWithPackages: aPackagesCollection [
 
@@ -197,4 +183,10 @@ StRewriterScopeSelectorPresenter >> updateSelectionForMethodsPresenter [
 	methodsSelection
 		ifTrue: [ methodsListWithFilterPresenter listPresenter selectItems: methodsInTheSelectedClasses asOrderedCollection ]
 		ifFalse: [ methodsListWithFilterPresenter listPresenter resetListSelection ]
+]
+
+{ #category : 'accessing' }
+StRewriterScopeSelectorPresenter >> windowTitle [
+
+	^ 'Select the classes'
 ]

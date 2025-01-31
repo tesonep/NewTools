@@ -17,6 +17,12 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'accessing' }
+DebugPointBrowserPresenter class >> defaultPreferredExtent [
+
+	^ 800 @ 600
+]
+
 { #category : 'world menu' }
 DebugPointBrowserPresenter class >> menuCommandOn: aBuilder [
 
@@ -141,15 +147,6 @@ DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 	variableTargetPresenter := DebugPointVariableTargetPresenter new
 ]
 
-{ #category : 'initialization' }
-DebugPointBrowserPresenter >> initializeWindow: aWindowPresenter [
-	
-	aWindowPresenter
-		title: 'Debug Point Browser';		
-		windowIcon: (self application iconNamed: #bug);
-		initialExtent: 800@550
-]
-
 { #category : 'api' }
 DebugPointBrowserPresenter >> items: aDebugPointCollection [
 
@@ -208,4 +205,15 @@ DebugPointBrowserPresenter >> updateTable [
 DebugPointBrowserPresenter >> updateVariableTargetPresenterFrom: aDebugPointTarget [
 
 	variableTargetPresenter target: aDebugPointTarget
+]
+
+{ #category : 'initialization' }
+DebugPointBrowserPresenter >> windowIcon [ 
+
+	^ self iconNamed: #bug
+]
+
+{ #category : 'initialization' }
+DebugPointBrowserPresenter >> windowTitle [ 
+	^ 'Debug Point Browser'
 ]

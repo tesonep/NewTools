@@ -37,12 +37,6 @@ StMethodToolbarPresenter class >> example [
 	^ example
 ]
 
-{ #category : 'specs' }
-StMethodToolbarPresenter class >> title [
-
-	^ 'Toolbar'
-]
-
 { #category : 'accessing' }
 StMethodToolbarPresenter >> addItemLabeled: aString do: aBlock [
 	| item |
@@ -182,4 +176,10 @@ StMethodToolbarPresenter >> selectFirst [
 StMethodToolbarPresenter >> setModelBeforeInitialization: aMethod [
 
 	self method: aMethod
+]
+
+{ #category : 'accessing' }
+StMethodToolbarPresenter >> windowTitle [
+
+	^ 'Toolbar'
 ]

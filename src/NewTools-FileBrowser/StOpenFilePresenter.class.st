@@ -109,14 +109,14 @@ StOpenFilePresenter class >> examplePreviewer [
 		open
 ]
 
-{ #category : 'hooks' }
-StOpenFilePresenter >> initialTitle [
-	^ 'Select File To Open'
-]
-
 { #category : 'testing' }
 StOpenFilePresenter >> isMultipleSelection [
 	"Answer <true> if the receiver was set to enable multiple selections"
 	
 	^ self fileNavigationSystem isMultipleSelection 
+]
+
+{ #category : 'hooks' }
+StOpenFilePresenter >> windowTitle [
+	^ 'Select File To Open'
 ]

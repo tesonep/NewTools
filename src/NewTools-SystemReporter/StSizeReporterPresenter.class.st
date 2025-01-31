@@ -58,12 +58,6 @@ StSizeReporterPresenter >> effectiveClasses [
 	^ data at: #effectiveClasses
 ]
 
-{ #category : 'building report' }
-StSizeReporterPresenter >> extent [
-
-	^ 600@ 400
-]
-
 { #category : 'initialization' }
 StSizeReporterPresenter >> fillTopics [
 
@@ -231,12 +225,6 @@ StSizeReporterPresenter >> testClasses [
 	^ data at: #testClasses
 ]
 
-{ #category : 'ui' }
-StSizeReporterPresenter >> title [ 
-
-	^ 'Size reporter'
-]
-
 { #category : 'building report' }
 StSizeReporterPresenter >> topicSpec [
   {	#'# smart report' -> #reportSmartInfo: .
@@ -246,4 +234,10 @@ StSizeReporterPresenter >> topicSpec [
 		do: [ :each | self addTopicSpec: each ].
 	^ topics
 		 
+]
+
+{ #category : 'ui' }
+StSizeReporterPresenter >> windowTitle [ 
+
+	^ 'Size reporter'
 ]

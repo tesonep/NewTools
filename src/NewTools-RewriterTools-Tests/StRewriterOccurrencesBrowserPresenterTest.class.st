@@ -30,5 +30,5 @@ StRewriterOccurrencesBrowserPresenterTest >> testCritiques [
 { #category : 'tests' }
 StRewriterOccurrencesBrowserPresenterTest >> testTitle [
 
-	self deny: StRewriterOccurrencesBrowserPresenter title equals: 'Untitled window'
+	self assert: StRewriterOccurrencesBrowserPresenter new windowTitle  equals: 'Occurrences matches' 
 ]

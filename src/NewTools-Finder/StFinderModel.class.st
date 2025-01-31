@@ -55,8 +55,10 @@ StFinderModel >> application [
 ]
 
 { #category : 'accessing' }
-StFinderModel >> application: anApplication [ 
-	application := anApplication
+StFinderModel >> application: anApplication [
+
+	application := anApplication.
+	self initializeSearchTargets.
 ]
 
 { #category : 'information' }
@@ -114,7 +116,6 @@ StFinderModel >> initialize [
 	useCase := false.
 
 	self initializeSearchTargets.
-	currentSearch := availableSearchTargets first.
 	self selectAllPackages
 ]
 
@@ -122,7 +123,8 @@ StFinderModel >> initialize [
 StFinderModel >> initializeSearchTargets [
 	"Private - Set the receiver's default search targets"
 
-	self availableSearchTargets: (self newSearchTargetsWith: self class defaultSearchTargets)
+	self availableSearchTargets: (self newSearchTargetsWith: self class defaultSearchTargets).
+	currentSearch := availableSearchTargets first.
 ]
 
 { #category : 'initialization' }

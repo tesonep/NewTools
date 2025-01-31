@@ -139,8 +139,6 @@ StBrowserSearchPresenter >> initializeSearchOptions [
 StBrowserSearchPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter title: 'Choose item'.
-
 	aWindowPresenter whenOpenedDo: [ searchField takeKeyboardFocus ]
 ]
 
@@ -232,4 +230,10 @@ StBrowserSearchPresenter >> updateList [
 	(env hasClassNamed: searchField text)
 		ifTrue: [ itemsList selectItem: (env at: searchField text asSymbol) scrollToSelection: true ]
 		ifFalse: [ itemsList selectFirst ]
+]
+
+{ #category : 'initialization' }
+StBrowserSearchPresenter >> windowTitle [ 
+
+	^ 'Choose item'
 ]

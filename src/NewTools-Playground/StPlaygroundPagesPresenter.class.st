@@ -136,9 +136,7 @@ StPlaygroundPagesPresenter >> initializePresenters [
 StPlaygroundPagesPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
-		title: self class defaultTitle;
-		initialExtent: self initialExtent;
+	aWindowPresenter
 		whenOpenedDo: [ pageList takeKeyboardFocus ]
 ]
 
@@ -204,4 +202,10 @@ StPlaygroundPagesPresenter >> selectedPage [
 StPlaygroundPagesPresenter >> setModelBeforeInitialization: aPlayground [
 
 	parent := aPlayground
+]
+
+{ #category : 'accessing' }
+StPlaygroundPagesPresenter >> windowTitle [
+
+	^ 'Pages'
 ]

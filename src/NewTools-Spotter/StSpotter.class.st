@@ -78,6 +78,14 @@ StSpotter class >> createTips [
 ]
 
 { #category : 'accessing' }
+StSpotter class >> defaultPreferredExtent [
+	
+	^ self isShowingPreview 
+		ifTrue: [ (750@680) ]
+		ifFalse: [ (500@680) ]
+]
+
+{ #category : 'accessing' }
 StSpotter class >> hidePreview [
 	<script>
 
@@ -458,15 +466,6 @@ StSpotter >> historize: aCandidateLink [
 ]
 
 { #category : 'initialization' }
-StSpotter >> initialExtent [
-
-	self flag: #TODO. "Maybe calculate coordinates?"
-	^ self isShowingPreview 
-		ifTrue: [ (750@450) ]
-		ifFalse: [ (500@450) ]
-]
-
-{ #category : 'initialization' }
 StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
@@ -557,7 +556,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Spotter';
 		withoutDecorations;
-		initialExtent: self initialExtent;
+		initialExtent: self preferredExtent;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ 
 			self stopProcessing.
