@@ -91,8 +91,9 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 	self lastClosedWindows size >= 5 ifTrue: [
 		5 to: self lastClosedWindows size do: [ :i |
 		self lastClosedWindows removeLast close ] ].
-	aModel labelString = 'Last Closed Windows' ifFalse: [
-		self lastClosedWindows addFirst: aModel ].
+	aModel labelString = 'Last Closed Windows'
+		ifFalse: [ self lastClosedWindows addFirst: aModel ]
+		ifTrue: [ aModel closeBoxHit ].
 	self refresh
 ]
 
