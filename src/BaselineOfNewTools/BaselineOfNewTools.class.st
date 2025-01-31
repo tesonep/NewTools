@@ -120,6 +120,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
+			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager');
 			group: 'Debugger' with: #( 
 					 	'Core' 
 					 	'Inspector' 
@@ -195,6 +196,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'default' with: #( 
 						'Playground' 
 						'Inspector' 
+						'ClosedWindows'
 						'CritiqueBrowser' 
 						'Debugger'
 				   		'SystemReporter' 

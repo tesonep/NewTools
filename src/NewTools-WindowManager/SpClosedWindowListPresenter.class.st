@@ -78,11 +78,12 @@ SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
 SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 
 	<worldMenu>
-	(aBuilder group: #Windows) with: [
+
 		(aBuilder item: #'Unclose window')
-			order: 90;
+		parent: #Windows;
+			order: 1;
 			action: [ self new open ];
-			help: 'Show last 5 closed Windows' ]
+			help: 'Show last 5 closed Windows' 
 ]
 
 { #category : 'adding' }
