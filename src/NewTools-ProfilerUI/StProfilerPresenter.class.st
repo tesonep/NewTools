@@ -34,7 +34,7 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 StProfilerPresenter class >> open [
 
 	<example>
-	^ self new open
+	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'spying' }

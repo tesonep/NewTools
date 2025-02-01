@@ -23,7 +23,7 @@ SpColorPickerPresenter class >> defaultPreferredExtent [
 SpColorPickerPresenter class >> open [
 	<script>
 
-	^ self new open
+	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'layout' }

@@ -355,7 +355,7 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self setResetButton.
 	self setUpdateButton.
 
-	critiqueModel := StSingleCritiqueResultListPresenter new.
+	critiqueModel := StSingleCritiqueResultListPresenter new application: application.
 	critiquesModel := self critiquesModel.
 	sourceCodeModel := self sourceCodeModel.
 	toolbarModel := self toolbarModel.
