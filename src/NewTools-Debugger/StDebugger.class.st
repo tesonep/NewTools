@@ -90,6 +90,7 @@ Class {
 		'stackAndCodeContainer'
 	],
 	#classVars : [
+		'DebugSessionClass',
 		'EnableStackColoring'
 	],
 	#classInstVars : [
@@ -169,6 +170,31 @@ StDebugger class >> debugSession: aDebugSession [
 	applicationDebugSession deferDebuggerOpeningToBackend: debugger.
 	
 	^ debugger
+]
+
+{ #category : 'as yet unclassified' }
+StDebugger class >> debugSessionClass [
+	
+	^ DebugSessionClass ifNil: [ DebugSessionClass := StMorphicDebugSession ]
+]
+
+{ #category : 'as yet unclassified' }
+StDebugger class >> debugSessionClass: aClass [ 
+	
+	DebugSessionClass := aClass
+]
+
+{ #category : 'accessing' }
+StDebugger class >> debugSessionClassSettingsOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder pickOne: #debugSessionClass)
+		parent: #debugging;
+		label: 'DebugSession class to use';
+		target: StDebugger;
+		default: StMorphicDebugSession ;
+		domainValues: { StMorphicDebugSession. EnhancedDebugSessionWithHaltingBlock };
+		description: 'It affects the implementation of the operations in the debugger'
 ]
 
 { #category : 'accessing' }
