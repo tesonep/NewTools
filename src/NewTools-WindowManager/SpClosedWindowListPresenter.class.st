@@ -133,7 +133,7 @@ SpClosedWindowListPresenter >> defaultLayout [
 SpClosedWindowListPresenter >> initialize [
 
 	super initialize.
-	self unsubscribeFromWindowEvents .
+	self unsubscribeFromWindowEvents.
 	self subscribeToWindowClosedAnnoucements.
 	removeItemBlock := [ :item |
 	                   item ifNotNil: [
@@ -142,6 +142,7 @@ SpClosedWindowListPresenter >> initialize [
 		                   self refresh ] ].
 	unhideItemBlock := [ :item |
 	                   item ifNotNil: [ item visible: true ].
+	                   item removeProperty: #isClosed.
 	                   self items remove: item.
 	                   self refresh ]
 ]
