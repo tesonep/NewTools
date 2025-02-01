@@ -34,8 +34,7 @@ Class {
 		'unhideButton',
 		'removeButton',
 		'unhideItemBlock',
-		'removeItemBlock',
-		'title'
+		'removeItemBlock'
 	],
 	#classInstVars : [
 		'lastClosedWindows'
@@ -78,23 +77,24 @@ SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
 SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 
 	<worldMenu>
-	(aBuilder group: #Windows) with: [
+
 		(aBuilder item: #'Unclose window')
-			order: 90;
+		parent: #Windows;
+			order: 1;
 			action: [ self new open ];
-			help: 'Show last 5 closed Windows' ]
+			help: 'Show last 5 closed Windows' 
 ]
 
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
-	
-	self lastClosedWindows size >= 5 ifTrue: [
-		self lastClosedWindows removeLast close ].
-	aModel labelString = 'Last Closed Windows' ifFalse: [
-		self lastClosedWindows addFirst: aModel.
-  	aModel setProperty: #isClosed toValue: true ].
-	self refresh
 
+	self lastClosedWindows size >= 5 ifTrue: [
+		5 to: self lastClosedWindows size do: [ :i |
+		self lastClosedWindows removeLast close ] ].
+	aModel labelString = 'Last Closed Windows'
+		ifFalse: [ self lastClosedWindows addFirst: aModel ]
+		ifTrue: [ aModel closeBoxHit ].
+	self refresh
 ]
 
 { #category : 'initialization' }
