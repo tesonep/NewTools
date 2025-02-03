@@ -88,6 +88,9 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
+	SystemWindow useHideForClose ifFalse: [
+		self unsubscribeFromWindowEvents.
+		^ self ].
 	self lastClosedWindows size >= 5 ifTrue: [
 		5 to: self lastClosedWindows size do: [ :i |
 		self lastClosedWindows removeLast close ] ].
