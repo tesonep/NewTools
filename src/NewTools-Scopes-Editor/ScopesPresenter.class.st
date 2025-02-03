@@ -47,12 +47,12 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 { #category : 'specs' }
 ScopesPresenter class >> newInstance [
 	ScopeNodesPresenter reset.
-	^ self on: ScopesManager singleInstance
+	^ (self newApplication: StPharoApplication current model: ScopesManager singleInstance)
 ]
 
 { #category : 'opening' }
 ScopesPresenter class >> open [
-
+	<script>
 	self newInstance open
 ]
 

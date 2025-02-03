@@ -43,7 +43,7 @@ StWelcomeBrowser class >> menuCommandOn: aBuilder [
 StWelcomeBrowser class >> open [
 	<script>
 	
-	self new open
+	(self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'instance creation' }

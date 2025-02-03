@@ -40,7 +40,7 @@ SpColorPicker class >> defaultPreferredExtent [
 SpColorPicker class >> open [
 
 	<script>
-	^ self new
+	^ (self newApplication: StPharoApplication current) 
 		  open;
 		  yourself
 ]

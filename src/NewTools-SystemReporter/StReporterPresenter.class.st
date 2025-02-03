@@ -40,7 +40,7 @@ StReporterPresenter class >> defaultLayout [
 StReporterPresenter class >> open [
 
 	<script>
-	self new open
+	(self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'adding' }

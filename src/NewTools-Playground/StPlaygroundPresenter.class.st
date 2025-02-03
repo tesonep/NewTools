@@ -95,7 +95,7 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 StPlaygroundPresenter class >> open [
 	<script>
 	
-	^ self new open
+	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'instance creation' }
