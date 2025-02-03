@@ -88,11 +88,16 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
+	SystemWindow useHideForClose ifFalse: [
+		self unsubscribeFromWindowEvents.
+		^ self ].
 	self lastClosedWindows size >= 5 ifTrue: [
 		5 to: self lastClosedWindows size do: [ :i |
 		self lastClosedWindows removeLast close ] ].
 	aModel labelString = 'Last Closed Windows'
-		ifFalse: [ self lastClosedWindows addFirst: aModel ]
+		ifFalse: [
+			aModel setProperty: #isClosed toValue: true.
+			self lastClosedWindows addFirst: aModel ]
 		ifTrue: [ aModel closeBoxHit ].
 	self refresh
 ]
