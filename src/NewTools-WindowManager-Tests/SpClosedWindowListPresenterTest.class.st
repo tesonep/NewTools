@@ -14,23 +14,23 @@ SpClosedWindowListPresenterTest >> setUp [
 
 	super setUp.
 
-	presenter := SpClosedWindowListPresenter new.
+	presenter := SpClosedWindowListPresenter uniqueInstance.
 	testWindow := SystemWindow new
 		              setLabel: 'Test Window';
 		              extent: 300 @ 200;
 		              yourself.
-	SpClosedWindowListPresenter lastClosedWindows removeAll
+	SpClosedWindowListPresenter uniqueInstance items removeAll
 ]
 
 { #category : 'tests' }
 SpClosedWindowListPresenterTest >> testAddClosedWindowShouldAddToList [
 
-	self assert: presenter lastClosedWindows isEmpty.
+	self assert: presenter items isEmpty.
 
 	presenter addClosedWindow: testWindow.
 
-	self assert: presenter lastClosedWindows size equals: 1.
-	self assert: presenter lastClosedWindows first equals: testWindow
+	self assert: presenter items size equals: 1.
+	self assert: presenter items first equals: testWindow
 ]
 
 { #category : 'tests' }
@@ -41,10 +41,10 @@ SpClosedWindowListPresenterTest >> testAddClosedWindowShouldRemoveOldestWhenExce
 
 	windows do: [ :each | presenter addClosedWindow: each ].
 
-	self assert: presenter lastClosedWindows size equals: 5.
+	self assert: presenter items size equals: 5.
 	self assert:
-		(presenter lastClosedWindows includes: windows first) not.
-	self assert: (presenter lastClosedWindows includes: windows last).
+		(presenter items includes: windows first) not.
+	self assert: (presenter items includes: windows last).
 
 	windows do: [ :each | each delete ]
 ]
@@ -64,7 +64,7 @@ SpClosedWindowListPresenterTest >> testRemoveButtonShouldPermanentlyCloseWindow 
 	self deny: testWindow isNil.
 
 	presenter removeButton click.
-	self assert: presenter lastClosedWindows isEmpty
+	self assert: presenter items isEmpty
 ]
 
 { #category : 'tests' }
@@ -77,8 +77,8 @@ SpClosedWindowListPresenterTest >> testSubscriptionToWindowClosedAnnouncements [
 
 	self currentWorld announcer announce: announcement.
 
-	self assert: presenter lastClosedWindows size equals: 1.
-	self assert: presenter lastClosedWindows first equals: testWindow
+	self assert: presenter items size equals: 1.
+	self assert: presenter items first equals: testWindow
 ]
 
 { #category : 'tests' }
@@ -93,5 +93,5 @@ SpClosedWindowListPresenterTest >> testUnhideButtonShouldRestoreWindow [
 
 	self assert: testWindow visible.
 	self assert: testWindow position equals: originalPosition.
-	self assert: presenter lastClosedWindows isEmpty
+	self assert: presenter items isEmpty
 ]
