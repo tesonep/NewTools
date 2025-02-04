@@ -113,6 +113,8 @@ BaselineOfNewTools >> baseline: spec [
 
 			package: 'NewTools-WelcomeBrowser';
 			
+			package: 'NewTools-Keymapping';
+			
 			package: 'ColorPicker';
 			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
 
@@ -191,6 +193,8 @@ BaselineOfNewTools >> baseline: spec [
 						
 			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
 			
+			group: 'Keymapping' with: #( 'NewTools-Keymapping' );
+			
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 
 			group: 'default' with: #( 
@@ -210,6 +214,7 @@ BaselineOfNewTools >> baseline: spec [
 						'Profiler'
 						'SettingsBrowser'
 						'WelcomeBrowser'
+						'Keymapping'
 						'ColorPickerGroup' ) ]
 ]
 
