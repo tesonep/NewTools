@@ -362,7 +362,7 @@ StFileNavigationSystemPresenter >> nameText [
 { #category : 'accessing' }
 StFileNavigationSystemPresenter >> nameText: aString [
 	"Set the receive's name text to aString. This is displayed in a text presenter to display the currently selected file, or the name of a new file to be saved"
-	
+
 	nameText text: aString.
 ]
 
