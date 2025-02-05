@@ -65,9 +65,8 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 
 	dialog open.
 
-	protocolName := presenter protocolName.
+	protocolName := presenter selectedItem ifNil: [ CmCommandAborted signal ].
 
-	protocolName isEmptyOrNil ifTrue: [ CmCommandAborted signal ].
 	(protocolName beginsWith: '*') ifTrue: [
 		UIManager default inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
 		^ CmCommandAborted signal ].
@@ -108,8 +107,7 @@ StProtocolNameChooserPresenter >> defaultLayout [
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	super initializeDialogWindow: aDialogWindowPresenter.
-	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
-	suggestionList whenSelectedDo: [ :protocolName | self protocolName: protocolName ]
+	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ]
 ]
 
 { #category : 'initialization' }
@@ -120,7 +118,19 @@ StProtocolNameChooserPresenter >> initializePresenters [
 	suggestionList := self newList.
 
 	protocolNameField := self newTextInput.
-	protocolNameField placeholder: 'Protocol name (e.g. accessing)'
+	protocolNameField placeholder: 'Protocol name (e.g. accessing)'.
+	self initializeProtocolNameField
+]
+
+{ #category : 'initialization' }
+StProtocolNameChooserPresenter >> initializeProtocolNameField [
+
+	protocolNameField eventHandler whenKeyDownDo: [ :anEvent | "If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list.""31 = Arrow down"
+		anEvent keyValue = 31 ifTrue: [
+			suggestionList selectIndex: (suggestionList selection selectedIndex + 1 min: suggestionList items size) scrollToSelection: true ].
+
+		"30 = Arrow up"
+		anEvent keyValue = 30 ifTrue: [ suggestionList selectIndex: (suggestionList selection selectedIndex - 1 max: 1) scrollToSelection: true ] ]
 ]
 
 { #category : 'initialization' }
@@ -165,8 +175,16 @@ StProtocolNameChooserPresenter >> selectProtocolName [
 	protocolNameField selectAll
 ]
 
+{ #category : 'accessing' }
+StProtocolNameChooserPresenter >> selectedItem [
+
+	^ suggestionList selectedItem
+]
+
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> updatePresenter [
 
-	suggestionList items: self protocolsToSuggest
+	suggestionList
+		items: self protocolsToSuggest;
+		selectFirst
 ]
