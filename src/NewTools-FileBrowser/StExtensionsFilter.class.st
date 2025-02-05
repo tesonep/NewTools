@@ -103,7 +103,6 @@ StExtensionsFilter >> predicate: aFileReference [
 
 	aFileReference isDirectory ifTrue: [ ^ true ].
 
-	^ (self extensionsWithDots anySatisfy: [ :extension | 
-		   aFileReference basename asLowercase endsWith: extension ]) and: [ 
-		  StAllFilter new predicate: aFileReference ]
+	^ self extensionsWithDots anySatisfy: [ :extension |
+		  aFileReference basename asLowercase endsWith: extension ]
 ]

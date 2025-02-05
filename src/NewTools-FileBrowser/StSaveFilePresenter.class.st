@@ -75,6 +75,12 @@ StSaveFilePresenter >> initializePresenters [
 	fileNavigationSystem layout: self rightPaneLayout
 ]
 
+{ #category : 'showing' }
+StSaveFilePresenter >> openModal [
+
+	^ self asModalWindow open
+]
+
 { #category : 'layout' }
 StSaveFilePresenter >> rightPaneLayout [
 
@@ -88,8 +94,13 @@ StSaveFilePresenter >> rightPaneLayout [
 StSaveFilePresenter >> selectedEntry [
 
 	| entry |
-	entry := super selectedEntry ifNil: [ ^ nil ].
-	entry := filter addExtensionTo: entry.
+	"This dialog returns a file reference to the current selected directory with the selected name text"
+	entry := self currentDirectory / self nameText.
+
+	"Add the extension if not already there"
+	(self filter predicate: entry)
+		ifFalse: [ entry := self filter addExtensionTo: entry ].
+
 	entry exists ifFalse: [ ^ entry ].
 	entry = confirmedOverwrite ifTrue: [ ^ entry ].
 	(self application confirm: (self existingFileMessage: entry))
