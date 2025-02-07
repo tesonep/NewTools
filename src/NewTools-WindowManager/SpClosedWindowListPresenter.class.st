@@ -37,6 +37,7 @@ Class {
 		'removeItemBlock'
 	],
 	#classVars : [
+		'EnableCloseWindow',
 		'UniqueInstance'
 	],
 	#classInstVars : [
@@ -89,7 +90,7 @@ SpClosedWindowListPresenter class >> settingOn: aBuilder [
 SpClosedWindowListPresenter class >> shutDown: isImageQuitting [
 
 	isImageQuitting ifFalse: [ ^ self ].
-	self uniqueInstance list removeAll.
+	self uniqueInstance items removeAll.
 
 ]
 
@@ -200,6 +201,11 @@ SpClosedWindowListPresenter >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+SpClosedWindowListPresenter >> enableCloseWindow [
+	^ self class enableCloseWindow
+]
+
 { #category : 'initialization' }
 SpClosedWindowListPresenter >> initialize [
 
@@ -288,6 +294,12 @@ SpClosedWindowListPresenter >> resetSelection [
 { #category : 'api' }
 SpClosedWindowListPresenter >> selectedItem [
 	^ list selection selectedItem
+]
+
+{ #category : 'events subscription' }
+SpClosedWindowListPresenter >> subscribeToWindowClosedAnnoucements [
+
+	^ self class subscribeToWindowClosedAnnoucements
 ]
 
 { #category : 'accessing' }

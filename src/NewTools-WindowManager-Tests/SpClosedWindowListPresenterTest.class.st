@@ -15,6 +15,8 @@ SpClosedWindowListPresenterTest >> setUp [
 	super setUp.
 
 	presenter := SpClosedWindowListPresenter uniqueInstance.
+	presenter unsubscribeToWindowClosedAnnoucements .
+	presenter subscribeToWindowClosedAnnoucements .
 	testWindow := SystemWindow new
 		              setLabel: 'Test Window';
 		              extent: 300 @ 200;
