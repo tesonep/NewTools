@@ -3,14 +3,15 @@ A SpClosedWindowListPresenter is a presenter that manages and displays a list of
 It maintains a history of the last 5 closed windows and provides functionality to either
 permanently close them or restore them to their previous state.
 
-Class Instance Variable:
+My list is holding the last 5 closed windows. 
 
-    lastClosedWindows    <OrderedCollection>     Collection holding up to 5 recently closed window 
+I am using a Singleton design pattern because I'm saving the closed windows in the list of my unique instance. But I can still be opened multiple times.
 
 Example usage:
 ```smalltalk
-SpClosedWindowListPresenter new open
+    SpClosedWindowListPresenter uniqueInstance open
 ```
+
 Implementation Points:
 - Uses a fixed-size ring buffer (max 5 elements) to track closed windows
 - Windows can be restored to their original position and state
@@ -18,12 +19,6 @@ Implementation Points:
 
 Public API:
 - #addClosedWindow: aWindow    Add a window to the history
-
-
-
-
-
-
 
 "
 Class {
@@ -38,9 +33,6 @@ Class {
 	],
 	#classVars : [
 		'UniqueInstance'
-	],
-	#classInstVars : [
-		'lastClosedWindows'
 	],
 	#category : 'NewTools-WindowManager',
 	#package : 'NewTools-WindowManager'
