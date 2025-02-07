@@ -265,7 +265,8 @@ BaselineOfNewTools >> postload: loader package: packageSpec [
 
 	MCMethodDefinition initializersEnabled: initializersEnabled.
 	self loadThemeImages.
-	SystemWindow useHideForClose: true
+
+	
 ]
 
 { #category : 'actions' }

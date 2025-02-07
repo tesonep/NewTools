@@ -53,6 +53,14 @@ SpClosedWindowListPresenter class >> defaultPreferredExtent [
 	^ 310 @ 185
 ]
 
+{ #category : 'accessing' }
+SpClosedWindowListPresenter class >> enableCloseWindow [
+
+	EnableCloseWindow ifNil: [ EnableCloseWindow := true ].
+	SystemWindow useHideForClose: EnableCloseWindow.
+	^ EnableCloseWindow
+]
+
 { #category : 'class initialization' }
 SpClosedWindowListPresenter class >> initialize [
 
@@ -79,8 +87,9 @@ SpClosedWindowListPresenter class >> settingOn: aBuilder [
 	(aBuilder setting: #useHideForClose)
 		parent: #tools;
 		order: 1;
-		default: SystemWindow useHideForClose;
-		target: SystemWindow;
+		default: self enableCloseWindow ;
+		target: self;
+		selector: #enableCloseWindow;
 		description:
 			'If closed windows will be stored in SpClosedWindowListPresenter';
 		label: 'Use last closed windows'
