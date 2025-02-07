@@ -37,7 +37,6 @@ Class {
 		'removeItemBlock'
 	],
 	#classVars : [
-		'EnableCloseWindow',
 		'UniqueInstance'
 	],
 	#classInstVars : [
