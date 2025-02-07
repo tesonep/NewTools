@@ -26,6 +26,14 @@ StRewriterExpressionFinderPresenterTest >> testPatternCode [
 	self assert: expressionFinder patternCode equals: 'A pattern'
 ]
 
+{ #category : 'tests' }
+StRewriterExpressionFinderPresenterTest >> testPatternCodeSnippet [
+
+	expressionFinder patternCode: '`var'.
+	self deny: expressionFinder patternCode equals: ''.
+	self assert: expressionFinder patternCode equals: '`var'
+]
+
 { #category : 'accessing' }
 StRewriterExpressionFinderPresenterTest >> toolClass [
 
