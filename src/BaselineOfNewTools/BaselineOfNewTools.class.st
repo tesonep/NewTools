@@ -43,6 +43,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Playground-Tests' with: [ spec requires: #( 'NewTools-Playground' ) ];
 			"closed windows"
 			package: 'NewTools-WindowManager';
+			package: 'NewTools-WindowManager-Tests' with: [  spec requires: #('NewTools-WindowManager') ];
 			"browser"
 			package: 'NewTools-SystemBrowser' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 			"system reporter"
@@ -120,7 +121,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 			group: 'Playground' with: #( 'Core' 'NewTools-Playground' 'NewTools-Playground-Tests' );
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
-			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager');
+			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
 			group: 'Debugger' with: #( 
 					 	'Core' 
 					 	'Inspector' 
@@ -264,7 +265,8 @@ BaselineOfNewTools >> postload: loader package: packageSpec [
 
 	MCMethodDefinition initializersEnabled: initializersEnabled.
 	self loadThemeImages.
-	SystemWindow useHideForClose: true
+
+	
 ]
 
 { #category : 'actions' }

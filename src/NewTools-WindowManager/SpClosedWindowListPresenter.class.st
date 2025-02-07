@@ -3,14 +3,15 @@ A SpClosedWindowListPresenter is a presenter that manages and displays a list of
 It maintains a history of the last 5 closed windows and provides functionality to either
 permanently close them or restore them to their previous state.
 
-Class Instance Variable:
+My list is holding the last 5 closed windows. 
 
-    lastClosedWindows    <OrderedCollection>     Collection holding up to 5 recently closed window 
+I am using a Singleton design pattern because I'm saving the closed windows in the list of my unique instance. But I can still be opened multiple times.
 
 Example usage:
 ```smalltalk
-SpClosedWindowListPresenter new open
+    SpClosedWindowListPresenter uniqueInstance open
 ```
+
 Implementation Points:
 - Uses a fixed-size ring buffer (max 5 elements) to track closed windows
 - Windows can be restored to their original position and state
@@ -18,12 +19,6 @@ Implementation Points:
 
 Public API:
 - #addClosedWindow: aWindow    Add a window to the history
-
-
-
-
-
-
 
 "
 Class {
@@ -36,8 +31,8 @@ Class {
 		'unhideItemBlock',
 		'removeItemBlock'
 	],
-	#classInstVars : [
-		'lastClosedWindows'
+	#classVars : [
+		'UniqueInstance'
 	],
 	#category : 'NewTools-WindowManager',
 	#package : 'NewTools-WindowManager'
@@ -50,9 +45,83 @@ SpClosedWindowListPresenter class >> defaultPreferredExtent [
 ]
 
 { #category : 'accessing' }
-SpClosedWindowListPresenter class >> lastClosedWindows [
+SpClosedWindowListPresenter class >> enableCloseWindow [
 
-	^ lastClosedWindows ifNil: [  lastClosedWindows := OrderedCollection new ]
+	^ SystemWindow useHideForClose
+]
+
+{ #category : 'accessing' }
+SpClosedWindowListPresenter class >> enableCloseWindow: aBoolean [
+
+	aBoolean
+		ifTrue: [ self subscribeToWindowClosedAnnoucements ]
+		ifFalse: [ self unsubscribeToWindowClosedAnnoucements ].
+
+	^ SystemWindow useHideForClose: aBoolean
+]
+
+{ #category : 'class initialization' }
+SpClosedWindowListPresenter class >> initialize [
+
+	SessionManager default registerUserClassNamed: self name.
+
+]
+
+{ #category : 'instance creation' }
+SpClosedWindowListPresenter class >> new [ 
+	self error: 'We should have only one instance of this presenter'
+]
+
+{ #category : 'instance creation' }
+SpClosedWindowListPresenter class >> reset [
+
+	<script>
+	UniqueInstance := nil
+]
+
+{ #category : 'settings' }
+SpClosedWindowListPresenter class >> settingOn: aBuilder [
+
+	<systemsettings>
+	(aBuilder setting: #useHideForClose)
+		parent: #tools;
+		order: 1;
+		target: self;
+		selector: #enableCloseWindow;
+		description:
+			'If closed windows will be stored in SpClosedWindowListPresenter';
+		label: 'Use last closed windows'
+]
+
+{ #category : 'system startup' }
+SpClosedWindowListPresenter class >> shutDown: isImageQuitting [
+
+	isImageQuitting ifFalse: [ ^ self ].
+	self uniqueInstance items removeAll.
+
+]
+
+{ #category : 'events subscription' }
+SpClosedWindowListPresenter class >> subscribeToWindowClosedAnnoucements [
+
+	<script>
+	self currentWorld announcer
+		when: WindowClosed
+		do: [ :ann | self uniqueInstance addClosedWindow: ann window ]
+		for: self
+]
+
+{ #category : 'instance creation' }
+SpClosedWindowListPresenter class >> uniqueInstance [
+
+	^ UniqueInstance ifNil: [ UniqueInstance := self basicNew initialize ]
+]
+
+{ #category : 'events subscription' }
+SpClosedWindowListPresenter class >> unsubscribeToWindowClosedAnnoucements [
+
+	<script>
+	self currentWorld announcer unsubscribe: self
 ]
 
 { #category : 'world menu items' }
@@ -60,7 +129,7 @@ SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
 
 	<windowMenu>
 	|  announcement |
-	(aBuilder item: #FakeClose)
+	(aBuilder item: #Close)
 		order: 1.0;
 		action: [
 			aBuilder model hide.
@@ -81,23 +150,19 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 		(aBuilder item: #'Unclose window')
 		parent: #Windows;
 			order: 1;
-			action: [ self new open ];
+			action: [ self uniqueInstance open ];
 			help: 'Show last 5 closed Windows' 
 ]
 
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
-	SystemWindow useHideForClose ifFalse: [
-		self unsubscribeFromWindowEvents.
-		^ self ].
-	self lastClosedWindows size >= 5 ifTrue: [
-		5 to: self lastClosedWindows size do: [ :i |
-		self lastClosedWindows removeLast close ] ].
+	self items size >= 5 ifTrue: [
+		5 to: self items size do: [ :i | self items removeLast close ] ].
 	aModel labelString = 'Last Closed Windows'
 		ifFalse: [
 			aModel setProperty: #isClosed toValue: true.
-			self lastClosedWindows addFirst: aModel ]
+			self items addFirst: aModel ]
 		ifTrue: [ aModel closeBoxHit ].
 	self refresh
 ]
@@ -134,12 +199,15 @@ SpClosedWindowListPresenter >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+SpClosedWindowListPresenter >> enableCloseWindow [
+	^ self class enableCloseWindow
+]
+
 { #category : 'initialization' }
 SpClosedWindowListPresenter >> initialize [
 
 	super initialize.
-	self unsubscribeFromWindowEvents.
-	self subscribeToWindowClosedAnnoucements.
 	removeItemBlock := [ :item |
 	                   item ifNotNil: [
 		                   self items remove: item.
@@ -156,7 +224,7 @@ SpClosedWindowListPresenter >> initialize [
 SpClosedWindowListPresenter >> initializePresenters [
 
 	list := self newList
-		        items: self lastClosedWindows ;
+		        items: OrderedCollection new;
 		        display: [ :s | s displayString ].
 	unhideButton := self newButton.
 	removeButton := self newButton.
@@ -185,21 +253,15 @@ SpClosedWindowListPresenter >> items: anItemList [
 ]
 
 { #category : 'accessing' }
-SpClosedWindowListPresenter >> lastClosedWindows [
-
-	^ self class lastClosedWindows
-]
-
-{ #category : 'accessing' }
 SpClosedWindowListPresenter >> list [
 
 	^ list 
 ]
 
-{ #category : 'api' }
+{ #category : 'adding' }
 SpClosedWindowListPresenter >> refresh [
 
-	self items: self items.
+	self list refresh.
 	self resetSelection
 ]
 
@@ -235,9 +297,7 @@ SpClosedWindowListPresenter >> selectedItem [
 { #category : 'events subscription' }
 SpClosedWindowListPresenter >> subscribeToWindowClosedAnnoucements [
 
-	self currentWorld announcer
-		when: WindowClosed
-		do: [ :ann |  self addClosedWindow: ann window ] for: self
+	^ self class subscribeToWindowClosedAnnoucements
 ]
 
 { #category : 'accessing' }
@@ -255,13 +315,10 @@ SpClosedWindowListPresenter >> unhideItemBlock: aBlock [
 	unhideItemBlock := aBlock.
 ]
 
-{ #category : 'unsubscribing' }
-SpClosedWindowListPresenter >> unsubscribeFromWindowEvents [
-	"Unsubscribe from all window-related events"
+{ #category : 'events subscription' }
+SpClosedWindowListPresenter >> unsubscribeToWindowClosedAnnoucements [
 
-	(self currentWorld announcer subscriptions subscriptionsForClass:
-		 self class) do: [ :subscription |
-		self currentWorld announcer unsubscribe: subscription ]
+	^ self class unsubscribeToWindowClosedAnnoucements
 ]
 
 { #category : 'accessing' }
