@@ -74,7 +74,7 @@ StRewriterOccurrencesBrowserPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter askOkToClose: false
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 StRewriterOccurrencesBrowserPresenter >> windowTitle [ 
 
 	^ 'Occurrences matches'
