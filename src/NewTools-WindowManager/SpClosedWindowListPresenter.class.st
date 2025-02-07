@@ -56,16 +56,24 @@ SpClosedWindowListPresenter class >> defaultPreferredExtent [
 { #category : 'accessing' }
 SpClosedWindowListPresenter class >> enableCloseWindow [
 
-	EnableCloseWindow ifNil: [ EnableCloseWindow := true ].
-	SystemWindow useHideForClose: EnableCloseWindow.
-	^ EnableCloseWindow
+	^ SystemWindow useHideForClose
+]
+
+{ #category : 'accessing' }
+SpClosedWindowListPresenter class >> enableCloseWindow: aBoolean [
+
+	aBoolean
+		ifTrue: [ self subscribeToWindowClosedAnnoucements ]
+		ifFalse: [ self unsubscribeToWindowClosedAnnoucements ].
+
+	^ SystemWindow useHideForClose: aBoolean
 ]
 
 { #category : 'class initialization' }
 SpClosedWindowListPresenter class >> initialize [
 
 	SessionManager default registerUserClassNamed: self name.
-	self startUp: true. 
+
 ]
 
 { #category : 'instance creation' }
@@ -87,7 +95,6 @@ SpClosedWindowListPresenter class >> settingOn: aBuilder [
 	(aBuilder setting: #useHideForClose)
 		parent: #tools;
 		order: 1;
-		default: self enableCloseWindow ;
 		target: self;
 		selector: #enableCloseWindow;
 		description:
@@ -101,12 +108,6 @@ SpClosedWindowListPresenter class >> shutDown: isImageQuitting [
 	isImageQuitting ifFalse: [ ^ self ].
 	self uniqueInstance items removeAll.
 
-]
-
-{ #category : 'system startup' }
-SpClosedWindowListPresenter class >> startUp: isImageStarting [
-
-	isImageStarting ifTrue: [ self subscribeToWindowClosedAnnoucements ]
 ]
 
 { #category : 'events subscription' }
@@ -165,9 +166,6 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
-	SystemWindow useHideForClose ifFalse: [
-		self unsubscribeToWindowClosedAnnoucements.
-		^ self ].
 	self items size >= 5 ifTrue: [
 		5 to: self items size do: [ :i | self items removeLast close ] ].
 	aModel labelString = 'Last Closed Windows'
