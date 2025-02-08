@@ -84,7 +84,7 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
 		parent: #InputOutput;
-		action: [ self currentApplication tools workspace open ];
+		action: [ (self currentApplication toolNamed: #workspace) open ];
 		order: 1;
 		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';

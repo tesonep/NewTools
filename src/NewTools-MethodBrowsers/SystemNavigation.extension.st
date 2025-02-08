@@ -11,5 +11,5 @@ SystemNavigation >> browseAllUsersOfClassOrTrait: class [
 { #category : '*NewTools-MethodBrowsers' }
 SystemNavigation >> browseVersionsOf: aMethod [
 
-	self tools versionBrowser browseVersionsForMethod: aMethod
+	(self tools toolNamed: #versionBrowser) browseVersionsForMethod: aMethod
 ]

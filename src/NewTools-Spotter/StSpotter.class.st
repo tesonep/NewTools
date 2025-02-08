@@ -149,7 +149,7 @@ StSpotter class >> isShowingTips [
 StSpotter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Spotter)
-		action: [ self currentApplication tools spotter open ];
+		action: [ (self currentApplication toolNamed: #spotter) open ];
 		keyText: 'Shift + Enter';
 		order: 1;
 		parent: #Searching;
