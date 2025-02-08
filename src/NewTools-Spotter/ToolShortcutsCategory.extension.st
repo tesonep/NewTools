@@ -5,9 +5,10 @@ ToolShortcutsCategory >> openSpotter [
 
 	<shortcut>
 	^ KMKeymap shortcut: Character cr shift action: [ :target | 
-		  | selection |
+		  | selection spot |
 		  selection := target selection.
-		  (self tools spotter insertsSelection and: [ selection isNotNil ])
-			  ifTrue: [ self tools spotter openWithText: selection ]
-			  ifFalse: [ self tools spotter open ] ]
+			spot := (self tools toolNamed: #spotter).
+		  ( spot insertsSelection and: [ selection isNotNil ])
+			  ifTrue: [ spot  openWithText: selection ]
+			  ifFalse: [ spot open ] ]
 ]
