@@ -21,9 +21,9 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundPagesPresenter class >> defaultExtent [
+StPlaygroundPagesPresenter class >> defaultPreferredExtent [
 
-	^ (700@400)
+	^ 700@400
 ]
 
 { #category : 'accessing' }
@@ -54,7 +54,7 @@ StPlaygroundPagesPresenter class >> unselectedMessage [
 StPlaygroundPagesPresenter >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight
-		positionOfSlider: self initialExtent x * 0.3;
+		positionOfSlider: self preferredExtent x * 0.3;
 		add: pageListPanel;
 		add: pagePreviewPanel;
 		yourself
@@ -75,12 +75,6 @@ StPlaygroundPagesPresenter >> doLoadPageOnNewPlayground [
 		open.
 	self window close.
 	playground takeKeyboardFocus 		
-]
-
-{ #category : 'initialization' }
-StPlaygroundPagesPresenter >> initialExtent [
-		
-	^ self class defaultExtent
 ]
 
 { #category : 'initialization' }

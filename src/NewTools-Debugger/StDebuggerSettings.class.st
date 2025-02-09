@@ -40,16 +40,16 @@ Class {
 }
 
 { #category : 'accessing' }
-StDebuggerSettings class >> defaultExtent [
+StDebuggerSettings class >> defaultPosition [
 
-	^ (850 @ 650)
+	^ 10 @ 10
 
 ]
 
 { #category : 'accessing' }
-StDebuggerSettings class >> defaultPosition [
+StDebuggerSettings class >> defaultPreferredExtent [
 
-	^ 10 @ 10
+	^ (850 @ 650)
 
 ]
 
@@ -57,7 +57,7 @@ StDebuggerSettings class >> defaultPosition [
 StDebuggerSettings class >> initialize [
 
 	LastKnownPosition := self defaultPosition.
-	LastKnownExtent := self defaultExtent.
+	LastKnownExtent := self defaultPreferredExtent.
 ]
 
 { #category : 'initialization' }
@@ -77,7 +77,7 @@ StDebuggerSettings class >> lastKnownExtent [
 	"Answer a <Point> specifying the last window known extent in the screen"
 
 	^ LastKnownExtent
-		ifNil: [ LastKnownExtent := self defaultExtent ]
+		ifNil: [ LastKnownExtent := self defaultPreferredExtent ]
 ]
 
 { #category : 'accessing' }

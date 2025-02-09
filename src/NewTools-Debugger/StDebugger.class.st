@@ -198,9 +198,9 @@ StDebugger class >> defaultDebuggerRank [
 ]
 
 { #category : 'accessing' }
-StDebugger class >> defaultPreferredExtent [ 
-	
-	^ self settings lastKnownExtent
+StDebugger class >> defaultPreferredExtent [
+
+	^ self settings defaultPreferredExtent 
 ]
 
 { #category : 'accessing' }
@@ -737,12 +737,6 @@ StDebugger >> implementMissingMethod [
 	self selectTopContext.
 	self flag: 'why do we need to give code the keyboard focus?'
 	"code takeKeyboardFocus"
-]
-
-{ #category : 'api' }
-StDebugger >> initialExtent [
-
-	^ self settings defaultExtent 
 ]
 
 { #category : 'initialization' }
