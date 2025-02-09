@@ -56,6 +56,11 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 	Smalltalk os isWindows ifTrue: [
 		currentNode := currentNode asFileReference parent.
 		aPathForSpec := OrderedCollection new ].
+	
+	"This code is (a certainly wrong) way to ensure the treeNavigationPresenter widget points to the right fileSystem (that could be a MemoryStore) as it search for roots of the disk and doesn't allow to check in a MemoryStore "
+	"(currentNode fileReference fileSystem = aFileLocator fileSystem)
+        ifFalse: [ directoryTreePresenter roots: { StRootDirectoryWrapper on: aFileLocator fileSystem root }.
+                    currentNode fileReference: aFileLocator ]."
 
 	path do: [ :aPart |
 		| subdirs |
