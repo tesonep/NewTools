@@ -54,7 +54,7 @@ StFinderResult >> browser [
 	"We should check how to do it via the stApplication but ok for now"
 
 	
-	^ application tools browser
+	^ application toolNamed: #browser
 ]
 
 { #category : 'accessing' }
@@ -248,7 +248,7 @@ StFinderResult >> sendersAction [
 StFinderResult >> versionBrowser [
 	"We should check how to do it via the stApplication but ok for now"
 
-	^ application tools versionBrowser
+	^ application toolNamed: #versionBrowser
 ]
 
 { #category : 'action' }
