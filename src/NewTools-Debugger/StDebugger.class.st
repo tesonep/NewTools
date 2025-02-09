@@ -640,7 +640,7 @@ StDebugger >> doBrowseMethodVersions [
 	| target |
 	target := self stackSelectionMethodContext.
 	target isBlock ifTrue: [ target := target method ].
-	self application versionBrowser
+	(self application toolNamed: #versionBrowser)
 		browseVersionsForClass: target methodClass
 		selector: target selector
 ]
