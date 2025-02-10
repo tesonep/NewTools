@@ -293,7 +293,7 @@ StInspectorPresenter >> windowIcon [
 { #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
 	
-	^ self model ifNotNil: [ :m | m windowTitle ] ifNil: [ 'Inspector']
+	^ self model ifNotNil: [ :m | m printString ] ifNil: [ 'Inspector']
 ]
 
 { #category : 'accessing' }
