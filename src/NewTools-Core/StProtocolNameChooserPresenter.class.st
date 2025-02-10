@@ -17,7 +17,8 @@ Class {
 	#instVars : [
 		'suggestionList',
 		'protocolNameField',
-		'concernedClass'
+		'concernedClass',
+		'newProtocolButton'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -66,6 +67,7 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	dialog open.
 
 	protocolName := presenter selectedItem ifNil: [ CmCommandAborted signal ].
+	
 
 	(protocolName beginsWith: '*') ifTrue: [
 		UIManager default inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
@@ -91,7 +93,7 @@ StProtocolNameChooserPresenter >> connectPresenters [
 
 	super connectPresenters.
 
-	protocolNameField whenTextChangedDo: [ self updatePresenter ]
+	protocolNameField whenTextChangedDo: [ self updatePresenter ].
 ]
 
 { #category : 'layout' }
@@ -99,7 +101,11 @@ StProtocolNameChooserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: suggestionList;
-		  add: protocolNameField expand: false;
+		  add: (SpBoxLayout newLeftToRight
+				   add: protocolNameField expand: true;
+				   add: newProtocolButton expand: false;
+				   yourself)
+		  withConstraints: [ :constraints | constraints height: self class toolbarHeight ];
 		  yourself
 ]
 
@@ -107,7 +113,16 @@ StProtocolNameChooserPresenter >> defaultLayout [
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	super initializeDialogWindow: aDialogWindowPresenter.
-	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ]
+	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
+
+
+
+	newProtocolButton action: [ "If we click on the + we should add the content of the input field in the list, select it and validate"
+		suggestionList
+			items: { protocolNameField text };
+			selectFirst.
+
+		aDialogWindowPresenter triggerOkAction ]
 ]
 
 { #category : 'initialization' }
@@ -119,6 +134,12 @@ StProtocolNameChooserPresenter >> initializePresenters [
 
 	protocolNameField := self newTextInput.
 	protocolNameField placeholder: 'Protocol name (e.g. accessing)'.
+
+	newProtocolButton := self newButton.
+	newProtocolButton
+		icon: (self iconNamed: #add);
+		help: 'Create a new protocol with the content of the input field if this protocol is not in the list'.
+
 	self initializeProtocolNameField
 ]
 
