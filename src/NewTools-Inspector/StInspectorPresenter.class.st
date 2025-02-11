@@ -292,8 +292,11 @@ StInspectorPresenter >> windowIcon [
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
+	"in the past the definition was 
 	
-	^ self model ifNotNil: [ :m | m printString ] ifNil: [ 'Inspector']
+	^ self model windowTitle but I could not make it during the massive cleaning of Spec.
+	Sorry about it - SD"
+	^ 'Inspector'
 ]
 
 { #category : 'accessing' }
