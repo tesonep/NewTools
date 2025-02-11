@@ -1,12 +1,12 @@
 Extension { #name : 'KMCategory' }
 
-{ #category : '*NewTools-Keymapping' }
+{ #category : '*NewTools-ShortcutsBrowser' }
 KMCategory >> scopeName [
 
 	^  self name
 ]
 
-{ #category : '*NewTools-Keymapping' }
+{ #category : '*NewTools-ShortcutsBrowser' }
 KMCategory >> shortcuts [
 
 	^ (self entriesAt: #all) keymaps

@@ -27,7 +27,6 @@ BaselineOfNewTools >> baseline: spec [
 			"Basic tools (inherited from Spec)"
 			package: 'NewTools-MethodBrowsers' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
 			package: 'NewTools-MethodBrowsers-Tests' with: [ spec requires: #( 'NewTools-MethodBrowsers' ) ];
-			package: 'NewTools-KeymapBrowser';
 			"inspector"
 			package: 'NewTools-Inspector' with: [ spec requires: #( 'NewTools-Inspector-Extensions' ) ];
 			package: 'NewTools-Inspector-Extensions' with: [ spec requires: #( 'NewTools-Core' ) ];
@@ -114,7 +113,7 @@ BaselineOfNewTools >> baseline: spec [
 
 			package: 'NewTools-WelcomeBrowser';
 			
-			package: 'NewTools-Keymapping';
+			package: 'NewTools-ShortcutsBrowser';
 			
 			package: 'ColorPicker';
 			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
@@ -155,7 +154,6 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
 			group: 'Methods' with: #( 'Core' 'NewTools-SpTextPresenterDecorators' 'NewTools-MethodBrowsers' );
 			"Not in the image for the moment, we need a pass on them"
-			group: 'KeymapBrowser' with: #( 'Core' 'NewTools-KeymapBrowser' );
 			group: 'CritiqueBrowser' with: #( 'NewTools-CodeCritiques' 'NewTools-CodeCritiques-Tests' );
 			group: 'FontChooser' with: #( 'Core' 'NewTools-FontChooser' 'NewTools-FontChooser-Tests' );
 			group: 'FlagBrowser' with: #( 
@@ -194,7 +192,7 @@ BaselineOfNewTools >> baseline: spec [
 						
 			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
 			
-			group: 'Keymapping' with: #( 'NewTools-Keymapping' );
+			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );
 			
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 
@@ -215,7 +213,7 @@ BaselineOfNewTools >> baseline: spec [
 						'Profiler'
 						'SettingsBrowser'
 						'WelcomeBrowser'
-						'Keymapping'
+						'ShortcutsBrowser'
 						'ColorPickerGroup' ) ]
 ]
 
