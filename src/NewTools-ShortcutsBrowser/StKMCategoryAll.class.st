@@ -1,22 +1,22 @@
 Class {
-	#name : 'KMCategoryAll',
+	#name : 'StKMCategoryAll',
 	#superclass : 'Object',
 	#instVars : [
 		'categoryName',
 		'shortcuts'
 	],
-	#category : 'NewTools-Keymapping',
-	#package : 'NewTools-Keymapping'
+	#category : 'NewTools-ShortcutsBrowser',
+	#package : 'NewTools-ShortcutsBrowser'
 }
 
 { #category : 'copying' }
-KMCategoryAll >> , aKMCategory [
+StKMCategoryAll >> , aKMCategory [
 
 	self shortcuts addAll: aKMCategory allEntries keymaps
 ]
 
 { #category : 'comparing' }
-KMCategoryAll >> = anObject [
+StKMCategoryAll >> = anObject [
 	"Answer whether the receiver and anObject represent the same object."
 
 	self == anObject ifTrue: [ ^ true ].
@@ -26,52 +26,52 @@ KMCategoryAll >> = anObject [
 ]
 
 { #category : 'adding' }
-KMCategoryAll >> addAll: aCollection [ 
+StKMCategoryAll >> addAll: aCollection [ 
 	"Add all shortcuts in aCollection to the receiver"
 	
 	self shortcuts addAll: aCollection
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> categoryName [
+StKMCategoryAll >> categoryName [
 
 	^ categoryName
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> categoryName: anObject [
+StKMCategoryAll >> categoryName: anObject [
 
 	categoryName := anObject
 ]
 
 { #category : 'comparing' }
-KMCategoryAll >> hash [
+StKMCategoryAll >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ categoryName hash bitXor: shortcuts hash
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> icon [
+StKMCategoryAll >> icon [
 
 	^ self iconNamed: self systemIconName
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> model [
+StKMCategoryAll >> model [
 	"Required by <SpDropListPresenter> ?"
 
 	^ self
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> name [
+StKMCategoryAll >> name [
 
 	^  self categoryName
 ]
 
 { #category : 'printing' }
-KMCategoryAll >> printOn: aStream [
+StKMCategoryAll >> printOn: aStream [
 	"Generate a string representation of the receiver based on its instance variables."
 
 	super printOn: aStream.
@@ -82,14 +82,14 @@ KMCategoryAll >> printOn: aStream [
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> shortcuts [
+StKMCategoryAll >> shortcuts [
 
 	^ shortcuts
 		ifNil: [ shortcuts := OrderedCollection new ]
 ]
 
 { #category : 'accessing' }
-KMCategoryAll >> shortcuts: anObject [
+StKMCategoryAll >> shortcuts: anObject [
 
 	shortcuts := anObject
 ]

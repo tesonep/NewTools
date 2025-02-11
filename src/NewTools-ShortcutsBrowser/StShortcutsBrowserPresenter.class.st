@@ -2,7 +2,7 @@
 A KMDescription is a window showing the description of shortcuts for a specified set of symbols reprensenting KMCategories
 "
 Class {
-	#name : 'KMDescriptionPresenter',
+	#name : 'StShortcutsBrowserPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
 		'actionBar',
@@ -10,30 +10,30 @@ Class {
 		'shortcutTable',
 		'inputPresenter'
 	],
-	#category : 'NewTools-Keymapping',
-	#package : 'NewTools-Keymapping'
+	#category : 'NewTools-ShortcutsBrowser',
+	#package : 'NewTools-ShortcutsBrowser'
 }
 
 { #category : 'accessing' }
-KMDescriptionPresenter class >> defaultPreferredExtent [
+StShortcutsBrowserPresenter class >> defaultPreferredExtent [
 
 	^ 900 @ 650
 ]
 
 { #category : 'instance creation' }
-KMDescriptionPresenter class >> descriptionText [
+StShortcutsBrowserPresenter class >> descriptionText [
 
 	^ 'Show the system''s shortcuts'
 ]
 
 { #category : 'accessing' }
-KMDescriptionPresenter class >> icon [
+StShortcutsBrowserPresenter class >> icon [
 
 	^ self iconNamed: #keymapBrowser
 ]
 
 { #category : 'instance creation' }
-KMDescriptionPresenter class >> menuCommandOn: aBuilder [
+StShortcutsBrowserPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 
 	(aBuilder item: 'Shortcuts Browser')
@@ -45,26 +45,26 @@ KMDescriptionPresenter class >> menuCommandOn: aBuilder [
 ]
 
 { #category : 'instance creation' }
-KMDescriptionPresenter class >> open [
+StShortcutsBrowserPresenter class >> open [
 
 	<script>
 	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> allAPIsEntry [
+StShortcutsBrowserPresenter >> allAPIsEntry [
 	"Set the receiver's category items to a list of categories in aCollectionOfSymbols.
 	We also build an 'All' category including all keymaps in aCollectionOfSymbols"
 
 	| newCategoryItem |
-	newCategoryItem := KMCategoryAll new categoryName: 'All'.
+	newCategoryItem := StKMCategoryAll new categoryName: 'All'.
 	KMRepository default categories inject: newCategoryItem into: [ : a : b | a , b ].
 	newCategoryItem addAll: self shortcutActivationCmdInstances.
 	^ newCategoryItem
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> connectPresenters [
+StShortcutsBrowserPresenter >> connectPresenters [
 
 	categoryList transmitTo: shortcutTable transform: [ :item | self keymapsAtCategory: item model ].
 	inputPresenter whenTextChangedDo: [ :text | self filterTable: text ].
@@ -72,7 +72,7 @@ KMDescriptionPresenter >> connectPresenters [
 ]
 
 { #category : 'layout' }
-KMDescriptionPresenter >> defaultLayout [
+StShortcutsBrowserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  spacing: 6;
@@ -88,7 +88,7 @@ KMDescriptionPresenter >> defaultLayout [
 ]
 
 { #category : 'callbacks' }
-KMDescriptionPresenter >> filterTable: aText [
+StShortcutsBrowserPresenter >> filterTable: aText [
 
 	| newItems |
 	aText ifEmpty: [
@@ -102,7 +102,7 @@ KMDescriptionPresenter >> filterTable: aText [
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> initialize [
+StShortcutsBrowserPresenter >> initialize [
 
 	| shortcutCategories |
 	super initialize.
@@ -113,7 +113,7 @@ KMDescriptionPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> initializePresenters [
+StShortcutsBrowserPresenter >> initializePresenters [
 
 	categoryList := self newDropList
 		                display: [ :category | category name ];
@@ -153,13 +153,13 @@ KMDescriptionPresenter >> initializePresenters [
 ]
 
 { #category : 'callbacks' }
-KMDescriptionPresenter >> keymapsAtCategory: aKMCategoryOrKMCategoryAll [
+StShortcutsBrowserPresenter >> keymapsAtCategory: aKMCategoryOrKMCategoryAll [
 	"Answer a <Collection> of keymaps"
 	^ aKMCategoryOrKMCategoryAll shortcuts
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> shortcutActivationCategoriesItems [
+StShortcutsBrowserPresenter >> shortcutActivationCategoriesItems [
 	"Answer a <Collection> of <KMCategoryItemPresenter> representing each a category of shortcuts created using the Commander 1 framework"
 	
 	| shortcutActivationCategories |
@@ -167,20 +167,20 @@ KMDescriptionPresenter >> shortcutActivationCategoriesItems [
 		                                 cmdShortcutActivation annotatedClass packageName ]) values.
 
 	^ shortcutActivationCategories collect: [ :shortcuts |
-		  KMCategoryAll new
+		  StKMCategoryAll new
 			  categoryName: shortcuts anyOne annotatedClass packageName;
 			  shortcuts: shortcuts;
 			  yourself ]
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> shortcutActivationCmdInstances [
+StShortcutsBrowserPresenter >> shortcutActivationCmdInstances [
 
 	^ CmdShortcutActivation registeredInstances copyWithoutAll: CmdShortcutActivation redefiningInstances
 ]
 
 { #category : 'initialization' }
-KMDescriptionPresenter >> windowTitle [
+StShortcutsBrowserPresenter >> windowTitle [
 
 	^ 'Shortcuts Browser'
 ]
