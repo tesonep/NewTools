@@ -178,7 +178,7 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 SpClosedWindowListPresenter >> connectPresenters [
 
 	super connectPresenters.
-	activateBox state: self enableCloseWindow .
+
 	activateBox
 		whenActivatedDo: [ self enableCloseWindow: true ];
 		whenDeactivatedDo: [ self enableCloseWindow: false ].
@@ -243,8 +243,9 @@ SpClosedWindowListPresenter >> initializePresenters [
 	list := self newList
 		        items: OrderedCollection new;
 		        display: [ :s | s displayString ].
-	activateBox := self newCheckBox help:
-		               'Enable/disable the unclose window logic'.
+	activateBox := self newCheckBox activateBox
+		               state: self enableCloseWindow;
+		               help: 'Enable/disable the unclose window logic'.
 	unhideButton := self newButton.
 	removeButton := self newButton.
 	unhideButton
