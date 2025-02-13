@@ -12,6 +12,8 @@ ObjectWithPrintingRaisingHaltTest >> testInspectingObjectWithPrintOnWithHaltOpen
 	"
 	
 	| openInspectors inspectedObject |
+	
+	5 timesRepeat: [ Smalltalk garbageCollect ].
 	StInspectorPresenter allInstances select: [ :e | e window isOpen ] 
 					thenDo: [ :each | each window close ].
 
