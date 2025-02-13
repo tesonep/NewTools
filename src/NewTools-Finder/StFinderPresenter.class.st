@@ -259,6 +259,21 @@ StFinderPresenter class >> openOnTargets: aCollection [
 	^ presenter
 ]
 
+{ #category : 'instance creation' }
+StFinderPresenter class >> openWithText: aText [
+
+	| model presenter |
+	model := StFinderModel new.
+	presenter := self
+		             newApplication: StPresenter currentApplication
+		             model: model.
+	model application: presenter application.
+	presenter open.
+	
+	presenter searchBar searchInput text: aText.
+	^ presenter
+]
+
 { #category : 'searching' }
 StFinderPresenter class >> searchBy: aString [ 
 	self shouldBeImplemented.
