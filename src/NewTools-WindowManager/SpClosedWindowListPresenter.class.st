@@ -64,7 +64,6 @@ SpClosedWindowListPresenter class >> enableCloseWindow: aBoolean [
 SpClosedWindowListPresenter class >> initialize [
 
 	SessionManager default registerUserClassNamed: self name.
-	self subscribeToWindowClosedAnnoucements 
 
 ]
 
