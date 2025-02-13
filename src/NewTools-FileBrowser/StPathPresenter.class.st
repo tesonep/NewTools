@@ -83,9 +83,9 @@ StPathPresenter >> initializeLayout [
 { #category : 'accessing' }
 StPathPresenter >> labelFor: aPath [
 
-	^ aPath basename = '/'
-		ifFalse: [ aPath basename ]
-		ifTrue: [ 'Root' ]
+	^ aPath isRoot
+		  ifFalse: [ aPath basename ]
+		  ifTrue: [ 'Root' ]
 ]
 
 { #category : 'accessing' }
