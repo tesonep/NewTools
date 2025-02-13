@@ -243,7 +243,7 @@ SpClosedWindowListPresenter >> initializePresenters [
 	list := self newList
 		        items: OrderedCollection new;
 		        display: [ :s | s displayString ].
-	activateBox := self newCheckBox activateBox
+	activateBox := self newCheckBox
 		               state: self enableCloseWindow;
 		               help: 'Enable/disable the unclose window logic'.
 	unhideButton := self newButton.
