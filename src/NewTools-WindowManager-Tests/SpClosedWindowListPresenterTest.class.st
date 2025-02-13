@@ -28,13 +28,13 @@ SpClosedWindowListPresenterTest >> setUp [
 SpClosedWindowListPresenterTest >> testActivateCheckBoxEnableAndDisableSelf [
 
 	| announcement |
-	presenter activateBox state: presenter activateBox state not.
+	presenter activateBox click.
 	announcement := WindowClosed new
 		                window: testWindow;
 		                yourself.
 	self currentWorld announcer announce: announcement.
 	self assert: presenter items isEmpty.
-	presenter activateBox state: presenter activateBox state not.
+	presenter activateBox click.
 	self currentWorld announcer announce: announcement.
 	self assert: presenter items first equals: testWindow
 ]
