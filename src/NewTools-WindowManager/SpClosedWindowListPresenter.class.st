@@ -29,7 +29,8 @@ Class {
 		'unhideButton',
 		'removeButton',
 		'unhideItemBlock',
-		'removeItemBlock'
+		'removeItemBlock',
+		'activateBox'
 	],
 	#classVars : [
 		'UniqueInstance'
@@ -154,6 +155,12 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 			help: 'Show last 5 closed Windows' 
 ]
 
+{ #category : 'accessing' }
+SpClosedWindowListPresenter >> activateBox [
+
+	^ activateBox
+]
+
 { #category : 'adding' }
 SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
@@ -172,6 +179,9 @@ SpClosedWindowListPresenter >> connectPresenters [
 
 	super connectPresenters.
 
+	activateBox
+		whenActivatedDo: [ self enableCloseWindow: true ];
+		whenDeactivatedDo: [ self enableCloseWindow: false ].
 	unhideButton action: [
 		| newItem |
 		list items isNotEmpty ifTrue: [
@@ -192,6 +202,7 @@ SpClosedWindowListPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		  add: listLayout;
 		  add: (SpBoxLayout newLeftToRight
+				   add: activateBox expand: false;
 				   addLast: #unhideButton expand: false;
 				   addLast: #removeButton expand: false;
 				   yourself)
@@ -202,6 +213,12 @@ SpClosedWindowListPresenter >> defaultLayout [
 { #category : 'accessing' }
 SpClosedWindowListPresenter >> enableCloseWindow [
 	^ self class enableCloseWindow
+]
+
+{ #category : 'accessing' }
+SpClosedWindowListPresenter >> enableCloseWindow: aBoolean [
+
+	^ self class enableCloseWindow: aBoolean
 ]
 
 { #category : 'initialization' }
@@ -226,6 +243,9 @@ SpClosedWindowListPresenter >> initializePresenters [
 	list := self newList
 		        items: OrderedCollection new;
 		        display: [ :s | s displayString ].
+	activateBox := self newCheckBox
+		               state: self enableCloseWindow;
+		               help: 'Enable/disable the unclose window logic'.
 	unhideButton := self newButton.
 	removeButton := self newButton.
 	unhideButton
@@ -238,7 +258,7 @@ SpClosedWindowListPresenter >> initializePresenters [
 		addStyle: 'flat';
 		icon: (self iconNamed: #remove);
 		help: 'Remove a item from the list'.
-		self resetSelection 
+	self resetSelection
 ]
 
 { #category : 'accessing' }
