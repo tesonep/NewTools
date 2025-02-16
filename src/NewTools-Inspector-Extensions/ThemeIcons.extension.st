@@ -4,9 +4,14 @@ Extension { #name : 'ThemeIcons' }
 ThemeIcons >> inspectionIcons [
 	<inspectorPresentationOrder: 0 title: 'Icons'>
 	
-	^ SpListPresenter new
+	^ SpTablePresenter new
+		addColumn: ((SpImageTableColumn 
+			title: 'Icon'
+			evaluated: [ :aSpec | aSpec value ])
+			width: 50);
+		addColumn: (SpStringTableColumn 
+			title: 'Symbol' 
+			evaluated: [ :aSpec | aSpec key ]);  	 
 		items: (self icons associations sorted: #key ascending);
-		display: [ :each | each key ];
-		displayIcon: [ :each | each value ];
 		yourself
 ]
