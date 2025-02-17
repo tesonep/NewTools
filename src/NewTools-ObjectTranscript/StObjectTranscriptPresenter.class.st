@@ -25,7 +25,8 @@ Class {
 		'zoom',
 		'logger',
 		'inspectSelectedItem',
-		'showInspector'
+		'showInspector',
+		'isOpened'
 	],
 	#classVars : [
 		'ShowInspector'
@@ -171,7 +172,8 @@ StObjectTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter whenOpenedDo: [ 
-			self selectLastItem ].
+			self selectLastItem.
+			isOpened := true. ].
 	aWindowPresenter whenClosedDo: [ logger removeAsClient: self ]
 ]
 
@@ -180,6 +182,12 @@ StObjectTranscriptPresenter >> inspect: anObject [
 	
 	zoom model: anObject asInspectorModel
 		
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> isOpened [ 
+	
+	^ isOpened ifNil: [ isOpened := false ]
 ]
 
 { #category : 'accessing' }
@@ -207,6 +215,7 @@ StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 StObjectTranscriptPresenter >> refresh [ 
 	
 	self populateItemsFrom: logger.
+	self selectLastItem.
 	
 	
 
@@ -215,8 +224,9 @@ StObjectTranscriptPresenter >> refresh [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> selectLastItem [ 
 
-	logList listPresenter scrollToIndex: logList listPresenter listSize.
-	logList selectItem: logList listPresenter listSize 
+	logList selectItem: logList listPresenter listSize. 
+	self isOpened ifTrue: [ 
+		logList listPresenter scrollToIndex: logList listPresenter listSize ]
 ]
 
 { #category : 'accessing' }
