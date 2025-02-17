@@ -226,6 +226,8 @@ SpClosedWindowListPresenter >> initializePresenters [
 
 	list := self newList
 		        items: OrderedCollection new;
+		        whenActivatedDo: [ :selection |
+			        unhideItemBlock cull: selection selectedItem ];
 		        display: [ :s | s displayString ].
 	unhideButton := self newButton.
 	removeButton := self newButton.
@@ -239,18 +241,13 @@ SpClosedWindowListPresenter >> initializePresenters [
 		addStyle: 'flat';
 		icon: (self iconNamed: #remove);
 		help: 'Remove a item from the list'.
-		self resetSelection 
+	self resetSelection
 ]
 
 { #category : 'accessing' }
 SpClosedWindowListPresenter >> items [
 
 	^ list model items
-]
-
-{ #category : 'private' }
-SpClosedWindowListPresenter >> items: anItemList [
-	(list items: anItemList) whenActivatedDo: [ :selection | unhideItemBlock cull: selection selectedItem ]
 ]
 
 { #category : 'accessing' }
@@ -302,11 +299,6 @@ SpClosedWindowListPresenter >> subscribeToWindowClosedAnnoucements [
 ]
 
 { #category : 'accessing' }
-SpClosedWindowListPresenter >> title [
-	^ 'Last Closed Windows'
-]
-
-{ #category : 'accessing' }
 SpClosedWindowListPresenter >> unhideButton [
 	^ unhideButton 
 ]
@@ -324,5 +316,5 @@ SpClosedWindowListPresenter >> unsubscribeToWindowClosedAnnoucements [
 
 { #category : 'accessing' }
 SpClosedWindowListPresenter >> windowTitle [
-	^ 'Last Closed Windows'
+	^ 'Window Uncloser'
 ]
