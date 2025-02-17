@@ -1,3 +1,22 @@
+"
+I'm a circular logger that works with `StObjectTranscriptPresenter` instances.
+II get a direct reference to my UI so that I can ask them to refresh them.
+I do not use announcements for this by design!
+May be this aspect can be changed in the future. 
+
+
+Here is a typical global usage example
+
+```
+| cb |
+StObjectTranscriptLogger start.
+cb := self new.
+cb logger: StObjectTranscriptLogger instance.
+'this is a message only interesting from the logger domain' emit.
+cb open.
+```
+
+"
 Class {
 	#name : 'StObjectTranscriptLogger',
 	#superclass : 'CircularMemoryLogger',
@@ -25,7 +44,7 @@ StObjectTranscriptLogger >> initialize [
 StObjectTranscriptLogger >> nextPut: aSignal [
 
 	super nextPut: aSignal.
-	clients do: [ :each | each update ]
+	clients do: [ :each | each refresh ]
 ]
 
 { #category : 'initialization' }
