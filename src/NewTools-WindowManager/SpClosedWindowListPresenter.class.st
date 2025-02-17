@@ -166,7 +166,8 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
 	self items size >= 5 ifTrue: [
 		5 to: self items size do: [ :i | self items removeLast close ] ].
-	aModel labelString = 'Last Closed Windows'
+
+	aModel model presenter = SpClosedWindowListPresenter uniqueInstance
 		ifFalse: [
 			aModel setProperty: #isClosed toValue: true.
 			self items addFirst: aModel ]
@@ -242,6 +243,8 @@ SpClosedWindowListPresenter >> initializePresenters [
 
 	list := self newList
 		        items: OrderedCollection new;
+		        whenActivatedDo: [ :selection |
+			        unhideItemBlock cull: selection selectedItem ];
 		        display: [ :s | s displayString ].
 	activateBox := self newCheckBox
 		               state: self enableCloseWindow;
@@ -265,11 +268,6 @@ SpClosedWindowListPresenter >> initializePresenters [
 SpClosedWindowListPresenter >> items [
 
 	^ list model items
-]
-
-{ #category : 'private' }
-SpClosedWindowListPresenter >> items: anItemList [
-	(list items: anItemList) whenActivatedDo: [ :selection | unhideItemBlock cull: selection selectedItem ]
 ]
 
 { #category : 'accessing' }
@@ -321,11 +319,6 @@ SpClosedWindowListPresenter >> subscribeToWindowClosedAnnoucements [
 ]
 
 { #category : 'accessing' }
-SpClosedWindowListPresenter >> title [
-	^ 'Last Closed Windows'
-]
-
-{ #category : 'accessing' }
 SpClosedWindowListPresenter >> unhideButton [
 	^ unhideButton 
 ]
@@ -343,5 +336,5 @@ SpClosedWindowListPresenter >> unsubscribeToWindowClosedAnnoucements [
 
 { #category : 'accessing' }
 SpClosedWindowListPresenter >> windowTitle [
-	^ 'Last Closed Windows'
+	^ 'Window Uncloser'
 ]
