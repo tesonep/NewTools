@@ -25,7 +25,7 @@ StClassProcessor class >> hideInSettings [
 { #category : 'accessing' }
 StClassProcessor class >> order [
 	
-	^ 100
+	^ 60
 ]
 
 { #category : 'accessing' }

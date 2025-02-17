@@ -109,7 +109,7 @@ StSpotterModel >> defaultProcessors [
 
 	^ (StSpotterProcessor allEnabledSubclasses 
 		collect: [ :each | each new ])
-		sort: #order ascending
+		sort: #order ascending 
 ]
 
 { #category : 'private - queries' }
@@ -141,6 +141,12 @@ StSpotterModel >> initializeOrigin: anObject [
 	self addStep: (self newStep
 		origin: anObject;
 		yourself)
+]
+
+{ #category : 'testing' }
+StSpotterModel >> isFree [ 
+
+  ^ scheduler isFree
 ]
 
 { #category : 'testing' }

@@ -25,7 +25,7 @@ StImplementorsProcessor class >> hideInSettings [
 { #category : 'accessing' }
 StImplementorsProcessor class >> order [
 	
-	^ 100
+	^ 70
 ]
 
 { #category : 'accessing' }
