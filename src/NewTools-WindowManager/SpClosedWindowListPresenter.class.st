@@ -167,7 +167,7 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 	self items size >= 5 ifTrue: [
 		5 to: self items size do: [ :i | self items removeLast close ] ].
 	
-	aModel model presenter = SpClosedWindowListPresenter uniqueInstance 
+	aModel labelString = 'Window Uncloser'
 		ifFalse: [
 			aModel setProperty: #isClosed toValue: true.
 			self items addFirst: aModel ]
