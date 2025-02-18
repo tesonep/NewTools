@@ -16,7 +16,7 @@ SpClosedWindowListPresenterTest >> setUp [
 
 	presenter := SpClosedWindowListPresenter uniqueInstance.
 	presenter unsubscribeToWindowClosedAnnoucements .
-	presenter subscribeToWindowClosedAnnoucements .
+	presenter enableCloseWindow: true.
 	testWindow := SystemWindow new
 		              setLabel: 'Test Window';
 		              extent: 300 @ 200;
@@ -29,6 +29,7 @@ SpClosedWindowListPresenterTest >> testActivateCheckBoxEnableAndDisableSelf [
 
 	| announcement |
 	presenter activateBox click.
+	presenter activateBox click.
 	announcement := WindowClosed new
 		                window: testWindow;
 		                yourself.
@@ -36,7 +37,8 @@ SpClosedWindowListPresenterTest >> testActivateCheckBoxEnableAndDisableSelf [
 	self assert: presenter items isEmpty.
 	presenter activateBox click.
 	self currentWorld announcer announce: announcement.
-	self assert: presenter items first equals: testWindow
+	self assert: presenter items first equals: testWindow.
+	presenter activateBox click
 ]
 
 { #category : 'tests' }
