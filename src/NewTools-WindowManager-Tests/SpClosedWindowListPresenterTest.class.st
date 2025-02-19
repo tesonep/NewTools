@@ -3,7 +3,8 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'presenter',
-		'testWindow'
+		'testWindow',
+		'originalEnableCloseWindow'
 	],
 	#category : 'NewTools-WindowManager-Tests',
 	#package : 'NewTools-WindowManager-Tests'
@@ -13,10 +14,10 @@ Class {
 SpClosedWindowListPresenterTest >> setUp [
 
 	super setUp.
-
+	originalEnableCloseWindow := SpClosedWindowListPresenter uniqueInstance enableCloseWindow.
 	presenter := SpClosedWindowListPresenter uniqueInstance.
 	presenter unsubscribeToWindowClosedAnnoucements .
-	presenter subscribeToWindowClosedAnnoucements .
+	presenter enableCloseWindow: true.
 	testWindow := SystemWindow new
 		              setLabel: 'Test Window';
 		              extent: 300 @ 200;
@@ -24,10 +25,18 @@ SpClosedWindowListPresenterTest >> setUp [
 	SpClosedWindowListPresenter uniqueInstance items removeAll
 ]
 
+{ #category : 'running' }
+SpClosedWindowListPresenterTest >> tearDown [
+
+	super tearDown.
+	presenter enableCloseWindow: originalEnableCloseWindow
+]
+
 { #category : 'tests' }
 SpClosedWindowListPresenterTest >> testActivateCheckBoxEnableAndDisableSelf [
 
 	| announcement |
+	presenter activateBox click.
 	presenter activateBox click.
 	announcement := WindowClosed new
 		                window: testWindow;
@@ -36,7 +45,8 @@ SpClosedWindowListPresenterTest >> testActivateCheckBoxEnableAndDisableSelf [
 	self assert: presenter items isEmpty.
 	presenter activateBox click.
 	self currentWorld announcer announce: announcement.
-	self assert: presenter items first equals: testWindow
+	self assert: presenter items first equals: testWindow.
+	presenter activateBox click
 ]
 
 { #category : 'tests' }
