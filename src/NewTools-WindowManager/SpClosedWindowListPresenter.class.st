@@ -30,7 +30,8 @@ Class {
 		'removeButton',
 		'unhideItemBlock',
 		'removeItemBlock',
-		'activateBox'
+		'activateBox',
+		'rejectedWindows'
 	],
 	#classVars : [
 		'UniqueInstance'
@@ -166,13 +167,19 @@ SpClosedWindowListPresenter >> addClosedWindow: aModel [
 
 	self items size >= 5 ifTrue: [
 		5 to: self items size do: [ :i | self items removeLast close ] ].
-	
-	aModel labelString = 'Window Uncloser'
+
+	(self isWindowRejected: aModel)
 		ifFalse: [
 			aModel setProperty: #isClosed toValue: true.
 			self items addFirst: aModel ]
 		ifTrue: [ aModel closeBoxHit ].
 	self refresh
+]
+
+{ #category : 'adding' }
+SpClosedWindowListPresenter >> addRejectedWindow: aWindowClass [
+
+	rejectedWindows add: aWindowClass
 ]
 
 { #category : 'initialization' }
@@ -235,7 +242,8 @@ SpClosedWindowListPresenter >> initialize [
 	                   item ifNotNil: [ item visible: true ].
 	                   item removeProperty: #isClosed.
 	                   self items remove: item.
-	                   self refresh ]
+	                   self refresh ].
+	self initializeRejectedWindows
 ]
 
 { #category : 'initialization' }
@@ -262,6 +270,29 @@ SpClosedWindowListPresenter >> initializePresenters [
 		icon: (self iconNamed: #remove);
 		help: 'Remove a item from the list'.
 	self resetSelection
+]
+
+{ #category : 'initialization' }
+SpClosedWindowListPresenter >> initializeRejectedWindows [
+	"at the moment we reject only those windows by default"
+	
+	rejectedWindows := OrderedCollection new.
+	rejectedWindows add: StDebugger.
+	rejectedWindows add: StInspectorPresenter.
+	rejectedWindows add: self class
+]
+
+{ #category : 'testing' }
+SpClosedWindowListPresenter >> isWindowRejected: aWindow [
+
+	(aWindow model notNil and: [
+		 (rejectedWindows includes: aWindow model class) or:
+			 (aWindow model presenter notNil and: [
+				  rejectedWindows includes: aWindow model presenter class ]) ])
+		ifTrue: [ ^ true ].
+
+
+	^ false
 ]
 
 { #category : 'accessing' }
@@ -298,6 +329,18 @@ SpClosedWindowListPresenter >> removeItem: anObject [
 { #category : 'api' }
 SpClosedWindowListPresenter >> removeItemBlock: aBlock [
 	removeItemBlock := aBlock.
+]
+
+{ #category : 'removing' }
+SpClosedWindowListPresenter >> removeRejectedWindow: aWindowClass [
+
+	rejectedWindows remove: aWindowClass 
+]
+
+{ #category : 'initialization' }
+SpClosedWindowListPresenter >> resetRejectedWindows [
+
+	rejectedWindows := OrderedCollection new
 ]
 
 { #category : 'api' }
