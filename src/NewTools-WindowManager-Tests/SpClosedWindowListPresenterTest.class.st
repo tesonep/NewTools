@@ -28,8 +28,8 @@ SpClosedWindowListPresenterTest >> setUp [
 { #category : 'running' }
 SpClosedWindowListPresenterTest >> tearDown [
 
-	super tearDown.
-	presenter enableCloseWindow: originalEnableCloseWindow
+	presenter enableCloseWindow: originalEnableCloseWindow.
+	super tearDown
 ]
 
 { #category : 'tests' }
