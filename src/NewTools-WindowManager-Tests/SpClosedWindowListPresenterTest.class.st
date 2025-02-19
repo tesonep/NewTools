@@ -3,7 +3,8 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'presenter',
-		'testWindow'
+		'testWindow',
+		'originalEnableCloseWindow'
 	],
 	#category : 'NewTools-WindowManager-Tests',
 	#package : 'NewTools-WindowManager-Tests'
@@ -13,7 +14,7 @@ Class {
 SpClosedWindowListPresenterTest >> setUp [
 
 	super setUp.
-
+	originalEnableCloseWindow := SpClosedWindowListPresenter uniqueInstance enableCloseWindow.
 	presenter := SpClosedWindowListPresenter uniqueInstance.
 	presenter unsubscribeToWindowClosedAnnoucements .
 	presenter enableCloseWindow: true.
@@ -22,6 +23,13 @@ SpClosedWindowListPresenterTest >> setUp [
 		              extent: 300 @ 200;
 		              yourself.
 	SpClosedWindowListPresenter uniqueInstance items removeAll
+]
+
+{ #category : 'running' }
+SpClosedWindowListPresenterTest >> tearDown [
+
+	super tearDown.
+	presenter enableCloseWindow: originalEnableCloseWindow
 ]
 
 { #category : 'tests' }
