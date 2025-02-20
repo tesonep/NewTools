@@ -112,7 +112,7 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 StMessageBrowser class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
-	registry register: self as: #messageList
+	"registry register: self as: #messageList"
 ]
 
 { #category : 'icons' }
