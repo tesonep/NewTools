@@ -101,7 +101,11 @@ StObjectTranscriptPresenter >> addActions [
 		addActionWith: [ :item | item
 			name: 'Toggle inspector entities';
 			iconName: #smallHelp;
-			action: [ inspectSelectedItem := inspectSelectedItem not ] ];
+			action: [ 
+				inspectSelectedItem := inspectSelectedItem not.
+				inspectSelectedItem 
+						ifTrue: [ self inspect: logList selectedItem ]
+						ifFalse: [ self inspect: logger recordings ] ] ];
 		addActionWith: [ :item | item
 			name: 'Hide/Show inspector';
 			iconName: #inspect;
@@ -204,11 +208,11 @@ StObjectTranscriptPresenter >> logger: aLogger [
 StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 
 	| rec |
-	rec := aLogger recordings.
+	rec := aLogger recordings copy.
 	logList items: rec.
 	rec size > 0 
 		ifTrue: [ logList reapplyOrResetFilter.
-					logList selectItem: logList items first. ]
+					logList selectLast. ]
 ]
 
 { #category : 'actions' }
@@ -224,9 +228,9 @@ StObjectTranscriptPresenter >> refresh [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> selectLastItem [ 
 
-	logList selectItem: logList listPresenter listSize. 
-	self isOpened ifTrue: [ 
-		logList listPresenter scrollToIndex: logList listPresenter listSize ]
+	logList 
+		selectIndex: logList listPresenter listSize 
+		scrollToSelection: true
 ]
 
 { #category : 'accessing' }
