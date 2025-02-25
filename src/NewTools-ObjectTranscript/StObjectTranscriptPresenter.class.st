@@ -158,11 +158,7 @@ StObjectTranscriptPresenter >> addActions [
 		addActionWith: [ :item | item
 			name: 'Toggle inspector entities';
 			iconName: #smallHelp;
-			action: [ 
-				inspectSelectedItem := inspectSelectedItem not.
-				inspectSelectedItem 
-						ifTrue: [ self inspect: logList selectedItem ]
-						ifFalse: [ self inspect: logger recordings ] ] ];
+			action: [ self hideShowInspector ] ];
 		addActionWith: [ :item | item
 			name: 'Hide/Show inspector';
 			iconName: #inspect;
@@ -170,8 +166,15 @@ StObjectTranscriptPresenter >> addActions [
 		addActionWith: [ :item | item
 			name: 'Flush entities';
 			iconName: #delete;
-			action: [ self flush ]]
-	
+			action: [ self flush ]];
+		addActionWith: [ :item | item
+			name: 'Start logger';
+			iconName: #start;
+			action: [ self startLogger ]];
+		addActionWith: [ :item | item
+			name: 'Stop logger';
+			iconName: #stop;
+			action: [ self stopLogger ]]
 	
 ]
 
@@ -208,6 +211,15 @@ StObjectTranscriptPresenter >> flush [
 
 	logger reset.
 	self populateItemsFrom: logger
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> hideShowInspector [
+
+	inspectSelectedItem := inspectSelectedItem not.
+				inspectSelectedItem 
+						ifTrue: [ self inspect: logList selectedItem ]
+						ifFalse: [ self inspect: logger recordings ]
 ]
 
 { #category : 'initialization' }
@@ -307,6 +319,18 @@ StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.
 	self layout: self defaultLayout.
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> startLogger [
+
+	logger start
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> stopLogger [
+
+	logger stop
 ]
 
 { #category : 'accessing' }
