@@ -1,16 +1,28 @@
 "
 I'm a presenter showing StObjectTranscriptLogger log elements. 
 
+
+```
+StObjectTranscriptLogger open
+ 
+StObjectTranscriptLogger openWithLogger: StObjectTranscripLogger instance
+```
+
+To open from another presenter use the following expression
+
+```
+(self application toolNamed: #objectTranscript) open
+```
+
+
 You can show/hide the inspector and the inspector can either display the currently selected log entry or the complete list so that we can perform collection operations for complex filters
 
 
 ```
 	| cb |
 	StObjectTranscriptLogger start.
-	cb := self new.
-	cb logger: StObjectTranscriptLogger instance.
-	'this is a message only interesting from the logger domain' emit.
-	cb open.
+	cb := self open.
+	'Pharo is super nice!' emit.
 ``` 
 
 
@@ -66,6 +78,38 @@ StObjectTranscriptPresenter class >> example [
 	'this is a message only interesting from the logger domain' emit.
 	cb open.
 	^ cb
+]
+
+{ #category : 'accessing' }
+StObjectTranscriptPresenter class >> example2 [
+	"self example2"
+	
+	self open. 
+	'Hello Pharo is cool,' emit.
+	
+]
+
+{ #category : 'instance creation' }
+StObjectTranscriptPresenter class >> open [ 
+	"Make sure that the object transcript logger is on and open a presenter on it."
+	
+	StObjectTranscriptLogger start.
+	^ self openWithLogger: StObjectTranscriptLogger instance
+]
+
+{ #category : 'instance creation' }
+StObjectTranscriptPresenter class >> openWithLogger: aLogger [
+
+	^ self new logger: aLogger; open 
+
+	
+]
+
+{ #category : 'registration' }
+StObjectTranscriptPresenter class >> registerToolsOn: registry [
+
+	registry register: self as: #objectTranscript
+
 ]
 
 { #category : 'settings' }

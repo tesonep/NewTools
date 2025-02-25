@@ -115,6 +115,8 @@ BaselineOfNewTools >> baseline: spec [
 			
 			package: 'NewTools-ShortcutsBrowser';
 			
+			package: 'NewTools-ObjectTranscript';
+			
 			package: 'ColorPicker';
 			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
 
@@ -195,6 +197,8 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );
 			
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
+			
+			
 
 			group: 'default' with: #( 
 						'Playground' 
