@@ -138,6 +138,19 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 	ShowInspector := aBoolean
 ]
 
+{ #category : 'registration' }
+StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
+	<worldMenu>
+	
+	(aBuilder item: #'Browse') 
+		parent: #Browse;
+		label: 'Object Transcript';
+		order: 5; 
+		iconName: #playground;
+		action: [ StObjectTranscriptPresenter open].	
+
+]
+
 { #category : 'actions' }
 StObjectTranscriptPresenter >> addActions [
 
