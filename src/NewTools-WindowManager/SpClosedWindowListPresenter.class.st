@@ -148,12 +148,11 @@ SpClosedWindowListPresenter class >> windowMenuOn: aBuilder [
 SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 
 	<worldMenu>
-
-		(aBuilder item: #'Unclose window')
+	(aBuilder item: #'Reopen closed windows')
 		parent: #Windows;
-			order: 1;
-			action: [ self uniqueInstance open ];
-			help: 'Show last 5 closed Windows' 
+		order: 1;
+		action: [ self uniqueInstance open ];
+		help: 'Show the last 5 closed windows.'
 ]
 
 { #category : 'accessing' }
