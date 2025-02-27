@@ -48,15 +48,20 @@ StDebuggerMethodImplementorExtension >> addProtocols: protocols [
 ]
 
 { #category : 'private - actions' }
-StDebuggerMethodImplementorExtension >> addProtocolsFrom: aClassOrTrait [ 
+StDebuggerMethodImplementorExtension >> addProtocolsFrom: aClassOrTrait [
 
+	| allProtocolsWithDuplicates |
 	aClassOrTrait ifNil: [ ^ self ].
 
-	self addProtocols: (aClassOrTrait isTrait
-		ifTrue: [ aClassOrTrait protocols ]
-		ifFalse: [ 
-			((aClassOrTrait withAllSuperclasses copyWithoutAll: {Object. ProtoObject}) 
-				flatCollect: #protocols) asSet])
+	allProtocolsWithDuplicates := Dictionary new.
+	(aClassOrTrait isTrait
+		 ifTrue: [ aClassOrTrait protocols ]
+		 ifFalse: [
+			 (aClassOrTrait withAllSuperclasses copyWithoutAll: {
+					  Object.
+					  ProtoObject }) flatCollect: #protocols ]) do: [ :protocol |
+		allProtocolsWithDuplicates at: protocol name put: protocol ].
+	self addProtocols: allProtocolsWithDuplicates values
 ]
 
 { #category : 'debugger extension' }
