@@ -745,8 +745,8 @@ StDebugger >> initialize [
 	super initialize.
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
-  	self susbcribeToExtensionToggleAnnouncement.
-	self susbcribeToLayoutChangesAnnouncement.
+  	self susbscribeToExtensionToggleAnnouncement.
+	self susbscribeToLayoutChangesAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -1300,13 +1300,13 @@ StDebugger >> subscribeToActionModel [
 ]
 
 { #category : 'subscription' }
-StDebugger >> susbcribeToExtensionToggleAnnouncement [
+StDebugger >> susbscribeToExtensionToggleAnnouncement [
 
 	self class codeSupportAnnouncer weak when: StDebuggerExtensionActivationToggle send: #updateExtensionsFromAnnouncement: to: self
 ]
 
 { #category : 'subscription' }
-StDebugger >> susbcribeToLayoutChangesAnnouncement [
+StDebugger >> susbscribeToLayoutChangesAnnouncement [
 
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
