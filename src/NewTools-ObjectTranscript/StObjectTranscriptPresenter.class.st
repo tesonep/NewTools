@@ -1,16 +1,28 @@
 "
 I'm a presenter showing StObjectTranscriptLogger log elements. 
 
+
+```
+StObjectTranscriptLogger open
+ 
+StObjectTranscriptLogger openWithLogger: StObjectTranscripLogger instance
+```
+
+To open from another presenter use the following expression
+
+```
+(self application toolNamed: #objectTranscript) open
+```
+
+
 You can show/hide the inspector and the inspector can either display the currently selected log entry or the complete list so that we can perform collection operations for complex filters
 
 
 ```
 	| cb |
 	StObjectTranscriptLogger start.
-	cb := self new.
-	cb logger: StObjectTranscriptLogger instance.
-	'this is a message only interesting from the logger domain' emit.
-	cb open.
+	cb := self open.
+	'Pharo is super nice!' emit.
 ``` 
 
 
@@ -68,6 +80,38 @@ StObjectTranscriptPresenter class >> example [
 	^ cb
 ]
 
+{ #category : 'accessing' }
+StObjectTranscriptPresenter class >> example2 [
+	"self example2"
+	
+	self open. 
+	'Hello Pharo is cool,' emit.
+	
+]
+
+{ #category : 'instance creation' }
+StObjectTranscriptPresenter class >> open [ 
+	"Make sure that the object transcript logger is on and open a presenter on it."
+	
+	StObjectTranscriptLogger start.
+	^ self openWithLogger: StObjectTranscriptLogger instance
+]
+
+{ #category : 'instance creation' }
+StObjectTranscriptPresenter class >> openWithLogger: aLogger [
+
+	^ self new logger: aLogger; open 
+
+	
+]
+
+{ #category : 'registration' }
+StObjectTranscriptPresenter class >> registerToolsOn: registry [
+
+	registry register: self as: #objectTranscript
+
+]
+
 { #category : 'settings' }
 StObjectTranscriptPresenter class >> settings: aBuilder [
 
@@ -94,6 +138,19 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 	ShowInspector := aBoolean
 ]
 
+{ #category : 'registration' }
+StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
+	<worldMenu>
+	
+	(aBuilder item: #'Browse') 
+		parent: #Browse;
+		label: 'Object Transcript';
+		order: 5; 
+		iconName: #playground;
+		action: [ StObjectTranscriptPresenter open].	
+
+]
+
 { #category : 'actions' }
 StObjectTranscriptPresenter >> addActions [
 
@@ -101,11 +158,7 @@ StObjectTranscriptPresenter >> addActions [
 		addActionWith: [ :item | item
 			name: 'Toggle inspector entities';
 			iconName: #smallHelp;
-			action: [ 
-				inspectSelectedItem := inspectSelectedItem not.
-				inspectSelectedItem 
-						ifTrue: [ self inspect: logList selectedItem ]
-						ifFalse: [ self inspect: logger recordings ] ] ];
+			action: [ self hideShowInspector ] ];
 		addActionWith: [ :item | item
 			name: 'Hide/Show inspector';
 			iconName: #inspect;
@@ -113,8 +166,15 @@ StObjectTranscriptPresenter >> addActions [
 		addActionWith: [ :item | item
 			name: 'Flush entities';
 			iconName: #delete;
-			action: [ self flush ]]
-	
+			action: [ self flush ]];
+		addActionWith: [ :item | item
+			name: 'Start logger';
+			iconName: #start;
+			action: [ self startLogger ]];
+		addActionWith: [ :item | item
+			name: 'Stop logger';
+			iconName: #stop;
+			action: [ self stopLogger ]]
 	
 ]
 
@@ -151,6 +211,15 @@ StObjectTranscriptPresenter >> flush [
 
 	logger reset.
 	self populateItemsFrom: logger
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> hideShowInspector [
+
+	inspectSelectedItem := inspectSelectedItem not.
+				inspectSelectedItem 
+						ifTrue: [ self inspect: logList selectedItem ]
+						ifFalse: [ self inspect: logger recordings ]
 ]
 
 { #category : 'initialization' }
@@ -250,6 +319,18 @@ StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.
 	self layout: self defaultLayout.
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> startLogger [
+
+	logger start
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> stopLogger [
+
+	logger stop
 ]
 
 { #category : 'accessing' }
