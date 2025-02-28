@@ -8,7 +8,7 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'browsing' }
 DebugPointTablePresenter >> browseInstanceVariable: anInstVarName fromClass: aClass [
 
 	(self application tools browser openOnClass: aClass)
@@ -16,7 +16,7 @@ DebugPointTablePresenter >> browseInstanceVariable: anInstVarName fromClass: aCl
 		selectVariableNamed: anInstVarName
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'browsing' }
 DebugPointTablePresenter >> browseTarget: aDebugPointTarget [
 
 	aDebugPointTarget browseFrom: self
