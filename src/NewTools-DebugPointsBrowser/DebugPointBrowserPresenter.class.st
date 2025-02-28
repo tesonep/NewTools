@@ -18,6 +18,12 @@ Class {
 }
 
 { #category : 'accessing' }
+DebugPointBrowserPresenter class >> currentApplication [
+
+	^ StPharoApplication current
+]
+
+{ #category : 'accessing' }
 DebugPointBrowserPresenter class >> defaultPreferredExtent [
 
 	^ 800 @ 600
@@ -105,7 +111,8 @@ DebugPointBrowserPresenter >> initialize [
 	self class codeSupportAnnouncer weak
 		when: DebugPointAdded send: #updateTable to: self;
 		when: DebugPointRemoved send: #updateTable to: self;
-		when: DebugPointChanged send: #updateEditor to: self
+		when: DebugPointChanged send: #updateEditor to: self.
+	self application: self class currentApplication
 ]
 
 { #category : 'initialization' }
