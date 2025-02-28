@@ -130,7 +130,7 @@ DebugPointBrowserPresenter >> initializePresenters [
 		                   yourself
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeTable [
 
 	dpTable := self instantiate: DebugPointTablePresenter.
@@ -141,7 +141,7 @@ DebugPointBrowserPresenter >> initializeTable [
 			dp updateDebugPointUIManager: self ] ]
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 
 	variableTargetPresenter := DebugPointVariableTargetPresenter new
