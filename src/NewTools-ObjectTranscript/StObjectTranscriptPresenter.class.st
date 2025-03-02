@@ -3,9 +3,9 @@ I'm a presenter showing StObjectTranscriptLogger log elements.
 
 
 ```
-StObjectTranscriptLogger open
+StObjectTranscriptPresenter open
  
-StObjectTranscriptLogger openWithLogger: StObjectTranscripLogger instance
+StObjectTranscriptPresenter openWithLogger: StObjectTranscripLogger instance
 ```
 
 To open from another presenter use the following expression
@@ -50,15 +50,7 @@ Class {
 { #category : 'accessing' }
 StObjectTranscriptPresenter class >> defaultPreferredExtent [
 	"Answer the desired extent for the receiver when it is first opened on the screen.  "
-	"This does oot work and is a perfect case to make the remembering only be used when 
-	it is coming from a resized
-	
-	The behavior should be 
-		open -> we use these 
-		reopen -> we use these
-		onResize -> we store the resize and continue to use them.
-	
-	"
+
 	^ self showInspector
 		ifTrue: [ 450 @ 650 ]
 		ifFalse: [ 250 @ 450 ]
