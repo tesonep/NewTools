@@ -52,8 +52,8 @@ StObjectTranscriptPresenter class >> defaultPreferredExtent [
 	"Answer the desired extent for the receiver when it is first opened on the screen.  "
 
 	^ self showInspector
-		ifTrue: [ 450 @ 650 ]
-		ifFalse: [ 250 @ 450 ]
+		ifTrue: [ 550 @ 850 ]
+		ifFalse: [ 550 @ 650 ]
 ]
 
 { #category : 'accessing' }
@@ -84,6 +84,7 @@ StObjectTranscriptPresenter class >> example2 [
 { #category : 'instance creation' }
 StObjectTranscriptPresenter class >> open [ 
 	"Make sure that the object transcript logger is on and open a presenter on it."
+	<script>
 	
 	StObjectTranscriptLogger start.
 	^ self openWithLogger: StObjectTranscriptLogger instance
