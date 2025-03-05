@@ -11,9 +11,6 @@ Class {
 		'text',
 		'transcript'
 	],
-	#classInstVars : [
-		'recordings'
-	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
 }
