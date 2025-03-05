@@ -133,15 +133,15 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 
 { #category : 'registration' }
 StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
+
 	<worldMenu>
-	
-	(aBuilder item: #'Browse') 
+	(aBuilder item: #Browse)
 		parent: #Browse;
 		label: 'Object Transcript';
-		order: 5; 
+		order: 5;
 		iconName: #playground;
-		action: [ StObjectTranscriptPresenter open].	
-
+		help: 'Tool to be able to see logs in this instance of Pharo.';
+		action: [ self open ]
 ]
 
 { #category : 'actions' }

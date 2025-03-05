@@ -69,9 +69,9 @@ NewThreadSafeTranscript >> << anObject [
 ]
 
 { #category : 'initialization' }
-NewThreadSafeTranscript >> allocateRecodings: maxEntry [
+NewThreadSafeTranscript >> allocateRecodings: size [
 
-	recordings := Array new: maxEntry	
+	recordings := Array new: size
 ]
 
 { #category : 'streaming' }

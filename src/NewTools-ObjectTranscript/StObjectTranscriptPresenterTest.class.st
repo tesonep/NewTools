@@ -9,16 +9,16 @@ Class {
 StObjectTranscriptPresenterTest >> testFalseShowInspectorDoNotShowInspector [
 
 	| st win current |
-	[ current := StObjectTranscriptPresenter showInspector.
-	StObjectTranscriptPresenter showInspector: false. 
+	[
+	current := StObjectTranscriptPresenter showInspector.
+	StObjectTranscriptPresenter showInspector: false.
 	st := StObjectTranscriptPresenter new.
-	win := st logger: StObjectTranscriptLogger instance; open.
-	self assert: win initialExtent equals: (250.0 @ 450.0).
-	] ensure: [ 
+	win := st
+		       logger: StObjectTranscriptLogger instance;
+		       open.
+	self assert: win initialExtent equals: 550 @ 650 ] ensure: [
 		win close.
 		StObjectTranscriptPresenter showInspector: current ]
-		
-	
 ]
 
 { #category : 'tests' }
