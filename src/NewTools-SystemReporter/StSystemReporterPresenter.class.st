@@ -61,7 +61,6 @@ StSystemReporterPresenter >> fillTopics [
 			{ (#'OS Details' -> #reportWin32OSDetails:).
 			(#'VM Configuration' -> #reportWin32VMConfig:).
 			(#'Hardware Details' -> #reportWin32HardwareDetails:).
-			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
 			} do: [ :each | self addTopicSpec: each ]. 
 			].	
 		
@@ -235,12 +234,6 @@ StSystemReporterPresenter >> reportVMStats: aStream [
 ]
 
 { #category : 'building report' }
-StSystemReporterPresenter >> reportWin32GFXDetails: aStream [
-	self header: 'Graphics Hardware Details' on: aStream.
-	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10003)
-]
-
-{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32HardwareDetails: aStream [
 	self header: 'Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10001)
@@ -286,7 +279,6 @@ StSystemReporterPresenter >> topicSpec [
 			(#'OS Details' -> #reportWin32OSDetails:).
 			(#'VM Configuration' -> #reportWin32VMConfig:).
 			(#'Hardware Details' -> #reportWin32HardwareDetails:).
-			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
 			} ].	
 		
 	self isLinux 
