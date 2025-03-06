@@ -18,7 +18,7 @@ Class {
 { #category : 'accessing' }
 StTranscriptPresenter class >> defaultPreferredExtent [
 
-	^ 300@700
+	^ (447 @ 300) scaledByDisplayScaleFactor
 ]
 
 { #category : 'accessing' }
@@ -56,10 +56,17 @@ StTranscriptPresenter class >> menuCommandOn: aBuilder [
 	aBuilder withSeparatorAfter
 ]
 
+{ #category : 'instance creation' }
+StTranscriptPresenter class >> open [
+
+	<script>
+	^ self new open
+]
+
 { #category : 'tools registry' }
 StTranscriptPresenter class >> registerToolsOn: aRegistry [
-	"Smalltalk tools register: self as: #newTranscript"
-	
+	"Smalltalk tools register: self as: #transcript"
+
 	aRegistry register: self as: #transcript
 ]
 
@@ -136,5 +143,5 @@ StTranscriptPresenter >> updateNewEntry [
 { #category : 'accessing' }
 StTranscriptPresenter >> windowTitle [
 
-	^ 'New basic transcript'
+	^ 'Transcript'
 ]
