@@ -160,7 +160,13 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
 ]
 
-{ #category : 'accessing - defaults' }
+{ #category : 'accessing' }
+StProtocolNameChooserPresenter >> newProtocolButton [
+
+	^ newProtocolButton
+]
+
+{ #category : 'accessing' }
 StProtocolNameChooserPresenter >> protocolName [
 	^ protocolNameField text asSymbol
 ]
