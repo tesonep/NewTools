@@ -9,8 +9,7 @@ Class {
 		'shouldFilterStack',
 		'oldMethodToSourceDictionary',
 		'lastUserPreservation',
-		'lastUserPosition',
-		'lastUserExtent'
+		'lastUserPosition'
 	],
 	#category : 'NewTools-Debugger-Tests-Presenters',
 	#package : 'NewTools-Debugger-Tests',
