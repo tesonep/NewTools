@@ -18,6 +18,7 @@ BaselineOfNewTools >> baseline: spec [
 
 		self sindarin: spec.
 		self chest: spec.
+		self graphAlgorithms: spec.
 
 		spec
 			package: 'NewTools-Core';
@@ -59,11 +60,11 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FileBrowser-Morphic' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
 			package: 'NewTools-FileBrowser-Tests' with: [ spec requires: #( 'NewTools-FileBrowser' ) ];
 			"dependency analyser"
-			package: 'NewTools-DependencyAnalyser' with: [ spec requires: #( 'NewTools-Core' ) ];
+			package: 'NewTools-DependencyAnalyser' with: [ spec requires: #('AIGraphAlgorithms') ];
 			package: 'NewTools-DependencyAnalyser-Tests' with: [ spec
 					requires: #( 'NewTools-DependencyAnalyser' 'NewTools-DependencyAnalyser-Tests-Data' ) ];
 			package: 'NewTools-DependencyAnalyser-Tests-Data';
-			package: 'NewTools-DependencyAnalyser-UI' with: [ spec requires: #( 'NewTools-DependencyAnalyser' ) ];
+			package: 'NewTools-DependencyAnalyser-UI' with: [ spec requires: #( 'NewTools-Core' 'NewTools-DependencyAnalyser' ) ];
 			"extras"
 			package: 'HelpCenter' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FlagBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
@@ -220,11 +221,9 @@ BaselineOfNewTools >> baseline: spec [
 						'NewTools-SettingsBrowser-Tests');
 						
 			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
-			
-			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );
-			
+			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );	
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
-			
+			group: 'DependencyAnalyser' with: #('NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests');
 			
 
 			group: 'default' with: #( 
@@ -246,7 +245,8 @@ BaselineOfNewTools >> baseline: spec [
 						'SettingsBrowser'
 						'WelcomeBrowser'
 						'ShortcutsBrowser'
-						'ColorPickerGroup' ) ]
+						'ColorPickerGroup'
+						'DependencyAnalyser' ) ]
 ]
 
 { #category : 'external projects' }
@@ -257,6 +257,15 @@ BaselineOfNewTools >> chest: spec [
 			repository: ((self packageRepositoryURLForSpec: spec) ifEmpty: [
 						 'github://pharo-spec/Chest:v0.4.1' ]);
 			loads: 'default' ]
+]
+
+{ #category : 'baselines' }
+BaselineOfNewTools >> graphAlgorithms: spec [
+
+	spec
+		baseline: 'AIGraphAlgorithms'
+		with: [
+		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.7/src' ]
 ]
 
 { #category : 'actions' }
