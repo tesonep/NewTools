@@ -205,6 +205,15 @@ NewThreadSafeTranscript >> space [
 	self nextPut: Character space
 ]
 
+{ #category : 'updating' }
+NewThreadSafeTranscript >> stepGlobal [ 
+
+	" do nothing this is just to be compatible with the old transcript
+	Not having this method while morphic is calling you is a bad idea and you are dead.
+	
+	"
+]
+
 { #category : 'stop conditions' }
 NewThreadSafeTranscript >> tab [
 	"Output a tab on the receiver, buffered and not yet shown"
