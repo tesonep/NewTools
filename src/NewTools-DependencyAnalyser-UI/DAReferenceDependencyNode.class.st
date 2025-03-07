@@ -1,0 +1,36 @@
+"
+A PDCycleNode is used to display a reference dependency in a tree.
+"
+Class {
+	#name : 'DAReferenceDependencyNode',
+	#superclass : 'DAMethodDependencyNode',
+	#category : 'NewTools-DependencyAnalyser-UI-Nodes',
+	#package : 'NewTools-DependencyAnalyser-UI',
+	#tag : 'Nodes'
+}
+
+{ #category : 'testing' }
+DAReferenceDependencyNode >> browseSendersOrUsers [
+]
+
+{ #category : 'accessing' }
+DAReferenceDependencyNode >> icon [
+	^ self iconNamed: #class
+]
+
+{ #category : 'testing' }
+DAReferenceDependencyNode >> isClassToDependencyNode [
+	^ true
+]
+
+{ #category : 'testing' }
+DAReferenceDependencyNode >> isReferenceNode [
+	  ^ true
+]
+
+{ #category : 'browse-nautilus' }
+DAReferenceDependencyNode >> spawnNewBrowser [
+	| classToBrowse |
+	classToBrowse := self content reference.
+	self browseClass: classToBrowse
+]
