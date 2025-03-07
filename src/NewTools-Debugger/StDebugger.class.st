@@ -200,7 +200,8 @@ StDebugger class >> defaultDebuggerRank [
 { #category : 'accessing' }
 StDebugger class >> defaultPreferredExtent [
 
-	^ self settings defaultPreferredExtent 
+	^ (850 @ 650)
+
 ]
 
 { #category : 'accessing' }

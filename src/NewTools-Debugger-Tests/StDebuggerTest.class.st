@@ -9,8 +9,7 @@ Class {
 		'shouldFilterStack',
 		'oldMethodToSourceDictionary',
 		'lastUserPreservation',
-		'lastUserPosition',
-		'lastUserExtent'
+		'lastUserPosition'
 	],
 	#category : 'NewTools-Debugger-Tests-Presenters',
 	#package : 'NewTools-Debugger-Tests',
@@ -94,11 +93,11 @@ StDebuggerTest >> setUp [
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 	oldMethodToSourceDictionary := Dictionary new.
 	
-	lastUserPreservation := self settings preserveWindowPositionAndExtent.
+	lastUserPreservation := self settings preserveWindowPosition.
 	"Save the user position (test running should not modify user changes)"
 	lastUserPosition := self settings lastKnownPosition.
 	"Save the user extent (test running should not modify user changes)"
-	lastUserExtent := self settings lastKnownExtent.
+	
 ]
 
 { #category : 'tests - context inspector' }
@@ -142,11 +141,10 @@ StDebuggerTest >> tearDown [
 			classified: assoc key protocolName ].
 		
 	"Restore the original preservation setting"		
-	self settings preserveWindowPositionAndExtent: lastUserPreservation.
+	self settings preserveWindowPosition: lastUserPreservation.
 	"Restore the original position"		
 	self settings lastKnownPosition: lastUserPosition.
 	"Restore the original extent"		
-	self settings lastKnownExtent: lastUserExtent.
 
 	super tearDown
 ]
@@ -811,23 +809,8 @@ StDebuggerTest >> testNewDebuggerContextFor [
 ]
 
 { #category : 'tests - context inspector' }
-StDebuggerTest >> testOpenDebuggerWithLastKnownExtent [
-
-	self settings preserveWindowPositionAndExtent: true.
-	dbg := (self debuggerOn: session) open.
-	"Check window is opened with the saved extent"
-	self 
-		assert: self settings lastKnownExtent 
-		equals: dbg window window extent.
-
-	dbg close.
-
-]
-
-{ #category : 'tests - context inspector' }
 StDebuggerTest >> testOpenDebuggerWithLastKnownPosition [
 
-	self settings preserveWindowPositionAndExtent: true.
 	dbg := (self debuggerOn: session) open.
 	"Check window is opened with the saved position"
 	self 
@@ -839,50 +822,11 @@ StDebuggerTest >> testOpenDebuggerWithLastKnownPosition [
 ]
 
 { #category : 'tests - context inspector' }
-StDebuggerTest >> testPreserveLastKnownExtentIsFalse [
-
-	| newDbgExtent |
-
-	self settings preserveWindowPositionAndExtent: false.
-	dbg := (self debuggerOn: session) open.
-
-	newDbgExtent := 100 @ 200.
-	"Programmatically change the extent of debugger window"
-	dbg window window extent: newDbgExtent.
-	"New extent is saved when the window is closed"
-	dbg close.
-
-	self 
-		deny: self settings lastKnownExtent 
-		equals: newDbgExtent.
-
-]
-
-{ #category : 'tests - context inspector' }
-StDebuggerTest >> testPreserveLastKnownExtentIsTrue [
-
-	| newDbgExtent |
-
-	dbg := (self debuggerOn: session) open.
-
-	newDbgExtent := 100 @ 200.
-	"Programmatically change the extent of debugger window"
-	dbg window window extent: newDbgExtent.
-	"New extent is saved when the window is closed"
-	dbg close.
-
-	self 
-		assert: self settings lastKnownExtent 
-		equals: newDbgExtent.
-
-]
-
-{ #category : 'tests - context inspector' }
 StDebuggerTest >> testPreserveLastKnownPositionIsFalse [
 
 	| newDbgPosition |
 
-	self settings preserveWindowPositionAndExtent: false.
+	self settings preserveWindowPosition: false.
 	dbg := (self debuggerOn: session) open.
 
 	newDbgPosition := 100 @ 200.
@@ -892,7 +836,7 @@ StDebuggerTest >> testPreserveLastKnownPositionIsFalse [
 	dbg close.
 
 	self 
-		deny: self settings lastKnownExtent 
+		deny: self settings lastKnownPosition
 		equals: newDbgPosition
 ]
 
@@ -1379,25 +1323,6 @@ StDebuggerTest >> testUpdateSourceCodeFor [
 	
 	dbg updateSourceCodeFor: (self class>>#testUpdateSourceCodeFor).
 	self assert: dbg code text equals: (self class>>#testUpdateSourceCodeFor) sourceCode.
-]
-
-{ #category : 'tests - context inspector' }
-StDebuggerTest >> testValueOfLastKnownExtentIsChangedWhenWindowIsClosed [
-
-	| newDbgExtent |
-
-	dbg := (self debuggerOn: session) open.
-
-	newDbgExtent := 500 @ 100.
-	"Programmatically change the position of debugger window"
-	dbg window window extent: newDbgExtent.
-	"New position is saved when the window is closed"
-	dbg close.
-
-	self 
-		assert: self settings lastKnownExtent
-		equals: newDbgExtent.
-
 ]
 
 { #category : 'tests - context inspector' }
