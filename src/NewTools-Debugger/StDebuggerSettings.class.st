@@ -30,7 +30,8 @@ Class {
 	#name : 'StDebuggerSettings',
 	#superclass : 'Object',
 	#classVars : [
-		'LastKnownPosition'
+		'LastKnownPosition',
+		'PreserveWindowPosition'
 	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
@@ -56,6 +57,7 @@ StDebuggerSettings class >> initializeWindow: aWindowPresenter [
 	"Set global window position and extent using window data in aStDebugger"
 	"Pay attention this is not a presenter so the method name is misleading."
 	
+	self preserveWindowPosition ifFalse: [ ^ self ].
 	aWindowPresenter whenClosedDo: [
 		self
 			lastKnownPosition: (aWindowPresenter window ifNotNil: [ : wnd | wnd position ]) ]
@@ -74,4 +76,28 @@ StDebuggerSettings class >> lastKnownPosition: aPoint [
 	"Set a <Point> as the last window known position in the screen"
 
 	LastKnownPosition := aPoint
+]
+
+{ #category : 'accessing' }
+StDebuggerSettings class >> preserveWindowPosition [
+
+	^ PreserveWindowPosition ifNil: [ PreserveWindowPosition := true ]
+]
+
+{ #category : 'accessing' }
+StDebuggerSettings class >> preserveWindowPosition: aBoolean [
+
+	PreserveWindowPosition := aBoolean
+]
+
+{ #category : 'initialization' }
+StDebuggerSettings class >> preserveWindowPositionAndExtentOn: aBuilder [
+	<systemsettings>
+	
+	(aBuilder setting: #preserveWindowPosition)
+		label: 'Preserve window position';
+		target: self;
+		parent: #debugging;
+		default: true;
+		description: 'If enabled, the debugger will preserve the last known window position, and it will open new debugger windows in that configuration'.
 ]

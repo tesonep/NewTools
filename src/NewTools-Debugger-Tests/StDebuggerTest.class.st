@@ -94,7 +94,7 @@ StDebuggerTest >> setUp [
 	shouldFilterStack := StDebuggerActionModel shouldFilterStack.
 	oldMethodToSourceDictionary := Dictionary new.
 	
-	lastUserPreservation := self settings preserveWindowPositionAndExtent.
+	lastUserPreservation := self settings preserveWindowPosition.
 	"Save the user position (test running should not modify user changes)"
 	lastUserPosition := self settings lastKnownPosition.
 	"Save the user extent (test running should not modify user changes)"
@@ -142,11 +142,10 @@ StDebuggerTest >> tearDown [
 			classified: assoc key protocolName ].
 		
 	"Restore the original preservation setting"		
-	self settings preserveWindowPositionAndExtent: lastUserPreservation.
+	self settings preserveWindowPosition: lastUserPreservation.
 	"Restore the original position"		
 	self settings lastKnownPosition: lastUserPosition.
 	"Restore the original extent"		
-	self settings lastKnownExtent: lastUserExtent.
 
 	super tearDown
 ]
@@ -813,7 +812,6 @@ StDebuggerTest >> testNewDebuggerContextFor [
 { #category : 'tests - context inspector' }
 StDebuggerTest >> testOpenDebuggerWithLastKnownPosition [
 
-	self settings preserveWindowPositionAndExtent: true.
 	dbg := (self debuggerOn: session) open.
 	"Check window is opened with the saved position"
 	self 
@@ -848,7 +846,7 @@ StDebuggerTest >> testPreserveLastKnownPositionIsFalse [
 
 	| newDbgPosition |
 
-	self settings preserveWindowPositionAndExtent: false.
+	self settings preserveWindowPosition: false.
 	dbg := (self debuggerOn: session) open.
 
 	newDbgPosition := 100 @ 200.
