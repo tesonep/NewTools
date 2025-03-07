@@ -823,25 +823,6 @@ StDebuggerTest >> testOpenDebuggerWithLastKnownPosition [
 ]
 
 { #category : 'tests - context inspector' }
-StDebuggerTest >> testPreserveLastKnownExtentIsTrue [
-
-	| newDbgExtent |
-
-	dbg := (self debuggerOn: session) open.
-
-	newDbgExtent := 100 @ 200.
-	"Programmatically change the extent of debugger window"
-	dbg window window extent: newDbgExtent.
-	"New extent is saved when the window is closed"
-	dbg close.
-
-	self 
-		assert: self settings lastKnownExtent 
-		equals: newDbgExtent.
-
-]
-
-{ #category : 'tests - context inspector' }
 StDebuggerTest >> testPreserveLastKnownPositionIsFalse [
 
 	| newDbgPosition |
@@ -856,7 +837,7 @@ StDebuggerTest >> testPreserveLastKnownPositionIsFalse [
 	dbg close.
 
 	self 
-		deny: self settings lastKnownExtent 
+		deny: self settings lastKnownPosition
 		equals: newDbgPosition
 ]
 
@@ -1343,25 +1324,6 @@ StDebuggerTest >> testUpdateSourceCodeFor [
 	
 	dbg updateSourceCodeFor: (self class>>#testUpdateSourceCodeFor).
 	self assert: dbg code text equals: (self class>>#testUpdateSourceCodeFor) sourceCode.
-]
-
-{ #category : 'tests - context inspector' }
-StDebuggerTest >> testValueOfLastKnownExtentIsChangedWhenWindowIsClosed [
-
-	| newDbgExtent |
-
-	dbg := (self debuggerOn: session) open.
-
-	newDbgExtent := 500 @ 100.
-	"Programmatically change the position of debugger window"
-	dbg window window extent: newDbgExtent.
-	"New position is saved when the window is closed"
-	dbg close.
-
-	self 
-		assert: self settings lastKnownExtent
-		equals: newDbgExtent.
-
 ]
 
 { #category : 'tests - context inspector' }
