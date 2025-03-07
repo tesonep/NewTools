@@ -115,8 +115,6 @@ StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter
 	super initializeDialogWindow: aDialogWindowPresenter.
 	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
 
-
-
 	newProtocolButton action: [ "If we click on the + we should add the content of the input field in the list, select it and validate"
 		suggestionList
 			items: { protocolNameField text };
@@ -204,6 +202,8 @@ StProtocolNameChooserPresenter >> selectedItem [
 
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> updatePresenter [
+
+	newProtocolButton enabled: self protocolName isNotEmpty.
 
 	suggestionList
 		items: self protocolsToSuggest;
