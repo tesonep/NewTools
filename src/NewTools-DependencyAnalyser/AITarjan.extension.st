@@ -17,5 +17,5 @@ AITarjan >> runOnDAPackageRelationGraph: aRelationGraph [
 
     "Convert the strongly connected components to a DAPackageRelation"
     ^ self stronglyConnectedComponents collect: [ :packages |
-        DAPackageRelationGraph onPackages: packages ]
+        StPackageRelationGraph onPackages: packages ]
 ]
