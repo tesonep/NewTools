@@ -18,7 +18,7 @@ DADependencyCheckerTest >> setUp [
 { #category : 'tests' }
 DADependencyCheckerTest >> testShouldGetDirectDependencies [
 	self
-		assert: (checker dependenciesOf: 'Tool-DependencyAnalyser-Tests-Data')
+		assert: (checker dependenciesOf: 'NewTools-DependencyAnalyser-Tests-Data')
 		equals: #(#Kernel #'Kernel-BytecodeEncoders')
 ]
 
@@ -26,7 +26,7 @@ DADependencyCheckerTest >> testShouldGetDirectDependencies [
 DADependencyCheckerTest >> testShouldGetUnresolvedDependencies [
 
 	| result |
-	result := (checker unresolvedDependenciesOf: 'Tool-DependencyAnalyser-Tests-Data').
+	result := (checker unresolvedDependenciesOf: 'NewTools-DependencyAnalyser-Tests-Data').
 	self
 		assert: result size
 		equals: 2.

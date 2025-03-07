@@ -12,7 +12,7 @@ Class {
 { #category : 'running' }
 DAMessageSendAnalyzerTest >> setUp [
 	super setUp.
-	analyzer := DAMessageSendAnalyzer on: 'Tool-DependencyAnalyser-Tests-Data'
+	analyzer := DAMessageSendAnalyzer on: 'NewTools-DependencyAnalyser-Tests-Data'
 ]
 
 { #category : 'tests' }

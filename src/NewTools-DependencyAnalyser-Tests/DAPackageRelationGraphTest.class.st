@@ -38,7 +38,7 @@ DAPackageRelationGraphTest >> setUp [
 	packageTextCore := DAPackage onPackageNamed: 'Text-Core'.
 	packageRegexCore := DAPackage onPackageNamed: 'Regex-Core'.
 	packageCollectionsSequenceable := DAPackage onPackageNamed: 'Collections-Sequenceable'.
-	packagePackageDependencies := DAPackage onPackageNamed: #'Tool-DependencyAnalyser'.
+	packagePackageDependencies := DAPackage onPackageNamed: #'NewTools-DependencyAnalyser'.
 	packageA := DAPackage onPackageNamed: 'A'.
 	packageB := DAPackage onPackageNamed: 'B'.
 	packageC := DAPackage onPackageNamed: 'C'.
@@ -305,7 +305,7 @@ DAPackageRelationGraphTest >> testSuccessors [
 { #category : 'tests' }
 DAPackageRelationGraphTest >> testSystemPackageContaining [
 	self assert: (aPackageRelationGraph systemPackageContaining: Collection) packageName equals: 'Collections-Abstract'.
-	self assert: (aPackageRelationGraph systemPackageContaining: DAPackageRelationGraph) packageName equals: #'Tool-DependencyAnalyser'
+	self assert: (aPackageRelationGraph systemPackageContaining: DAPackageRelationGraph) packageName equals: #'NewTools-DependencyAnalyser'
 ]
 
 { #category : 'tests' }
