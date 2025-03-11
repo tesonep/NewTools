@@ -28,7 +28,7 @@ StTranscriptPresenter class >> example [
 	
 	| t tr |
 	t := self new. 
-	tr := NewThreadSafeTranscript new.
+	tr := StThreadSafeTranscript new.
 	tr show: 'Hello Pharo I''m a new textual transcript'.
 	t transcript: tr.
 	t open. 
@@ -63,6 +63,13 @@ StTranscriptPresenter class >> open [
 	^ self new open
 ]
 
+{ #category : 'instance creation' }
+StTranscriptPresenter class >> openOn: aTranscript [
+
+	<script>
+	^ self new transcript: aTranscript; open
+]
+
 { #category : 'tools registry' }
 StTranscriptPresenter class >> registerToolsOn: aRegistry [
 	"Smalltalk tools register: self as: #transcript"
@@ -75,7 +82,7 @@ StTranscriptPresenter >> initialize [
 
 	super initialize.
 	self registerToAnnouncer. 
-	transcript := NewThreadSafeTranscript uniqueInstance
+	transcript := StThreadSafeTranscript uniqueInstance
 ]
 
 { #category : 'initialization' }
@@ -83,6 +90,7 @@ StTranscriptPresenter >> initializePresenters [
 
 
 	text := self newText.
+	text beEditable
 	
 	
 ]

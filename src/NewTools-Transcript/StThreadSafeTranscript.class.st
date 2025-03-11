@@ -8,7 +8,7 @@ I'm based on a circular list.
 
 "
 Class {
-	#name : 'NewThreadSafeTranscript',
+	#name : 'StThreadSafeTranscript',
 	#superclass : 'Model',
 	#instVars : [
 		'mutex',
@@ -24,41 +24,41 @@ Class {
 }
 
 { #category : 'declare' }
-NewThreadSafeTranscript class >> install [
+StThreadSafeTranscript class >> install [
 
 	self installThreadSafeAsTranscript
 ]
 
 { #category : 'declare' }
-NewThreadSafeTranscript class >> installThreadSafeAsTranscript [
+StThreadSafeTranscript class >> installThreadSafeAsTranscript [
 	<script>
 
 	Smalltalk globals at: #Transcript put: self uniqueInstance
 ]
 
 { #category : 'declare' }
-NewThreadSafeTranscript class >> reset [
+StThreadSafeTranscript class >> reset [
 	<script>
 
 	UniqueInstance := nil
 ]
 
 { #category : 'icons' }
-NewThreadSafeTranscript class >> taskbarIconName [
+StThreadSafeTranscript class >> taskbarIconName [
 	"Answer the icon for the receiver in a task bar."
 
 	^#transcript
 ]
 
 { #category : 'declare' }
-NewThreadSafeTranscript class >> uniqueInstance [
+StThreadSafeTranscript class >> uniqueInstance [
 	<script>
 
 	^ UniqueInstance ifNil: [ UniqueInstance := self new ]
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> << anObject [
+StThreadSafeTranscript >> << anObject [
 	"Write anObject to the receiver, dispatching using #putOn:
 	This is a shortcut for both nextPut: and nextPutAll: since anObject can be both
 	the element type of the receiver as well as a collection of those elements.
@@ -69,13 +69,13 @@ NewThreadSafeTranscript >> << anObject [
 ]
 
 { #category : 'initialization' }
-NewThreadSafeTranscript >> allocateRecodings: size [
+StThreadSafeTranscript >> allocateRecodings: size [
 
 	recordings := Array new: size
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> clear [
+StThreadSafeTranscript >> clear [
 
 	mutex critical: [
 		recordings := OrderedCollection new.
@@ -84,12 +84,12 @@ NewThreadSafeTranscript >> clear [
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> close [
+StThreadSafeTranscript >> close [
 	"Close the receiver, indicating it is not longer needed"
 ]
 
 { #category : 'protected low level' }
-NewThreadSafeTranscript >> contents [ 
+StThreadSafeTranscript >> contents [ 
 	"probably super inefficient again... "
 	
 	^ String streamContents: [ :s |
@@ -97,44 +97,44 @@ NewThreadSafeTranscript >> contents [
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> cr [
+StThreadSafeTranscript >> cr [
 	"Output a cr on the receiver, buffered and not yet shown"
 
 	self nextPut: Character cr
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> crShow: anObject [
+StThreadSafeTranscript >> crShow: anObject [
 	"Output anObject asString on the receiver preceded by a cr and show the output"
 
 	self critical: [ self cr; show: anObject ]
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> critical: block [
+StThreadSafeTranscript >> critical: block [
 	"Execute block making sure only one thread accesses the receiver"
 
 	^ mutex critical: block
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> endEntry [
+StThreadSafeTranscript >> endEntry [
 	"Show the currently buffered output"
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> flush [
+StThreadSafeTranscript >> flush [
 	
 	
 ]
 
 { #category : 'testing' }
-NewThreadSafeTranscript >> hasBindingOf: aString [
+StThreadSafeTranscript >> hasBindingOf: aString [
 	^ false
 ]
 
 { #category : 'initialization' }
-NewThreadSafeTranscript >> initialize [
+StThreadSafeTranscript >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
@@ -145,14 +145,14 @@ NewThreadSafeTranscript >> initialize [
 ]
 
 { #category : 'initialization' }
-NewThreadSafeTranscript >> maxEntry: aNumber [
+StThreadSafeTranscript >> maxEntry: aNumber [
 
 	maxEntry := aNumber.
 	self allocateRecodings: maxEntry.
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> nextPut: aCharacter [
+StThreadSafeTranscript >> nextPut: aCharacter [
 
 	mutex critical: [
 		self rawNextPut: aCharacter ].
@@ -161,15 +161,21 @@ NewThreadSafeTranscript >> nextPut: aCharacter [
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> nextPutAll: value [
+StThreadSafeTranscript >> nextPutAll: value [
 	"Ineffient way...."
 
 	self critical: [ value do: [ :each | self rawNextPut: each  ] ].
 	^ value
 ]
 
+{ #category : 'ui' }
+StThreadSafeTranscript >> open [ 
+
+	^ StTranscriptPresenter openOn: self
+]
+
 { #category : 'streaming' }
-NewThreadSafeTranscript >> rawNextPut: aCharacter [
+StThreadSafeTranscript >> rawNextPut: aCharacter [
 
 	
 		index := index >= maxEntry
@@ -181,32 +187,32 @@ NewThreadSafeTranscript >> rawNextPut: aCharacter [
 ]
 
 { #category : 'streaming' }
-NewThreadSafeTranscript >> reset [
+StThreadSafeTranscript >> reset [
 
 	self clear
 ]
 
 { #category : 'updating' }
-NewThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
+StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 	^ false
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> show: anObject [
+StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
 
 	self critical: [ self << anObject  ]
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> space [
+StThreadSafeTranscript >> space [
 	"Output a space on the receiver, buffered and not yet shown"
 
 	self nextPut: Character space
 ]
 
 { #category : 'updating' }
-NewThreadSafeTranscript >> stepGlobal [ 
+StThreadSafeTranscript >> stepGlobal [ 
 
 	" do nothing this is just to be compatible with the old transcript
 	Not having this method while morphic is calling you is a bad idea and you are dead.
@@ -215,7 +221,7 @@ NewThreadSafeTranscript >> stepGlobal [
 ]
 
 { #category : 'stop conditions' }
-NewThreadSafeTranscript >> tab [
+StThreadSafeTranscript >> tab [
 	"Output a tab on the receiver, buffered and not yet shown"
 
 	self nextPut: Character tab

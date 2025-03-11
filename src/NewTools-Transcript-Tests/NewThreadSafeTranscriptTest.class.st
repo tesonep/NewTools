@@ -9,7 +9,7 @@ Class {
 NewThreadSafeTranscriptTest >> testNextPut [
 
 	| t |
-	t := NewThreadSafeTranscript new.
+	t := StThreadSafeTranscript new.
 	t nextPut: $a.
 	t << 'toto'.
 	t cr.
@@ -22,7 +22,7 @@ tintin'
 NewThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 
 	| t |
-	t := NewThreadSafeTranscript new.
+	t := StThreadSafeTranscript new.
 	t maxEntry: 5.
 	t << 'abcdefgh'.
 	self assert: t contents equals: 'fgh' 
@@ -32,7 +32,7 @@ NewThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 NewThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 
 	| t |
-	t := NewThreadSafeTranscript new.
+	t := StThreadSafeTranscript new.
 	t maxEntry: 5.
 	t << 'toto'.
 	self assert: t contents equals: 'toto' 
@@ -42,7 +42,7 @@ NewThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 NewThreadSafeTranscriptTest >> testShow [
 
 	| t |
-	t := NewThreadSafeTranscript new.
+	t := StThreadSafeTranscript new.
 	t show: 'toto'.
 	self assert: t contents equals: 'toto' 
 ]
@@ -51,7 +51,7 @@ NewThreadSafeTranscriptTest >> testShow [
 NewThreadSafeTranscriptTest >> testShowAndClear [
 
 	| t |
-	t := NewThreadSafeTranscript new.
+	t := StThreadSafeTranscript new.
 	t show: 'toto'.
 	self assert: t contents equals: 'toto'.
 	t clear.
