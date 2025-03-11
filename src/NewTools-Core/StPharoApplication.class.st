@@ -54,6 +54,12 @@ StPharoApplication >> defaultWindowExtent [
 	^ 800@600
 ]
 
+{ #category : 'showing' }
+StPharoApplication >> defaultWindowPresenterClass [
+	
+	^ StWindowPresenter
+]
+
 { #category : 'initialization' }
 StPharoApplication >> initialize [
 
