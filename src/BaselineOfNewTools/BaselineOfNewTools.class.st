@@ -308,6 +308,7 @@ BaselineOfNewTools >> packageRepositoryURLForSpec: spec [
 BaselineOfNewTools >> postload: loader package: packageSpec [
 
 	MCMethodDefinition initializersEnabled: initializersEnabled.
+	StThreadSafeTranscript installThreadSafeAsTranscript.
 	self loadThemeImages.
 
 	
