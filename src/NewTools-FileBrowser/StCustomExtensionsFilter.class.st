@@ -70,7 +70,7 @@ StCustomExtensionsFilter >> extensions [
 StCustomExtensionsFilter >> extensions: aCollection [
 
 	extensions := aCollection.
-	basename ifNil: [ basename := extensions asCommaString ]
+	basename ifNil: [ basename := extensions joinUsing: ', ' ]
 ]
 
 { #category : 'initialization' }
