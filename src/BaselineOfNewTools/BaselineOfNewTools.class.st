@@ -93,7 +93,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-CodeCritiques-Tests';
 			
 			"Window Profile"
-			package: 'NewTools-Window-Profile' with: [ spec requires: #('NewTools-Core')] ;
+			package: 'NewTools-Window-Profiles' with: [ spec requires: #('NewTools-Core')] ;
 			
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
