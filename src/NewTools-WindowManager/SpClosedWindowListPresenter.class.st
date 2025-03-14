@@ -23,7 +23,7 @@ Public API:
 "
 Class {
 	#name : 'SpClosedWindowListPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'list',
 		'unhideButton',
@@ -162,23 +162,23 @@ SpClosedWindowListPresenter >> activateBox [
 ]
 
 { #category : 'adding' }
-SpClosedWindowListPresenter >> addClosedWindow: aModel [
+SpClosedWindowListPresenter >> addClosedWindow: aWindow [
 
 	self items size >= 5 ifTrue: [
 		5 to: self items size do: [ :i | self items removeLast close ] ].
 
-	(self isWindowRejected: aModel)
+	(self isPresenterRejected: aWindow)
 		ifFalse: [
-			aModel setProperty: #isClosed toValue: true.
-			self items addFirst: aModel ]
-		ifTrue: [ aModel closeBoxHit ].
+			aWindow setProperty: #isClosed toValue: true.
+			self items addFirst: aWindow ]
+		ifTrue: [ aWindow closeBoxHit ].
 	self refresh
 ]
 
 { #category : 'adding' }
-SpClosedWindowListPresenter >> addRejectedWindow: aWindowClass [
+SpClosedWindowListPresenter >> addToRejectedPresenters: aPresenterClassName [
 
-	rejectedWindows add: aWindowClass
+	rejectedWindows add: aPresenterClassName
 ]
 
 { #category : 'initialization' }
@@ -242,7 +242,7 @@ SpClosedWindowListPresenter >> initialize [
 	                   item removeProperty: #isClosed.
 	                   self items remove: item.
 	                   self refresh ].
-	self initializeRejectedWindows
+	self initializeRejectedPresenters 
 ]
 
 { #category : 'initialization' }
@@ -272,25 +272,24 @@ SpClosedWindowListPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-SpClosedWindowListPresenter >> initializeRejectedWindows [
+SpClosedWindowListPresenter >> initializeRejectedPresenters [
 	"at the moment we reject only those windows by default"
 	
 	rejectedWindows := OrderedCollection new.
-	rejectedWindows add: StDebugger.
-	rejectedWindows add: StInspectorPresenter.
-	rejectedWindows add: self class
+	rejectedWindows add: 'StDebugger'.
+	rejectedWindows add: 'StInspectorPresenter'.
+	rejectedWindows add: 'SpClosedWindowListPresenter'
 ]
 
 { #category : 'testing' }
-SpClosedWindowListPresenter >> isWindowRejected: aWindow [
+SpClosedWindowListPresenter >> isPresenterRejected: aWindow [
 
-	^ (aWindow model notNil and: [
-		   (rejectedWindows includes: aWindow model class) or: [
-			   (aWindow model respondsTo: #presenter) and: [
-				   aWindow model presenter notNil and: [
-					   rejectedWindows includes: aWindow model presenter class ] ] ] ])
-		  ifTrue: [ true ]
-		  ifFalse: [ false ]
+	^ aWindow notNil and: [
+		  (rejectedWindows includes: aWindow model class asString) or: [
+			  (aWindow model respondsTo: #presenter) and: [
+				  aWindow model presenter notNil and: [
+					  rejectedWindows includes:
+						  aWindow model presenter class asString ] ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -330,13 +329,13 @@ SpClosedWindowListPresenter >> removeItemBlock: aBlock [
 ]
 
 { #category : 'removing' }
-SpClosedWindowListPresenter >> removeRejectedWindow: aWindowClass [
+SpClosedWindowListPresenter >> removeRejectedPresenter: aPresenterClass [
 
-	rejectedWindows remove: aWindowClass 
+	rejectedWindows remove: aPresenterClass 
 ]
 
 { #category : 'initialization' }
-SpClosedWindowListPresenter >> resetRejectedWindows [
+SpClosedWindowListPresenter >> resetRejectedPresenters [
 
 	rejectedWindows := OrderedCollection new
 ]
