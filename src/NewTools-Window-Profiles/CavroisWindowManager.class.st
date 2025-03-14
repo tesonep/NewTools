@@ -142,13 +142,21 @@ CavroisWindowManager class >> deleteProfile [
 { #category : 'action' }
 CavroisWindowManager class >> loadProfile [
 
-	| file profile |
-	file := FileLocator preferences asFileReference / 'pharo'
-	        / 'Profile.ston'.
-	profile := STON fromString: file.
-	self current profiles at: profile name put: profile.
-	self current currentProfile: profile.
-	MenubarMorph reset
+	| file profile presenter |
+	presenter := StOpenFilePresenter new
+		             openFolder:
+			             FileLocator preferences asFileReference / 'pharo';
+		             title: 'Select Profile to load'.
+	presenter okAction: [ :fileReference |
+		(fileReference basename includesSubstring: 'Profile')
+			ifTrue: [
+				file := fileReference.
+				profile := STON fromString: file.
+				self current profiles at: profile name put: profile.
+				self current currentProfile: profile.
+				MenubarMorph reset ]
+			ifFalse: [ self inform: ' File selected is not a profile' ] ].
+	presenter open
 ]
 
 { #category : 'menu' }
@@ -214,9 +222,12 @@ CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
 { #category : 'saving' }
 CavroisWindowManager class >> saveProfile [
 
-	| fileString fileName file |
+	| fileString fileName file saveName |
+	saveName := self current currentProfile name
+		            copyReplaceAll: '(Current)'
+		            with: ''.
 	fileString := STON toString: self current currentProfile.
-	fileName := 'Profile.ston'.
+	fileName := 'Profile: ' , saveName trimRight , '.ston'.
 	file := FileLocator preferences asFileReference / 'pharo' / fileName.
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
