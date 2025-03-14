@@ -91,6 +91,10 @@ BaselineOfNewTools >> baseline: spec [
 			"CritiqueBrowser"
 			package: 'NewTools-CodeCritiques';
 			package: 'NewTools-CodeCritiques-Tests';
+			
+			"Window Profile"
+			package: 'NewTools-Window-Profile' with: [ spec requires: #('NewTools-Core')] ;
+			
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
@@ -137,6 +141,8 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 
 			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
+			
+			group: 'Profile' with: #( 'NewTools-Window-Profile' );
 			
 			group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
 			
@@ -227,6 +233,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 
 			group: 'default' with: #( 
+			         'Profile'
 						'Playground'
 						'Transcript'
 						'Inspector' 
