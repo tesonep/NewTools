@@ -227,7 +227,7 @@ CavroisWindowManager class >> saveProfile [
 		            copyReplaceAll: '(Current)'
 		            with: ''.
 	fileString := STON toString: self current currentProfile.
-	fileName := 'Profile: ' , saveName trimRight , '.ston'.
+	fileName := 'Profile:' , saveName trimBoth , '.ston'.
 	file := FileLocator preferences asFileReference / 'pharo' / fileName.
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
