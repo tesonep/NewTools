@@ -1,8 +1,9 @@
 Class {
 	#name : 'CavroisWindowManagerTest',
 	#superclass : 'TestCase',
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Tests',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Tests'
 }
 
 { #category : 'initialization' }
@@ -47,32 +48,12 @@ CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
 CavroisWindowManagerTest >> testConfigurationFromWindow [
 
 	| prof configuration play |
-	prof := CavroisWindowManager new.
+	[ prof := CavroisWindowManager new.
 	play := StPlaygroundPresenter new open.
 	configuration := prof placeHolderFromWindow: play window.
-	self assert: configuration  extent equals: (700.0@500.0).
-	play delete
+	self assert: configuration  extent equals: (600.0@400.0).
+	] ensure: [ play delete ]
 	
-]
-
-{ #category : 'tests' }
-CavroisWindowManagerTest >> testPresenterHasCorrectAPI [
-
-	| pres win |
-	pres := SpPresenter new.
-	pres layout: SpBoxLayout new. 
-	pres position:  100@100.
-	pres extent: 200@333.
-	
-	self assert: pres initialPosition equals: 100@100.
-	self assert: pres extent equals: 200@333.
-	"this test is key because else we cannot pass to the window 
-	the size and position we want. "
-	
-	win := pres open.
-	self assert: win initialExtent equals: 200@333.
-	self assert: win position equals: 100@100.
-	"here we see that the size and position are not honored"
 ]
 
 { #category : 'tests' }

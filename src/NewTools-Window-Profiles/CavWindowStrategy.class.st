@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'placeHolder'
 	],
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
@@ -21,5 +22,5 @@ CavWindowStrategy >> placeHolder: anObject [
 ]
 
 { #category : 'positioning' }
-CavWindowStrategy >> placeWindow: aWindowPresenter [
+CavWindowStrategy >> placePresenter: aPresenter [
 ]

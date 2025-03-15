@@ -12,8 +12,9 @@ Class {
 		'count',
 		'visualPlaceHolder'
 	],
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'as yet unclassified' }
@@ -46,7 +47,7 @@ CavAbstractWindowPlaceHolder >> count [
 { #category : 'api' }
 CavAbstractWindowPlaceHolder >> display [
 
-	visualPlaceHolder := CavVisualPlaceHolder new
+	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
 		                     addMorph: (TextMorph new
@@ -117,21 +118,13 @@ CavAbstractWindowPlaceHolder >> position: aPoint [
 CavAbstractWindowPlaceHolder >> printOn: aStream [
 
 	super printOn: aStream.
-	aStream nextPutAll: '(' , kind printString , ' ' , (self strategy
-			 ifNotNil: [ :s | s class name ]
-			 ifNil: [ ' nil strategy' ]) , ')'
+	aStream nextPutAll: '(' , kind printString , ' with ' , self strategy class name , ')'
 ]
 
 { #category : 'printing' }
 CavAbstractWindowPlaceHolder >> resetCount [ 
 	 
 	count := 0.
-]
-
-{ #category : 'initialization' }
-CavAbstractWindowPlaceHolder >> setDefaultStrategy [
-
-	
 ]
 
 { #category : 'accessing' }

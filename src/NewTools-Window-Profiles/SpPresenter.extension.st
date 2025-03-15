@@ -22,11 +22,19 @@ SpPresenter >> initializeWindow: aWindowPresenter [
 	In the next Spec version the content of this method will be removed and it will do nothing by default because the goal is to remove the management of all of those informations from Composable to put them in WindowPresenter."
 
 	self hasInitialPosition ifTrue: [ aWindowPresenter initialPosition: self initialPosition ].
+	
+	"We should check if the lines above are needed and else we should push them in Spec Core."
+	
 	aWindowPresenter
-		title: self title;
-		initialExtent: (self extent ifNil: [self preferredExtent]);
+		title: self windowTitle;
+		initialExtent: self class preferredExtent;
 		windowIcon: self windowIcon;
-		whenResizingDo: [ :ann | self preferredExtent: ann newSize ].
+		"Pay attention preferredExtent: is used here because it is stateful
+		in the sense that it will set the preferred extent to be remembered.
+		Of course only when resizable allows it."
+
+		whenResizingDo: [ :ann | aWindowPresenter isResizable 
+									ifTrue: [ self preferredExtent: ann newSize ]].
 ]
 
 { #category : '*NewTools-Window-Profiles' }

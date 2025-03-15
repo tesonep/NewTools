@@ -6,18 +6,19 @@ I just checks if the window associated with the placeholder is present, and put 
 Class {
 	#name : 'CavPopUpStrategy',
 	#superclass : 'CavWindowStrategy',
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
 CavPopUpStrategy class >> title [
 
-	^ 'Pop Up Strategy'
+	^ 'Pop Up on the Top Strategy'
 ]
 
 { #category : 'positioning' }
-CavPopUpStrategy >> placeWindow: aWindow [
+CavPopUpStrategy >> placePresenter: aWindow [
 
 	aWindow position: placeHolder position.
 

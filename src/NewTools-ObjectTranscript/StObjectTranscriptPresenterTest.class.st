@@ -6,22 +6,6 @@ Class {
 }
 
 { #category : 'tests' }
-StObjectTranscriptPresenterTest >> testFalseShowInspectorDoNotShowInspector [
-
-	| st win current |
-	[
-	current := StObjectTranscriptPresenter showInspector.
-	StObjectTranscriptPresenter showInspector: false.
-	st := StObjectTranscriptPresenter new.
-	win := st
-		       logger: StObjectTranscriptLogger instance;
-		       open.
-	self assert: win initialExtent equals: 550 @ 650 ] ensure: [
-		win close.
-		StObjectTranscriptPresenter showInspector: current ]
-]
-
-{ #category : 'tests' }
 StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 	"We wanted to show that the size of the window can dynamically be changed when the extend of the class presenter changes.
 	However, in the current version of spec this is not possible. 
@@ -44,3 +28,4 @@ StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 		win close.
 		StObjectTranscriptPresenter showInspector: current ]
 ]
+

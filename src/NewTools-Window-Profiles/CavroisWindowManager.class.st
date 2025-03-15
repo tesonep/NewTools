@@ -31,8 +31,9 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'adding' }
@@ -259,7 +260,7 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 CavroisWindowManager class >> toggleProfilePlaceholders [
 
 	(World submorphs anySatisfy: [ :morph |
-		 morph isKindOf: CavVisualPlaceHolder ])
+		 morph isKindOf: CavVisualPlaceHolderMorph ])
 		ifTrue: [ self current removeVisualPlaceholders ]
 		ifFalse: [
 			self current currentProfile ifNotNil: [
@@ -388,7 +389,7 @@ CavroisWindowManager >> profiles [
 CavroisWindowManager >> removeVisualPlaceholders [
 
 	World submorphs
-		select: [ :morph | morph isKindOf: CavVisualPlaceHolder ]
+		select: [ :morph | morph isKindOf: CavVisualPlaceHolderMorph ]
 		thenDo: [ :morph | morph delete ].
 			World submorphs
 		select: [ :morph | morph visible = false ]

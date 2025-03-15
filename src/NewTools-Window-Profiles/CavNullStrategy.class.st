@@ -4,20 +4,19 @@ I am a null strategy that does nothing by default, i just return the original wi
 Class {
 	#name : 'CavNullStrategy',
 	#superclass : 'CavWindowStrategy',
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
 CavNullStrategy class >> title [
 
-	^ 'Null Strategy'
+	^ 'Not Changing Strategy'
 ]
 
 { #category : 'positioning' }
-CavNullStrategy >> placeWindow: aWindow [
+CavNullStrategy >> placePresenter: aPresenter [
 
-	aWindow position: placeHolder position.
-	aWindow extent: placeHolder extent.
-	^ aWindow
+	
 ]
