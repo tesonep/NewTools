@@ -70,7 +70,7 @@ CavroisWindowManagerTest >> testPresenterHasCorrectAPI [
 	the size and position we want. "
 	
 	win := pres open.
-	self assert: win extent equals: 200@333.
+	self assert: win initialExtent equals: 200@333.
 	self assert: win position equals: 100@100.
 	"here we see that the size and position are not honored"
 ]
