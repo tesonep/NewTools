@@ -28,3 +28,4 @@ StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 		win close.
 		StObjectTranscriptPresenter showInspector: current ]
 ]
+
