@@ -51,9 +51,8 @@ Class {
 StObjectTranscriptPresenter class >> defaultPreferredExtent [
 	"Answer the desired extent for the receiver when it is first opened on the screen.  "
 
-	^ self showInspector
-		ifTrue: [ 550 @ 850 ]
-		ifFalse: [ 550 @ 650 ]
+	^ 550 @ 850
+		
 ]
 
 { #category : 'accessing' }
