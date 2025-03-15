@@ -10,7 +10,7 @@ Class {
 CavWindowStrategyTest >> testNullStrategyDoesNotChangeExtentAndPosition [
 
 
-	| presenterClass presenter |
+	| presenterClass presenter strategy |
 	presenterClass := SpPresenter newAnonymousSubclass.
 	presenterClass compile: 'defaultLayout ^ SpGridLayout new'.
 	presenterClass compile: 'initializePresenters self layout: SpBoxLayout newLeftToRight'.
@@ -20,7 +20,10 @@ CavWindowStrategyTest >> testNullStrategyDoesNotChangeExtentAndPosition [
 	self assert: presenter preferredExtent equals: 666@42.
 	self assert: presenter position equals: 10@10.
 	
-	CavNullStrategy new placePresenter: presenter. 
+	strategy := CavNullStrategy new.
+	strategy placeHolder: (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
+	strategy placePresenter: presenter.
+	 
 	self assert: presenter preferredExtent equals: 666@42.
 	self assert: presenter position equals: 10@10.
 	
