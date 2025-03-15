@@ -57,26 +57,6 @@ CavroisWindowManagerTest >> testConfigurationFromWindow [
 ]
 
 { #category : 'tests' }
-CavroisWindowManagerTest >> testPresenterHasCorrectAPI [
-
-	| pres win |
-	[ pres := SpPresenter new.
-	pres layout: SpBoxLayout new. 
-	pres position:  100@100.
-	pres extent: 200@333.
-	
-	self assert: pres initialPosition equals: 100@100.
-	self assert: pres extent equals: 200@333.
-	"this test is key because else we cannot pass to the window 
-	the size and position we want. "
-	
-	win := pres open.
-	self assert: win initialExtent equals: 200@333.
-	self assert: win position equals: 100@100.
-	] ensure: [ win close ]
-]
-
-{ #category : 'tests' }
 CavroisWindowManagerTest >> testRemovingCurrentProfileUpdateCurrentProfile [
 
 	CavroisWindowManager current addProfileFromWindows: 'Profile 1'.

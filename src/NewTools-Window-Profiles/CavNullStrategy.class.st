@@ -18,7 +18,5 @@ CavNullStrategy class >> title [
 { #category : 'positioning' }
 CavNullStrategy >> placePresenter: aPresenter [
 
-	aPresenter position: placeHolder position.
-	aPresenter extent: placeHolder extent.
 	
 ]
