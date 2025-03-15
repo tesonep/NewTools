@@ -6,8 +6,9 @@ I should be modified to have a maximum stacking size because i can place my wind
 Class {
 	#name : 'CavStackingStrategy',
 	#superclass : 'CavWindowStrategy',
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
@@ -17,11 +18,10 @@ CavStackingStrategy class >> title [
 ]
 
 { #category : 'positioning' }
-CavStackingStrategy >> placeWindow: aWindow [
-	"for now just stupid"
-
-	aWindow extent: placeHolder extent.
-	aWindow position:
+CavStackingStrategy >> placePresenter: aPresenter [
+	
+	aPresenter extent: placeHolder extent.
+	aPresenter position:
 		placeHolder position + (20 @ 20 * placeHolder count).
 	placeHolder increment
 ]

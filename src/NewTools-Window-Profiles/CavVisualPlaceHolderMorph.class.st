@@ -1,15 +1,19 @@
+"
+I'm morph to represent a placeholder.
+"
 Class {
-	#name : 'CavVisualPlaceHolder',
+	#name : 'CavVisualPlaceHolderMorph',
 	#superclass : 'BorderedMorph',
 	#instVars : [
 		'placeHolder'
 	],
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Morphic',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Morphic'
 }
 
 { #category : 'actions' }
-CavVisualPlaceHolder >> changeStrategy [
+CavVisualPlaceHolderMorph >> changeStrategy [
 
 	| presenter description |
 	presenter := SpSelectDialog new
@@ -31,7 +35,7 @@ CavVisualPlaceHolder >> changeStrategy [
 ]
 
 { #category : 'initialization' }
-CavVisualPlaceHolder >> initialize [
+CavVisualPlaceHolderMorph >> initialize [
 
 	super initialize.
 	self borderWidth: 3.
@@ -42,7 +46,7 @@ CavVisualPlaceHolder >> initialize [
 ]
 
 { #category : 'accessing' }
-CavVisualPlaceHolder >> placeHolder: aPlaceHolder [
+CavVisualPlaceHolderMorph >> placeHolder: aPlaceHolder [
 
 	placeHolder := aPlaceHolder
 ]

@@ -8,8 +8,9 @@ Class {
 		'profileName',
 		'placeHolderDictionary'
 	],
-	#category : 'NewTools-Window-Profiles',
-	#package : 'NewTools-Window-Profiles'
+	#category : 'NewTools-Window-Profiles-Model',
+	#package : 'NewTools-Window-Profiles',
+	#tag : 'Model'
 }
 
 { #category : 'adding' }
