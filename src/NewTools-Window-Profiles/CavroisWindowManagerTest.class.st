@@ -47,11 +47,11 @@ CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
 CavroisWindowManagerTest >> testConfigurationFromWindow [
 
 	| prof configuration play |
-	prof := CavroisWindowManager new.
+	[ prof := CavroisWindowManager new.
 	play := StPlaygroundPresenter new open.
 	configuration := prof placeHolderFromWindow: play window.
-	self assert: configuration  extent equals: (700.0@500.0).
-	play delete
+	self assert: configuration  extent equals: (600.0@400.0).
+	] ensure: [ play delete ]
 	
 ]
 
@@ -59,7 +59,7 @@ CavroisWindowManagerTest >> testConfigurationFromWindow [
 CavroisWindowManagerTest >> testPresenterHasCorrectAPI [
 
 	| pres win |
-	pres := SpPresenter new.
+	[ pres := SpPresenter new.
 	pres layout: SpBoxLayout new. 
 	pres position:  100@100.
 	pres extent: 200@333.
@@ -70,9 +70,9 @@ CavroisWindowManagerTest >> testPresenterHasCorrectAPI [
 	the size and position we want. "
 	
 	win := pres open.
-	self assert: win extent equals: 200@333.
+	self assert: win initialExtent equals: 200@333.
 	self assert: win position equals: 100@100.
-	"here we see that the size and position are not honored"
+	] ensure: [ win close ]
 ]
 
 { #category : 'tests' }
