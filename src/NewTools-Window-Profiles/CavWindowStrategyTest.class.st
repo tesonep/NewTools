@@ -27,25 +27,98 @@ CavWindowStrategyTest >> setUp [
 ]
 
 { #category : 'tests' }
+CavWindowStrategyTest >> testCascadingtrategyDoesNotChangeExtentAndPosition [
+
+	| strategy |
+	
+	"In setUp
+	placeHolder := (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
+	"
+	
+	strategy := CavStackingStrategy new.
+	strategy placeHolder: placeHolder.
+	strategy placePresenter: presenter.
+	
+	self assert: presenter extent equals: 100@200.
+	self assert: presenter position equals: (101@101) + (20@20).
+	
+	strategy placePresenter: presenter.
+	self assert: presenter extent equals: (100@200).
+	self assert: presenter position equals: (101@101) + (40@40).
+	
+	
+	
+
+	
+	
+	
+	
+]
+
+{ #category : 'tests' }
+CavWindowStrategyTest >> testExactReplaceStrategyDoesNotChangeExtentAndPosition [
+
+	| strategy |
+	
+	"In setUp
+	placeHolder := (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
+	"
+	
+	strategy := CavExactOnTopStrategy new.
+	strategy placeHolder: placeHolder.
+	strategy placePresenter: presenter.
+	
+	self assert: presenter extent equals: 100@200.
+	self assert: presenter position equals: 101@101
+	
+	"we cannot test that if there was one window with the same presenter it got removed."
+	
+
+	
+
+	
+	
+	
+	
+]
+
+{ #category : 'tests' }
 CavWindowStrategyTest >> testNullStrategyDoesNotChangeExtentAndPosition [
 
-
-	| presenterClass presenter strategy |
-	presenterClass := SpPresenter newAnonymousSubclass.
-	presenterClass compile: 'defaultLayout ^ SpGridLayout new'.
-	presenterClass compile: 'initializePresenters self layout: SpBoxLayout newLeftToRight'.
-	presenterClass class compile: 'defaultPreferredExtent ^ 666@42'.
-	presenterClass compile: 'position ^ 10@10'.
-	presenter := presenterClass new.
-	self assert: presenter preferredExtent equals: 666@42.
-	self assert: presenter position equals: 10@10.
-	
-	strategy := CavNullStrategy new.
-	strategy placeHolder: (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
+	| strategy |
+	[ strategy := CavNullStrategy new.
+	strategy placeHolder: placeHolder.
 	strategy placePresenter: presenter.
-	 
-	self assert: presenter preferredExtent equals: 666@42.
-	self assert: presenter position equals: 10@10.
+	presenter open. 
+	self assert: presenter extent equals: 666@42.
+	self assert: presenter position equals: 10@10.] ensure: [ presenter delete ] 
+
+	
+	
+	
+	
+]
+
+{ #category : 'tests' }
+CavWindowStrategyTest >> testPopUpReplaceStrategyDoesNotChangeExtentAndPosition [
+
+	| strategy |
+	
+	"In setUp
+	placeHolder := (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
+	"
+	
+	strategy := CavReplaceStrategy new.
+	strategy placeHolder: placeHolder.
+	strategy placePresenter: presenter.
+	
+	self assert: presenter extent equals: 100@200.
+	self assert: presenter position equals: 101@101
+	
+	"we do not test that if there was one window with the same presenter, the new one did not get 
+	created at all but an old one is put on top."
+	
+
 	
 
 	
