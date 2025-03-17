@@ -2,7 +2,6 @@ Class {
 	#name : 'CavWindowStrategyTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'presenterClass',
 		'presenter',
 		'placeHolder'
 	],
@@ -11,10 +10,10 @@ Class {
 	#tag : 'Tests'
 }
 
-{ #category : 'tests' }
+{ #category : 'running' }
 CavWindowStrategyTest >> setUp [
 
-
+	super setUp.
 	presenter := SpPresenterForTestingCavrois new.
 	presenter position: 10@10.
 	self assert: presenter preferredExtent equals: 666@42.

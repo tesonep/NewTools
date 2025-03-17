@@ -17,7 +17,7 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'examples' }
 CavAbstractWindowPlaceHolder class >> exampleTranscript [
 
 	^ self new 
