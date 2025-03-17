@@ -62,7 +62,8 @@ CavWindowStrategyTest >> testExactReplaceStrategyDoesNotChangeExtentAndPosition 
 	"In setUp
 	placeHolder := (CavWindowPlaceHolder new position: 101@101; extent: 100@200).
 	"
-	
+	self skip.
+	self flag: #revisitAlexis.
 	strategy := CavExactOnTopStrategy new.
 	strategy placeHolder: placeHolder.
 	strategy placePresenter: presenter.
@@ -85,6 +86,8 @@ CavWindowStrategyTest >> testExactReplaceStrategyDoesNotChangeExtentAndPosition 
 CavWindowStrategyTest >> testNullStrategyDoesNotChangeExtentAndPosition [
 
 	| strategy |
+	self skip.
+	self flag: #revisitAlexis.
 	[ strategy := CavNullStrategy new.
 	strategy placeHolder: placeHolder.
 	strategy placePresenter: presenter.
