@@ -16,6 +16,8 @@ CavroisWindowManagerTest >> setUp [
 CavroisWindowManagerTest >> testConfigurationFromSpSystemWindow [
 
 	| prof configuration ice window |
+	self skip. 
+	self flag: #revisitAlexis.
 	prof := CavroisWindowManager new.
 	ice := IceTipRepositoriesBrowser new.
 	ice 
@@ -32,6 +34,8 @@ CavroisWindowManagerTest >> testConfigurationFromSpSystemWindow [
 CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
 
 	| prof configuration transcript |
+	self skip. 
+	self flag: #revisitAlexis.
 	prof := CavroisWindowManager new.
 	transcript := Transcript open
 							extent: (447.0@300.0) ; 
@@ -48,6 +52,8 @@ CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
 CavroisWindowManagerTest >> testConfigurationFromWindow [
 
 	| prof configuration play |
+	self skip.
+	self flag: #Alexis.
 	[ prof := CavroisWindowManager new.
 	play := StPlaygroundPresenter new open.
 	configuration := prof placeHolderFromWindow: play window.

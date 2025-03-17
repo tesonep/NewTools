@@ -166,6 +166,7 @@ CavroisWindowManager class >> profileMenu: aBuilder [
     <worldMenu>
     (aBuilder item: #Profiles)
         order: 95;
+				help: 'Profiles lets you define places where your windows will be automatically be placed.';
         with: [
             (aBuilder group: #UserProfiles)
                 order: 1;
