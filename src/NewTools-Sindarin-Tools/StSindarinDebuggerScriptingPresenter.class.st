@@ -49,7 +49,7 @@ StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 { #category : 'debugger extension' }
 StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 
-	^ 'Sindarin'
+	^ 'Scripts'
 ]
 
 { #category : 'actions' }
