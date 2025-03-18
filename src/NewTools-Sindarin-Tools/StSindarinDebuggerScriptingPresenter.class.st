@@ -142,8 +142,13 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> updateCode [
-	code beForContext: self debuggerActionModel interruptedContext.
-	code interactionModel addBinding: (WorkspaceVariable key: #sindarin value: self sindarin)
+
+	| interactionModel |
+	interactionModel := StSindarinContextInteractionModel on:
+		                    self debuggerActionModel interruptedContext.
+	interactionModel addBinding:
+		(WorkspaceVariable key: #sindarin value: self sindarin).
+	code interactionModel: interactionModel
 ]
 
 { #category : 'initialization' }
