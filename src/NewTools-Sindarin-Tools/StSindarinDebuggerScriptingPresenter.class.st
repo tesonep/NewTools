@@ -80,11 +80,8 @@ StSindarinDebuggerScriptingPresenter >> executeScript [
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	code := self newCode.
-	code interactionModel: StSindarinContextInteractionModel new.
 	code syntaxHighlight: true.
-	"code contextMenu: [  ]."
 	code text: 'sindarin stepOver'.
-	self updateCode.
 	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
 	self flag: 'set the doit conetxt of the code to the current selected context'.
 	resultInspection := nil inspectionRaw.
@@ -145,14 +142,13 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> updateCode [
-	code interactionModel context: self debugger currentContext.
-	code interactionModel bindings
-		at: #sindarin
-		put: (WorkspaceVariable key: #sindarin value: self sindarin)
+	code beForContext: self debuggerActionModel interruptedContext.
+	code interactionModel addBinding: (WorkspaceVariable key: #sindarin value: self sindarin)
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptingPresenter >> updatePresenter [ 	
+StSindarinDebuggerScriptingPresenter >> updatePresenter [
+
 	self updateCode.
-	super updatePresenter 
+	super updatePresenter
 ]
