@@ -11,6 +11,12 @@ Class {
 	#package : 'NewTools-Sindarin-Tools'
 }
 
+{ #category : 'accessing' }
+StSindarinDebuggerPresenter class >> currentApplication [
+
+	^ StPharoApplication current
+]
+
 { #category : 'layout' }
 StSindarinDebuggerPresenter class >> defaultLayout [
 
