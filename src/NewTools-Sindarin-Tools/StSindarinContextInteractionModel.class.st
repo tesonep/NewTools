@@ -16,3 +16,8 @@ StSindarinContextInteractionModel >> bindingOf: aString [
 		  associationAt: aString
 		  ifAbsent: [ super bindingOf: aString ]
 ]
+
+{ #category : 'binding' }
+StSindarinContextInteractionModel >> isScripting [
+	^true
+]
