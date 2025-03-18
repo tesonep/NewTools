@@ -46,6 +46,11 @@ StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
 	self flag: 'todo'
 ]
 
+{ #category : 'accessing' }
+StSindarinDebuggerScriptingPresenter >> debuggerActionModel [
+	^self debugger debuggerActionModel
+]
+
 { #category : 'debugger extension' }
 StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 
@@ -56,7 +61,7 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 StSindarinDebuggerScriptingPresenter >> executeScript [
 
 	| stream result model receiver evaluationContext |
-	self debuggerPresenter debuggerActionModel preventUpdatesDuring: [ 
+	self debuggerActionModel preventUpdatesDuring: [ 
 		stream := code text readStream.
 		model := code interactionModel.
 		receiver := model context receiver.
