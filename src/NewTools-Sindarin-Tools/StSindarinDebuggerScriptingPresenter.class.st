@@ -16,25 +16,14 @@ Class {
 		'code',
 		'resultInspection',
 		'toolbar',
-		'sindarinDebugger'
+		'sindarinDebugger',
+		'resultLabel',
+		'hasUnsavedCodeChanges'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
 	#tag : 'Presenters'
 }
-
-{ #category : 'layout' }
-StSindarinDebuggerScriptingPresenter class >> defaultLayout [
-	^ SpBoxLayout newTopToBottom
-		add: #toolbar expand: false;
-		add: #code;
-		add: 'Result (right click to see more...)' 
-			expand: false 
-			fill: false 
-			padding: 5;
-		add: #resultInspection;
-		yourself
-]
 
 { #category : 'visiting' }
 StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
@@ -58,6 +47,19 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 	^ 'Scripts'
 ]
 
+{ #category : 'layout' }
+StSindarinDebuggerScriptingPresenter >> defaultLayout [
+	^ SpBoxLayout newTopToBottom
+		add: #toolbar expand: false;
+		add: #code;
+		add: #resultLabel 
+			expand: false 
+			fill: false 
+			padding: 5;
+		add: #resultInspection;
+		yourself
+]
+
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> executeScript [
 
@@ -78,16 +80,26 @@ StSindarinDebuggerScriptingPresenter >> executeScript [
 		resultInspection update ]
 ]
 
+{ #category : 'accessing' }
+StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
+
+	^ hasUnsavedCodeChanges ifNil: [ hasUnsavedCodeChanges := false ]
+]
+
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
+
+	resultLabel := self newLabel.
 	code := self newCode.
 	code syntaxHighlight: true.
 	code text: 'sindarin stepOver'.
-	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
-	self flag: 'set the doit conetxt of the code to the current selected context'.
+	code whenTextChangedDo: [
+		hasUnsavedCodeChanges := true.
+		self updateLabel ].
 	resultInspection := nil inspectionRaw.
 	resultInspection owner: self.
-	self initializeToolbar
+	self initializeToolbar.
+	self updateLabel
 ]
 
 { #category : 'initialization' }
@@ -111,7 +123,9 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
-	self flag: 'todo'
+	self flag: 'todo'.
+	hasUnsavedCodeChanges := false.
+	self updateLabel 
 ]
 
 { #category : 'accessing' }
@@ -150,6 +164,18 @@ StSindarinDebuggerScriptingPresenter >> updateCode [
 	interactionModel addBinding:
 		(WorkspaceVariable key: #sindarin value: self sindarin).
 	code interactionModel: interactionModel
+]
+
+{ #category : 'updating' }
+StSindarinDebuggerScriptingPresenter >> updateLabel [
+
+	self hasUnsavedCodeChanges ifTrue: [
+		resultLabel label: '*unsaved script'.
+		resultLabel addStyle: 'headerError'.
+		^ self ].
+	resultLabel label: 'Execute script to see results'.
+	resultLabel addStyle: 'header'.
+	resultLabel removeStyle: 'headerError'
 ]
 
 { #category : 'initialization' }
