@@ -67,3 +67,9 @@ CavWindowProfile >> placeHoldersFor: aString [
 			   kind: 'Unrecorded';
 			   yourself) } ]
 ]
+
+{ #category : 'initialization' }
+CavWindowProfile >> reset [
+
+	placeHolderDictionary := Dictionary new
+]
