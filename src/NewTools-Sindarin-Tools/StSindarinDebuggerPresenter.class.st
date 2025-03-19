@@ -7,8 +7,9 @@ Class {
 		'inspector',
 		'toolbar'
 	],
-	#category : 'NewTools-Sindarin-Tools',
-	#package : 'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools-Presenters',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Presenters'
 }
 
 { #category : 'layout' }
