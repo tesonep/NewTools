@@ -163,19 +163,22 @@ CavroisWindowManager class >> loadProfile [
 { #category : 'menu' }
 CavroisWindowManager class >> profileMenu: aBuilder [
 
-    <worldMenu>
-    (aBuilder item: #Profiles)
-        order: 95;
-				help: 'Profiles lets you define places where your windows will be automatically be placed.';
-        with: [
-            (aBuilder group: #UserProfiles)
-                order: 1;
-                withSeparatorAfter.
-            (aBuilder group: #ProfileAction)
-                order: 2;
-                withSeparatorAfter.
-            (aBuilder group: #ImportExport)
-                order: 3. ]
+	<worldMenu>
+	(aBuilder item: #Profiles)
+		order: 95;
+		help: 'Profiles lets you define places where your windows will be automatically be placed.';
+		with: [
+			(aBuilder group: #UserProfiles)
+				order: 1;
+				help: 'Group the user profiles.';
+				withSeparatorAfter.
+			(aBuilder group: #ProfileAction)
+				order: 2;
+				help: 'Group the actions for the user profiles.';
+				withSeparatorAfter.
+			(aBuilder group: #ImportExport)
+				order: 3;
+				help: 'Actions of import/export of profiles.' ]
 ]
 
 { #category : 'menu items' }
