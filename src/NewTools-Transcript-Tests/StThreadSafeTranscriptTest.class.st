@@ -1,12 +1,12 @@
 Class {
-	#name : 'NewThreadSafeTranscriptTest',
+	#name : 'StThreadSafeTranscriptTest',
 	#superclass : 'TestCase',
 	#category : 'NewTools-Transcript-Tests',
 	#package : 'NewTools-Transcript-Tests'
 }
 
 { #category : 'tests' }
-NewThreadSafeTranscriptTest >> testNextPut [
+StThreadSafeTranscriptTest >> testNextPut [
 
 	| t |
 	t := StThreadSafeTranscript new.
@@ -19,7 +19,7 @@ tintin'
 ]
 
 { #category : 'tests' }
-NewThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
+StThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 
 	| t |
 	t := StThreadSafeTranscript new.
@@ -29,7 +29,7 @@ NewThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 ]
 
 { #category : 'tests' }
-NewThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
+StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 
 	| t |
 	t := StThreadSafeTranscript new.
@@ -39,7 +39,7 @@ NewThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 ]
 
 { #category : 'tests' }
-NewThreadSafeTranscriptTest >> testShow [
+StThreadSafeTranscriptTest >> testShow [
 
 	| t |
 	t := StThreadSafeTranscript new.
@@ -48,7 +48,7 @@ NewThreadSafeTranscriptTest >> testShow [
 ]
 
 { #category : 'tests' }
-NewThreadSafeTranscriptTest >> testShowAndClear [
+StThreadSafeTranscriptTest >> testShowAndClear [
 
 	| t |
 	t := StThreadSafeTranscript new.
