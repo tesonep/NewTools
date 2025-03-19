@@ -2,8 +2,7 @@ Class {
 	#name : 'StSindarinContextInteractionModelTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'sindarin',
-		'debugger'
+		'sindarin'
 	],
 	#category : 'NewTools-Sindarin-Tools-Tests',
 	#package : 'NewTools-Sindarin-Tools',
