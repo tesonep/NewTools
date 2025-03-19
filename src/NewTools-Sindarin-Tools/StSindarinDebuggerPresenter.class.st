@@ -1,6 +1,6 @@
 Class {
 	#name : 'StSindarinDebuggerPresenter',
-	#superclass : 'StInspectionPresenter',
+	#superclass : 'StPresenterWithModel',
 	#instVars : [
 		'currentNodeSource',
 		'stack',
@@ -10,12 +10,6 @@ Class {
 	#category : 'NewTools-Sindarin-Tools',
 	#package : 'NewTools-Sindarin-Tools'
 }
-
-{ #category : 'accessing' }
-StSindarinDebuggerPresenter class >> currentApplication [
-
-	^ StPharoApplication current
-]
 
 { #category : 'layout' }
 StSindarinDebuggerPresenter class >> defaultLayout [
