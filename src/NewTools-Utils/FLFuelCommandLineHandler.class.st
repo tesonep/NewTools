@@ -61,7 +61,6 @@ FLFuelCommandLineHandler class >> isResponsibleFor: aCommandLine [
 FLFuelCommandLineHandler >> activate [
 	self manageFiles.
 	(self commandLine hasOption: 'save') ifTrue: [
-		ThreadSafeTranscript install.
 		SessionManager default addDeferredStartupAction: [
 			Smalltalk snapshot: true andQuit: true.
 			NonInteractiveTranscript new install ] ].
