@@ -66,14 +66,14 @@ CavroisWindowManager class >> addProfileImportExportItems: aBuilder [
 ]
 
 { #category : 'adding' }
-CavroisWindowManager class >> addProfileSnapshotItem: aBuilder [
+CavroisWindowManager class >> addProfileItem: aBuilder [
 
-	(aBuilder item: #'Snapshot Profile')
+	(aBuilder item: #'New Profile')
 		parent: #ProfileAction;
 		order: 3;
-		action: [ self createProfileSnapshot ];
+		action: [ self createProfile ];
 		help: 'Creates a local profile based on your image';
-		iconName: #save
+		iconName: #add
 ]
 
 { #category : 'adding' }
@@ -100,7 +100,7 @@ CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 ]
 
 { #category : 'instance creation' }
-CavroisWindowManager class >> createProfileSnapshot [
+CavroisWindowManager class >> createProfile [
 
 	| presenter |
 	presenter := SpRequestDialog new
@@ -110,7 +110,7 @@ CavroisWindowManager class >> createProfileSnapshot [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
-			             self updateCurrentProfileBeforeSnapshot.
+			             self updateCurrentProfileBeforeCreation.
 			             self current addProfileFromWindows:
 					             dialog presenter text , ' (Current)'.
 			             MenubarMorph reset ];
@@ -184,7 +184,8 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 	<worldMenu>
 	self
 		addProfileSwitchingItems: aBuilder;
-		addProfileSnapshotItem: aBuilder;
+		addProfileItem: aBuilder;
+		updateProfileItem: aBuilder;
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
 		resetWindowsToCurrentProfile: aBuilder;
@@ -286,7 +287,7 @@ CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileK
 ]
 
 { #category : 'updating' }
-CavroisWindowManager class >> updateCurrentProfileBeforeSnapshot [
+CavroisWindowManager class >> updateCurrentProfileBeforeCreation [
 
 	| oldProfile oldKey newKey |
 	self current currentProfile ifNotNil: [
@@ -299,24 +300,48 @@ CavroisWindowManager class >> updateCurrentProfileBeforeSnapshot [
 			removeKey: oldKey ]
 ]
 
+{ #category : 'updating' }
+CavroisWindowManager class >> updateProfile [
+
+	self current updateProfile
+]
+
+{ #category : 'updating' }
+CavroisWindowManager class >> updateProfileItem: aBuilder [
+
+	(aBuilder item: #'Update current profile')
+		parent: #ProfileAction;
+		order: 3;
+		action: [
+			self current currentProfile
+				ifNil: [ self inform: 'No profile has been created yet' ]
+				ifNotNil: [
+					self updateProfile.
+					self inform: 'Profile has been updated' ] ];
+		help:
+			'Allows you to register new window(s) in profile or to modify previous ones';
+		iconName: #save
+]
+
 { #category : 'recording' }
 CavroisWindowManager >> addProfileFromWindows: aProfileName [
 	"self new profileFromWindows"
 
-	| profile allWindows |
-	5 timesRepeat: [ Smalltalk garbageCollect ].
-
+	| profile |
 	profile := CavWindowProfile new named: aProfileName.
-	allWindows := self currentWorld windowsSatisfying: [ :w |
-		              w isCollapsed not and:
-			              (w isKindOf: SpDialogWindowMorph) not ].
-
-
-	allWindows do: [ :each |
+	self allCurrentWindows do: [ :each |
 		profile add: (self placeHolderFromWindow: each) ].
 	profiles at: profile name put: profile.
 	self currentProfile: profile.
 	^ profile
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> allCurrentWindows [
+
+	5 timesRepeat: [ Smalltalk garbageCollect ].
+	^ self currentWorld windowsSatisfying: [ :w |
+		  w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not ]
 ]
 
 { #category : 'accessing' }
@@ -417,4 +442,12 @@ CavroisWindowManager >> transitionToProfile [
 				 w model presenter class = placeHolder kind) ifTrue: [
 				w position: placeHolder position.
 				w extent: placeHolder extent ] ] ]
+]
+
+{ #category : 'updating' }
+CavroisWindowManager >> updateProfile [
+
+	self currentProfile reset.
+	self allCurrentWindows do: [ :each |
+		self currentProfile add: (self placeHolderFromWindow: each) ]
 ]
