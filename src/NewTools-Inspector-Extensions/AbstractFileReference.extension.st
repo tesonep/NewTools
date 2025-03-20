@@ -1,18 +1,6 @@
 Extension { #name : 'AbstractFileReference' }
 
-{ #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionCompressedItems: aBuilder [
-	<inspectorPresentationOrder: 0 title: 'Compressed Items'>
-	| items children root |
-
-	root := (FileSystem zip: self) open workingDirectory.
-	children := root directories, root files.
-	items := self isRoot 
-		ifTrue: [ children ]
-		ifFalse: [ 
-			children asOrderedCollection 
-				addFirst: self parent;
-				yourself ].
 
 	^ aBuilder newTable
 		items: items;
@@ -46,32 +34,57 @@ AbstractFileReference >> inspectionCompressedItemsContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionContents: aBuilder [
-	<inspectorPresentationOrder: 0 title: 'Contents'> 
-	| maxBytes buffer atEnd stringContents displayStream displayString |
-	
-	maxBytes := 10000.
-	
-	self binaryReadStreamDo: [ :stream | 
-		buffer := stream next: maxBytes.
-		atEnd := stream atEnd ].
-				
-	displayString := [ 
-			stringContents := ZnCharacterEncoder utf8 decodeBytes: buffer.
-			atEnd 
-				ifTrue: [ stringContents ]
-				ifFalse: [ stringContents, '  ... truncated ...' ] ]
-		on: Error 
-		do: [ 
-			displayStream := (String new: maxBytes * 5) writeStream.
-			buffer hexDumpOn: displayStream max: maxBytes.
-			displayString := displayStream contents ].
-	
-	^ aBuilder newCode
-		withoutSyntaxHighlight;
-		text: displayString;
-		whenSubmitDo: [ :text | 
-			self writeStreamDo: [ :s | s nextPutAll: text string ] ];
-		yourself
+    <inspectorPresentationOrder: 0 title: 'Contents'> 
+    | maxBytes buffer atEnd stringContents displayStream displayString contentPresenter toolbarPresenter |
+     
+    maxBytes := 10000.
+    
+    self binaryReadStreamDo: [ :stream | 
+        buffer := stream next: maxBytes.
+        atEnd := stream atEnd ].
+                
+    displayString := [ 
+            stringContents := ZnCharacterEncoder utf8 decodeBytes: buffer.
+            atEnd 
+                ifTrue: [ stringContents ]
+                ifFalse: [ stringContents, '  ... truncated ...' ] ]
+        on: Error 
+        do: [ 
+            displayStream := (String new: maxBytes * 5) writeStream.
+            buffer hexDumpOn: displayStream max: maxBytes.
+            displayString := displayStream contents ].
+    
+    contentPresenter := aBuilder newCode
+        withoutSyntaxHighlight;
+        text: displayString;
+        whenSubmitDo: [ :text | 
+            self 
+                ensureDelete;
+                writeStreamDo: [ :s | s nextPutAll: text asString ] ];
+        yourself.
+        
+    toolbarPresenter := aBuilder newToolbar.
+    toolbarPresenter displayMode: aBuilder application toolbarDisplayMode.
+    toolbarPresenter add: (toolbarPresenter newToolbarButton 
+        icon: (aBuilder application iconNamed: #smallSave);
+        label: 'Save contents';
+        help: 'Save contents of file';
+        action: [ 
+            self 
+                ensureDelete;
+                writeStreamDo: [ :s | s nextPutAll: contentPresenter text asString ] ];
+        yourself).
+        
+    ^ aBuilder newPresenter
+        layout: (SpBoxLayout newTopToBottom 
+            add: (SpBoxLayout newLeftToRight 
+                    hAlignEnd;
+                    add: toolbarPresenter;
+                    yourself) 
+                expand: false;
+            add: contentPresenter;
+            yourself);
+        yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
@@ -103,12 +116,6 @@ AbstractFileReference >> inspectionGifContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItems: aBuilder [
-	<inspectorPresentationOrder: 0 title: 'Items'>
-	| items |
-	
-	items := 	self directories, self files.
-	self isRoot ifFalse: [ 
-		items := items copyWithFirst: self parent ]. 
 
 	^  aBuilder newTable 
 		beResizable;

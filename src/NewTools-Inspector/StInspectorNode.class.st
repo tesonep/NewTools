@@ -42,6 +42,12 @@ StInspectorNode >> asInspectorModel [
 	^ StInspectorModel on: self rawValue
 ]
 
+{ #category : 'testing' }
+StInspectorNode >> canSave [
+
+	^ false
+]
+
 { #category : 'accessing' }
 StInspectorNode >> children [ 
 	

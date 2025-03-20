@@ -16,6 +16,12 @@ Class {
 	#tag : 'ExpressionFinder'
 }
 
+{ #category : 'accessing' }
+StRewriterExpressionFinderPresenter class >> defaultPreferredExtent [ 
+
+	^ 600 @ 330
+]
+
 { #category : 'world menu' }
 StRewriterExpressionFinderPresenter class >> descriptionText [
 
@@ -44,12 +50,6 @@ StRewriterExpressionFinderPresenter class >> menuCommandOn: aBuilder [
 		parent: #Tools;
 		iconName: self iconName;
 		help: self descriptionText
-]
-
-{ #category : 'specs' }
-StRewriterExpressionFinderPresenter class >> title [
-
-	^ 'Expression Finder'
 ]
 
 { #category : 'initialization' }
@@ -92,10 +92,8 @@ StRewriterExpressionFinderPresenter >> initializePresenters [
 { #category : 'initialization' }
 StRewriterExpressionFinderPresenter >> initializeWindow: aWindowPresenter [
 
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self class title;
-		initialExtent: 600 @ 330;
-		windowIcon: self class icon;
 		askOkToClose: false
 ]
 
@@ -129,4 +127,16 @@ StRewriterExpressionFinderPresenter >> searchExpressionOnAllClasses [
 		ruleHolder := StRewriterRuleHolder lhs: patternCodePresenter lhs rhs: ''.
 		critiques := StRewriterRenrakuApplier obtainCritiquesOf: methods forRules: { ruleHolder }.
 		(StRewriterOccurrencesBrowserPresenter critiques: critiques) open ]
+]
+
+{ #category : 'accessing' }
+StRewriterExpressionFinderPresenter >> windowIcon [ 
+
+	^ self iconNamed: self class iconName
+]
+
+{ #category : 'accessing' }
+StRewriterExpressionFinderPresenter >> windowTitle [
+
+	^ 'Expression Finder'
 ]

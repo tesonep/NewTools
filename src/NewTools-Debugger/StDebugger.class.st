@@ -198,6 +198,13 @@ StDebugger class >> defaultDebuggerRank [
 ]
 
 { #category : 'accessing' }
+StDebugger class >> defaultPreferredExtent [
+
+	^ (850 @ 650)
+
+]
+
+{ #category : 'accessing' }
 StDebugger class >> enableStackColoring [
 
 	^ EnableStackColoring
@@ -634,7 +641,7 @@ StDebugger >> doBrowseMethodVersions [
 	| target |
 	target := self stackSelectionMethodContext.
 	target isBlock ifTrue: [ target := target method ].
-	self application versionBrowser
+	(self application toolNamed: #versionBrowser)
 		browseVersionsForClass: target methodClass
 		selector: target selector
 ]
@@ -733,20 +740,14 @@ StDebugger >> implementMissingMethod [
 	"code takeKeyboardFocus"
 ]
 
-{ #category : 'api' }
-StDebugger >> initialExtent [
-
-	^ self settings defaultExtent 
-]
-
 { #category : 'initialization' }
 StDebugger >> initialize [
 
 	super initialize.
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
-  	self susbcribeToExtensionToggleAnnouncement.
-	self susbcribeToLayoutChangesAnnouncement.
+  	self subscribeToExtensionToggleAnnouncement.
+	self subscribeToLayoutChangesAnnouncement.
 	
 	programmaticallyClosed := false.
 ]
@@ -870,10 +871,7 @@ StDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self debuggerActionModel statusStringForContext;
-		initialExtent: self settings lastKnownExtent;
 		initialPosition: self settings lastKnownPosition;
-		windowIcon: (self iconNamed: #smallDebug);
 		whenClosedDo: [ self clear ].
 
 	self settings initializeWindow: aWindowPresenter.
@@ -1303,13 +1301,13 @@ StDebugger >> subscribeToActionModel [
 ]
 
 { #category : 'subscription' }
-StDebugger >> susbcribeToExtensionToggleAnnouncement [
+StDebugger >> subscribeToExtensionToggleAnnouncement [
 
 	self class codeSupportAnnouncer weak when: StDebuggerExtensionActivationToggle send: #updateExtensionsFromAnnouncement: to: self
 ]
 
 { #category : 'subscription' }
-StDebugger >> susbcribeToLayoutChangesAnnouncement [
+StDebugger >> subscribeToLayoutChangesAnnouncement [
 
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
@@ -1543,4 +1541,17 @@ StDebugger >> warning: aString for: aPresenter [
 						  yourself);
 				 yourself);
 		popup
+]
+
+{ #category : 'initialization' }
+StDebugger >> windowIcon [
+		
+	^ self iconNamed: #smallDebug
+		
+]
+
+{ #category : 'initialization' }
+StDebugger >> windowTitle [
+
+	^  self debuggerActionModel statusStringForContext
 ]

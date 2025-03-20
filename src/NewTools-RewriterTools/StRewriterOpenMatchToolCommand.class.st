@@ -32,8 +32,9 @@ StRewriterOpenMatchToolCommand class >> defaultName [
 { #category : 'executing' }
 StRewriterOpenMatchToolCommand >> execute [
 
-	^ StRewriterMatchToolPresenter new
-		  patternCode: self context lhs;
-		  pharoCode: '';
-		  open
+	^ (StRewriterMatchToolPresenter 
+			newApplication: self application)
+			patternCode: self context lhs;
+			pharoCode: '';
+			open
 ]

@@ -20,9 +20,6 @@ Class {
 	#classVars : [
 		'UsingLayout'
 	],
-	#classInstVars : [
-		'preferredExtent'
-	],
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
 	#tag : 'Senders'
@@ -94,12 +91,6 @@ StMessageBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: aSymbol senders asSendersOf: aSymbol
 ]
 
-{ #category : 'accessing' }
-StMessageBrowser class >> defaultPreferredExtent [
-
-	^ 900@600
-]
-
 { #category : 'instance creation - old' }
 StMessageBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
@@ -117,23 +108,11 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 
 ]
 
-{ #category : 'accessing' }
-StMessageBrowser class >> preferredExtent [
-
-	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
-]
-
-{ #category : 'accessing' }
-StMessageBrowser class >> preferredExtent: aPoint [
-
-	preferredExtent := aPoint
-]
-
 { #category : 'tool registration' }
 StMessageBrowser class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
-	registry register: self as: #messageList
+	"registry register: self as: #messageList"
 ]
 
 { #category : 'icons' }
@@ -141,12 +120,6 @@ StMessageBrowser class >> taskbarIconName [
 	"Answer the icon for an instance of the receiver in a task bar"
 
 	^#references
-]
-
-{ #category : 'specs' }
-StMessageBrowser class >> title [
-
-	^ 'Message Browser'
 ]
 
 { #category : 'private' }
@@ -385,17 +358,6 @@ StMessageBrowser >> initializePresenters [
 	self initializeDropList
 ]
 
-{ #category : 'initialization' }
-StMessageBrowser >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		title: self title;
-		initialExtent: self class preferredExtent;
-		windowIcon: (self iconNamed: self class taskbarIconName);
-		whenResizingDo: [ :ann | self class preferredExtent: ann newSize ]
-]
-
 { #category : 'private' }
 StMessageBrowser >> installIconStylerFor: anItem [
 	"icons styler are only supported for method definitions (not nil / not for comment definitions    
@@ -601,12 +563,6 @@ StMessageBrowser >> textConverter: aTextConverter [
 	textPresenter text: self textConverter getText.
 ]
 
-{ #category : 'private' }
-StMessageBrowser >> title [
-
-	^ (title ifNil: [ self class title ]), ' [' , messageList numberOfElements printString , ']'
-]
-
 { #category : 'accessing' }
 StMessageBrowser >> title: aString [
 
@@ -654,8 +610,21 @@ StMessageBrowser >> whenSelectedItemChanged: aBlock [
 	messageList whenSelectedItemChanged: aBlock 
 ]
 
+{ #category : 'initialization' }
+StMessageBrowser >> windowIcon [
+
+	^ self iconNamed: self class taskbarIconName
+		
+]
+
 { #category : 'private' }
 StMessageBrowser >> windowIsClosing [
 
 	self class codeChangeAnnouncer unsubscribe: self
+]
+
+{ #category : 'private' }
+StMessageBrowser >> windowTitle [
+
+	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
 ]

@@ -79,18 +79,12 @@ StPlaygroundPresenter class >> defaultExtent [
 	^ (600@400)
 ]
 
-{ #category : 'accessing' }
-StPlaygroundPresenter class >> defaultTitle [ 
-
-	^ 'Playground'
-]
-
 { #category : 'world menu' }
 StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Playground)
 		parent: #InputOutput;
-		action: [ self currentApplication tools workspace open ];
+		action: [ (self currentApplication toolNamed: #workspace) open ];
 		order: 1;
 		keyText: 'o, p';
 		help: 'A window used as a scratchpad area where fragments of Pharo code can be entered, stored, edited, and evaluated.';
@@ -101,7 +95,7 @@ StPlaygroundPresenter class >> menuCommandOn: aBuilder [
 StPlaygroundPresenter class >> open [
 	<script>
 	
-	^ self new open
+	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'instance creation' }
@@ -200,11 +194,11 @@ StPlaygroundPresenter >> stopProcessing [
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowIcon [
 	
-	^ self application iconNamed: #workspace
+	^ self iconNamed: #workspace
 ]
 
 { #category : 'initialization' }
 StPlaygroundPresenter >> windowTitle [
 
-	^ self class defaultTitle
+	^ 'Playground'
 ]

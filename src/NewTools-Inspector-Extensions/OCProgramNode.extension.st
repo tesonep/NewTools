@@ -13,7 +13,7 @@ OCProgramNode >> inspectionAST: aBuilder [
 					stream
 						nextPutAll: each class name;
 						nextPut: $(;
-						nextPutAll: ((each formattedCode truncateTo: 50) copyReplaceAll: String cr with: String space);
+						nextPutAll: ((each sourceCode truncateTo: 50) copyReplaceAll: String cr with: String space);
 						nextPut: $)
 			 ] ];
 		yourself

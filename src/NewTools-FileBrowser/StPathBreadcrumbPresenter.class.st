@@ -134,8 +134,10 @@ StPathBreadcrumbPresenter >> pathTextChangedTo: aStringOrText [
 { #category : 'callbacks' }
 StPathBreadcrumbPresenter >> updatePathSelection: fileReference [
 	"Private - Receiver's path has changed, update owner's presenters. Prevent recursive updating because path selection could be triggered from file table or file tree presenters"
-	
-	self owner model currentDirectory = fileReference
-		ifFalse: [ self owner openFolder: fileReference ].
-	self owner nameText: fileReference basename.
+
+	self owner model currentDirectory = fileReference ifFalse: [
+		self owner openFolder: fileReference ].
+
+	fileReference isDirectory ifFalse: [
+		self owner nameText: fileReference basename ]
 ]

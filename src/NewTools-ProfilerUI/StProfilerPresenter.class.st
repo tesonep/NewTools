@@ -15,6 +15,11 @@ Class {
 }
 
 { #category : 'examples' }
+StProfilerPresenter class >> defaultPreferredExtent [ 
+	^ 800 @ 800
+]
+
+{ #category : 'examples' }
 StProfilerPresenter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #'Profiler')
@@ -29,7 +34,7 @@ StProfilerPresenter class >> menuCommandOn: aBuilder [
 StProfilerPresenter class >> open [
 
 	<example>
-	^ self new open
+	^ (self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'spying' }
@@ -66,11 +71,6 @@ StProfilerPresenter >> disableInputPresenter [
 	inputPresenter enabled: false
 ]
 
-{ #category : 'constants' }
-StProfilerPresenter >> initExtent [
-	^ 800 @ 800
-]
-
 { #category : 'private - factory' }
 StProfilerPresenter >> initializeInputPresenter [
 
@@ -94,9 +94,9 @@ StProfilerPresenter >> initializeResultsPresenter [
 
 { #category : 'initialization' }
 StProfilerPresenter >> initializeWindow: aWindowPresenter [
+	
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		title: self presenterTitle;
-		initialExtent: self initExtent;
 		whenOpenedDo: [ self subscribe ];
 		whenClosedDo: [ self unsubscribe ]
 ]
@@ -105,11 +105,6 @@ StProfilerPresenter >> initializeWindow: aWindowPresenter [
 StProfilerPresenter >> newInputPresenter [
 
 	^ StProfilerInputPresenter on: self viewModel
-]
-
-{ #category : 'constants' }
-StProfilerPresenter >> presenterTitle [
-	^ 'Profiler'
 ]
 
 { #category : 'actions' }
@@ -161,4 +156,9 @@ StProfilerPresenter >> unsubscribe [
 StProfilerPresenter >> viewModel [
 
 	^ viewModel ifNil: [ viewModel := StProfilerModel new ]
+]
+
+{ #category : 'constants' }
+StProfilerPresenter >> windowTitle [
+	^ 'Profiler'
 ]

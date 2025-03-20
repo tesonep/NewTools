@@ -31,16 +31,6 @@ Class {
 	#tag : 'Parts'
 }
 
-{ #category : 'specs' }
-StSingleCritiqueResultListPresenter class >> defaultSpec [
-
-	^ SpBoxLayout newTopToBottom
-		  add: #critiquesModel;
-		  add: #toolbarModel height: 25;
-		  add: #sourceCodeModel;
-		  yourself
-]
-
 { #category : 'icons' }
 StSingleCritiqueResultListPresenter class >> exclamationIcon [ 
 
@@ -79,12 +69,6 @@ StSingleCritiqueResultListPresenter class >> open [
 
 	<example>
 	^ self new open
-]
-
-{ #category : 'specs' }
-StSingleCritiqueResultListPresenter class >> title [
-
-	^ 'Critique Browser'
 ]
 
 { #category : 'icons' }
@@ -215,6 +199,16 @@ StSingleCritiqueResultListPresenter >> critiquesOf: aRule [
 	cache ifNil: [ ^ {  } ].
 	critiquesModel items: ((cache critiquesOf: aRule) sorted: [ :a :b | 
 			 a printString < b printString ])
+]
+
+{ #category : 'menu' }
+StSingleCritiqueResultListPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		  add: #critiquesModel;
+		  add: #toolbarModel height: 25;
+		  add: #sourceCodeModel;
+		  yourself
 ]
 
 { #category : 'private' }
@@ -482,4 +476,10 @@ StSingleCritiqueResultListPresenter >> whenSelectedItemChangesOnListModel [
 				critique providesChange
 					ifTrue: [ self setTextModelForTransformationRule: critique ]
 					ifFalse: [ self setTextModelForClassOrMethod: critique ] ] ] ]
+]
+
+{ #category : 'accessing' }
+StSingleCritiqueResultListPresenter >> windowTitle [
+
+	^ 'Critique Browser'
 ]

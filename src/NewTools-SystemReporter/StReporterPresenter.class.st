@@ -40,7 +40,7 @@ StReporterPresenter class >> defaultLayout [
 StReporterPresenter class >> open [
 
 	<script>
-	self new open
+	(self newApplication: StPharoApplication current) open
 ]
 
 { #category : 'adding' }
@@ -134,13 +134,6 @@ StReporterPresenter >> initializePresenters [
 	topicList beMultipleSelection.
 	topicList display: [ :each | each key ].
 	reportText := self newText beNotEditable.
-]
-
-{ #category : 'initialization' }
-StReporterPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter title: self title.
-	aWindowPresenter initialExtent: self extent
 ]
 
 { #category : 'initialization' }

@@ -13,7 +13,7 @@ Class {
 
 { #category : 'accessing' }
 StFinderCommand >> application [
-
+	
 	^ self context application
 ]
 

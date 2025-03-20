@@ -23,6 +23,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'accessing' }
+StSettingsMainPresenter class >> defaultPreferredExtent [
+
+	 ^ 1200 @ 700
+]
+
 { #category : 'adding' }
 StSettingsMainPresenter class >> descriptionBackgroundColor [
 
@@ -83,12 +89,6 @@ StSettingsMainPresenter class >> styleSheetString [
 	.descriptionStyle [ 
 		Draw { #backgroundColor: #' , self descriptionBackgroundColor , ' } ]
 ]'.
-]
-
-{ #category : 'initialization' }
-StSettingsMainPresenter >> browserTitle [ 
-
-	^ 'Settings Browser'
 ]
 
 { #category : 'initialization' }
@@ -217,15 +217,6 @@ StSettingsMainPresenter >> initializePresenters [
 	self initializeFocus.
 ]
 
-{ #category : 'initialization' }
-StSettingsMainPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self browserTitle;
-		initialExtent: 1200 @ 700;
-		centered
-]
-
 { #category : 'loading' }
 StSettingsMainPresenter >> loadSettings [
 	"Load the settings from the system settings file, if exists"
@@ -262,4 +253,10 @@ StSettingsMainPresenter >> selectDialog: fileReferneces [
 		displayIcon: [ :each | self iconNamed: each systemIconName ];
 		openModal.
 
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> windowTitle [ 
+
+	^ 'Settings Browser'
 ]

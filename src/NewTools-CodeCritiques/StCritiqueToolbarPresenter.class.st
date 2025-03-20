@@ -46,12 +46,6 @@ StCritiqueToolbarPresenter class >> open [
 	^ self new open
 ]
 
-{ #category : 'specs' }
-StCritiqueToolbarPresenter class >> title [
-
-	^ 'Critique Toolbar'
-]
-
 { #category : 'accessing' }
 StCritiqueToolbarPresenter >> addCritiqueToFalsePositive [
 

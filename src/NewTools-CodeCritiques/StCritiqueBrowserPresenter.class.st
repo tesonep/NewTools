@@ -67,9 +67,14 @@ StCritiqueBrowserPresenter class >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter class >> defaultPreferredExtent [
+
+	^ 760 @ 370
+]
+
 { #category : 'icons' }
 StCritiqueBrowserPresenter class >> icon [
-
 	"Answer an icon for the receiver."
 
 	^ self iconNamed: self iconName
@@ -164,7 +169,7 @@ StCritiqueBrowserPresenter >> applyRules [
 		           self setTitle: windowTitle.
 		           checker runRules: rules onPackage: package withoutTestCase: removeTestCase ].
 	           checker rule: rules.
-	           self setTitle: self defaultTitle.
+	           self setTitle: self windowTitle.
 	           cache packages: rbEnvironment.
 	           cache initCache.
 	           self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).
@@ -247,19 +252,13 @@ StCritiqueBrowserPresenter >> connectPresenters [
 				rule: rule;
 				setTextModelForNil ].
 		self setTitle:
-			(rule ifNil: [ self defaultTitle ] ifNotNil: [ rule name ]) ]
+			(rule ifNil: [ self windowTitle ] ifNotNil: [ rule name ]) ]
 ]
 
 { #category : 'accessing' }
 StCritiqueBrowserPresenter >> critiquesModel [
 
 	^ critiqueModel critiquesModel
-]
-
-{ #category : 'api' }
-StCritiqueBrowserPresenter >> defaultTitle [
-
-	^ 'Critique Browser'
 ]
 
 { #category : 'accessing' }
@@ -346,7 +345,7 @@ StCritiqueBrowserPresenter >> initialize [
 { #category : 'initialization' }
 StCritiqueBrowserPresenter >> initializePresenters [
 
-	title := self defaultTitle.
+	title := self windowTitle.
 	rulesModel := self newTreeTable.
 	resetButton := self newButton.
 	updateButton := self newButton.
@@ -356,7 +355,7 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self setResetButton.
 	self setUpdateButton.
 
-	critiqueModel := StSingleCritiqueResultListPresenter new.
+	critiqueModel := StSingleCritiqueResultListPresenter new application: application.
 	critiquesModel := self critiquesModel.
 	sourceCodeModel := self sourceCodeModel.
 	toolbarModel := self toolbarModel.
@@ -366,14 +365,6 @@ StCritiqueBrowserPresenter >> initializePresenters [
 	self focusOrder
 		add: rulesModel;
 		add: critiqueModel
-]
-
-{ #category : 'initialization' }
-StCritiqueBrowserPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self defaultTitle;
-		initialExtent: 760 @ 370
 ]
 
 { #category : 'accessing' }
@@ -656,4 +647,16 @@ StCritiqueBrowserPresenter >> updateTree [
 
 	critiqueModel updateList.
 	rulesModel update
+]
+
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter >> windowIcon [ 
+
+	^ self iconNamed: #smallQA
+]
+
+{ #category : 'accessing' }
+StCritiqueBrowserPresenter >> windowTitle [
+
+	^ 'Critique Browser'
 ]

@@ -24,9 +24,6 @@ Class {
 		'IndexableDisplayLimit',
 		'InspectorDiveOnSingleClick'
 	],
-	#classInstVars : [
-		'preferredExtent'
-	],
 	#category : 'NewTools-Inspector-View',
 	#package : 'NewTools-Inspector',
 	#tag : 'View'
@@ -44,12 +41,6 @@ StInspectorPresenter class >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #millerList;
 		yourself
-]
-
-{ #category : 'accessing' }
-StInspectorPresenter class >> defaultPreferredExtent [
-
-	^ (700@500)
 ]
 
 { #category : 'accessing' }
@@ -116,18 +107,6 @@ StInspectorPresenter class >> openOn: anObject [
 	^ (self onObject: anObject) open
 ]
 
-{ #category : 'accessing' }
-StInspectorPresenter class >> preferredExtent [
-	
-	^ preferredExtent ifNil: [ preferredExtent := self defaultPreferredExtent ]
-]
-
-{ #category : 'accessing' }
-StInspectorPresenter class >> preferredExtent: aPoint [
-	
-	preferredExtent := aPoint
-]
-
 { #category : 'tools registry' }
 StInspectorPresenter class >> registerToolsOn: registry [
 	"self registerToolsOn: self currentApplication tools
@@ -190,14 +169,10 @@ StInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self windowTitle;
-		windowIcon: self windowIcon;
-		initialExtent: self class preferredExtent;
 		whenOpenedDo: [ self takeKeyboardFocus ];
 		whenFocusReceivedDo: [ self startProcessing ];
 		whenFocusLostDo: [ self stopProcessing ];
-		whenClosedDo: [ self stopProcessing ];
-		whenResizingDo: [ :ann | self preferredExtent: ann newSize ]
+		whenClosedDo: [ self stopProcessing ]
 ]
 
 { #category : 'transmission' }
@@ -257,15 +232,6 @@ StInspectorPresenter >> newInspectorFor: aModel [
 ]
 
 { #category : 'private' }
-StInspectorPresenter >> preferredExtent: aSize [
-
-	(self window isMaximized 
-		or: [ self window isMinimized ])
-		ifTrue: [ ^ self ].
-	self class preferredExtent: aSize
-]
-
-{ #category : 'private' }
 StInspectorPresenter >> setModel: aModel [
 
 	self model: aModel
@@ -315,27 +281,32 @@ StInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
-		window title: self title ].
+		window title: self windowTitle ].
 ]
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowIcon [
 	
-	^ self application iconNamed: #smallInspectIt
+	^ self iconNamed: #smallInspectIt
 ]
 
 { #category : 'initialization' }
 StInspectorPresenter >> windowTitle [
-
-	^ self model windowTitle
+	"in the past the definition was 
+	
+	^ self model windowTitle but I could not make it during the massive cleaning of Spec.
+	Sorry about it - SD"
+	^ 'Inspector'
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar [
-	 ^withHeaderBar ifNil: [ withHeaderBar := true ]
+
+	 ^ withHeaderBar ifNil: [ withHeaderBar := true ]
 ]
 
 { #category : 'accessing' }
 StInspectorPresenter >> withHeaderBar: bool [
+
 	withHeaderBar := bool
 ]

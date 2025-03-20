@@ -36,6 +36,12 @@ Class {
 }
 
 { #category : 'instance creation' }
+StCritiqueRuleSelectorPresenter class >> defaultPreferredExtent [ 
+	
+	^ 450 @ 360
+]
+
+{ #category : 'instance creation' }
 StCritiqueRuleSelectorPresenter class >> items [
 
 	| rules rulesByGroup |
@@ -100,12 +106,6 @@ StCritiqueRuleSelectorPresenter >> addSelected [
 			ifTrue: [ selectedRules addAll: item rules ] ].
 	self update.
 	nextButton enabled: selectedRules isNotEmpty.
-]
-
-{ #category : 'adding' }
-StCritiqueRuleSelectorPresenter >> defaultTitle [
-
-	^ 'Select rules'
 ]
 
 { #category : 'adding' }
@@ -258,14 +258,6 @@ StCritiqueRuleSelectorPresenter >> initializeSelectedList [
 		self updateButtonsState: aSelection ].
 ]
 
-{ #category : 'initialization' }
-StCritiqueRuleSelectorPresenter >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter
-		title: self defaultTitle;
-		initialExtent: 450 @ 360
-]
-
 { #category : 'adding' }
 StCritiqueRuleSelectorPresenter >> isSelected: aRule [
 
@@ -410,4 +402,10 @@ StCritiqueRuleSelectorPresenter >> updateTree [
 
 	list update.
 	selectedList update
+]
+
+{ #category : 'adding' }
+StCritiqueRuleSelectorPresenter >> windowTitle [
+
+	^ 'Select rules'
 ]

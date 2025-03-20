@@ -19,18 +19,6 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundBindingsPresenter class >> defaultExtent [
-
-	^ (600@400)
-]
-
-{ #category : 'accessing' }
-StPlaygroundBindingsPresenter class >> defaultTitle [
-
-	^ 'Bindings'
-]
-
-{ #category : 'accessing' }
 StPlaygroundBindingsPresenter class >> emptyMessage [
 
 	^ 'There are no bindings to list.'
@@ -70,6 +58,12 @@ StPlaygroundBindingsPresenter >> defaultLayout [
 		add: bindingPanel;
 		add: inspectorPanel;
 		yourself
+]
+
+{ #category : 'initialization' }
+StPlaygroundBindingsPresenter >> defaultWindowTitle [
+
+	^ 'Bindings'
 ]
 
 { #category : 'testing' }
@@ -145,15 +139,6 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 	
 	bindingList transmitTo: inspector.
 
-]
-
-{ #category : 'initialization' }
-StPlaygroundBindingsPresenter >> initializeWindow: aWindowPresenter [
-
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter 
-		title: self title;
-		initialExtent: self class defaultExtent
 ]
 
 { #category : 'testing' }
@@ -250,14 +235,6 @@ StPlaygroundBindingsPresenter >> sortedBindingAssociations [
 	^ self bindings associations sort: [ :a | self isLocalBinding: a ] ascending
 ]
 
-{ #category : 'initialization' }
-StPlaygroundBindingsPresenter >> title [
-
-	parent withWindowDo: [ :w | 
-		^ 'Bindings for {1}' format: { w title } ].
-	^ self class defaultTitle
-]
-
 { #category : 'actions' }
 StPlaygroundBindingsPresenter >> toggleSelectedBindingScope [
 
@@ -304,4 +281,12 @@ StPlaygroundBindingsPresenter >> updatePresenterWithSelection: aBlock [
 	bindingList items: newBindings.
 	newBindings = oldBindings ifTrue: [ ^ self ].
 	newBindings ifNotEmpty: aBlock
+]
+
+{ #category : 'initialization' }
+StPlaygroundBindingsPresenter >> windowTitle [
+
+	parent withWindowDo: [ :w | 
+		^ 'Bindings for {1}' format: { w windowTitle } ].
+	^ self defaultWindowTitle
 ]

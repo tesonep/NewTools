@@ -177,7 +177,6 @@ StObjectInspectorPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self title;
 		toolbar: self buildToolbar
 ]
 
@@ -302,12 +301,6 @@ StObjectInspectorPresenter >> step [
 ]
 
 { #category : 'accessing' }
-StObjectInspectorPresenter >> title [
-
-	^ self model windowTitle
-]
-
-{ #category : 'accessing' }
 StObjectInspectorPresenter >> trySelectAnyPageWithName: aCollection [
 	"Tries to select a the first page of aCollection that exists in the pages list."
 	| pagesToSearch |
@@ -358,7 +351,7 @@ StObjectInspectorPresenter >> updateTitle [
 		
 	self isRoot ifFalse: [ ^ self ].
 	self withWindowDo: [ :window | 
-		window title: self title ].
+		window title: self windowTitle ].
 ]
 
 { #category : 'api - events' }
@@ -371,4 +364,10 @@ StObjectInspectorPresenter >> whenActivatedDo: aBlock [
 StObjectInspectorPresenter >> whenClosedDo: aBlock [
 
 	header whenClosedDo: aBlock
+]
+
+{ #category : 'accessing' }
+StObjectInspectorPresenter >> windowTitle [
+
+	^ self model windowTitle
 ]

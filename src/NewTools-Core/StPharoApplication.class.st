@@ -54,6 +54,12 @@ StPharoApplication >> defaultWindowExtent [
 	^ 800@600
 ]
 
+{ #category : 'showing' }
+StPharoApplication >> defaultWindowPresenterClass [
+	
+	^ StWindowPresenter
+]
+
 { #category : 'initialization' }
 StPharoApplication >> initialize [
 
@@ -77,10 +83,11 @@ StPharoApplication >> newIconProvider [
 	^ StPharoDefaultIconProvider new
 ]
 
-{ #category : 'registration' }
-StPharoApplication >> register: aTool as: aNameSelector [
-
-	self tools register: aTool as: aNameSelector
+{ #category : 'tool management' }
+StPharoApplication >> register: aPresenterClass as: aNameSelector [
+	"Register the presenter class of a tool with a given nickname"
+	
+	self tools register: aPresenterClass as: aNameSelector
 ]
 
 { #category : 'private - running' }
@@ -111,17 +118,17 @@ StPharoApplication >> run [
 StPharoApplication >> shutDown: quitting [
 ]
 
-{ #category : 'private - running' }
-StPharoApplication >> start [
-
-	"do nothing"
-]
-
 { #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
 	self resetConfiguration.
 	self resetBackend.
+]
+
+{ #category : 'tool management' }
+StPharoApplication >> toolNamed: aName [
+
+	^ self tools toolNamed: aName
 ]
 
 { #category : 'settings' }
@@ -130,13 +137,13 @@ StPharoApplication >> toolbarDisplayMode [
 	^ StPharoSettings toolbarDisplayMode
 ]
 
-{ #category : 'accessing - resources' }
+{ #category : 'tool management' }
 StPharoApplication >> tools [
 
 	^ Smalltalk tools
 ]
 
-{ #category : 'registration' }
+{ #category : 'tool management' }
 StPharoApplication >> unregisterToolWithRole: aName [
 
 	self tools unregisterToolWithRole: aName

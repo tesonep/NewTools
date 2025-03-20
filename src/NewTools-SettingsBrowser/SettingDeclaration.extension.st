@@ -17,7 +17,7 @@ SettingDeclaration >> getColorFor: aPresenter [
 
 	| colorPickerPresenter |
 
-	colorPickerPresenter := aPresenter instantiate: SpColorPickerWindow on: self.
+	colorPickerPresenter := aPresenter instantiate: SpColorPickerPresenter on: self.
 	colorPickerPresenter
 		whenChangedDo: [ : c | 
 			| changedAspect |

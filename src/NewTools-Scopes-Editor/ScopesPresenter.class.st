@@ -47,12 +47,12 @@ ScopesPresenter class >> menuCommandOn: aBuilder [
 { #category : 'specs' }
 ScopesPresenter class >> newInstance [
 	ScopeNodesPresenter reset.
-	^ self on: ScopesManager singleInstance
+	^ (self newApplication: StPharoApplication current model: ScopesManager singleInstance)
 ]
 
 { #category : 'opening' }
 ScopesPresenter class >> open [
-
+	<script>
 	self newInstance open
 ]
 
@@ -68,11 +68,6 @@ ScopesPresenter class >> openSelecting: aScope [
 ScopesPresenter class >> refreshAllInstances [
 	<script>
 	self allInstances do: [ :each | each refresh ]
-]
-
-{ #category : 'specs' }
-ScopesPresenter class >> title [
-	^ 'Scopes Editor'
 ]
 
 { #category : 'api' }
@@ -94,12 +89,12 @@ ScopesPresenter >> argumentsListActions [
 		addActionWith: [ :anItem | anItem
 			name: 'Delete';
 			actionEnabled: [ scopesTree selectedItem isScopeNode ];
-			iconName: #glamorousTrash;
+			iconName: #trash;
 			action: [ self deleteSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Edit';
 			actionEnabled: [ scopesTree selectedItem isScopeNode ];
-			iconName: #glamorousEdit;
+			iconName: #edit;
 			action: [ self editSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Rename';
@@ -107,7 +102,7 @@ ScopesPresenter >> argumentsListActions [
 			action: [ self renameSelectedScope ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Inspect';
-			iconName: #glamorousSearch;
+			iconName: #search;
 			action: [ scopesTree selectedItem inspect ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Open in browser';
@@ -116,7 +111,7 @@ ScopesPresenter >> argumentsListActions [
 		addActionWith: [ :anItem | anItem 
 			name: 'Browse';
 			actionEnabled: [ scopesTree selectedItem isScopeNode not ];
-			iconName: #glamorousBrowse;
+			iconName: #browse;
 			action: [ self browseSelectedItem ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Class references';
@@ -535,4 +530,10 @@ ScopesPresenter >> updateEnabled [
 ScopesPresenter >> updateScopesTree [
 
 	scopesTree updateRootsKeepingSelection: self scopeNodes
+]
+
+{ #category : 'accessing' }
+ScopesPresenter >> windowTitle [
+
+	^ 'Scope Editor'
 ]

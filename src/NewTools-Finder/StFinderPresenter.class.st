@@ -134,16 +134,22 @@ The ''Select classes'' button opened a dialog window  to select which classes wi
 The ''All classes'' button is used to reset the classes selection.'
 ]
 
+{ #category : 'accessing' }
+StFinderPresenter class >> defaultPreferredExtent [
+
+	^ (800 @ 500)
+]
+
 { #category : 'world menu' }
 StFinderPresenter class >> menuFinderCommandOn: aBuilder [
 	<worldMenu>
 
-	(aBuilder item: #NewFinder)
+	(aBuilder item:  #Finder)
 		parent: #Searching ;
-		action: [ StFinderPresenter open ];
-		label: 'New Finder';
+		action: [ self open ];
+		label: 'Finder';
 		order: 2; 
-		help: 'Open the new Finder tool.';
+		help: 'Open the Finder tool.';
 		iconName: #smallFind.
 
 ]
@@ -215,15 +221,26 @@ The Method Finder is not trying all methods in the system so if it will find not
 
 ]
 
+{ #category : 'instance creation' }
+StFinderPresenter class >> newApplication: anApplication model: aModel [
+
+	aModel application: anApplication.
+	^ super newApplication: anApplication model: aModel.
+]
+
 { #category : 'opening' }
 StFinderPresenter class >> open [
 	<script>
-	
 	| model presenter |
+	
 	model := StFinderModel new.
-	presenter := self on: model.
+	presenter := self 
+		newApplication: StPresenter currentApplication 
+		model: model.
+
 	model application: presenter application. 
 	presenter open.
+	
 	^ presenter
 ]
 
@@ -239,6 +256,21 @@ StFinderPresenter class >> openOnTargets: aCollection [
 	presenter := self on: finderModel.
 	finderModel application: presenter application. 
 	presenter	open.
+	^ presenter
+]
+
+{ #category : 'instance creation' }
+StFinderPresenter class >> openWithText: aText [
+
+	| model presenter |
+	model := StFinderModel new.
+	presenter := self
+		             newApplication: StPresenter currentApplication
+		             model: model.
+	model application: presenter application.
+	presenter open.
+	
+	presenter searchBar searchInput text: aText.
 	^ presenter
 ]
 
@@ -366,12 +398,6 @@ StFinderPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> initialExtentForWindow [
-
-	^ (800 @ 500)
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> initializeFocus [
 
 	self focusOrder 
@@ -413,6 +439,7 @@ StFinderPresenter >> initializeResultTree [
 		beMultipleSelection;
 		display: [ :result | result displayString ];
 		displayIcon: [ :result | result displayIcon ];
+		children: [ :result | result children ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: $b actionModifier;
 			action: [ self resultTree selectedItem browseAction ] ];
@@ -421,16 +448,6 @@ StFinderPresenter >> initializeResultTree [
 			action: [ self resultTree selectedItem referencesAction ] ];
 		actions: self rootCommandsGroup / 'StFinderSelContextualMenu';
 		yourself
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> initializeWindow: aSpWindowPresenter [
-
-	super initializeWindow: aSpWindowPresenter.
-
-	self setTitleTo: aSpWindowPresenter.
-	self setWindowIconTo: aSpWindowPresenter.
-	self setInitialExtentTo: aSpWindowPresenter
 ]
 
 { #category : 'updating - widgets' }
@@ -542,26 +559,6 @@ StFinderPresenter >> selectedResults: aCollection [
 ]
 
 { #category : 'initialization' }
-StFinderPresenter >> setInitialExtentTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter initialExtent: self initialExtentForWindow
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setTitleTo: aSpWindowPresenter [
-
-	aSpWindowPresenter title: 'Finder'
-
-]
-
-{ #category : 'initialization' }
-StFinderPresenter >> setWindowIconTo: aSpWindowPresenter [
-	
-	aSpWindowPresenter	windowIcon: (self iconNamed: #smallFind).
-
-]
-
-{ #category : 'initialization' }
 StFinderPresenter >> subscribeToAnnouncements [
 
 	self model whenSearchStarted: [ self notifySearchStarted ].
@@ -624,8 +621,7 @@ StFinderPresenter >> updateResultsWith: results time: time [
 	"Call to update resultTree with results."
 
 	resultTree
-		roots: results;
-		children: [ :result | result children ].
+		roots: results.
 	self updateResultsBehavior.
 	resultStatusBar pushMessage: (self updateStatusBarTextFrom: results time: time).
 ]
@@ -652,4 +648,18 @@ StFinderPresenter >> updateStatusBarTextFrom: results time: time [
 			<< ' results and took ';
 			<< time asStringWithCommas;
 			<< ' ms' ]
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowIcon [
+
+	^ self iconNamed: #smallFind
+
+]
+
+{ #category : 'initialization' }
+StFinderPresenter >> windowTitle [
+
+	^ 'Finder'
+
 ]

@@ -27,6 +27,12 @@ StInspectorIndexedNode >> = anObject [
 	^ super = anObject and: [ index = anObject index ]
 ]
 
+{ #category : 'testing' }
+StInspectorIndexedNode >> canSave [
+
+	^ true
+]
+
 { #category : 'accessing' }
 StInspectorIndexedNode >> errorMessage [
 	^ 'error obtaining indexed variable value'

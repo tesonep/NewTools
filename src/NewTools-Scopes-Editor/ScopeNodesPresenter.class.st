@@ -51,11 +51,6 @@ ScopeNodesPresenter class >> reset [
 	LastSearch := nil
 ]
 
-{ #category : 'specs' }
-ScopeNodesPresenter class >> title [
-	^ 'Scope creator'
-]
-
 { #category : 'private - actions' }
 ScopeNodesPresenter >> activateItem: scopeNode [
 
@@ -115,12 +110,12 @@ ScopeNodesPresenter >> argumentsListActions [
 	^ SpActionGroup new
 		addActionWith: [ :anItem | anItem
 			name: 'Check all Cmd-a';
-			iconName: #glamorousAccept;
+			iconName: #accept;
 			action: [ self checkAll ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Unheck all';
 			shortcutKey: $u actionModifier;
-			iconName: #glamorousAccept;
+			iconName: #accept;
 			action: [ self uncheckAll ] ];
 		addActionWith: [ :anItem | anItem
 			name: 'Add class hierarchy (flattened)';
@@ -130,12 +125,12 @@ ScopeNodesPresenter >> argumentsListActions [
 		addActionWith: [ :anItem | anItem
 			name: 'Browse';
 			actionEnabled: [ scopeNodesTree selectedItem isNotNil ];
-			iconName: #glamorousBrowse;
+			iconName: #browse;
 			action: [ self browseSelectedItem ] ];
 		addActionWith: [ :anItem | anItem
   			name: 'Class references';
   			actionEnabled: [ scopeNodesTree selectedItem isClassNode ];
-  			iconName: #glamorousBrowse;
+  			iconName: #browse;
   			action: [ self showReferencesToClass: scopeNodesTree selectedItem value ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: $a actionModifier;
@@ -469,4 +464,10 @@ ScopeNodesPresenter >> validate [
 
 	checkedScopeNodes ifEmpty: [ ^ false ].
 	^ true
+]
+
+{ #category : 'accessing' }
+ScopeNodesPresenter >> windowTitle [
+
+	^ 'Scope creator'
 ]

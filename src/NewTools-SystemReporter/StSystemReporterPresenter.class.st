@@ -17,6 +17,12 @@ Class {
 }
 
 { #category : 'system menu' }
+StSystemReporterPresenter class >> defaultPreferredExtent [ 
+
+	^ 500@ 600
+]
+
+{ #category : 'system menu' }
 StSystemReporterPresenter class >> systemReporterMenuOn: aBuilder [ 
 	<worldMenu>
 	
@@ -32,12 +38,6 @@ StSystemReporterPresenter >> connectPresenters [
 
 	super connectPresenters.
 	topicList  selectIndex: 1.
-]
-
-{ #category : 'utils' }
-StSystemReporterPresenter >> extent [
-
-	^ 500@ 600
 ]
 
 { #category : 'initialization' }
@@ -61,7 +61,6 @@ StSystemReporterPresenter >> fillTopics [
 			{ (#'OS Details' -> #reportWin32OSDetails:).
 			(#'VM Configuration' -> #reportWin32VMConfig:).
 			(#'Hardware Details' -> #reportWin32HardwareDetails:).
-			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
 			} do: [ :each | self addTopicSpec: each ]. 
 			].	
 		
@@ -235,12 +234,6 @@ StSystemReporterPresenter >> reportVMStats: aStream [
 ]
 
 { #category : 'building report' }
-StSystemReporterPresenter >> reportWin32GFXDetails: aStream [
-	self header: 'Graphics Hardware Details' on: aStream.
-	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10003)
-]
-
-{ #category : 'building report' }
 StSystemReporterPresenter >> reportWin32HardwareDetails: aStream [
 	self header: 'Hardware Details' on: aStream.
 	aStream nextPutAll: (Smalltalk vm getSystemAttribute: 10001)
@@ -261,11 +254,6 @@ StSystemReporterPresenter >> reportWin32VMConfig: aStream [
 	aStream nextPutAll: iniPath; cr; cr.
 	self readContentsSafelyFromFile: iniPath andWriteTo: aStream
 
-]
-
-{ #category : 'utils' }
-StSystemReporterPresenter >> title [ 
-	^ 'System Reporter'
 ]
 
 { #category : 'initialization' }
@@ -291,10 +279,14 @@ StSystemReporterPresenter >> topicSpec [
 			(#'OS Details' -> #reportWin32OSDetails:).
 			(#'VM Configuration' -> #reportWin32VMConfig:).
 			(#'Hardware Details' -> #reportWin32HardwareDetails:).
-			(#'GFX Hardware Details' -> #reportWin32GFXDetails:).	
 			} ].	
 		
 	self isLinux 
 		ifTrue: [ topics add: #'OS Details' -> #reportLinuxOSDetails: ].
 	^ topics
+]
+
+{ #category : 'utils' }
+StSystemReporterPresenter >> windowTitle [ 
+	^ 'System Reporter'
 ]

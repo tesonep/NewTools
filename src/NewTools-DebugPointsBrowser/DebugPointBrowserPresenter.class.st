@@ -17,6 +17,18 @@ Class {
 	#package : 'NewTools-DebugPointsBrowser'
 }
 
+{ #category : 'accessing' }
+DebugPointBrowserPresenter class >> currentApplication [
+
+	^ StPharoApplication current
+]
+
+{ #category : 'accessing' }
+DebugPointBrowserPresenter class >> defaultPreferredExtent [
+
+	^ 800 @ 600
+]
+
 { #category : 'world menu' }
 DebugPointBrowserPresenter class >> menuCommandOn: aBuilder [
 
@@ -99,7 +111,8 @@ DebugPointBrowserPresenter >> initialize [
 	self class codeSupportAnnouncer weak
 		when: DebugPointAdded send: #updateTable to: self;
 		when: DebugPointRemoved send: #updateTable to: self;
-		when: DebugPointChanged send: #updateEditor to: self
+		when: DebugPointChanged send: #updateEditor to: self.
+	self application: self class currentApplication
 ]
 
 { #category : 'initialization' }
@@ -124,7 +137,7 @@ DebugPointBrowserPresenter >> initializePresenters [
 		                   yourself
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeTable [
 
 	dpTable := self instantiate: DebugPointTablePresenter.
@@ -135,19 +148,10 @@ DebugPointBrowserPresenter >> initializeTable [
 			dp updateDebugPointUIManager: self ] ]
 ]
 
-{ #category : 'presenter building' }
+{ #category : 'initialization' }
 DebugPointBrowserPresenter >> initializeVariableTargetPresenter [
 
 	variableTargetPresenter := DebugPointVariableTargetPresenter new
-]
-
-{ #category : 'initialization' }
-DebugPointBrowserPresenter >> initializeWindow: aWindowPresenter [
-	
-	aWindowPresenter
-		title: 'Debug Point Browser';		
-		windowIcon: (self application iconNamed: #bug);
-		initialExtent: 800@550
 ]
 
 { #category : 'api' }
@@ -208,4 +212,15 @@ DebugPointBrowserPresenter >> updateTable [
 DebugPointBrowserPresenter >> updateVariableTargetPresenterFrom: aDebugPointTarget [
 
 	variableTargetPresenter target: aDebugPointTarget
+]
+
+{ #category : 'initialization' }
+DebugPointBrowserPresenter >> windowIcon [ 
+
+	^ self iconNamed: #bug
+]
+
+{ #category : 'initialization' }
+DebugPointBrowserPresenter >> windowTitle [ 
+	^ 'Debug Point Browser'
 ]

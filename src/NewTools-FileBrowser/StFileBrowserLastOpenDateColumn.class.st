@@ -3,23 +3,16 @@ I'm a column use to display the last access date of a file in a File dialog.
 "
 Class {
 	#name : 'StFileBrowserLastOpenDateColumn',
-	#superclass : 'StFileBrowserAbstractColumn',
+	#superclass : 'StFileBrowserDateColumn',
 	#category : 'NewTools-FileBrowser-Columns',
 	#package : 'NewTools-FileBrowser',
 	#tag : 'Columns'
 }
 
-{ #category : 'adding' }
-StFileBrowserLastOpenDateColumn class >> addConstraintTo: aTableColumn [
-
-	aTableColumn
-		width: 150;
-		beSortable
-]
-
 { #category : 'templateMethod' }
 StFileBrowserLastOpenDateColumn class >> evaluateOn: aFileReference [
-	^ aFileReference accessTime fileDialogFormat
+
+	^ aFileReference accessTime
 ]
 
 { #category : 'sorting' }

@@ -14,6 +14,12 @@ StTPresenter classSide >> currentApplication [
 	^ SpToolCurrentApplication value ifNil: [ StPharoApplication current ]
 ]
 
+{ #category : 'accessing' }
+StTPresenter classSide >> defaultPreferredExtent [
+
+	^ 600@400
+]
+
 { #category : 'instance creation' }
 StTPresenter classSide >> new [
 
@@ -37,24 +43,13 @@ StTPresenter classSide >> owner: anOwningPresenter on: aDomainObject [
 		model: aDomainObject
 ]
 
-{ #category : 'accessing' }
-StTPresenter classSide >> preferredExtent [
-
-	^ 600@400
-]
-
 { #category : 'initialization' }
 StTPresenter >> initializeWindow: aWindowPresenter [
 	"All tools should call its parent"
 
+	super initializeWindow: aWindowPresenter.
 	self traversePresentersDo: [ :each |
 		each addWindowShortcutsTo: aWindowPresenter ]
-]
-
-{ #category : 'accessing' }
-StTPresenter >> preferredExtent [
-
-	^ self class preferredExtent
 ]
 
 { #category : 'private' }

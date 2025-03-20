@@ -78,6 +78,14 @@ StSpotter class >> createTips [
 ]
 
 { #category : 'accessing' }
+StSpotter class >> defaultPreferredExtent [
+	
+	^ self isShowingPreview 
+		ifTrue: [ (750@680) ]
+		ifFalse: [ (500@680) ]
+]
+
+{ #category : 'accessing' }
 StSpotter class >> hidePreview [
 	<script>
 
@@ -141,7 +149,7 @@ StSpotter class >> isShowingTips [
 StSpotter class >> menuCommandOn: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Spotter)
-		action: [ self currentApplication tools spotter open ];
+		action: [ (self currentApplication toolNamed: #spotter) open ];
 		keyText: 'Shift + Enter';
 		order: 1;
 		parent: #Searching;
@@ -183,7 +191,18 @@ StSpotter class >> openOnOrigin: anObject [
 { #category : 'instance creation' }
 StSpotter class >> openWithText: aText [
 
-	^ (self newWithText: aText) openModal
+"If a Spotter is already open, it closes itself and opens the Finder instead.  
+ Otherwise, it initializes a new Spotter. The purpose of this is so users can 
+ press 'shift+enter' inside the Spotter to open the Finder."
+   | searchText |
+	spotter ifNotNil: [
+		spotter isVisible ifTrue: [
+			searchText := spotter searchText text.
+			self reset.
+			^ StFinderPresenter openWithText: searchText ] ].
+	
+	spotter := self newWithText: aText.
+	^ spotter openModal
 ]
 
 { #category : 'settings' }
@@ -315,32 +334,48 @@ StSpotter >> addPreviewPanelTo: contentsLayout [
 ]
 
 { #category : 'initialization' }
-StSpotter >> addTipsPanel [ 
+StSpotter >> addTipsPanel [
 
 	self layout: (SpBoxLayout newTopToBottom
-		add: self layout;
-		add: (SpBoxLayout newLeftToRight
-				vAlignCenter;
-				borderWidth: 3;
-				spacing: 3;
-				add: (self newImage 
-					image: (self application iconNamed: #smallHelp);
-					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
-					yourself)
-					expand: false;
-				add: ((tip := self newLabel)
-					in: [ :this | this eventHandler whenMouseDownDo: [ :anEvent | self feedTip ] ];
-					yourself);
-				addLast: (SpBoxLayout newTopToBottom 
-					add: (self newLink 
-						label: 'Advanced Search...';
-						action: [ self openFinder ];
-						yourself);
-					yourself)
-					expand: false;
-				yourself)
-			expand: false;
-		yourself)
+			 add: self layout;
+			 add: (SpBoxLayout newLeftToRight
+					  vAlignCenter;
+					  borderWidth: 3;
+					  spacing: 3;
+					  add: (self newImage
+							   image: (self application iconNamed: #smallHelp);
+							   in: [ :this |
+								   this eventHandler whenMouseDownDo: [ :anEvent |
+										   self feedTip ] ];
+							   yourself)
+					  expand: false;
+					  add: ((tip := self newLabel)
+							   in: [ :this |
+								   this eventHandler whenMouseDownDo: [ :anEvent |
+										   self feedTip ] ];
+							   yourself);
+					  addLast: (SpBoxLayout newLeftToRight
+							   vAlign: SpLayoutWidgetAlignment start;
+							   borderWidth: 3;
+							   spacing: 3;
+							   add: (self newImage
+									    image: (self application iconNamed: #smallFind);
+									    action: [ self openFinder ];
+									    yourself)
+							   expand: false);
+					  addLast: (SpBoxLayout newTopToBottom
+							   borderWidth: 3;
+							   vAlign: SpLayoutWidgetAlignment end;
+							   add: (self newLink
+									    label: 'Finder...';
+									    action: [ self openFinder ];
+									    help: 'Open the Finder tool (Shift + Return).';
+									    yourself);
+							   yourself)
+					  expand: false;
+					  yourself)
+			 expand: false;
+			 yourself)
 ]
 
 { #category : 'private' }
@@ -458,15 +493,6 @@ StSpotter >> historize: aCandidateLink [
 ]
 
 { #category : 'initialization' }
-StSpotter >> initialExtent [
-
-	self flag: #TODO. "Maybe calculate coordinates?"
-	^ self isShowingPreview 
-		ifTrue: [ (750@450) ]
-		ifFalse: [ (500@450) ]
-]
-
-{ #category : 'initialization' }
 StSpotter >> initialize [
 
 	mutex ifNil: [ mutex := Mutex new ].
@@ -557,7 +583,7 @@ StSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Spotter';
 		withoutDecorations;
-		initialExtent: self initialExtent;
+		initialExtent: self preferredExtent;
 		whenOpenedDo: [ self startProcessing ];
 		whenClosedDo: [ 
 			self stopProcessing.
@@ -612,8 +638,9 @@ StSpotter >> maybeActivateFirstElementOfResultList [
 	resultList presenters
 		detect: [ :each | each matchesText: text ]
 		ifFound: [ :aPresenter | self activate: aPresenter ]."
-		
-	self activate: resultList selectedItem 
+	self model isFree ifFalse: [ ^ self ].	
+	self activate: resultList selectedItem.
+	
 ]
 
 { #category : 'accessing - model' }
@@ -803,7 +830,7 @@ StSpotter >> startProcessing [
 
 { #category : 'private' }
 StSpotter >> stopProcessing [
-	"Start the process."
+	"Stop the process."
 
 	self model stopProcessing
 ]

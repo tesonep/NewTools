@@ -52,7 +52,7 @@ StClassCritiqueBrowserPresenter >> processRules [
 			classRules: rules;
 			checkClass: cls ].
 	checker rule: rules.
-	self setTitle: self defaultTitle.
+	self setTitle: self windowTitle.
 	cache packages: rbEnvironment.
 	cache initCache.
 	self rules: (self allRules select: [ :r | self hasBrokenRules: r ]).

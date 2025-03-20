@@ -25,6 +25,12 @@ StInspectorSlotNode >> = anObject [
 	^ super = anObject and: [ slot = anObject slot ]
 ]
 
+{ #category : 'testing' }
+StInspectorSlotNode >> canSave [
+
+	^ true
+]
+
 { #category : 'accessing' }
 StInspectorSlotNode >> errorMessage [
 	^ 'error obtaining variable value'

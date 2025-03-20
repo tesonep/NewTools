@@ -13,6 +13,12 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'accessing' }
+StOpenDirectoryPresenter class >> defaultPreferredExtent [ 
+
+	^ (1050 @ 550)
+]
+
 { #category : 'examples' }
 StOpenDirectoryPresenter class >> example [
 
@@ -39,17 +45,6 @@ StOpenDirectoryPresenter >> allowsChooseDirectoryIfNoFilename [
 	^ true
 ]
 
-{ #category : 'initialization' }
-StOpenDirectoryPresenter >> initialExtentForWindow [
-
-	^ (1050 @ 550)
-]
-
-{ #category : 'hooks' }
-StOpenDirectoryPresenter >> initialTitle [
-	^ 'Select Directory To Open'
-]
-
 { #category : 'accessing' }
 StOpenDirectoryPresenter >> selectedEntry [
 
@@ -57,4 +52,9 @@ StOpenDirectoryPresenter >> selectedEntry [
 		fileReference isDirectory ifTrue: [ ^ fileReference ] ].
 	self inform: 'You must select a directory'.
 	^ nil
+]
+
+{ #category : 'hooks' }
+StOpenDirectoryPresenter >> windowTitle [
+	^ 'Select Directory To Open'
 ]
