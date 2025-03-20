@@ -14,7 +14,7 @@ AbstractFileReference >> inspectionCompressedItems: aBuilder [
 				addFirst: self parent;
 				yourself ].
 
-	^ aBuilder newTabl
+	^ aBuilder newTable
 		items: items;
 		addColumn: (SpCompositeTableColumn new
 			title: 'Name';
