@@ -58,3 +58,9 @@ StDebuggerToolbar >> presenter [
 
 	^ presenter ifNil: [ presenter := SpPresenter new ]
 ]
+
+{ #category : 'updating' }
+StDebuggerToolbar >> updateWith: aCommandGroup [
+
+	commandsGroup := aCommandGroup
+]

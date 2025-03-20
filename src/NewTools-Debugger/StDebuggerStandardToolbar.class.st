@@ -16,7 +16,7 @@ StDebuggerStandardToolbar >> build [
 { #category : 'updating' }
 StDebuggerStandardToolbar >> updateWith: aCommandGroup [
 
-	commandsGroup := aCommandGroup.
+	super updateWith: aCommandGroup.
 	SpToolbarPresenterBuilder new
 		toolbarPresenter: self presenter;
 		visit: commandsGroup
