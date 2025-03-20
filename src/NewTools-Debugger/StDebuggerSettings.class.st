@@ -116,16 +116,30 @@ StDebuggerSettings class >> toolbarLayout: aSymbol [
 	toolbarLayout := aSymbol
 ]
 
+{ #category : 'default values' }
+StDebuggerSettings class >> toolbarLayoutCompact [
+
+	^ #compact
+]
+
 { #category : 'settings' }
 StDebuggerSettings class >> toolbarLayoutSettingOn: aBuilder [
 
 	<systemsettings>
-		(aBuilder pickOne: #toolbarLayout)
-				label: 'Toolbar layout';
-				target: self;
-				parent: #debugging;
-				default: #standard;
-				domainValues: #(standard compact);
-				description:
-					'Customize the debugger toolbar layout: standard for big buttons or compact for more space.'.
+	(aBuilder pickOne: #toolbarLayout)
+		label: 'Toolbar layout';
+		target: self;
+		parent: #debugging;
+		default: #standard;
+		domainValues: {
+				self toolbarLayoutStandard.
+				self toolbarLayoutCompact };
+		description:
+			'Customize the debugger toolbar layout: standard for big buttons or compact for more space.'
+]
+
+{ #category : 'default values' }
+StDebuggerSettings class >> toolbarLayoutStandard [
+
+	^ #standard
 ]
