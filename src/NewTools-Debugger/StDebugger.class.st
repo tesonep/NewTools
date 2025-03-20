@@ -341,7 +341,7 @@ StDebugger >> buildContextMenus [
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
+		toolbarPresenter: self toolbarPresenter;
 		visit: toolbarCommandGroup.
 
 	"Code"
@@ -454,7 +454,7 @@ StDebugger >> code [
 StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: #toolbar expand: false;
+		  add: self toolbarPresenter expand: false;
 		  add: #code;
 		  yourself
 ]
@@ -802,7 +802,6 @@ StDebugger >> initializeInspector [
 StDebugger >> initializePresenters [
 
 	self initializeStack.
-	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
 	self initializeExtensionTools.
@@ -856,14 +855,6 @@ StDebugger >> initializeStack [
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
-]
-
-{ #category : 'initialization' }
-StDebugger >> initializeToolbar [
-
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar displayMode: self application toolbarDisplayMode
 ]
 
 { #category : 'initialization' }
@@ -1315,7 +1306,17 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 { #category : 'accessing - presenters' }
 StDebugger >> toolbar [
 
-	^ toolbar
+	^ toolbar ifNil: [
+		  toolbar := self newToolbar.
+		  toolbar addStyle: 'stToolbar'.
+		  toolbar displayMode: self application toolbarDisplayMode.
+		  toolbar ]
+]
+
+{ #category : 'accessing - presenters' }
+StDebugger >> toolbarPresenter [
+
+	^ self toolbar
 ]
 
 { #category : 'code pane' }
