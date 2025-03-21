@@ -1,8 +1,9 @@
 Class {
 	#name : 'StBytecodeInspectorSlotNode',
 	#superclass : 'StInspectorSlotNode',
-	#category : 'NewTools-Sindarin-Tools',
-	#package : 'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools-Model',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }

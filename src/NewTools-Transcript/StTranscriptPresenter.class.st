@@ -44,8 +44,9 @@ StTranscriptPresenter class >> exampleDefault [
 
 { #category : 'accessing' }
 StTranscriptPresenter class >> menuCommandOn: aBuilder [
+
 	<worldMenu>
-	(aBuilder item: #'New Transcript')
+	(aBuilder item: #'Transcript')
 		action: [ (Smalltalk tools toolNamed: #transcript) new open ];
 		order: 2;
 		parent: #InputOutput;
@@ -54,6 +55,7 @@ StTranscriptPresenter class >> menuCommandOn: aBuilder [
 		help: 'Window on the new Transcript output stream, which is useful for writing log messages.';
 		iconName: self taskbarIconName.
 	aBuilder withSeparatorAfter
+	
 ]
 
 { #category : 'instance creation' }

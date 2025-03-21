@@ -14,6 +14,12 @@ SindarinStepToNextExecutionCommand class >> defaultIconName [
 	^ #into
 ]
 
+{ #category : 'testing' }
+SindarinStepToNextExecutionCommand class >> isAbstract [
+
+	^ self == SindarinStepToNextExecutionCommand 
+]
+
 { #category : 'hooks' }
 SindarinStepToNextExecutionCommand >> execute [
 
