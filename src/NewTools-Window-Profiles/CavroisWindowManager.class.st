@@ -1,6 +1,5 @@
 "
 I scan the current windows and build a profile from the presenters or tools inside them. 
-
 A profile is set of window configurations also called place holders.
 A place holder is a description of the window on the screen (extent, position, kind, strategy).
 A strategy is the way the window will be placed on the screen, such as replace the previous one, stacking...
