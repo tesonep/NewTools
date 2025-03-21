@@ -1,23 +1,26 @@
 "
 I scan the current windows and build a profile from the presenters or tools inside them. 
 
-A profile is set of window configurations also called place holders
-A place holder is a description of the window on the screen (extent, position, kind, strategy)
+A profile is set of window configurations also called place holders.
+A place holder is a description of the window on the screen (extent, position, kind, strategy).
 A strategy is the way the window will be placed on the screen, such as replace the previous one, stacking...
 
 To fully understand my fonctionnalities, you can:
 
-- Click on 'Snapshot Profile' in the Profiles menu.
+- Click on 'Add Profile' in the Profiles menu.
 
 - Select 'Show/hide current profile' to display visual placeholders of the current profile
-( Clicking on one of them allows to change the strategy associated with the window ).
+( - Left click on one of them allows to change the strategy associated with the window 
+  - Right click on one of them to remove a registered window from the current profile ).
 
-- When selecting an other profiles, it becomes the current and all current windows on the screen are moved according to placeholders
+- You can update your profile without recreating a new one by using the 'Update current profile' option.
+
+- When selecting an other profile, it becomes the current and all current windows on the screen are moved according to placeholders.
 
 - If you want to reorganize your windows based on your current profile, 'Reset Windows' will do the same behavior said as above.
 
-- Lastly, with 'Export Profile', current profile will be saved in a STON file in the Preferences folder as ""Profile.ston"".
-This profile can be load with 'Import Profile' 
+- Lastly, with 'Export Profile', current profile will be saved in a STON file in the Preferences folder as ""Profile:YourProfileName.ston"".
+Any profile can be load with 'Import Profile', make sure your file has 'Profile' in it to work.
 
 "
 Class {
@@ -45,6 +48,17 @@ CavroisWindowManager class >> addProfileDeletionItem: aBuilder [
 		action: [ self deleteProfile ];
 		help: 'Remove a profile';
 		iconName: #trash
+]
+
+{ #category : 'adding' }
+CavroisWindowManager class >> addProfileHelpItem: aBuilder [
+
+	(aBuilder item: #'Tutorial')
+		parent: #ProfileTutorial;
+		order: 9;
+		action: [ self openTutorial ];
+		help: 'Tutorial about profiles';
+		iconName: #smallHelp.
 ]
 
 { #category : 'adding' }
@@ -160,22 +174,38 @@ CavroisWindowManager class >> loadProfile [
 	presenter open
 ]
 
+{ #category : 'open' }
+CavroisWindowManager class >> openTutorial [
+
+	<script>
+	| presenter |
+	presenter := SpTextPresenter new
+		             text: self comment;
+		             open.
+
+	presenter withWindowDo: [ :w |
+		w title: 'Profile Tutorial' translated ]
+]
+
 { #category : 'menu' }
 CavroisWindowManager class >> profileMenu: aBuilder [
 
-    <worldMenu>
-    (aBuilder item: #Profiles)
-        order: 95;
-				help: 'Profiles lets you define places where your windows will be automatically be placed.';
-        with: [
-            (aBuilder group: #UserProfiles)
-                order: 1;
-                withSeparatorAfter.
-            (aBuilder group: #ProfileAction)
-                order: 2;
-                withSeparatorAfter.
-            (aBuilder group: #ImportExport)
-                order: 3. ]
+	<worldMenu>
+	(aBuilder item: #Profiles)
+		order: 95;
+		help:
+			'Profiles lets you define places where your windows will be automatically be placed.';
+		with: [ 
+			(aBuilder group: #UserProfiles)
+				order: 1;
+				withSeparatorAfter.
+			(aBuilder group: #ProfileAction)
+				order: 2;
+				withSeparatorAfter.
+			(aBuilder group: #ImportExport)
+				order: 3;
+				withSeparatorAfter.
+			(aBuilder group: #ProfileTutorial) order: 4 ]
 ]
 
 { #category : 'menu items' }
@@ -189,7 +219,8 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
 		resetWindowsToCurrentProfile: aBuilder;
-		addProfileImportExportItems: aBuilder
+		addProfileImportExportItems: aBuilder;
+		addProfileHelpItem: aBuilder
 ]
 
 { #category : 'removing' }
