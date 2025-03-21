@@ -6,8 +6,9 @@ Class {
 	#tag : 'Tests'
 }
 
-{ #category : 'initialization' }
+{ #category : 'running' }
 CavroisWindowManagerTest >> setUp [
+	super setUp.
 
 	CavroisWindowManager reset
 ]
@@ -37,7 +38,7 @@ CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
 	self skip. 
 	self flag: #revisitAlexis.
 	prof := CavroisWindowManager new.
-	transcript := Transcript open
+	transcript := StTranscriptPresenter open
 							extent: (447.0@300.0) ; 
 							bounds: ((699.0@460.0) corner: (1146.0@760.0)); 
 					 		yourself.

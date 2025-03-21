@@ -1,14 +1,15 @@
 Class {
 	#name : 'StSindarinDebuggerPresenter',
-	#superclass : 'StInspectionPresenter',
+	#superclass : 'StPresenterWithModel',
 	#instVars : [
 		'currentNodeSource',
 		'stack',
 		'inspector',
 		'toolbar'
 	],
-	#category : 'NewTools-Sindarin-Tools',
-	#package : 'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools-Presenters',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Presenters'
 }
 
 { #category : 'layout' }
@@ -32,7 +33,7 @@ StSindarinDebuggerPresenter class >> defaultLayout [
 StSindarinDebuggerPresenter >> buildToolbar [
 	| group |
 	group := CmCommandGroup forSpec.
-	SindarinCommand allSubclasses
+	(SindarinCommand allSubclasses reject:#isAbstract )
 		do: [ :cmd | group register: (cmd forSpecContext: self) ].
 	^ self newToolbar 
 		displayMode: self application toolbarDisplayMode;
@@ -49,7 +50,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 				ifNil: [ inspector model: nil.
 					currentNodeSource text: '' ]
 				ifNotNil: [ | node |
-					node := selection selectedItem node.
+					node := selection selectedItem sourceNodeExecuted.
 					inspector model: node.
 					inspector setAttributeTable.
 					currentNodeSource text: node source.
@@ -57,9 +58,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 					currentNodeSource selectionInterval: (node start to: node stop).
 					currentNodeSource
 						doItReceiver: selection selectedItem home receiver;
-						doItContext: selection selectedItem ].
-			currentNodeSource accept ].
-	stack items: self model stack.
+						doItContext: selection selectedItem ]].
 	inspector := StRawInspectionPresenter on: self model stack first.
 	currentNodeSource := self newCode.
 	currentNodeSource
@@ -67,6 +66,7 @@ StSindarinDebuggerPresenter >> initializePresenters [
 	currentNodeSource withSyntaxHighlight.
 	currentNodeSource text: self model node source.
 	currentNodeSource beForBehavior: self model method methodClass.
+	stack items: self model stack.
 	stack selectIndex: 1.
 	toolbar := self buildToolbar
 ]

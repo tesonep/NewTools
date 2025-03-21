@@ -1,5 +1,6 @@
 "
 I scan the current windows and build a profile from the presenters or tools inside them. 
+
 A profile is set of window configurations also called place holders.
 A place holder is a description of the window on the screen (extent, position, kind, strategy).
 A strategy is the way the window will be placed on the screen, such as replace the previous one, stacking...
@@ -192,19 +193,23 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 	<worldMenu>
 	(aBuilder item: #Profiles)
 		order: 95;
-		help:
-			'Profiles lets you define places where your windows will be automatically be placed.';
-		with: [ 
+		help: 'Profiles lets you define places where your windows will be automatically be placed.';
+		with: [
 			(aBuilder group: #UserProfiles)
 				order: 1;
+				help: 'Group the user profiles.';
 				withSeparatorAfter.
 			(aBuilder group: #ProfileAction)
 				order: 2;
+				help: 'Group the actions for the user profiles.';
 				withSeparatorAfter.
 			(aBuilder group: #ImportExport)
 				order: 3;
-				withSeparatorAfter.
-			(aBuilder group: #ProfileTutorial) order: 4 ]
+				help: 'Actions of import/export of profiles.';				
+        withSeparatorAfter.
+			(aBuilder group: #ProfileTutorial) 
+        order: 4;
+        help: 'Tutorial about profiles' ]
 ]
 
 { #category : 'menu items' }
