@@ -7,7 +7,7 @@ A strategy is the way the window will be placed on the screen, such as replace t
 
 To fully understand my fonctionnalities, you can:
 
-- Click on 'Add Profile' in the Profiles menu.
+- Click on 'New Profile' in the Profiles menu.
 
 - Select 'Show/hide current profile' to display visual placeholders of the current profile
 ( - Left click on one of them allows to change the strategy associated with the window 
