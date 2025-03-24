@@ -10,7 +10,7 @@ Here is a typical global usage example
 ```
 | cb |
 StObjectTranscriptLogger start.
-cb := self new.
+cb := StObjectTranscriptPresenter new.
 cb logger: StObjectTranscriptLogger instance.
 'this is a message only interesting from the logger domain' emit.
 cb open.
