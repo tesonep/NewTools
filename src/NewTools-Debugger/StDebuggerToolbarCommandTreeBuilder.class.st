@@ -51,7 +51,7 @@ StDebuggerToolbarCommandTreeBuilder class >> groupName [
 ]
 
 { #category : 'accessing' }
-StDebuggerToolbarCommandTreeBuilder class >> groupsNames [
+StDebuggerToolbarCommandTreeBuilder class >> toolbarGroupsNames [
 
 	^ {
 		  self contextControlGroupName.
