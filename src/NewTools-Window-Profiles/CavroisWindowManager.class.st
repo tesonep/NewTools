@@ -191,8 +191,10 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 
 	<worldMenu>
 	(aBuilder item: #Profiles)
-		order: 95;
-		help: 'Profiles lets you define places where your windows will be automatically be placed.';
+		parent: #Windows;
+		order: 0;
+		help:
+			'Profiles lets you define places where your windows will be automatically be placed.';
 		with: [
 			(aBuilder group: #UserProfiles)
 				order: 1;
@@ -204,11 +206,11 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 				withSeparatorAfter.
 			(aBuilder group: #ImportExport)
 				order: 3;
-				help: 'Actions of import/export of profiles.';				
-        withSeparatorAfter.
-			(aBuilder group: #ProfileTutorial) 
-        order: 4;
-        help: 'Tutorial about profiles' ]
+				help: 'Actions of import/export of profiles.';
+				withSeparatorAfter.
+			(aBuilder group: #ProfileTutorial)
+				order: 4;
+				help: 'Tutorial about profiles' ]
 ]
 
 { #category : 'menu items' }
