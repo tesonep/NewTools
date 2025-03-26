@@ -8,9 +8,10 @@ Class {
 
 { #category : 'building' }
 StDebuggerStandardToolbar >> build [
-	presenter := owner newToolbar.
-	presenter addStyle: 'stToolbar'.
-	presenter displayMode: owner application toolbarDisplayMode
+
+	toolbarPresenter := owner newToolbar.
+	toolbarPresenter addStyle: 'stToolbar'.
+	toolbarPresenter displayMode: owner application toolbarDisplayMode
 ]
 
 { #category : 'updating' }
@@ -18,6 +19,6 @@ StDebuggerStandardToolbar >> updateWith: aCommandGroup [
 
 	super updateWith: aCommandGroup.
 	SpToolbarPresenterBuilder new
-		toolbarPresenter: self presenter;
+		toolbarPresenter: self toolbarPresenter;
 		visit: commandsGroup
 ]

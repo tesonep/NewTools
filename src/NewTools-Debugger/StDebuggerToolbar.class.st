@@ -3,8 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'commandsGroup',
-		'presenter',
-		'owner'
+		'owner',
+		'toolbarPresenter'
 	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
@@ -54,9 +54,15 @@ StDebuggerToolbar >> owner: aStPresenter [
 ]
 
 { #category : 'accessing' }
-StDebuggerToolbar >> presenter [
+StDebuggerToolbar >> toolbarPresenter [
 
-	^ presenter ifNil: [ presenter := SpPresenter new ]
+	^ toolbarPresenter
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbar >> toolbarPresenter: anObject [
+
+	toolbarPresenter := anObject
 ]
 
 { #category : 'updating' }
