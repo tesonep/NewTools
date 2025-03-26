@@ -16,6 +16,11 @@ Class {
 }
 
 { #category : 'accessing' }
+StDebuggerCodeCommandTreeBuilder class >> codeDebugCommandsGroupName [
+	^'Execution'
+]
+
+{ #category : 'accessing' }
 StDebuggerCodeCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu 
 ]
@@ -60,7 +65,7 @@ StDebuggerCodeCommandTreeBuilder >> codeDebugCommandsDescription [
 
 { #category : 'accessing' }
 StDebuggerCodeCommandTreeBuilder >> codeDebugCommandsGroupName [
-	^'Execution'
+	^ self class codeDebugCommandsGroupName
 ]
 
 { #category : 'accessing - commands classes' }

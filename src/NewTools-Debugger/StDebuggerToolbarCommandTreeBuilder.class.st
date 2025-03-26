@@ -16,8 +16,28 @@ Class {
 }
 
 { #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder class >> contextControlGroupName [
+	^'Context control'
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder class >> contextRequestGroupName [
+	^'Context requests'
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder class >> defaultDebugActionsGroupName [
+	^'Debugging actions'
+]
+
+{ #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsGroup
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder class >> executionControlGroupName [
+	^'Execution control'
 ]
 
 { #category : 'accessing' }
@@ -28,6 +48,16 @@ StDebuggerToolbarCommandTreeBuilder class >> groupDescription [
 { #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder class >> groupName [ 	
 	^'Toolbar'
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder class >> groupsNames [
+
+	^ {
+		  self contextControlGroupName.
+		  self contextRequestGroupName.
+		  self defaultDebugActionsGroupName.
+		  self executionControlGroupName }
 ]
 
 { #category : 'building' }
@@ -78,7 +108,7 @@ StDebuggerToolbarCommandTreeBuilder >> contextControlGroupDescription [
 
 { #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder >> contextControlGroupName [
-	^'Context control'
+	^ self class contextControlGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -103,7 +133,7 @@ StDebuggerToolbarCommandTreeBuilder >> contextRequestGroupDescription [
 
 { #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder >> contextRequestGroupName [
-	^'Context requests'
+	^ self class contextRequestGroupName
 ]
 
 { #category : 'accessing' }
@@ -113,7 +143,7 @@ StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsDescription [
 
 { #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder >> defaultDebugActionsGroupName [
-	^'Debugging actions'
+	^ self class defaultDebugActionsGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -144,5 +174,10 @@ StDebuggerToolbarCommandTreeBuilder >> executionControlGroupDescription [
 
 { #category : 'accessing' }
 StDebuggerToolbarCommandTreeBuilder >> executionControlGroupName [
-	^'Execution control'
+	^ self class executionControlGroupName
+]
+
+{ #category : 'accessing' }
+StDebuggerToolbarCommandTreeBuilder >> groupsNames [
+	^ self class groupsNames
 ]
