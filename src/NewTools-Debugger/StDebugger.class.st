@@ -334,15 +334,14 @@ StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
 	
 	debuggerCommandGroup := self rootCommandsGroup.
+
 	"Stack"
 	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName. 
 	stackTable actions: stackGroup.
 	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: self toolbarPresenter;
-		visit: toolbarCommandGroup.
+	self toolbar updateWith: toolbarCommandGroup.
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
@@ -1303,20 +1302,16 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
-{ #category : 'accessing - presenters' }
+{ #category : 'commands - support' }
 StDebugger >> toolbar [
 
-	^ toolbar ifNil: [
-		  toolbar := self newToolbar.
-		  toolbar addStyle: 'stToolbar'.
-		  toolbar displayMode: self application toolbarDisplayMode.
-		  toolbar ]
+	^ toolbar ifNil: [ toolbar := StDebuggerToolbar toolbarOn: self ]
 ]
 
 { #category : 'accessing - presenters' }
 StDebugger >> toolbarPresenter [
 
-	^ self toolbar
+	^ self toolbar toolbarPresenter
 ]
 
 { #category : 'code pane' }
