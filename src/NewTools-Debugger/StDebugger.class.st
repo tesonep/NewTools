@@ -357,6 +357,7 @@ StDebugger >> buildToolbar [
 	| toolbar standardCommands menuBar |
 	toolbar := self newToolbar.
 	toolbar addStyle: 'stToolbar'.
+	toolbar displayMode: self application toolbarDisplayMode.
 	standardCommands := (self toolbarStandardCommandsGroups collect:	#allCommands) flattened.
 	self buildToolbar: toolbar withCommands: standardCommands.
 
@@ -404,8 +405,8 @@ StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGrou
 		menuBar addGroup: [ :group |
 			group addItem: [ :item |
 				item
-					name: cmdGroup name;
-					icon: cmdGroup icon;
+					name: (self toolbarMenuNameForGroup: cmdGroup);
+					icon: (self toolbarMenuIconForGroup: cmdGroup);
 					subMenu: menuButton ] ] ]
 ]
 
@@ -1366,6 +1367,22 @@ StDebugger >> toolbarAdvancedCommandsGroups [
 	^ toolbarCommandGroup groups reject: [ :g |
 		  StDebuggerToolbarCommandTreeBuilder toolbarGroupsNames includes:
 			  g name ]
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarMenuIconForGroup: aGroup [
+
+	self application toolbarDisplayMode == SpToolbarDisplayMode modeLabel
+		ifTrue: [ ^ nil ].
+	^ aGroup icon
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarMenuNameForGroup: aGroup [
+
+	self application toolbarDisplayMode == SpToolbarDisplayMode modeIcon
+		ifTrue: [ ^ '' ].
+	^ aGroup name
 ]
 
 { #category : 'accessing - presenters' }
