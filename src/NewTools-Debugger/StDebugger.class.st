@@ -354,44 +354,67 @@ StDebugger >> buildContextMenus [
 { #category : 'toolbar' }
 StDebugger >> buildToolbar [
 
-	| toolbar advancedCommandsGroup menuButton menuBar |
+	| toolbar standardCommandsGroups standardCommands advancedCommandsGroups menuBar |
+	standardCommandsGroups := toolbarCommandGroup groups select: [ :g |
+		                          StDebuggerToolbarCommandTreeBuilder
+			                          toolbarGroupsNames includes: g name ].
+	advancedCommandsGroups := toolbarCommandGroup groups reject: [ :g |
+		                          StDebuggerToolbarCommandTreeBuilder
+			                          toolbarGroupsNames includes: g name ].
+
 	toolbar := self newToolbar.
 	toolbar addStyle: 'stToolbar'.
+	standardCommands := (standardCommandsGroups collect: #allCommands)
+		                    flattened.
+	self buildToolbar: toolbar withCommands: standardCommands.
 
-	((toolbarCommandGroup groups reject: [ :g | g name = 'Advanced Step' ])
-		 collect: #allCommands) flattened do: [ :command |
+	menuBar := self newMenuBar.
+	self
+		buildToolbarMenus: menuBar
+		withCommandsGroups: advancedCommandsGroups.
+
+	self toolbarPresenter layout: (SpBoxLayout newLeftToRight
+			 add: toolbar expand: false;
+			 add: (SpBoxLayout newTopToBottom
+					  add: menuBar;
+					  hAlignStart;
+					  vAlignCenter;
+					  yourself)
+			 expand: false;
+			 yourself)
+]
+
+{ #category : 'toolbar' }
+StDebugger >> buildToolbar: toolbar withCommands: commands [
+
+	commands do: [ :command |
 		| buttonPresenter |
 		buttonPresenter := command
 			                   configureAsToolbarButton;
 			                   buildPresenter.
 		buttonPresenter icon: (toolbar iconNamed: command iconName).
-		toolbar add: buttonPresenter ].
+		toolbar add: buttonPresenter ]
+]
 
-	advancedCommandsGroup := toolbarCommandGroup commandOrGroupNamed:
-		                         'Advanced Step'.
-	menuButton := self newMenu.
-	advancedCommandsGroup allCommands do: [ :cmd |
-		menuButton addItem: [ :item |
-			item
-				name: cmd name;
-				icon: (toolbarPresenter iconNamed: cmd iconName);
-				action: [ cmd execute ] ] ].
+{ #category : 'toolbar' }
+StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGroups [
 
-	menuBar := self newMenuBar.
-	menuBar addGroup: [ :group |
-		group addItem: [ :item |
-			item
-				name: 'Advanced';
-				subMenu: menuButton ] ].
+	advancedCommandGroups do: [ :cmdGroup |
+		| menuButton |
+		menuButton := self newMenu.
+		cmdGroup allCommands do: [ :cmd |
+			menuButton addItem: [ :item |
+				item
+					name: cmd name;
+					icon: (self iconNamed: cmd iconName);
+					action: [ cmd execute ] ] ].
 
-	toolbarPresenter layout: (SpBoxLayout newLeftToRight
-			 add: toolbar expand: false;
-			 add: (SpBoxLayout newTopToBottom
-					  add: menuBar;
-					  vAlignCenter;
-					  yourself)
-			 expand: false;
-			 yourself)
+		menuBar addGroup: [ :group |
+			group addItem: [ :item |
+				item
+					name: cmdGroup name;
+					icon: (self iconNamed: cmdGroup iconName);
+					subMenu: menuButton ] ] ]
 ]
 
 { #category : 'commands - support' }
