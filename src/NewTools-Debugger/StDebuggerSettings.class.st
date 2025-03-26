@@ -104,28 +104,3 @@ StDebuggerSettings class >> preserveWindowPositionAndExtentOn: aBuilder [
 		default: true;
 		description: 'If enabled, the debugger will preserve the last known window position, and it will open new debugger windows in that configuration'.
 ]
-
-{ #category : 'accessing' }
-StDebuggerSettings class >> toolbarLayout [
-	^toolbarLayout ifNil: [ toolbarLayout := StDebuggerStandardToolbar]
-]
-
-{ #category : 'accessing' }
-StDebuggerSettings class >> toolbarLayout: aSymbol [
-
-	toolbarLayout := aSymbol
-]
-
-{ #category : 'settings' }
-StDebuggerSettings class >> toolbarLayoutSettingOn: aBuilder [
-
-	<systemsettings>
-	(aBuilder pickOne: #toolbarLayout)
-		label: 'Toolbar layout';
-		target: self;
-		parent: #debugging;
-		default: StDebuggerStandardToolbar;
-		domainValues: StDebuggerToolbar subclasses ;
-		description:
-			'Customize the debugger toolbar layout: standard for big buttons or compact for more space.'
-]
