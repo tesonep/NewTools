@@ -1,6 +1,6 @@
 "
 I'm a strategy that never creates a new window.
-
+I'm not working yet
 I just checks if the window associated with the placeholder is present, and put it on top of all the windows in the world.
 "
 Class {
