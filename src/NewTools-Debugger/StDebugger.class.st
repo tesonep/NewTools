@@ -357,6 +357,7 @@ StDebugger >> buildToolbar [
 	| toolbar advancedCommandsGroup menuButton menuBar |
 	toolbar := self newToolbar.
 	toolbar addStyle: 'stToolbar'.
+
 	((toolbarCommandGroup groups reject: [ :g | g name = 'Advanced Step' ])
 		 collect: #allCommands) flattened do: [ :command |
 		| buttonPresenter |
@@ -373,7 +374,8 @@ StDebugger >> buildToolbar [
 		menuButton addItem: [ :item |
 			item
 				name: cmd name;
-				icon: (toolbarPresenter iconNamed: cmd iconName) ] ].
+				icon: (toolbarPresenter iconNamed: cmd iconName);
+				action: [ cmd execute ] ] ].
 
 	menuBar := self newMenuBar.
 	menuBar addGroup: [ :group |
@@ -381,10 +383,14 @@ StDebugger >> buildToolbar [
 			item
 				name: 'Advanced';
 				subMenu: menuButton ] ].
-		
+
 	toolbarPresenter layout: (SpBoxLayout newLeftToRight
 			 add: toolbar expand: false;
-			 add: (SpBoxLayout newTopToBottom add: menuBar; vAlignCenter; yourself) expand: false;
+			 add: (SpBoxLayout newTopToBottom
+					  add: menuBar;
+					  vAlignCenter;
+					  yourself)
+			 expand: false;
 			 yourself)
 ]
 
