@@ -405,7 +405,7 @@ StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGrou
 			group addItem: [ :item |
 				item
 					name: cmdGroup name;
-					icon: (self iconNamed: cmdGroup iconName);
+					icon: cmdGroup icon;
 					subMenu: menuButton ] ] ]
 ]
 
