@@ -20,8 +20,8 @@ StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance 
 	toolbarGroup := rootCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	toolbarSindarinGroup := CmCommandGroup forSpec
 			beToolbarPopoverButton;
-			name: 'Advanced Step';
-			icon: (stDebuggerInstance application iconNamed: #dropDown);
+			name: 'Advanced';
+			icon: (stDebuggerInstance application iconNamed: #smallDebugIt);
 			yourself.
 	toolbarGroup register: toolbarSindarinGroup.
 	commands do: [ :c | toolbarSindarinGroup register: c ].		 

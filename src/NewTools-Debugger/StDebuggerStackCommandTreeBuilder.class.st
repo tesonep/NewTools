@@ -16,6 +16,11 @@ Class {
 }
 
 { #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> browseGroupName [
+	^ 'Browse'
+]
+
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder class >> displayStrategy [
 	^CmUIDisplayAsSubMenu
 ]
@@ -31,13 +36,48 @@ StDebuggerStackCommandTreeBuilder class >> groupName [
 ]
 
 { #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackContextMenuActionsGroupName [
+	^ 'Context Actions'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackContextMenuExplorationGroupName [
+	^ 'Explore'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackContextNavigationGroupName [
+	^ 'Receiver class code navigation commands'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackGroupName [
+	^ 'Stack'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackMethodNavigationGroupName [
+	^ 'Selected method navigation commands'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackMethodSelectorNavigationGroupName [
+	^ 'Selected method''s selector navigation commands'
+]
+
+{ #category : 'accessing' }
+StDebuggerStackCommandTreeBuilder class >> stackReceiverClassNavigationGroupName [
+	^ 'Receiver class navigation commands'
+]
+
+{ #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> browseGroupDescription [
 	^ 'Navigate the system from the stack'
 ]
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> browseGroupName [
-	^ 'Browse'
+	^ self class browseGroupName
 ]
 
 { #category : 'building' }
@@ -93,7 +133,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsDescription [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuActionsGroupName [
-	^ 'Context Actions'
+	^ self class stackContextMenuActionsGroupName
 ]
 
 { #category : 'commands' }
@@ -140,7 +180,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationDescription [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextMenuExplorationGroupName [
-	^ 'Explore'
+	^ self class stackContextMenuExplorationGroupName
 ]
 
 { #category : 'commands' }
@@ -176,7 +216,7 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackContextNavigationGroupName [
-	^ 'Receiver class code navigation commands'
+	^ self class stackContextNavigationGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -203,7 +243,7 @@ StDebuggerStackCommandTreeBuilder >> stackGroupDescription [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackGroupName [
-	^ 'Stack'
+	^ self class stackGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -231,7 +271,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackMethodNavigationGroupName [
-	^ 'Selected method navigation commands'
+	^ self class stackMethodNavigationGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -263,7 +303,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationGroupName [
-	^ 'Selected method''s selector navigation commands'
+	^ self class stackMethodSelectorNavigationGroupName
 ]
 
 { #category : 'accessing - commands classes' }
@@ -294,7 +334,7 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 
 { #category : 'accessing' }
 StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationGroupName [
-	^ 'Receiver class navigation commands'
+	^ self class stackReceiverClassNavigationGroupName
 ]
 
 { #category : 'accessing - commands classes' }
