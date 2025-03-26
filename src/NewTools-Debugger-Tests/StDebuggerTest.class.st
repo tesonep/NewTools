@@ -39,7 +39,7 @@ StDebuggerTest >> debuggerOn: aDebugSession [
 { #category : 'accessing' }
 StDebuggerTest >> executionControlCommandFrom: aDebugger [
 
-	^ debugger toolbar leftItems select: [ :p | 
+	^ debugger toolbarPresenter layout presenters first  leftItems select: [ :p | 
 		  #( 'Proceed' 'Into' 'Over' 'Through' ) includes: p label ]
 ]
 
@@ -1198,8 +1198,9 @@ StDebuggerTest >> testStackTableWithNewSession [
 { #category : 'tests - toolbar' }
 StDebuggerTest >> testToolbarDisplayMode [
 	debugger := self debuggerOn: session.
+	debugger buildToolbar.
 	self
-		assert: debugger toolbar displayMode
+		assert: debugger toolbarPresenter layout presenters first displayMode
 		equals: debugger application toolbarDisplayMode
 ]
 
