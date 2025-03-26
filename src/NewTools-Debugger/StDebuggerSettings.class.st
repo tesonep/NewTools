@@ -33,9 +33,6 @@ Class {
 		'LastKnownPosition',
 		'PreserveWindowPosition'
 	],
-	#classInstVars : [
-		'toolbarLayout'
-	],
 	#category : 'NewTools-Debugger-Model',
 	#package : 'NewTools-Debugger',
 	#tag : 'Model'
