@@ -354,24 +354,16 @@ StDebugger >> buildContextMenus [
 { #category : 'toolbar' }
 StDebugger >> buildToolbar [
 
-	| toolbar standardCommandsGroups standardCommands advancedCommandsGroups menuBar |
-	standardCommandsGroups := toolbarCommandGroup groups select: [ :g |
-		                          StDebuggerToolbarCommandTreeBuilder
-			                          toolbarGroupsNames includes: g name ].
-	advancedCommandsGroups := toolbarCommandGroup groups reject: [ :g |
-		                          StDebuggerToolbarCommandTreeBuilder
-			                          toolbarGroupsNames includes: g name ].
-
+	| toolbar standardCommands menuBar |
 	toolbar := self newToolbar.
 	toolbar addStyle: 'stToolbar'.
-	standardCommands := (standardCommandsGroups collect: #allCommands)
-		                    flattened.
+	standardCommands := (self toolbarStandardCommandsGroups collect:	#allCommands) flattened.
 	self buildToolbar: toolbar withCommands: standardCommands.
 
 	menuBar := self newMenuBar.
 	self
 		buildToolbarMenus: menuBar
-		withCommandsGroups: advancedCommandsGroups.
+		withCommandsGroups: self toolbarAdvancedCommandsGroups.
 
 	self toolbarPresenter layout: (SpBoxLayout newLeftToRight
 			 add: toolbar expand: false;
@@ -1368,10 +1360,26 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
+{ #category : 'toolbar' }
+StDebugger >> toolbarAdvancedCommandsGroups [
+
+	^ toolbarCommandGroup groups reject: [ :g |
+		  StDebuggerToolbarCommandTreeBuilder toolbarGroupsNames includes:
+			  g name ]
+]
+
 { #category : 'accessing - presenters' }
 StDebugger >> toolbarPresenter [
 
 	^ toolbarPresenter ifNil:[toolbarPresenter := SpPresenter new]
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarStandardCommandsGroups [
+
+	^ toolbarCommandGroup groups select: [ :g |
+		  StDebuggerToolbarCommandTreeBuilder toolbarGroupsNames includes:
+			  g name ]
 ]
 
 { #category : 'code pane' }
