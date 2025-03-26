@@ -20,19 +20,10 @@ StDebuggerToolbar class >> on: aStPresenter [
 		  yourself
 ]
 
-{ #category : 'settings' }
-StDebuggerToolbar class >> toolbarLayoutCompact [
-
-	^ StDebuggerSettings toolbarLayout
-	  = StDebuggerSettings toolbarLayoutCompact
-]
-
 { #category : 'instance creation' }
 StDebuggerToolbar class >> toolbarOn: aStPresenter [
 
-	^ (self toolbarLayoutCompact
-		   ifTrue: [ StDebuggerCompactToolbar ]
-		   ifFalse: [ StDebuggerStandardToolbar ]) on: aStPresenter
+	^ StDebuggerSettings toolbarLayout on: aStPresenter
 ]
 
 { #category : 'building' }

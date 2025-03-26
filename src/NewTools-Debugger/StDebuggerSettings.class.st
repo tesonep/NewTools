@@ -107,19 +107,13 @@ StDebuggerSettings class >> preserveWindowPositionAndExtentOn: aBuilder [
 
 { #category : 'accessing' }
 StDebuggerSettings class >> toolbarLayout [
-	^toolbarLayout ifNil: [ toolbarLayout := #standard ]
+	^toolbarLayout ifNil: [ toolbarLayout := StDebuggerStandardToolbar]
 ]
 
 { #category : 'accessing' }
 StDebuggerSettings class >> toolbarLayout: aSymbol [
 
 	toolbarLayout := aSymbol
-]
-
-{ #category : 'default values' }
-StDebuggerSettings class >> toolbarLayoutCompact [
-
-	^ #compact
 ]
 
 { #category : 'settings' }
@@ -130,16 +124,8 @@ StDebuggerSettings class >> toolbarLayoutSettingOn: aBuilder [
 		label: 'Toolbar layout';
 		target: self;
 		parent: #debugging;
-		default: #standard;
-		domainValues: {
-				self toolbarLayoutStandard.
-				self toolbarLayoutCompact };
+		default: StDebuggerStandardToolbar;
+		domainValues: StDebuggerToolbar subclasses ;
 		description:
 			'Customize the debugger toolbar layout: standard for big buttons or compact for more space.'
-]
-
-{ #category : 'default values' }
-StDebuggerSettings class >> toolbarLayoutStandard [
-
-	^ #standard
 ]
