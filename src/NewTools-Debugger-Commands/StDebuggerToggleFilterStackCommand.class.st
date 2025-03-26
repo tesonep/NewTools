@@ -28,6 +28,12 @@ StDebuggerToggleFilterStackCommand class >> defaultShortcut [
 	^$c meta, $f meta
 ]
 
+{ #category : 'accessing' }
+StDebuggerToggleFilterStackCommand >> canBeExecuted [
+
+	^ true
+]
+
 { #category : 'executing' }
 StDebuggerToggleFilterStackCommand >> execute [
 	StDebuggerActionModel shouldFilterStack: StDebuggerActionModel shouldFilterStack not.

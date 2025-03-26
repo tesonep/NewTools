@@ -28,6 +28,12 @@ StDebuggerSettingsCommand class >> defaultShortcut [
 	^$f meta, $s meta
 ]
 
+{ #category : 'accessing' }
+StDebuggerSettingsCommand >> canBeExecuted [
+
+	^ true
+]
+
 { #category : 'executing' }
 StDebuggerSettingsCommand >> execute [
 
