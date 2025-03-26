@@ -76,7 +76,6 @@ Class {
 	#classTraits : 'TDebugger classTrait',
 	#instVars : [
 		'code',
-		'toolbar',
 		'stackTable',
 		'inspector',
 		'breakpointInspector',
@@ -87,7 +86,8 @@ Class {
 		'debuggerActionModel',
 		'unsavedCodeChanges',
 		'programmaticallyClosed',
-		'stackAndCodeContainer'
+		'stackAndCodeContainer',
+		'toolbarPresenter'
 	],
 	#classVars : [
 		'EnableStackColoring'
@@ -341,7 +341,7 @@ StDebugger >> buildContextMenus [
 	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
-	self toolbar updateWith: toolbarCommandGroup.
+	self buildToolbar.
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
@@ -349,6 +349,43 @@ StDebugger >> buildContextMenus [
 	
 	"Configuration"
 	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName)
+]
+
+{ #category : 'toolbar' }
+StDebugger >> buildToolbar [
+
+	| toolbar advancedCommandsGroup menuButton menuBar |
+	toolbar := self newToolbar.
+	toolbar addStyle: 'stToolbar'.
+	((toolbarCommandGroup groups reject: [ :g | g name = 'Advanced Step' ])
+		 collect: #allCommands) flattened do: [ :command |
+		| buttonPresenter |
+		buttonPresenter := command
+			                   configureAsToolbarButton;
+			                   buildPresenter.
+		buttonPresenter icon: (toolbar iconNamed: command iconName).
+		toolbar add: buttonPresenter ].
+
+	advancedCommandsGroup := toolbarCommandGroup commandOrGroupNamed:
+		                         'Advanced Step'.
+	menuButton := self newMenu.
+	advancedCommandsGroup allCommands do: [ :cmd |
+		menuButton addItem: [ :item |
+			item
+				name: cmd name;
+				icon: (toolbarPresenter iconNamed: cmd iconName) ] ].
+
+	menuBar := self newMenuBar.
+	menuBar addGroup: [ :group |
+		group addItem: [ :item |
+			item
+				name: 'Advanced';
+				subMenu: menuButton ] ].
+		
+	toolbarPresenter layout: (SpBoxLayout newLeftToRight
+			 add: toolbar expand: false;
+			 add: (SpBoxLayout newTopToBottom add: menuBar; vAlignCenter; yourself) expand: false;
+			 yourself)
 ]
 
 { #category : 'commands - support' }
@@ -1302,16 +1339,10 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
-{ #category : 'commands - support' }
-StDebugger >> toolbar [
-
-	^ toolbar ifNil: [ toolbar := StDebuggerToolbar toolbarOn: self ]
-]
-
 { #category : 'accessing - presenters' }
 StDebugger >> toolbarPresenter [
 
-	^ self toolbar toolbarPresenter
+	^ toolbarPresenter ifNil:[toolbarPresenter := SpPresenter new]
 ]
 
 { #category : 'code pane' }
@@ -1508,7 +1539,7 @@ StDebugger >> updateStep [
 		p update ]
 ]
 
-{ #category : 'updating - presenters' }
+{ #category : 'toolbar' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].
