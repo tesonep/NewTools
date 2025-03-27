@@ -203,12 +203,12 @@ StDebuggerStackCommandTreeBuilder >> stackContextNavigationCommands [
 	^ (CmCommandGroup named: self stackContextNavigationGroupName) asSpecGroup
 		beDisplayedAsGroup;
 		register: ((SpBrowseClassCommand forSpecContext: stDebuggerInstance)
-			name: 'method';
+			name: 'Method';
 			yourself);
 		register: (((SpBrowseClassCommand forContext: stDebuggerInstance)
 			selector: #doBrowseReceiverClass;
 			asSpecCommand)
-				name: 'receiver';
+				name: 'Receiver';
 				shortcutKey: nil;
 				yourself);
 		yourself
@@ -265,7 +265,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 	group beDisplayedAsGroup.
 	self stackMethodCommandsClasses do: [ :navCmdClass | 
 		group register:
-			(self buildSpecCommand: navCmdClass forContext: stDebuggerInstance) ].
+			(self buildSpecCommand: navCmdClass forContext: [stDebuggerInstance selectedContext method]) ].
 	^ group
 ]
 
