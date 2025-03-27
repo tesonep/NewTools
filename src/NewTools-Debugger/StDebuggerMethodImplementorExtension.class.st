@@ -191,6 +191,6 @@ StDebuggerMethodImplementorExtension >> updatePresenter [
 	receiverClass withAllSuperclassesDo: [ :aClass |
 		traits addAll: aClass allTraits.
 		items add: aClass ].
-
+	items addAll: traits.
 	classesAndTraits items: items
 ]
