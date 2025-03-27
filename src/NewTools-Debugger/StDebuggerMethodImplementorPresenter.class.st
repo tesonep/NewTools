@@ -2,7 +2,7 @@
 I am a debugger extension that helps create a method that raised a debugger with a DNU, allowing to choose some parameters such as the class or trait and the protocol of the new method. 
 "
 Class {
-	#name : 'StDebuggerMethodImplementorExtension',
+	#name : 'StDebuggerMethodImplementorPresenter',
 	#superclass : 'SpPresenter',
 	#traits : 'TStDebuggerExtension',
 	#classTraits : 'TStDebuggerExtension classTrait',
@@ -21,7 +21,7 @@ Class {
 }
 
 { #category : 'testing' }
-StDebuggerMethodImplementorExtension class >> acceptsPredicate: aStDebuggerContextPredicate [
+StDebuggerMethodImplementorPresenter class >> acceptsPredicate: aStDebuggerContextPredicate [
 
 	^ aStDebuggerContextPredicate isContextDoesNotUnderstand or: [
 		  aStDebuggerContextPredicate
@@ -29,13 +29,13 @@ StDebuggerMethodImplementorExtension class >> acceptsPredicate: aStDebuggerConte
 ]
 
 { #category : 'debugger extension' }
-StDebuggerMethodImplementorExtension class >> showInDebugger [
+StDebuggerMethodImplementorPresenter class >> showInDebugger [
 
 	^ showDebuggerExtension ifNil: [ showDebuggerExtension := true ]
 ]
 
 { #category : 'presenters' }
-StDebuggerMethodImplementorExtension >> addProtocols: protocols [
+StDebuggerMethodImplementorPresenter >> addProtocols: protocols [
 	| sortedProtocols |
 
 	sortedProtocols := SortedCollection sortBlock: [ :p1 :p2 | p1 name <= p2 name ].
@@ -48,7 +48,7 @@ StDebuggerMethodImplementorExtension >> addProtocols: protocols [
 ]
 
 { #category : 'private - actions' }
-StDebuggerMethodImplementorExtension >> addProtocolsFrom: aClassOrTrait [
+StDebuggerMethodImplementorPresenter >> addProtocolsFrom: aClassOrTrait [
 
 	| allProtocolsWithDuplicates |
 	aClassOrTrait ifNil: [ ^ self ].
@@ -65,16 +65,17 @@ StDebuggerMethodImplementorExtension >> addProtocolsFrom: aClassOrTrait [
 ]
 
 { #category : 'debugger extension' }
-StDebuggerMethodImplementorExtension >> debuggerExtensionToolName [
+StDebuggerMethodImplementorPresenter >> debuggerExtensionToolName [
 
 	^ 'Create method'
 ]
 
 { #category : 'layout' }
-StDebuggerMethodImplementorExtension >> defaultLayout [
+StDebuggerMethodImplementorPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: description height: self class toolbarHeight;
+		  add: 'Problem' expand: false fill: false padding: 5; 
+		  add: description height: (2 * self class toolbarHeight);
 		  add: 'Class or Trait' expand: false fill: false padding: 5; 
 		  add: (SpBoxLayout newLeftToRight
 				   add: classesAndTraits expand: true fill: true padding: 5;
@@ -99,7 +100,7 @@ StDebuggerMethodImplementorExtension >> defaultLayout [
 ]
 
 { #category : 'actions' }
-StDebuggerMethodImplementorExtension >> implementMethod [
+StDebuggerMethodImplementorPresenter >> implementMethod [
 	| classOrTrait methodImplementor |
 	
 	classOrTrait := classesAndTraits selectedItem.
@@ -113,10 +114,12 @@ StDebuggerMethodImplementorExtension >> implementMethod [
 ]
 
 { #category : 'initialization' }
-StDebuggerMethodImplementorExtension >> initializePresenters [
+StDebuggerMethodImplementorPresenter >> initializePresenters [
 	
-	description := self newLabel.
-	description label: exception description.
+	description := self newText.
+	description beWrapWord.
+	description beNotEditable.
+	description text: exception description.
 
 	selectedProtocol := self newDropList.
 	selectedProtocol 
@@ -153,7 +156,7 @@ StDebuggerMethodImplementorExtension >> initializePresenters [
 ]
 
 { #category : 'actions' }
-StDebuggerMethodImplementorExtension >> protocol [
+StDebuggerMethodImplementorPresenter >> protocol [
 
 	^ customProtocolCheckBox state
 		  ifTrue: [ customProtocolTextInput text ]
@@ -161,7 +164,7 @@ StDebuggerMethodImplementorExtension >> protocol [
 ]
 
 { #category : 'presenters' }
-StDebuggerMethodImplementorExtension >> selectMatchingProtocol [
+StDebuggerMethodImplementorPresenter >> selectMatchingProtocol [
 
 	| stringToMatch matchingProtocols |
 	stringToMatch := String streamContents: [ :s |
@@ -174,14 +177,14 @@ StDebuggerMethodImplementorExtension >> selectMatchingProtocol [
 ]
 
 { #category : 'accessing - model' }
-StDebuggerMethodImplementorExtension >> setModelBeforeInitialization: aStDebugger [
+StDebuggerMethodImplementorPresenter >> setModelBeforeInitialization: aStDebugger [
 
 	debugger := aStDebugger.
 	exception := debugger exception 
 ]
 
 { #category : 'initialization' }
-StDebuggerMethodImplementorExtension >> updatePresenter [
+StDebuggerMethodImplementorPresenter >> updatePresenter [
 	| traits receiverClass items |
 	
 	items := OrderedCollection new.
@@ -191,6 +194,6 @@ StDebuggerMethodImplementorExtension >> updatePresenter [
 	receiverClass withAllSuperclassesDo: [ :aClass |
 		traits addAll: aClass allTraits.
 		items add: aClass ].
-
+	items addAll: traits.
 	classesAndTraits items: items
 ]

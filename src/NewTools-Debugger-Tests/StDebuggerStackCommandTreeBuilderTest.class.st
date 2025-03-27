@@ -191,12 +191,12 @@ StDebuggerStackCommandTreeBuilderTest >> testStackContextNavigationCommands [
 	self deny: cmdGroup isRoot.
 	
 	self assert: commands first class identicalTo: SpBrowseClassCommand.
-	self assert: commands first name equals: 'method'.
+	self assert: commands first name equals: 'Method'.
 	"self assert: commands first context identicalTo: debugger stackTable selection selectedItem method."
 	self assert: commands first selector equals: #doBrowseClass.
 	
 	self assert: commands second class identicalTo: SpBrowseClassCommand.
-	self assert: commands second name equals: 'receiver'.
+	self assert: commands second name equals: 'Receiver'.
 	"self assert: commands second context identicalTo: debugger stackTable selection selectedItem receiver class"
 	self assert: commands second selector equals: #doBrowseReceiverClass.
 	

@@ -25,7 +25,7 @@ StDebuggerMNUExtensionTest >> extensionClassesOfDebugger [
 { #category : 'accessing' }
 StDebuggerMNUExtensionTest >> extensionTested [
 
-	^ StDebuggerMethodImplementorExtension
+	^ StDebuggerMethodImplementorPresenter
 ]
 
 { #category : 'action' }

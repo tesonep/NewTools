@@ -1,8 +1,7 @@
 Class {
 	#name : 'StDebuggerContextInteractionModel',
-	#superclass : 'SpCodeInteractionModel',
+	#superclass : 'SpContextInteractionModel',
 	#instVars : [
-		'context',
 		'bindings'
 	],
 	#category : 'NewTools-Debugger-Model',
@@ -23,12 +22,6 @@ StDebuggerContextInteractionModel >> addBinding: aBinding [
 	self bindings add: aBinding 
 ]
 
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> behavior [
-
-	^ self context receiver class
-]
-
 { #category : 'binding' }
 StDebuggerContextInteractionModel >> bindingOf: aString [
 
@@ -43,30 +36,7 @@ StDebuggerContextInteractionModel >> bindingOf: aString [
 { #category : 'accessing' }
 StDebuggerContextInteractionModel >> bindings [
 
-	^ bindings ifNil: [ bindings := Dictionary new ]
-]
-
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> context [
-
-	^context
-]
-
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> context: aContext [
-	context := aContext
-]
-
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> doItContext [
-
-	^ self context
-]
-
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> doItReceiver [
-
-	^ self context receiver
+	^ bindings ifNil: [ bindings := Dictionary new ] 
 ]
 
 { #category : 'testing' }
@@ -90,24 +60,7 @@ StDebuggerContextInteractionModel >> hasBindingOf: aString [
 ]
 
 { #category : 'testing' }
-StDebuggerContextInteractionModel >> hasUnsavedCodeChanges [
-
-	^ context isNotNil and: [ context sourceCode ~= owner text asString ]
-]
-
-{ #category : 'testing' }
-StDebuggerContextInteractionModel >> isScripting [
-	^context belongsToDoIt
-]
-
-{ #category : 'testing' }
 StDebuggerContextInteractionModel >> needRequestorScope [
 
 	^ true
-]
-
-{ #category : 'accessing' }
-StDebuggerContextInteractionModel >> object [
-
-	^ self doItReceiver
 ]
