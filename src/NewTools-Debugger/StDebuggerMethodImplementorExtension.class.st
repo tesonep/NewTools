@@ -74,7 +74,8 @@ StDebuggerMethodImplementorExtension >> debuggerExtensionToolName [
 StDebuggerMethodImplementorExtension >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: description height: self class toolbarHeight;
+		  add: 'Problem' expand: false fill: false padding: 5; 
+		  add: description height: (2 * self class toolbarHeight);
 		  add: 'Class or Trait' expand: false fill: false padding: 5; 
 		  add: (SpBoxLayout newLeftToRight
 				   add: classesAndTraits expand: true fill: true padding: 5;
@@ -115,8 +116,10 @@ StDebuggerMethodImplementorExtension >> implementMethod [
 { #category : 'initialization' }
 StDebuggerMethodImplementorExtension >> initializePresenters [
 	
-	description := self newLabel.
-	description label: exception description.
+	description := self newText.
+	description beWrapWord.
+	description beNotEditable.
+	description text: exception description.
 
 	selectedProtocol := self newDropList.
 	selectedProtocol 
