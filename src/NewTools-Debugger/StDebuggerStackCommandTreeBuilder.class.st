@@ -98,7 +98,7 @@ StDebuggerStackCommandTreeBuilder >> buildSpecCommand: aCommandClass forContext:
 
 	| cmd |
 	cmd := super buildSpecCommand: aCommandClass forContext: stDebuggerInstance.
-	cmd name: aCommandClass shortName.
+	cmd name: aCommandClass shortName capitalized.
 	^ cmd
 ]
 
@@ -264,8 +264,11 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 		         asSpecGroup.
 	group beDisplayedAsGroup.
 	self stackMethodCommandsClasses do: [ :navCmdClass | 
-		group register:
-			(self buildSpecCommand: navCmdClass forContext: [stDebuggerInstance selectedContext method]) ].
+		|cmd|
+		cmd := self buildSpecCommand: navCmdClass forContext: stDebuggerInstance.
+		cmd innerCommand transform: [:dbg| dbg selectedContext ].
+		group register: cmd
+			 ].
 	^ group
 ]
 
@@ -297,7 +300,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance "stackSelectionMethodSelectorContext") ].
+						forContext: stDebuggerInstance) ].
 	^ group
 ]
 
@@ -324,11 +327,10 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 	group beDisplayedAsGroup.
 	self stackReceiverCommandsClasses
 		do: [ :navCmdClass | 
-			group
-				register:
-					(self
-						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance "stackSelectionReceiverClassContext") ].
+			|cmd|
+			cmd := self buildSpecCommand: navCmdClass forContext: stDebuggerInstance.
+			cmd innerCommand transform: [:dbg| cmd innerCommand dynamicDebuggerContext: dbg ].
+			group register: cmd ].
 	^ group
 ]
 
