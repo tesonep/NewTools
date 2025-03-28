@@ -673,36 +673,10 @@ StDebugger >> doBrowseImplementors [
 ]
 
 { #category : 'commands' }
-StDebugger >> doBrowseMethodInheritance [
-
-	| cls |
-	(self stackSelectionMethodContext value: self) method isDoIt ifTrue: [ 
-		^ self ].
-	cls := self stackSelectionReceiverClassContext value: self.
-	cls isBlock ifTrue: [ 
-		cls := (self stackSelectionMethodContext value: self) methodClass ].
-	self systemNavigation
-		methodHierarchyBrowserForClass:
-		(self stackSelectionReceiverClassContext value: self)
-		selector: (self stackSelectionMethodSelectorContext value: self)
-]
-
-{ #category : 'commands' }
 StDebugger >> doBrowseMethodReferences [
 
 	self systemNavigation browseAllSendersOrUsersOf:
 		(self stackSelectionMethodSelectorContext value: self)
-]
-
-{ #category : 'commands' }
-StDebugger >> doBrowseMethodVersions [
-
-	| target |
-	target := self stackSelectionMethodContext.
-	target isBlock ifTrue: [ target := target method ].
-	(self application toolNamed: #versionBrowser)
-		browseVersionsForClass: target methodClass
-		selector: target selector
 ]
 
 { #category : 'commands' }
@@ -717,6 +691,11 @@ StDebugger >> doBrowseSenders [
 
 	self systemNavigation browseAllSendersOf:
 		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : 'accessing' }
+StDebugger >> environment [
+	^self class environment
 ]
 
 { #category : 'accessing - model' }
@@ -1285,27 +1264,47 @@ StDebugger >> stackOfSize: anInteger [
 ]
 
 { #category : 'commands - support' }
+StDebugger >> stackSelectionMethod [
+	^self selectedContext homeMethod
+]
+
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ :dbg | stackTable selection selectedItem homeMethod ]
+	^ [ :dbg | dbg stackSelectionMethod ]
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionMethodSelector [
+	^self stackSelectionMethod selector
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
-	^ [ :dbg | stackTable selection selectedItem method selector ]
+	^ [ :dbg | dbg stackSelectionMethodSelector ]
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionReceiver [
+	^self selectedContext receiver
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionReceiverClass [
+	^self stackSelectionReceiver class
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
 
-	^ [ :dbg | stackTable selection selectedItem receiver class ]
+	^ [ :dbg | dbg stackSelectionReceiverClass ]
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
 
-	^ [ :dbg | stackTable selection selectedItem receiver ]
+	^ [ :dbg | dbg stackSelectionReceiver ]
 ]
 
 { #category : 'accessing - presenters' }
