@@ -313,12 +313,14 @@ CavroisWindowManager class >> toggleProfilePlaceholders [
 { #category : 'updating' }
 CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileKey [
 
-	| newKey |
+	| newKey oldKey |
 	(deletedProfileKey includesSubstring: 'Current') ifFalse: [ ^ self ].
-	newKey := self current profiles keys first , ' (Current)'.
+	oldKey := self current profiles keys first.
+	newKey := oldKey , '(Current)'.
 	self current profiles
-		at: newKey put: self current profiles values first;
-		removeKey: self current profiles keys first.
+		at: newKey
+		put: self current profiles values first.
+	self current profiles removeKey: oldKey.
 	self current currentProfile: (self current profiles at: newKey)
 ]
 
