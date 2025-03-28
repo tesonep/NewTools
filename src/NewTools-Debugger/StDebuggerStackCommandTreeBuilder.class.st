@@ -300,7 +300,7 @@ StDebuggerStackCommandTreeBuilder >> stackMethodSelectorNavigationCommands [
 				register:
 					(self
 						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance "stackSelectionMethodSelectorContext") ].
+						forContext: stDebuggerInstance) ].
 	^ group
 ]
 
