@@ -327,11 +327,10 @@ StDebuggerStackCommandTreeBuilder >> stackReceiverClassNavigationCommands [
 	group beDisplayedAsGroup.
 	self stackReceiverCommandsClasses
 		do: [ :navCmdClass | 
-			group
-				register:
-					(self
-						buildSpecCommand: navCmdClass
-						forContext: stDebuggerInstance "stackSelectionReceiverClassContext") ].
+			|cmd|
+			cmd := self buildSpecCommand: navCmdClass forContext: stDebuggerInstance.
+			cmd innerCommand transform: [:dbg| cmd innerCommand dynamicDebuggerContext: dbg ].
+			group register: cmd ].
 	^ group
 ]
 
