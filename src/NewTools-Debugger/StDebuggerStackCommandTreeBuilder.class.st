@@ -264,8 +264,11 @@ StDebuggerStackCommandTreeBuilder >> stackMethodNavigationCommands [
 		         asSpecGroup.
 	group beDisplayedAsGroup.
 	self stackMethodCommandsClasses do: [ :navCmdClass | 
-		group register:
-			(self buildSpecCommand: navCmdClass forContext: [stDebuggerInstance selectedContext method]) ].
+		|cmd|
+		cmd := self buildSpecCommand: navCmdClass forContext: stDebuggerInstance.
+		cmd innerCommand transform: [:dbg| dbg selectedContext ].
+		group register: cmd
+			 ].
 	^ group
 ]
 
