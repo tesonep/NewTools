@@ -78,7 +78,7 @@ StThreadSafeTranscript >> allocateRecodings: size [
 StThreadSafeTranscript >> clear [
 
 	mutex critical: [
-		recordings := OrderedCollection new.
+		self allocateRecodings: maxEntry.
 		index := 0.
 		SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new  ]
 ]
