@@ -28,8 +28,8 @@ CavReplaceStrategy >> placePresenter: aPresenter [
 	
 	(SystemWindow allInstances select: [ :each |
 		 each position = placeHolder position 
-			and: [ each kind = aPresenter class ]]) do: [ :each | each delete ].
+			and: [ placeHolder kind = aPresenter class ]]) do: [ :each | each delete ].
 	(SpWindow allInstances select: [ :each |
 		 each position = placeHolder position 
-				and: [ each kind = aPresenter class ]]) do: [ :each | each delete ]
+				and: [ placeHolder kind = aPresenter class ]]) do: [ :each | each delete ]
 ]
