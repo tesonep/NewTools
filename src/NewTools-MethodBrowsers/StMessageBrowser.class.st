@@ -12,7 +12,6 @@ Class {
 	#name : 'StMessageBrowser',
 	#superclass : 'StAbstractMessageCentricBrowserPresenter',
 	#instVars : [
-		'title',
 		'refreshingBlock',
 		'textPresenter',
 		'highlight'
@@ -564,9 +563,14 @@ StMessageBrowser >> textConverter: aTextConverter [
 ]
 
 { #category : 'accessing' }
+StMessageBrowser >> textPresenter [
+	^ textPresenter
+]
+
+{ #category : 'accessing' }
 StMessageBrowser >> title: aString [
 
-	title := aString.
+	titleHolder := aString.
 	self updateTitle
 ]
 
@@ -588,7 +592,8 @@ StMessageBrowser >> topologicSort: aBoolean [
 
 { #category : 'api' }
 StMessageBrowser >> updateTitle [
-	self withWindowDo: [ :window | window title: self title ]
+
+	self withWindowDo: [ :window | window title: self windowTitle ]
 ]
 
 { #category : 'layout' }
@@ -623,8 +628,14 @@ StMessageBrowser >> windowIsClosing [
 	self class codeChangeAnnouncer unsubscribe: self
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 StMessageBrowser >> windowTitle [
 
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , messageList numberOfElements printString , ']'
+	| additional |
+	
+	additional := messageList
+		              ifNotNil: [ ' [' , messageList numberOfElements printString , ']' ]
+		              ifNil: [ '' ].
+
+	^ (titleHolder ifNil: [ 'Message Browser' ]) , additional
 ]

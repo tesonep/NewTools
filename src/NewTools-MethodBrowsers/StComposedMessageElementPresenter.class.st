@@ -50,6 +50,6 @@ StComposedMessageElementPresenter >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	selectorLabel label: (messageList selectorOf: self model) trimmed.
-	packageLabel label: (messageList packageOf: self model) trimmed.
+	packageLabel label: (messageList packageOf: self model) name trimmed.
 	locationLabel label: (messageList locationOf: self model) trimmed	
 ]
