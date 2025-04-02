@@ -73,6 +73,11 @@ StMessageToolbarPresenter >> owner: aPresenter [
 	messageList := aPresenter messageList.
 ]
 
+{ #category : 'accessing' }
+StMessageToolbarPresenter >> scopeList [
+	^ scopeList
+]
+
 { #category : 'events' }
 StMessageToolbarPresenter >> whenFlipLayoutDo: aBlock [
 
