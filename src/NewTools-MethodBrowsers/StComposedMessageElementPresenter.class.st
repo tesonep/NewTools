@@ -9,9 +9,9 @@ Class {
 		'packageLabel',
 		'messageList'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
+	#category : 'NewTools-MethodBrowsers-Messages',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#tag : 'Messages'
 }
 
 { #category : 'nil' }

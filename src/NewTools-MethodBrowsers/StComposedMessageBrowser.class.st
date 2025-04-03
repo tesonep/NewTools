@@ -1,9 +1,9 @@
 Class {
 	#name : 'StComposedMessageBrowser',
 	#superclass : 'StMessageBrowser',
-	#category : 'NewTools-MethodBrowsers-Senders',
+	#category : 'NewTools-MethodBrowsers-Messages',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#tag : 'Messages'
 }
 
 { #category : 'initialization' }

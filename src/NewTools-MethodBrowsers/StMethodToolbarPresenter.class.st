@@ -76,7 +76,7 @@ StMethodToolbarPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMethodToolbarPresenter >> doBrowseSenders [
 
-	messageList doBrowseSenders
+	^ messageList doBrowseSenders
 ]
 
 { #category : 'private - actions' }

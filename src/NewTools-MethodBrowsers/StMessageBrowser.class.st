@@ -19,9 +19,9 @@ Class {
 	#classVars : [
 		'UsingLayout'
 	],
-	#category : 'NewTools-MethodBrowsers-Senders',
+	#category : 'NewTools-MethodBrowsers-Messages',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Senders'
+	#tag : 'Messages'
 }
 
 { #category : 'instance creation' }
@@ -36,10 +36,22 @@ StMessageBrowser class >> browse: aCollection [
 StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 
+	^ self browse: aCollection asImplementorsOf: aSymbol inScope: nil
+
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol inScope: aScope [
+	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
+	| scopeToUse |
+	scopeToUse := aScope ifNil: [ RBBrowserEnvironment default ] ifNotNil: [aScope].
+
 	^ self new
 		setRefreshingBlockForImplementorsOf: aSymbol;
 		messages: aCollection;
 		title: 'Implementors of ', aSymbol printString;
+		switchScopeTo: scopeToUse;		
 		open
 ]
 
@@ -47,11 +59,22 @@ StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [
 StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Senders Browser"
 
+	^ self browse: aCollection asSendersOf: aSymbol inScope: nil
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browse: aCollection asSendersOf: aSymbol inScope: aScope [
+	"Special Version that sets the correct refreshing Block for Senders Browser"
+
+	| scopeToUse |
+	scopeToUse := aScope ifNil: [ RBBrowserEnvironment default ] ifNotNil: [aScope].
+
 	^ self new
 		setRefreshingBlockForSendersOf: aSymbol;
 		highlight: aSymbol;
 		messages: aCollection;
 		title: 'Senders of ', aSymbol printString;
+		switchScopeTo: scopeToUse;
 		open
 ]
 
@@ -80,14 +103,28 @@ StMessageBrowser class >> browse: aCollection title: aString highlight: aSelectS
 StMessageBrowser class >> browseImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
-	^ self browse: aSymbol implementors asImplementorsOf: aSymbol
+	^ self browseImplementorsOf: aSymbol inScope: nil
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browseImplementorsOf: aSymbol inScope: aScope [
+	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	
+	^ self browse: aSymbol implementors asImplementorsOf: aSymbol inScope: aScope
 ]
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browseSendersOf: aSymbol [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 
-	^ self browse: aSymbol senders asSendersOf: aSymbol
+	^ self browseSendersOf: aSymbol inScope: nil
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browseSendersOf: aSymbol inScope: aScope [
+	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
+	^ self browse: aSymbol senders asSendersOf: aSymbol inScope: aScope
 ]
 
 { #category : 'instance creation - old' }
@@ -111,7 +148,7 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 StMessageBrowser class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
-	"registry register: self as: #messageList"
+	registry register: self as: #messageList
 ]
 
 { #category : 'icons' }
@@ -552,6 +589,13 @@ StMessageBrowser >> sourceIntervalOf: aSelector in: aMethodNode [
     | senderNode |
     senderNode := aMethodNode allChildren detect: [ :x | x isMessage and: [ x selector = aSelector ] ] ifNone: [ ^ #() ].
     ^ senderNode keywordsPositions first to: senderNode keywordsPositions last + senderNode keywords last size - 1 
+]
+
+{ #category : 'private - scopes' }
+StMessageBrowser >> switchScopeTo: aRBBrowserEnvironment [ 
+	
+	^ messageList switchScopeTo: aRBBrowserEnvironment 
+
 ]
 
 { #category : 'accessing' }
