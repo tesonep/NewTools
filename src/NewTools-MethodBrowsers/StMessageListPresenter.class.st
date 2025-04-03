@@ -23,11 +23,12 @@ Class {
 		'listPresenter',
 		'scopes',
 		'allMessages',
-		'visitedScopes'
+		'visitedScopes',
+		'selectedScope'
 	],
-	#category : 'NewTools-MethodBrowsers-Base',
+	#category : 'NewTools-MethodBrowsers-Messages',
 	#package : 'NewTools-MethodBrowsers',
-	#tag : 'Base'
+	#tag : 'Messages'
 }
 
 { #category : 'layout' }
@@ -164,7 +165,7 @@ StMessageListPresenter >> defaultScopes [
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseImplementors [
 		
-	StMessageBrowser browseImplementorsOf: self selectedMethod selector
+	^ StMessageBrowser browseImplementorsOf: self selectedMethod selector inScope: selectedScope 
 ]
 
 { #category : 'private - actions' }
@@ -176,7 +177,7 @@ StMessageListPresenter >> doBrowseMethod [
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseSenders [
 
-	StMessageBrowser browseSendersOf: self selectedMethod selector
+	^ StMessageBrowser browseSendersOf: self selectedMethod selector inScope: selectedScope 
 ]
 
 { #category : 'private - actions' }
@@ -200,10 +201,10 @@ StMessageListPresenter >> doInspectMethod [
 { #category : 'private - actions' }
 StMessageListPresenter >> doRemoveMethod [
 
-	self selectedMessage ifNotNil: [ :aMethod |
-		SystemNavigation new 
-			removeMethod: aMethod 
-			inClass: aMethod methodClass ]
+	self selectedMessages ifNotEmpty: [ :someMethods |
+			(ReRemoveMethodDriver new
+				 scopes: self scopes
+				 methods: someMethods) runRefactoring ]
 ]
 
 { #category : 'initialization' }
@@ -392,11 +393,22 @@ StMessageListPresenter >> selectedMessage [
 	^ listPresenter selection selectedItem
 ]
 
+{ #category : 'selection' }
+StMessageListPresenter >> selectedMessages [
+	
+	^ self listPresenter selectedItems
+]
+
 { #category : 'accessing' }
 StMessageListPresenter >> selectedMethod [
 
 	self selectedMessage ifNil: [ ^ nil ].
 	^ self selectedMessage compiledMethod
+]
+
+{ #category : 'accessing' }
+StMessageListPresenter >> selectedScope [
+	^ selectedScope
 ]
 
 { #category : 'accessing' }
@@ -438,6 +450,7 @@ StMessageListPresenter >> sortingBlock: aBlock [
 StMessageListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
 	"Private - Callback to scope selection from the user"
 
+	selectedScope := aRBBrowserEnvironment.
 	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
 
 ]

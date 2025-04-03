@@ -2,7 +2,8 @@ Class {
 	#name : 'StMessageBrowserTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'messageBrowser'
+		'messageBrowser',
+		'secondMessageWindow'
 	],
 	#category : 'NewTools-MethodBrowsers-Tests',
 	#package : 'NewTools-MethodBrowsers-Tests'
@@ -12,7 +13,64 @@ Class {
 StMessageBrowserTest >> tearDown [
 
 	messageBrowser ifNotNil: [ messageBrowser close ].
+	secondMessageWindow ifNotNil: [ secondMessageWindow close ].
 	super tearDown
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testAskingImplementorsOfASelectorShouldRespectSelectedScope [
+
+	| presenter secondPresenter |
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+	
+	presenter toolbarPresenter scopeList selectIndex: 2.
+	presenter messageList selectIndex: 1.
+	
+	secondMessageWindow := presenter messageList doBrowseImplementors.
+	secondPresenter := secondMessageWindow presenter.
+	
+	self 
+		assert: presenter messageList selectedScope
+		equals: secondPresenter messageList selectedScope	
+		
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testAskingReferencesOfAClassShouldRespectSelectedScope [
+
+	self fail
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testAskingSendersOfASelectorShouldRespectSelectedScope [
+
+	| presenter secondPresenter |
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+	
+	presenter toolbarPresenter scopeList selectIndex: 2.
+	presenter messageList selectIndex: 1.
+	
+	secondMessageWindow := presenter messageList doBrowseSenders.
+	secondPresenter := secondMessageWindow presenter.
+	
+	self 
+		assert: presenter messageList selectedScope
+		equals: secondPresenter messageList selectedScope	
+
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testModifyingAMethodModifiesIt [
+
+	self fail
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testModifyingTheSelectorCompilesNewCode [
+
+	self fail
 ]
 
 { #category : 'tests' }
@@ -59,4 +117,40 @@ StMessageBrowserTest >> testOpeningImplementorsWithASingleImplementationHasOneAn
 		
 	self 
 		assert: (presenter textPresenter text) equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testOpeningWithASpecificScopeActivatesIt [
+
+	self fail
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testOpeningWithASpecificScopeIncludesItInTheList [
+
+	self fail
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testRemovingAMethodCallsTheRefactoring [
+
+	| presenter mockSelectDialog |
+
+	messageBrowser := StMessageBrowser browseImplementorsOf:
+		                  #aSelectorWithASingleMethodImplementation.
+
+	presenter := messageBrowser presenter.
+	
+	mockSelectDialog := MockObject new.
+	mockSelectDialog
+		on: #title: with: MockObject any;
+		on: #label: with: 'Select a strategy';
+		on: #items: with: MockObject any;
+		on: #display: with: MockObject any;
+		on: #displayIcon: with: MockObject any;
+		on: #openModal respond: nil "When cancelling the dialog, nil is returned".
+	
+	ReInteractionDriver useSelectDialog: mockSelectDialog during: [presenter messageList doRemoveMethod].
+
+	mockSelectDialog verifyIn: self.
 ]
