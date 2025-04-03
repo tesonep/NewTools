@@ -39,33 +39,28 @@ CavroisWindowManagerTest >> testAddProfileFromWindows [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testConfigurationFromSpSystemWindow [
 
-	| prof configuration ice window |
-	self skip. 
-	self flag: #revisitAlexis.
-	prof := CavroisWindowManager new.
+	| configuration ice window |
 	ice := IceTipRepositoriesBrowser new.
-	ice 
-		extent: ice preferredExtent ; 
-		position: 100@100.
-	window := ice open. 	
-	configuration := prof placeHolderFromWindow: window window.
-	self assert: configuration extent equals:ice preferredExtent.
-	self assert: configuration position equals: 100@100.
+	ice
+		extent: ice preferredExtent;
+		position: 100 @ 100.
+	window := ice open.
+	configuration := manager placeHolderFromWindow: window window.
+
+	self assert: configuration extent equals: ice preferredExtent.
+	self assert: configuration position equals: 100 @ 100.
 	window delete
 ]
 
 { #category : 'tests' }
 CavroisWindowManagerTest >> testConfigurationFromWindow [
 
-	| prof configuration play |
-	self skip.
-	self flag: #Alexis.
-	[ prof := CavroisWindowManager new.
-	play := StPlaygroundPresenter new open.
-	configuration := prof placeHolderFromWindow: play window.
-	self assert: configuration  extent equals: (600.0@400.0).
-	] ensure: [ play delete ]
-	
+	| configuration play |
+	[
+		play := StPlaygroundPresenter new open.
+		configuration := manager placeHolderFromWindow: play window.
+		self assert: configuration extent equals: 600.0 @ 400.0 ] ensure: [
+		play delete ]
 ]
 
 { #category : 'tests' }
