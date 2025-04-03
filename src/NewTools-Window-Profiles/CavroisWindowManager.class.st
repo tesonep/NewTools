@@ -157,20 +157,26 @@ CavroisWindowManager class >> deleteProfile [
 { #category : 'action' }
 CavroisWindowManager class >> loadProfile [
 
-	| file profile presenter |
+	| file profile presenter oldProfile oldKey baseName |
 	presenter := StOpenFilePresenter new
 		             openFolder:
 			             FileLocator preferences asFileReference / 'pharo';
 		             title: 'Select Profile to load'.
 	presenter okAction: [ :fileReference |
-		(fileReference basename includesSubstring: 'Profile')
-			ifTrue: [
-				file := fileReference.
-				profile := STON fromString: file.
-				self current profiles at: profile name put: profile.
-				self current currentProfile: profile.
-				MenubarMorph reset ]
-			ifFalse: [ self inform: ' File selected is not a profile' ] ].
+			(fileReference basename includesSubstring: 'Profile')
+				ifTrue: [
+						file := fileReference.
+						profile := STON fromString: file.
+						oldProfile := self current currentProfile.
+						self current profiles at: profile name put: profile.
+						oldKey := self current profiles keyAtValue: oldProfile.
+						baseName := oldKey copyReplaceAll: '(Current)' with: ''.
+						self current profiles
+							at: baseName put: oldProfile;
+							removeKey: oldKey.
+						self current currentProfile: profile.
+						MenubarMorph reset ]
+				ifFalse: [ self inform: ' File selected is not a profile' ] ].
 	presenter open
 ]
 
