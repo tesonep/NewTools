@@ -384,7 +384,8 @@ CavroisWindowManager >> allCurrentWindows [
 
 	5 timesRepeat: [ Smalltalk garbageCollect ].
 	^ self currentWorld windowsSatisfying: [ :w |
-		  w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not ]
+			  (w hasProperty: #isClosed) not and:
+				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
 ]
 
 { #category : 'accessing' }
@@ -476,8 +477,9 @@ CavroisWindowManager >> removeVisualPlaceholders [
 	World submorphs
 		select: [ :morph | morph isKindOf: CavVisualPlaceHolderMorph ]
 		thenDo: [ :morph | morph delete ].
-			World submorphs
-		select: [ :morph | morph visible = false ]
+	World submorphs
+		select: [ :morph |
+			morph visible = false and: (morph hasProperty: #isClosed) not ]
 		thenDo: [ :morph | morph visible: true ]
 ]
 
