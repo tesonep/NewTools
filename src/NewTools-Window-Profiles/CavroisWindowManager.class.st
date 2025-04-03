@@ -28,7 +28,8 @@ Class {
 	#instVars : [
 		'profiles',
 		'classToolMapping',
-		'currentProfile'
+		'currentProfile',
+		'defaultLocation'
 	],
 	#classVars : [
 		'Current'
@@ -73,7 +74,7 @@ CavroisWindowManager class >> addProfileImportExportItems: aBuilder [
 	(aBuilder item: #'Export Profile')
 		parent: #ImportExport;
 		order: 8;
-		action: [ self saveProfile ];
+		action: [ self saveProfile: self current defaultLocation];
 		help: 'Export a profile';
 		iconName: #smallRedo
 ]
@@ -252,14 +253,16 @@ CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
 	(aBuilder item: #'Reset Windows')
 		parent: #ProfileAction;
 		order: 6;
-		action: [ self current transitionToProfile ];
+		action: [
+				self current currentProfile ifNotNil: [
+						self current transitionToProfile ] ];
 		help:
 			'Reset the state of all current windows to their placeHolder state';
 		iconName: #refreshCircling
 ]
 
 { #category : 'saving' }
-CavroisWindowManager class >> saveProfile [
+CavroisWindowManager class >> saveProfile: aLocation [
 
 	| fileString fileName file saveName |
 	saveName := self current currentProfile name
@@ -267,7 +270,7 @@ CavroisWindowManager class >> saveProfile [
 		            with: ''.
 	fileString := STON toString: self current currentProfile.
 	fileName := 'Profile:' , saveName trimBoth , '.ston'.
-	file := FileLocator preferences asFileReference / 'pharo' / fileName.
+	file := aLocation / fileName.
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
 ]
@@ -285,12 +288,14 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 	self current profiles
 		at: baseName put: oldProfile;
 		removeKey: oldKey.
+
 	newKey := profileKey , '(Current)'.
 	self current profiles
 		at: newKey put: newProfile;
 		removeKey: profileKey.
 	self current currentProfile: newProfile.
 	self current transitionToProfile.
+
 	MenubarMorph reset
 ]
 
@@ -394,12 +399,24 @@ CavroisWindowManager >> currentProfile: aProfile [
 	currentProfile := aProfile
 ]
 
+{ #category : 'accessing' }
+CavroisWindowManager >> defaultLocation [
+
+	^ defaultLocation
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> defaultLocation: aLocation [
+
+	defaultLocation := aLocation
+]
+
 { #category : 'initialization' }
 CavroisWindowManager >> initialize [
 
-	super initialize.
+	super initialize. 
 	classToolMapping := Dictionary new.
-
+	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	self resetProfiles
 ]
 
@@ -429,12 +446,15 @@ CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
 CavroisWindowManager >> placePresenter: aPresenter [
 
 	| placeHolder |
-
 	self currentProfile ifNotNil: [
-		placeHolder := self currentProfile placeHoldersFor:
-			               aPresenter class.
-		placeHolder first placePresenter: aPresenter ].
-	
+			placeHolder := self currentProfile placeHoldersFor:
+				               aPresenter class.
+			
+			(placeHolder first isKindOf: CavNullWindowPlaceHolder) ifTrue: [
+					placeHolder := self currentProfile placeHoldersFor:
+						               aPresenter model class ].
+
+			placeHolder first placePresenter: aPresenter ]
 ]
 
 { #category : 'accessing' }

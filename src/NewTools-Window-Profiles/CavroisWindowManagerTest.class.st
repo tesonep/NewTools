@@ -1,6 +1,10 @@
 Class {
 	#name : 'CavroisWindowManagerTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		'manager',
+		'virtualFS'
+	],
 	#category : 'NewTools-Window-Profiles-Tests',
 	#package : 'NewTools-Window-Profiles',
 	#tag : 'Tests'
@@ -8,9 +12,28 @@ Class {
 
 { #category : 'running' }
 CavroisWindowManagerTest >> setUp [
-	super setUp.
 
+	super setUp.
+	CavroisWindowManager reset.
+	virtualFS := FileSystem memory root.
+	manager := CavroisWindowManager current
+]
+
+{ #category : 'running' }
+CavroisWindowManagerTest >> tearDown [
+
+	super tearDown.
 	CavroisWindowManager reset
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testAddProfileFromWindows [
+
+	| profile |
+	profile := manager addProfileFromWindows: 'Profile'.
+
+	self assert: (manager profiles includesKey: 'Profile').
+	self assert: manager currentProfile equals: profile
 ]
 
 { #category : 'tests' }
@@ -32,24 +55,6 @@ CavroisWindowManagerTest >> testConfigurationFromSpSystemWindow [
 ]
 
 { #category : 'tests' }
-CavroisWindowManagerTest >> testConfigurationFromSystemWindow [
-
-	| prof configuration transcript |
-	self skip. 
-	self flag: #revisitAlexis.
-	prof := CavroisWindowManager new.
-	transcript := StTranscriptPresenter open
-							extent: (447.0@300.0) ; 
-							bounds: ((699.0@460.0) corner: (1146.0@760.0)); 
-					 		yourself.
-	configuration := prof placeHolderFromWindow: transcript.
-	self assert:  configuration  extent  equals:(447.0@300.0).
-	self assert:  configuration  position equals: (699.0@460.0).
-	transcript delete
-	
-]
-
-{ #category : 'tests' }
 CavroisWindowManagerTest >> testConfigurationFromWindow [
 
 	| prof configuration play |
@@ -64,27 +69,71 @@ CavroisWindowManagerTest >> testConfigurationFromWindow [
 ]
 
 { #category : 'tests' }
+CavroisWindowManagerTest >> testCurrentProfile [
+
+	self assert: manager currentProfile isNil.
+
+	manager addProfileFromWindows: 'Profile'.
+	self assert: manager currentProfile name equals: 'Profile'
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testDeleteProfile [
+
+	manager addProfileFromWindows: 'ProfileToKeep'.
+	manager addProfileFromWindows: 'ProfileToDelete'.
+
+	manager class removeSelectedProfile: 'ProfileToDelete'.
+
+	self deny: (manager profiles includesKey: 'ProfileToDelete').
+	self assert: (manager profiles includesKey: 'ProfileToKeep')
+]
+
+{ #category : 'tests' }
 CavroisWindowManagerTest >> testRemovingCurrentProfileUpdateCurrentProfile [
 
-	CavroisWindowManager current addProfileFromWindows: 'Profile 1'.
-	CavroisWindowManager current addProfileFromWindows: 'Profile 2'.
+	manager addProfileFromWindows: 'Profile1'.
+	manager addProfileFromWindows: 'Profile2'.
 	"adding Current so the method called gets tricked"
-	CavroisWindowManager current addProfileFromWindows:
-		'Profile 3 (Current)'.
+	manager addProfileFromWindows: 'Profile3(Current)'.
 
-	CavroisWindowManager removeSelectedProfile: 'Profile 3 (Current)'.
-	self
-		assert: CavroisWindowManager current currentProfile name
-		equals: 'Profile 1'
+	CavroisWindowManager removeSelectedProfile: 'Profile3(Current)'.
+	self assert: manager currentProfile name equals: 'Profile1'
 ]
 
 { #category : 'tests' }
 CavroisWindowManagerTest >> testRemovingLastProfileUpdateCurrentProfile [
 
-	CavroisWindowManager current addProfileFromWindows: 'Profile 1'.
-	CavroisWindowManager removeSelectedProfile:
-		CavroisWindowManager current profiles keys first.
+	manager addProfileFromWindows: 'Profile1'.
+	manager class removeSelectedProfile:
+		manager profiles keys first.
 
-	self assert: CavroisWindowManager current profiles isEmpty.
-	self assert: CavroisWindowManager current currentProfile isNil
+	self assert: manager profiles isEmpty.
+	self assert: manager currentProfile isNil
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testSaveProfile [
+
+	| profile fileRef |
+	profile := manager addProfileFromWindows: 'Test'.
+	fileRef := virtualFS / 'Profile:Test.ston'.
+
+	manager class saveProfile: virtualFS.
+
+	self assert: fileRef exists.
+	fileRef ensureDelete
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testSwitchToProfile [
+
+	manager addProfileFromWindows: 'Profile1'.
+	"adding Current so the method called gets tricked"
+	manager addProfileFromWindows: 'Profile2(Current)'.
+
+	manager class switchToProfile: 'Profile1'.
+
+	self assert: (manager profiles includesKey: 'Profile1(Current)').
+	self assert: (manager profiles includesKey: 'Profile2')
 ]

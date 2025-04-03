@@ -19,9 +19,11 @@ CavStackingStrategy class >> title [
 
 { #category : 'positioning' }
 CavStackingStrategy >> placePresenter: aPresenter [
-	
+
 	aPresenter extent: placeHolder extent.
 	aPresenter position:
 		placeHolder position + (20 @ 20 * placeHolder count).
-	placeHolder increment
+	placeHolder count < 4
+		ifTrue: [ placeHolder increment ]
+		ifFalse: [ placeHolder count: 1 ]
 ]
