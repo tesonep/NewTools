@@ -75,13 +75,6 @@ SpClosedWindowListPresenter class >> new [
 ]
 
 { #category : 'instance creation' }
-SpClosedWindowListPresenter class >> open [
-
-	<script>
-	^ (self newApplication: StPharoApplication current) open
-]
-
-{ #category : 'instance creation' }
 SpClosedWindowListPresenter class >> reset [
 
 	<script>
@@ -158,7 +151,7 @@ SpClosedWindowListPresenter class >> windowsOn: aBuilder [
 	(aBuilder item: #'Reopen closed windows')
 		parent: #Windows;
 		order: 1;
-		action: [ self open ];
+		action: [ self uniqueInstance open ];
 		help: 'Show the last 5 closed windows.'
 ]
 
