@@ -414,9 +414,10 @@ CavroisWindowManager >> defaultLocation: aLocation [
 { #category : 'initialization' }
 CavroisWindowManager >> initialize [
 
-	super initialize. 
+	super initialize.
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
+	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
 	self resetProfiles
 ]
 
