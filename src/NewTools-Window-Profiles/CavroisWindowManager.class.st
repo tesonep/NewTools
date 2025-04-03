@@ -195,7 +195,7 @@ CavroisWindowManager class >> profileMenu: aBuilder [
 		parent: #Windows;
 		order: 0;
 		help:
-			'Profiles lets you define places where your windows will be automatically be placed.';
+			'Profiles lets you define places where your windows will automatically be placed.';
 		with: [
 			(aBuilder group: #UserProfiles)
 				order: 1;
