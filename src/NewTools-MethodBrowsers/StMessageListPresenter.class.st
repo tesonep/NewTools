@@ -23,7 +23,6 @@ Class {
 		'listPresenter',
 		'scopes',
 		'allMessages',
-		'visitedScopes',
 		'selectedScope'
 	],
 	#category : 'NewTools-MethodBrowsers-Messages',
@@ -36,17 +35,6 @@ StMessageListPresenter class >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: #listPresenter;
-		yourself
-]
-
-{ #category : 'private - scopes' }
-StMessageListPresenter >> allScopes [
-
-	^ OrderedCollection new
-		add: self browserEnvironment;
-		addAll: self packageEnvironments;
-		addAll: self classesEnvironments;		
-		addAll: self compositeEnvironments;
 		yourself
 ]
 
@@ -101,22 +89,6 @@ StMessageListPresenter >> classHierarchyEnvironmentFor: aClass [
 
 ]
 
-{ #category : 'private - scopes' }
-StMessageListPresenter >> classHierarchyEnvironments [
-	"Answer a <Collection> of <RBClassEnvironment> for the receiver's selected classes"
-	
-	^ self visitedScopes 
-		select: [ : anObject | anObject isClass ]
-		thenCollect: [ : aClass | self classHierarchyEnvironmentFor: aClass  ]
-]
-
-{ #category : 'private' }
-StMessageListPresenter >> classHierarchyOf: aCompiledMethod [
-	"Answer a <Collection> of superclasses of aCompiledMethod method class"
-
-	^ RBClassHierarchyEnvironment class: aCompiledMethod methodClass
-]
-
 { #category : 'private' }
 StMessageListPresenter >> classOf: aCompiledMethod [
 	"Answer the <Class> of aCompiledMethod"
@@ -151,20 +123,26 @@ StMessageListPresenter >> defaultOutputPort [
 StMessageListPresenter >> defaultScopes [
 	"Private - By default we answer the <Package> of the currently selected item"
 
-	^ self selectedMessage
-		ifNil: [ Set empty ]
+	| defaultScopes |
+	defaultScopes := Set new.
+	
+	defaultScopes 
+		add: self browserEnvironment;
+		addAll: ScopesManager availableScopes.
+
+	self selectedMessage
 		ifNotNil: [ 
-			Set new
-				add: (self packageOf: self selectedMessage);
-				add: (self classOf: self selectedMessage);
-				add: (self classHierarchyOf: self selectedMessage);
-				addAll: ScopesManager availableScopes;
-				yourself ]
+			defaultScopes
+				add: (self packageEnvironmentFor: (self packageOf: self selectedMessage));
+				add: (self classEnvironmentFor: (self classOf: self selectedMessage));
+				add: (self classHierarchyEnvironmentFor: (self classOf: self selectedMessage))].
+			
+	^ defaultScopes
 ]
 
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseImplementors [
-		
+	
 	^ StMessageBrowser browseImplementorsOf: self selectedMethod selector inScope: selectedScope 
 ]
 
@@ -182,8 +160,12 @@ StMessageListPresenter >> doBrowseSenders [
 
 { #category : 'private - actions' }
 StMessageListPresenter >> doBrowseUsers [
-		
-	self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass
+
+	| window |
+	
+	window := self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass.
+	window presenter switchScopeTo: self selectedScope.
+	^ window
 ]
 
 { #category : 'private - actions' }
@@ -203,7 +185,7 @@ StMessageListPresenter >> doRemoveMethod [
 
 	self selectedMessages ifNotEmpty: [ :someMethods |
 			(ReRemoveMethodDriver new
-				 scopes: self scopes
+				 scopes: self sortedScopes
 				 methods: someMethods) runRefactoring ]
 ]
 
@@ -331,17 +313,6 @@ StMessageListPresenter >> packageEnvironmentFor: aPackage [
 
 ]
 
-{ #category : 'private - scopes' }
-StMessageListPresenter >> packageEnvironments [
-	"Answer a <Collection> of <RBPackageEnvironment> for the receiver's selected packages"
-
-	^ self visitedScopes 
-		select: [ : anObject | anObject isPackage ]
-		thenCollect: [ : aPackage | self packageEnvironmentFor: aPackage ]
-
-
-]
-
 { #category : 'private' }
 StMessageListPresenter >> packageNameForItem: anItem [
 	^ anItem package ifNil: [ '' ] ifNotNil: [ :package | package name ]
@@ -371,8 +342,7 @@ StMessageListPresenter >> protocolNameForItem: anItem [
 StMessageListPresenter >> scopes [
 	"Answer a <Collection> of the receiver's message list scopes"
 	
-	^ scopes
-		ifNil: [ scopes := self allScopes ]
+	^ scopes ifNil: [ scopes := self defaultScopes ]
 ]
 
 { #category : 'selecting' }
@@ -440,6 +410,12 @@ StMessageListPresenter >> sortClassesInCachedHierarchy: aMethodDefinition b: oth
 	^  aMethodHierarchy size < otherMethodHierarchy size
 ]
 
+{ #category : 'private - scopes' }
+StMessageListPresenter >> sortedScopes [
+	
+	^ scopes asOrderedCollection sort: [ :a :b | a scopeListOrder < b scopeListOrder ]
+]
+
 { #category : 'api' }
 StMessageListPresenter >> sortingBlock: aBlock [
 
@@ -447,12 +423,18 @@ StMessageListPresenter >> sortingBlock: aBlock [
 ]
 
 { #category : 'private - scopes' }
-StMessageListPresenter >> switchScopeTo: aRBBrowserEnvironment [ 
-	"Private - Callback to scope selection from the user"
+StMessageListPresenter >> switchScopeTo: aRBBrowserEnvironment [
+	| messages |
+
+	selectedScope = aRBBrowserEnvironment ifTrue: [ ^ self ].
 
 	selectedScope := aRBBrowserEnvironment.
-	listPresenter items: (aRBBrowserEnvironment selectMessagesFrom: allMessages)
+	self scopes add: selectedScope.
 
+	messages := aRBBrowserEnvironment selectMessagesFrom: allMessages.
+	listPresenter items: messages.
+
+	messages ifNotEmpty: [ listPresenter selectIndex: 1 ]
 ]
 
 { #category : 'accessing' }
@@ -468,25 +450,12 @@ StMessageListPresenter >> topologicSort: anObject [
 ]
 
 { #category : 'private - scopes' }
-StMessageListPresenter >> updateVisitedScopesFrom: aCompiledMethod [
-	"Private - Update the list of the visited scopes"
+StMessageListPresenter >> updateScopesFrom: aMethod [
 
-	visitedScopes 
-		ifNotNil: [ 
-			visitedScopes 
-				add: (self packageOf: aCompiledMethod);
-				add: (self classOf: aCompiledMethod);
-				add: (self classHierarchyOf: aCompiledMethod) ]
-]
-
-{ #category : 'private - scopes' }
-StMessageListPresenter >> visitedScopes [
-	"Answer a <Collection> of <Package> which has been selected in the receiver"
-	
-	^ visitedScopes
-		ifNil: [ visitedScopes := self defaultScopes ]
-
-
+	self scopes
+		add: (self packageEnvironmentFor: (self packageOf: aMethod));
+		add: (self classEnvironmentFor: (self classOf: aMethod));
+		add: (self classHierarchyEnvironmentFor: (self classOf: aMethod))
 ]
 
 { #category : 'api - events' }

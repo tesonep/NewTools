@@ -1,6 +1,12 @@
 Extension { #name : 'RBClassEnvironment' }
 
 { #category : '*NewTools-MethodBrowsers' }
+RBClassEnvironment >> scopeListOrder [
+
+	^ 4
+]
+
+{ #category : '*NewTools-MethodBrowsers' }
 RBClassEnvironment >> selectMessagesFrom: aCollectionOfCompiledMethod [ 
 	"Filter methods in aCollectionOfCompiledMethod for which their method class is present in the receiver's classes
 	 Answer a <Collection> of <CompiledMethod>"

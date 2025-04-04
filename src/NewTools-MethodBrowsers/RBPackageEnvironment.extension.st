@@ -1,6 +1,12 @@
 Extension { #name : 'RBPackageEnvironment' }
 
 { #category : '*NewTools-MethodBrowsers' }
+RBPackageEnvironment >> scopeListOrder [
+
+	^ 2
+]
+
+{ #category : '*NewTools-MethodBrowsers' }
 RBPackageEnvironment >> selectMessagesFrom: aCollectionOfCompiledMethod [ 
 	"Answer a <Collection> of <CompiledMethod> present in the receiver"
 

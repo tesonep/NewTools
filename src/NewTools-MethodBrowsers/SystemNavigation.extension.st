@@ -3,7 +3,7 @@ Extension { #name : 'SystemNavigation' }
 { #category : '*NewTools-MethodBrowsers' }
 SystemNavigation >> browseAllUsersOfClassOrTrait: class [
 
-	class isTrait 
+	^ class isTrait 
 		ifTrue: [ self browseAllUsersOfTrait: class ]
 		ifFalse: [ self browseAllCallsOnClass: class ]
 ]
