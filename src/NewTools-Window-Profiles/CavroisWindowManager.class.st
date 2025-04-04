@@ -29,7 +29,8 @@ Class {
 		'profiles',
 		'classToolMapping',
 		'currentProfile',
-		'defaultLocation'
+		'defaultLocation',
+		'placeHolderIndices'
 	],
 	#classVars : [
 		'Current'
@@ -424,6 +425,7 @@ CavroisWindowManager >> initialize [
 	super initialize.
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
+	placeHolderIndices := Dictionary new.
 	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
 	self resetProfiles
 ]
@@ -434,6 +436,12 @@ CavroisWindowManager >> kindFor: aString [
 	
 	
 	^ classToolMapping at: aString ifAbsent: [ #Unknown ]
+]
+
+{ #category : 'actions' }
+CavroisWindowManager >> nextPlaceHolderIndexFor: aWindowType ifAbsent: aBlock [
+
+	^ placeHolderIndices at: aWindowType ifAbsent: aBlock
 ]
 
 { #category : 'recording' }
@@ -453,16 +461,28 @@ CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
 { #category : 'operations' }
 CavroisWindowManager >> placePresenter: aPresenter [
 
-	| placeHolder |
+	| placeHolders windowType nextPlaceHolderIndex |
 	self currentProfile ifNotNil: [
-			placeHolder := self currentProfile placeHoldersFor:
-				               aPresenter class.
-			
-			(placeHolder first isKindOf: CavNullWindowPlaceHolder) ifTrue: [
-					placeHolder := self currentProfile placeHoldersFor:
-						               aPresenter model class ].
+			placeHolders := self currentProfile placeHoldersFor:
+				                aPresenter class.
+			windowType := aPresenter class.
+			(placeHolders first isKindOf: CavNullWindowPlaceHolder) ifTrue: [
+					placeHolders := self currentProfile placeHoldersFor:
+						                aPresenter model class.
+					windowType := aPresenter model class ].
+			nextPlaceHolderIndex := self
+				                        nextPlaceHolderIndexFor: windowType
+				                        ifAbsent: [
+						                        self
+							                        setNextPlaceHolderIndex: 1
+							                        for: windowType.
+						                        1 ].
 
-			placeHolder first placePresenter: aPresenter ]
+			self
+				setNextPlaceHolderIndex:
+				nextPlaceHolderIndex % placeHolders size + 1
+				for: windowType.
+			(placeHolders at: nextPlaceHolderIndex) placePresenter: aPresenter ]
 ]
 
 { #category : 'accessing' }
@@ -493,6 +513,13 @@ CavroisWindowManager >> removeVisualPlaceholders [
 CavroisWindowManager >> resetProfiles [
 
 	profiles := Dictionary new
+]
+
+{ #category : 'initialization' }
+CavroisWindowManager >> setNextPlaceHolderIndex: anInteger for: aWindowType [
+
+	placeHolderIndices at: aWindowType put: anInteger.
+	^ anInteger
 ]
 
 { #category : 'transitions' }

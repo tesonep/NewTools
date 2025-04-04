@@ -21,6 +21,7 @@ CavStackingStrategy class >> title [
 CavStackingStrategy >> placePresenter: aPresenter [
 
 	aPresenter extent: placeHolder extent.
+
 	aPresenter position:
 		placeHolder position + (20 @ 20 * placeHolder count).
 	placeHolder count < 4
