@@ -285,25 +285,34 @@ CavroisWindowManager class >> saveProfile: aLocation [
 { #category : 'actions' }
 CavroisWindowManager class >> switchToProfile: profileKey [
 
-	| oldProfile newProfile oldKey newKey baseName |
-	oldProfile := self current currentProfile.
-	newProfile := self current profiles at: profileKey.
+	| oldProfile newProfile oldKey newKey baseName presenter |
+	presenter := SpConfirmDialog new
+		             title: 'Switch Profile';
+		             label: profileKey , 'will become the current profile';
+		             acceptLabel: 'Confirm';
+		             cancelLabel: 'Cancel';
+		             onAccept: [ :dialog |
+				             oldProfile := self current currentProfile.
+				             newProfile := self current profiles at: profileKey.
 
-	oldProfile = newProfile ifTrue: [ ^ self ].
-	oldKey := self current profiles keyAtValue: oldProfile.
-	baseName := oldKey copyReplaceAll: '(Current)' with: ''.
-	self current profiles
-		at: baseName put: oldProfile;
-		removeKey: oldKey.
+				             oldProfile = newProfile ifTrue: [ ^ self ].
+				             oldKey := self current profiles keyAtValue:
+						                       oldProfile.
+				             baseName := oldKey
+					                         copyReplaceAll: '(Current)'
+					                         with: ''.
+				             self current profiles
+					             at: baseName put: oldProfile;
+					             removeKey: oldKey.
 
-	newKey := profileKey , '(Current)'.
-	self current profiles
-		at: newKey put: newProfile;
-		removeKey: profileKey.
-	self current currentProfile: newProfile.
-	self current transitionToProfile.
-
-	MenubarMorph reset
+				             newKey := profileKey , '(Current)'.
+				             self current profiles
+					             at: newKey put: newProfile;
+					             removeKey: profileKey.
+				             self current currentProfile: newProfile.
+				             self current transitionToProfile.
+				             MenubarMorph reset ];
+		             openDialog
 ]
 
 { #category : 'actions' }
