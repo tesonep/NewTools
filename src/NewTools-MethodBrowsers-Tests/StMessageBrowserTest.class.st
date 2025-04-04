@@ -25,21 +25,30 @@ StMessageBrowserTest >> testAskingImplementorsOfASelectorShouldRespectSelectedSc
 	presenter := messageBrowser presenter.
 	
 	presenter toolbarPresenter scopeList selectIndex: 2.
-	presenter messageList selectIndex: 1.
-	
 	secondMessageWindow := presenter messageList doBrowseImplementors.
 	secondPresenter := secondMessageWindow presenter.
 	
 	self 
-		assert: presenter messageList selectedScope
-		equals: secondPresenter messageList selectedScope	
+		assert: secondPresenter messageList selectedScope	
+		equals: presenter messageList selectedScope
 		
 ]
 
 { #category : 'tests' }
 StMessageBrowserTest >> testAskingReferencesOfAClassShouldRespectSelectedScope [
 
-	self fail
+	| presenter secondPresenter |
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+	
+	presenter toolbarPresenter scopeList selectIndex: 2.
+	secondMessageWindow := presenter messageList doBrowseUsers.
+	secondPresenter := secondMessageWindow presenter.
+	
+	self 
+		assert: secondPresenter messageList selectedScope	
+		equals: presenter messageList selectedScope
+		
 ]
 
 { #category : 'tests' }
@@ -59,18 +68,6 @@ StMessageBrowserTest >> testAskingSendersOfASelectorShouldRespectSelectedScope [
 		assert: presenter messageList selectedScope
 		equals: secondPresenter messageList selectedScope	
 
-]
-
-{ #category : 'tests' }
-StMessageBrowserTest >> testModifyingAMethodModifiesIt [
-
-	self fail
-]
-
-{ #category : 'tests' }
-StMessageBrowserTest >> testModifyingTheSelectorCompilesNewCode [
-
-	self fail
 ]
 
 { #category : 'tests' }
@@ -122,13 +119,25 @@ StMessageBrowserTest >> testOpeningImplementorsWithASingleImplementationHasOneAn
 { #category : 'tests' }
 StMessageBrowserTest >> testOpeningWithASpecificScopeActivatesIt [
 
-	self fail
+	| presenter anotherScope |
+	anotherScope := RBClassEnvironment classes: {self class. StMBTestClass}.
+	
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation inScope: anotherScope.
+	presenter := messageBrowser presenter.
+	
+	self assert: presenter messageList selectedScope equals: anotherScope
 ]
 
 { #category : 'tests' }
 StMessageBrowserTest >> testOpeningWithASpecificScopeIncludesItInTheList [
 
-	self fail
+	| presenter anotherScope |
+	anotherScope := RBClassEnvironment classes: {self class. StMBTestClass}.
+	
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation inScope: anotherScope.
+	presenter := messageBrowser presenter.
+	
+	self assert: (presenter toolbarPresenter scopeList items includes:anotherScope)
 ]
 
 { #category : 'tests' }
@@ -153,4 +162,42 @@ StMessageBrowserTest >> testRemovingAMethodCallsTheRefactoring [
 	ReInteractionDriver useSelectDialog: mockSelectDialog during: [presenter messageList doRemoveMethod].
 
 	mockSelectDialog verifyIn: self.
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testScopeListHasCorrectNumberOfElements [
+
+	| presenter |
+
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+	self assert: presenter toolbarPresenter scopeList items size equals: 4 "Current Image, Package and Class, hierarchy"
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testScopeListHasCorrectOrder [
+
+	| presenter |
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+
+
+	self
+		assertCollection: (presenter toolbarPresenter scopeList items collect: #description)
+		hasSameElements: { 'Current image'. 'Packages: NewTools-MethodBrowsers-Tests'. 'Hier: StMBTestClass'. 'Classes: StMBTestClass' }
+]
+
+{ #category : 'tests' }
+StMessageBrowserTest >> testSelectingElementsDoesNotDuplicateScopes [
+
+	| presenter |
+
+	messageBrowser := StMessageBrowser browseSendersOf: #aSelectorWithASingleMethodImplementation.
+	presenter := messageBrowser presenter.
+	self assert: presenter toolbarPresenter scopeList items size equals: 4.
+	
+	presenter messageList selectIndex: 2.
+	
+	self assert: presenter toolbarPresenter scopeList items size equals: 4.
+
 ]

@@ -18,8 +18,10 @@ StMessageToolbarPresenter >> connectPresenters [
 	
 	messageList whenSelectedDo: [ : item |
 		item ifNotNil: [
-			messageList updateVisitedScopesFrom: item.
-			scopeList disableSelectionDuring: [ scopeList items: messageList allScopes ] ] ]
+			messageList updateScopesFrom: item.
+			scopeList disableSelectionDuring: [ 
+				scopeList items: messageList sortedScopes.
+				scopeList selectItem: messageList selectedScope ] ] ]
 
 ]
 

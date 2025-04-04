@@ -113,6 +113,84 @@ StMessageBrowser class >> browseImplementorsOf: aSymbol inScope: aScope [
 	^ self browse: aSymbol implementors asImplementorsOf: aSymbol inScope: aScope
 ]
 
+{ #category : 'as yet unclassified' }
+StMessageBrowser class >> browseOverridenAndOverridingMethodsFrom: aMethod inScope: aScope [
+
+	| scopeToUse aCollection |
+
+	scopeToUse := aScope
+		              ifNil: [ RBBrowserEnvironment default ]
+		              ifNotNil: [ aScope ].
+
+	aCollection := aMethod methodClass withAllSuperAndSubclasses flatCollect: [
+		               :aClass |
+		               aClass methods select: [ :e |
+			               e selector = aMethod selector ] ].
+
+	^ self new
+		  refreshingBlock: [ :method |
+				  ((aMethod class isKindOf: method class) or: [method class isKindOf: aMethod class]) and: [
+						  method selector = aMethod selector ] ];
+		  messages: aCollection;
+		  title: 'Implementors of ' , aMethod selector printString
+			  , ' in hierarchy of ' , aMethod methodClass name;
+		  switchScopeTo: scopeToUse;
+		  selectItem: aMethod;
+		  open
+]
+
+{ #category : 'as yet unclassified' }
+StMessageBrowser class >> browseOverridenMethodsFrom: aMethod inScope: aScope [
+
+	| scopeToUse aCollection |
+
+	scopeToUse := aScope
+		              ifNil: [ RBBrowserEnvironment default ]
+		              ifNotNil: [ aScope ].
+
+	aCollection := aMethod methodClass withAllSuperclasses flatCollect: [
+		               :aClass |
+		               aClass methods select: [ :e |
+			               e selector = aMethod selector ] ].
+
+	^ self new
+		  refreshingBlock: [ :method |
+				  (aMethod class isKindOf: method class) and: [
+						  method selector = aMethod selector ] ];
+		  messages: aCollection;
+		  title: 'Implementors of ' , aMethod selector printString
+			  , ' in superclasses of ' , aMethod methodClass name;
+		  switchScopeTo: scopeToUse;
+		  selectItem: aMethod;
+		  open
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browseOverridingMethodsFrom: aMethod inScope: aScope [ 
+
+	| scopeToUse aCollection |
+
+	scopeToUse := aScope
+		              ifNil: [ RBBrowserEnvironment default ]
+		              ifNotNil: [ aScope ].
+
+	aCollection := aMethod methodClass withAllSubclasses flatCollect: [
+		               :aClass |
+		               aClass methods select: [ :e |
+			               e selector = aMethod selector ] ].
+
+	^ self new
+		  refreshingBlock: [ :method |
+				  (method class isKindOf: aMethod class) and: [
+						  method selector = aMethod selector ] ];
+		  messages: aCollection;
+		  title: 'Implementors of ' , aMethod selector printString
+			  , ' in subclasses of ' , aMethod methodClass name;
+		  switchScopeTo: scopeToUse;
+		  selectItem: aMethod;
+		  open
+]
+
 { #category : 'instance creation' }
 StMessageBrowser class >> browseSendersOf: aSymbol [
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
@@ -591,7 +669,7 @@ StMessageBrowser >> sourceIntervalOf: aSelector in: aMethodNode [
     ^ senderNode keywordsPositions first to: senderNode keywordsPositions last + senderNode keywords last size - 1 
 ]
 
-{ #category : 'private - scopes' }
+{ #category : 'api' }
 StMessageBrowser >> switchScopeTo: aRBBrowserEnvironment [ 
 	
 	^ messageList switchScopeTo: aRBBrowserEnvironment 

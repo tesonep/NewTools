@@ -1,6 +1,12 @@
 Extension { #name : 'RBClassHierarchyEnvironment' }
 
 { #category : '*NewTools-MethodBrowsers' }
+RBClassHierarchyEnvironment >> scopeListOrder [
+
+	^ 3
+]
+
+{ #category : '*NewTools-MethodBrowsers' }
 RBClassHierarchyEnvironment >> selectMessagesFrom: aCollectionOfCompiledMethod [ 
 	"Since the receiver is a system environment, answer all messages in aCollection"	
 
