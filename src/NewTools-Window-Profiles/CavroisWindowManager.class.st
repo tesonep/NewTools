@@ -515,7 +515,6 @@ CavroisWindowManager >> transitionToProfile [
 CavroisWindowManager >> updateProfile [
 
 	self currentProfile reset.
-	self currentProfile addAll:
-		(self allCurrentWindows collect: [ :each |
-			 self placeHolderFromWindow: each ])
+	self allCurrentWindows do: [ :each |
+		self currentProfile add: (self placeHolderFromWindow: each) ]
 ]
