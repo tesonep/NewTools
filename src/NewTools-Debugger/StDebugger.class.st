@@ -401,7 +401,8 @@ StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGrou
 					name: cmd name;
 					icon: (self iconNamed: cmd iconName);
 					description: cmd description;
-					action: [ cmd execute ] ] ].
+					action: [ cmd execute ];
+					enabled: cmd canBeExecuted ] ].
 
 		menuBar addGroup: [ :group |
 			group addItem: [ :item |
