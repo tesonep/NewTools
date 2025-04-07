@@ -98,7 +98,7 @@ AbstractFileReference >> inspectionContents: aBuilder [
 			 yourself).
 	toolbarPresenter add: (toolbarPresenter newToolbarButton
 			 icon: (aBuilder application iconNamed: #smallDelete);
-			 label: 'Delete contents';
+			 label: 'Delete file';
 			 help: 'Delete the file';
 			 action: [
 					 self ensureDelete.
