@@ -410,6 +410,7 @@ CavroisWindowManager class >> updateProfile: aProfile withName: aName [
 
 	self current profiles removeKey:
 		(self current profiles keyAtValue: aProfile value).
+	aProfile value named: aName.
 	self current currentProfile = aProfile value
 		ifTrue: [
 		self current profiles at: aName , ' (Current)' put: aProfile value ]
