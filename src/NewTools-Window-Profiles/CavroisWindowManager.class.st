@@ -85,7 +85,7 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 
 	(aBuilder item: #'New Profile')
 		parent: #ProfileAction;
-		order: 3;
+		order: 1;
 		action: [ self createProfile ];
 		help: 'Creates a local profile based on your image';
 		iconName: #add
@@ -98,7 +98,7 @@ CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 		(aBuilder item: k)
 			parent: #UserProfiles;
 			action: [ self switchToProfile: k ];
-			order: 4;
+			order: 0;
 			help: 'Profile';
 			iconName: #userProfile ]
 ]
@@ -108,7 +108,7 @@ CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 
 	(aBuilder item: #'Show/Hide current profile')
 		parent: #ProfileAction;
-		order: 4;
+		order: 3;
 		action: [ self toggleProfilePlaceholders ];
 		help: 'Show the placeholders of the current profile in the World';
 		iconName: #haloView
@@ -231,6 +231,7 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		updateProfileItem: aBuilder;
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
+		renameProfileItem: aBuilder;
 		resetWindowsToCurrentProfile: aBuilder;
 		addProfileImportExportItems: aBuilder;
 		addProfileHelpItem: aBuilder
@@ -244,6 +245,45 @@ CavroisWindowManager class >> removeSelectedProfile: selectedProfileKey [
 		ifTrue: [ self current currentProfile: nil ]
 		ifFalse: [
 		self updateCurrentProfileAfterDeletion: selectedProfileKey ]
+]
+
+{ #category : 'action' }
+CavroisWindowManager class >> renameProfile [
+
+	| presenter profile |
+	presenter := SpSelectDialog new
+		             title: 'Rename a profile';
+		             label: 'Select the profile you want to rename';
+		             items: self current profiles associations;
+		             display: [ :each | each key ];
+		             onAccept: [ :dialog |
+				             profile := dialog presenter selectedItem.
+				             dialog presenter delete ].
+	presenter openModal.
+
+	presenter := SpRequestDialog new
+		             title: 'Rename ' , profile key;
+		             label: 'What is the new name of your profile ?';
+		             text: '';
+		             acceptLabel: 'Confirm';
+		             cancelLabel: 'Cancel';
+		             onAccept: [ :dialog |
+				             self
+					             updateProfile: profile
+					             withName: dialog presenter text.
+				             MenubarMorph reset ];
+		             openDialog
+]
+
+{ #category : 'actions' }
+CavroisWindowManager class >> renameProfileItem: aBuilder [
+
+	(aBuilder item: #'Rename profile')
+		parent: #ProfileAction;
+		order: 4;
+		action: [ self current profiles ifNotEmpty: [ self renameProfile ] ];
+		help: 'Rename a profile';
+		iconName: #edit
 ]
 
 { #category : 'accessing' }
@@ -366,11 +406,22 @@ CavroisWindowManager class >> updateProfile [
 ]
 
 { #category : 'updating' }
+CavroisWindowManager class >> updateProfile: aProfile withName: aName [
+
+	self current profiles removeKey:
+		(self current profiles keyAtValue: aProfile value).
+	self current currentProfile = aProfile value
+		ifTrue: [
+		self current profiles at: aName , ' (Current)' put: aProfile value ]
+		ifFalse: [ self current profiles at: aName put: aProfile value ]
+]
+
+{ #category : 'updating' }
 CavroisWindowManager class >> updateProfileItem: aBuilder [
 
 	(aBuilder item: #'Update current profile')
 		parent: #ProfileAction;
-		order: 3;
+		order: 2;
 		action: [
 			self current currentProfile
 				ifNil: [ self inform: 'No profile has been created yet' ]
