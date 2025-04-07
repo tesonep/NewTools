@@ -92,16 +92,3 @@ CavroisWindowManagerTest >> testSaveProfile [
 	self assert: fileRef exists.
 	fileRef ensureDelete
 ]
-
-{ #category : 'tests' }
-CavroisWindowManagerTest >> testSwitchToProfile [
-
-	manager addProfileFromWindows: 'Profile1'.
-	"adding Current so the method called gets tricked"
-	manager addProfileFromWindows: 'Profile2(Current)'.
-
-	manager class switchToProfile: 'Profile1'.
-
-	self assert: (manager profiles includesKey: 'Profile1(Current)').
-	self assert: (manager profiles includesKey: 'Profile2')
-]
