@@ -22,8 +22,9 @@ CavroisWindowManagerTest >> setUp [
 { #category : 'running' }
 CavroisWindowManagerTest >> tearDown [
 
-	super tearDown.
-	CavroisWindowManager reset
+	CavroisWindowManager reset.
+
+	super tearDown
 ]
 
 { #category : 'tests' }
