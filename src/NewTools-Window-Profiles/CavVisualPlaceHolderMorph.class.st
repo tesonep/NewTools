@@ -74,17 +74,18 @@ CavVisualPlaceHolderMorph >> remove [
 		             title: 'Remove placeholder';
 		             label: 'Are you sure you want to remove it ?';
 		             onAccept: [ :dialog |
-			             class := Smalltalk at:
-					                      self submorphs first contents asString
-						                      asSymbol.
-			             key := CavroisWindowManager current currentProfile
-				                    placeHolderDictionnary at: class.
-			             (CavroisWindowManager current currentProfile
-				              placeHoldersFor: class) do: [ :p |
-					             p = self placeHolder ifTrue: [ key remove: p ] ].
-			             key ifEmpty: [
-					             CavroisWindowManager current currentProfile
-						             placeHolderDictionnary removeKey: class ].
-			             self delete ].
+				             class := Smalltalk at:
+						                      self submorphs first contents asString
+							                      asSymbol.
+				             key := CavroisWindowManager current currentProfile
+					                    placeHolderDictionnary at: class.
+				             (CavroisWindowManager current currentProfile
+					              placeHoldersFor: class) do: [ :p |
+						             p = self placeHolder ifTrue: [ key remove: p ] ].
+				             key ifEmpty: [
+							             CavroisWindowManager current currentProfile
+								             placeHolderDictionnary removeKey: class ].
+				             self delete.
+				             CavroisWindowManager current removeVisualPlaceholders ].
 	presenter openDialog
 ]
