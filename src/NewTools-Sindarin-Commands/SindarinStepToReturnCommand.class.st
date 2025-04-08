@@ -7,7 +7,7 @@ Class {
 
 { #category : 'accessing - defaults' }
 SindarinStepToReturnCommand class >> defaultDescription [
-	^ 'Steps execution until a new instance is created'
+	^ 'Steps to the next method return'
 ]
 
 { #category : 'accessing - defaults' }
