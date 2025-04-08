@@ -155,6 +155,12 @@ CavroisWindowManager class >> deleteProfile [
 		             openDialog
 ]
 
+{ #category : 'class initialization' }
+CavroisWindowManager class >> initialize [
+
+	SessionManager default registerUserClassNamed: self name
+]
+
 { #category : 'action' }
 CavroisWindowManager class >> loadProfile [
 
@@ -323,6 +329,12 @@ CavroisWindowManager class >> saveProfile: aLocation [
 	file := aLocation / fileName.
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
+]
+
+{ #category : 'system startup' }
+CavroisWindowManager class >> startUp: isImageStarting [
+
+	isImageStarting ifTrue: [ self reset ]
 ]
 
 { #category : 'actions' }
