@@ -171,6 +171,13 @@ StDebugger class >> debugSession: aDebugSession [
 	^ debugger
 ]
 
+{ #category : 'commands' }
+StDebugger class >> debuggerCodeCommandGroupFor: rootCommandGroup [
+
+	^ rootCommandGroup / StDebuggerCodeCommandTreeBuilder groupName
+	  / StDebuggerCodeCommandTreeBuilder new codeDebugCommandsGroupName
+]
+
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
@@ -189,6 +196,11 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
 			   #beVerticalCodeThenStack #beVerticalStackThenCode );
 		description: ''
+]
+
+{ #category : 'commands' }
+StDebugger class >> debuggerToolbarCommandGroupFor: rootCommandGroup [
+	^ rootCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName
 ]
 
 { #category : 'accessing' }
