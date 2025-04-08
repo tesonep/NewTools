@@ -392,7 +392,7 @@ StDebugger >> buildToolbar: toolbar withCommands: commands [
 { #category : 'toolbar' }
 StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGroups [
 
-	advancedCommandGroups do: [ :cmdGroup |
+	(advancedCommandGroups sort: [ :a :b| a name < b name ]) do: [ :cmdGroup |
 		| menuButton |
 		menuButton := self newMenu.
 		cmdGroup allCommands do: [ :cmd |
