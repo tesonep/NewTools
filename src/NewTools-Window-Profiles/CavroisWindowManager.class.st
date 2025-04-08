@@ -168,17 +168,20 @@ CavroisWindowManager class >> loadProfile [
 				ifTrue: [
 						file := fileReference.
 						profile := STON fromString: file.
-						oldProfile := self current currentProfile.
-						self current profiles at: profile name put: profile.
-						oldKey := self current profiles keyAtValue: oldProfile.
-						baseName := oldKey copyReplaceAll: '(Current)' with: ''.
+						self current currentProfile ifNotNil: [
+								oldProfile := self current currentProfile.
+								oldKey := self current profiles keyAtValue: oldProfile.
+								baseName := oldKey copyReplaceAll: '(Current)' with: ''.
+								self current profiles
+									at: baseName put: oldProfile;
+									removeKey: oldKey ].
 						self current profiles
-							at: baseName put: oldProfile;
-							removeKey: oldKey.
+							at: profile name , ' (Current)'
+							put: profile.
 						self current currentProfile: profile.
 						MenubarMorph reset ]
 				ifFalse: [ self inform: ' File selected is not a profile' ] ].
-	presenter open
+	presenter openDialog
 ]
 
 { #category : 'open' }
