@@ -12,5 +12,8 @@ SpMorphicBaseTextAdapter >> addTextSegmentDecoration: aDecorationSegment [
 SpMorphicBaseTextAdapter >> removeAllTextSegmentDecorations [
 	
 	self widgetDo: [ :w | 
-		w segments do: [ :each | w textArea removeSegment: each ] ]
+		w segments copy do: [ :each |
+			w textArea
+				removeSegment: each;
+				removeMorph: each ] ]
 ]
