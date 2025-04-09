@@ -155,6 +155,12 @@ CavroisWindowManager class >> deleteProfile [
 		             openDialog
 ]
 
+{ #category : 'class initialization' }
+CavroisWindowManager class >> initialize [
+
+	SessionManager default registerUserClassNamed: self name
+]
+
 { #category : 'action' }
 CavroisWindowManager class >> loadProfile [
 
@@ -168,17 +174,20 @@ CavroisWindowManager class >> loadProfile [
 				ifTrue: [
 						file := fileReference.
 						profile := STON fromString: file.
-						oldProfile := self current currentProfile.
-						self current profiles at: profile name put: profile.
-						oldKey := self current profiles keyAtValue: oldProfile.
-						baseName := oldKey copyReplaceAll: '(Current)' with: ''.
+						self current currentProfile ifNotNil: [
+								oldProfile := self current currentProfile.
+								oldKey := self current profiles keyAtValue: oldProfile.
+								baseName := oldKey copyReplaceAll: '(Current)' with: ''.
+								self current profiles
+									at: baseName put: oldProfile;
+									removeKey: oldKey ].
 						self current profiles
-							at: baseName put: oldProfile;
-							removeKey: oldKey.
+							at: profile name , ' (Current)'
+							put: profile.
 						self current currentProfile: profile.
 						MenubarMorph reset ]
 				ifFalse: [ self inform: ' File selected is not a profile' ] ].
-	presenter open
+	presenter openDialog
 ]
 
 { #category : 'open' }
@@ -320,6 +329,12 @@ CavroisWindowManager class >> saveProfile: aLocation [
 	file := aLocation / fileName.
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
+]
+
+{ #category : 'system startup' }
+CavroisWindowManager class >> startUp: isImageStarting [
+
+	isImageStarting ifTrue: [ self reset ]
 ]
 
 { #category : 'actions' }
