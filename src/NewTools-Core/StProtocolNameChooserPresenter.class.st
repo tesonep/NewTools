@@ -18,7 +18,8 @@ Class {
 		'suggestionList',
 		'protocolNameField',
 		'concernedClass',
-		'newProtocolButton'
+		'newProtocolButton',
+		'selectedProtocolName'
 	],
 	#category : 'NewTools-Core-Calypso',
 	#package : 'NewTools-Core',
@@ -27,8 +28,8 @@ Class {
 
 { #category : 'examples' }
 StProtocolNameChooserPresenter class >> exampleConfiguringPresenter [
-
 	<example>
+
 	self requestProtocolNameConfiguring: [ :presenter :dialog |
 		presenter
 			concernedClass: self class; "Giving the concerned class can allow some customizations such as knowing if we should suggest instance or class side protocols"
@@ -55,23 +56,18 @@ StProtocolNameChooserPresenter class >> requestProtocolName [
 StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	"I request a protocol name through a dialog and signal a CmdCommandAborted in case the provided protocol is empty or an extension name.
 	I allow the user to configure the presenter or the dialog via a configuration block."
-
-	<script>
 	| protocolName presenter dialog |
+
 	dialog := (presenter := self new) asBlockedDialogWindow.
-
 	aBlock cull: presenter cull: dialog.
-
 	presenter selectProtocolName.
-
 	dialog open.
-
-	protocolName := presenter selectedItem ifNil: [ CmCommandAborted signal ].
 	
-
+	protocolName := presenter selectedProtocolName ifNil: [ CmCommandAborted signal ].	
 	(protocolName beginsWith: '*') ifTrue: [
 		UIManager default inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
 		^ CmCommandAborted signal ].
+	
 	^ protocolName
 ]
 
@@ -94,33 +90,46 @@ StProtocolNameChooserPresenter >> connectPresenters [
 	super connectPresenters.
 
 	protocolNameField whenTextChangedDo: [ self updatePresenter ].
+	protocolNameField whenSubmitDo: [ :aString | self doAcceptFromTextInput  ].
+	
+	suggestionList whenActivatedDo: [ self doAcceptFromList ].
+	
+	newProtocolButton action: [ self doAcceptFromTextInput ]
 ]
 
 { #category : 'layout' }
 StProtocolNameChooserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: suggestionList;
-		  add: (SpBoxLayout newLeftToRight
-				   add: protocolNameField expand: true;
-				   add: newProtocolButton expand: false;
-				   yourself)
-		  withConstraints: [ :constraints | constraints height: self class toolbarHeight ];
-		  yourself
+		spacing: 3;
+		add: suggestionList;
+		add: (SpBoxLayout newLeftToRight
+				spacing: 3;
+				add: protocolNameField expand: true;
+				add: newProtocolButton expand: false;
+				yourself)
+			expand: false;
+		yourself
+]
+
+{ #category : 'private - actions' }
+StProtocolNameChooserPresenter >> doAcceptFromList [
+	
+	selectedProtocolName := suggestionList selectedItem.
+	self withWindowDo: [ :w | w beOk; close ]
+]
+
+{ #category : 'private - actions' }
+StProtocolNameChooserPresenter >> doAcceptFromTextInput [
+	
+	selectedProtocolName := protocolNameField text.
+	self withWindowDo: [ :w | w beOk; close ]
 ]
 
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	super initializeDialogWindow: aDialogWindowPresenter.
-	protocolNameField whenSubmitDo: [ :protocolName | aDialogWindowPresenter triggerOkAction ].
-
-	newProtocolButton action: [ "If we click on the + we should add the content of the input field in the list, select it and validate"
-		suggestionList
-			items: { protocolNameField text };
-			selectFirst.
-
-		aDialogWindowPresenter triggerOkAction ]
+	super initializeDialogWindow: aDialogWindowPresenter
 ]
 
 { #category : 'initialization' }
@@ -135,6 +144,7 @@ StProtocolNameChooserPresenter >> initializePresenters [
 
 	newProtocolButton := self newButton.
 	newProtocolButton
+		addStyle: 'small';
 		icon: (self iconNamed: #add);
 		help: 'Create a new protocol with the content of the input field if this protocol is not in the list'.
 
@@ -144,12 +154,22 @@ StProtocolNameChooserPresenter >> initializePresenters [
 { #category : 'initialization' }
 StProtocolNameChooserPresenter >> initializeProtocolNameField [
 
-	protocolNameField eventHandler whenKeyDownDo: [ :anEvent | "If we press arrow up, we should get up in the list. If we press arrow down, we should get down in the list.""31 = Arrow down"
-		anEvent keyValue = 31 ifTrue: [
-			suggestionList selectIndex: (suggestionList selection selectedIndex + 1 min: suggestionList items size) scrollToSelection: true ].
-
-		"30 = Arrow up"
-		anEvent keyValue = 30 ifTrue: [ suggestionList selectIndex: (suggestionList selection selectedIndex - 1 max: 1) scrollToSelection: true ] ]
+	protocolNameField eventHandler 
+		whenKeyDownDo: [ :anEvent | 
+			"If we press arrow up, we should get up in the list. 
+			 If we press arrow down, we should get down in the list."
+			"31 = Arrow down"
+			anEvent keyValue = 31 ifTrue: [
+				suggestionList 
+					selectIndex: (suggestionList selection selectedIndex + 1 min: suggestionList items size) 
+					scrollToSelection: true.
+				suggestionList takeKeyboardFocus ].
+			"30 = Arrow up"
+			anEvent keyValue = 30 ifTrue: [ 
+				suggestionList 
+					selectIndex: (suggestionList selection selectedIndex - 1 max: 1) 
+					scrollToSelection: true.
+				suggestionList takeKeyboardFocus ] ]
 ]
 
 { #category : 'initialization' }
@@ -160,18 +180,18 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 StProtocolNameChooserPresenter >> newProtocolButton [
 
 	^ newProtocolButton
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 StProtocolNameChooserPresenter >> protocolName [
 	^ protocolNameField text asSymbol
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 StProtocolNameChooserPresenter >> protocolName: aString [
 	"I allow to set a default protocol name to the list."
 
@@ -200,10 +220,16 @@ StProtocolNameChooserPresenter >> selectProtocolName [
 	protocolNameField selectAll
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 StProtocolNameChooserPresenter >> selectedItem [
 
 	^ suggestionList selectedItem
+]
+
+{ #category : 'accessing' }
+StProtocolNameChooserPresenter >> selectedProtocolName [
+
+	^ selectedProtocolName
 ]
 
 { #category : 'initialization' }
