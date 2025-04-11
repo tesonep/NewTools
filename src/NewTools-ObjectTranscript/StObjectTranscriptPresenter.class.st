@@ -34,11 +34,13 @@ Class {
 	#superclass : 'StPresenter',
 	#instVars : [
 		'logList',
-		'zoom',
+		'recordsInspector',
+		'selectedRecordInspector',
 		'logger',
 		'inspectSelectedItem',
 		'showInspector',
-		'isOpened'
+		'isOpened',
+		'tabLayout'
 	],
 	#classVars : [
 		'ShowInspector'
@@ -146,11 +148,7 @@ StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
 { #category : 'actions' }
 StObjectTranscriptPresenter >> addActions [
 
-	logList 
-		addActionWith: [ :item | item
-			name: 'Toggle inspector entities';
-			iconName: #smallHelp;
-			action: [ self hideShowInspector ] ];
+	logList
 		addActionWith: [ :item | item
 			name: 'Hide/Show inspector';
 			iconName: #inspect;
@@ -173,18 +171,11 @@ StObjectTranscriptPresenter >> addActions [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> connectPresenters [
 	
-	logList whenSelectionChangedDo: [ :selection |
-		selection selectedItem
-			ifNotNil: [ :log | 
-				"zoom model: log asInspectorModel"
-				inspectSelectedItem 
-						ifTrue: [ self inspect: log ]
-						ifFalse: [ self inspect: logger recordings ]
-				]]
+	logList whenSelectionChangedDo: [ :aSelection | self performSelection: aSelection ]
 	
 ]
 
-{ #category : 'initialization' }
+{ #category : 'layout' }
 StObjectTranscriptPresenter >> defaultLayout [
 	
 	^ showInspector 
@@ -205,15 +196,6 @@ StObjectTranscriptPresenter >> flush [
 	self populateItemsFrom: logger
 ]
 
-{ #category : 'actions' }
-StObjectTranscriptPresenter >> hideShowInspector [
-
-	inspectSelectedItem := inspectSelectedItem not.
-				inspectSelectedItem 
-						ifTrue: [ self inspect: logList selectedItem ]
-						ifFalse: [ self inspect: logger recordings ]
-]
-
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> initialize [
 
@@ -226,7 +208,8 @@ StObjectTranscriptPresenter >> initialize [
 StObjectTranscriptPresenter >> initializePresenters [
 
 	logList := self instantiate: SpFilteringListPresenter.
-	zoom := StInspectorPresenter newApplication: self application. 
+	recordsInspector := self instantiate: StInspectorPresenter. 
+	selectedRecordInspector := self instantiate: StInspectorPresenter.
 
 	self addActions
 ]
@@ -234,22 +217,23 @@ StObjectTranscriptPresenter >> initializePresenters [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
-
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter whenOpenedDo: [ 
-			self selectLastItem.
-			isOpened := true. ].
-	aWindowPresenter whenClosedDo: [ logger removeAsClient: self ]
+		self selectLastItem.
+		isOpened := true ].
+	aWindowPresenter whenClosedDo: [ 
+		logger ifNotNil: [ 
+			logger removeAsClient: self ] ]
 ]
 
 { #category : 'actions' }
-StObjectTranscriptPresenter >> inspect: anObject [
+StObjectTranscriptPresenter >> inspect: anObject inspector: aPresenter [
 	
-	zoom model: anObject asInspectorModel
+	aPresenter model: anObject asInspectorModel
 		
 ]
 
-{ #category : 'initialization' }
+{ #category : 'testing' }
 StObjectTranscriptPresenter >> isOpened [ 
 	
 	^ isOpened ifNil: [ isOpened := false ]
@@ -262,6 +246,19 @@ StObjectTranscriptPresenter >> logger: aLogger [
 	logger := aLogger.
 	logger addAsClient: self. 
 	self populateItemsFrom: logger
+	
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> performSelection: aSelection [
+
+	| log |
+	(log := aSelection selectedItem) ifNil: [ ^ self ].
+		
+	"zoom model: log asInspectorModel"
+	self inspect: log inspector: selectedRecordInspector.
+	tabLayout ifNotNil: [ tabLayout select: selectedRecordInspector ]
+				
 	
 ]
 
@@ -286,7 +283,7 @@ StObjectTranscriptPresenter >> refresh [
 
 ]
 
-{ #category : 'initialization' }
+{ #category : 'accessing' }
 StObjectTranscriptPresenter >> selectLastItem [ 
 
 	logList 
@@ -311,6 +308,8 @@ StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.
 	self layout: self defaultLayout.
+	
+	aBoolean ifTrue: [ tabLayout select: recordsInspector ]
 ]
 
 { #category : 'actions' }
@@ -325,24 +324,36 @@ StObjectTranscriptPresenter >> stopLogger [
 	logger stop
 ]
 
+{ #category : 'private - actions' }
+StObjectTranscriptPresenter >> tabSelected: aPresenter [
+
+	aPresenter =  recordsInspector 
+		ifTrue: [ self inspect: logger recordings inspector: aPresenter ].
+	 aPresenter = selectedRecordInspector 
+		ifTrue: [ self inspect: self selectedItem inspector: aPresenter ]
+	
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> windowTitle [ 
 
 	^ 'Object Transcript'
 ]
 
-{ #category : 'customization' }
+{ #category : 'layout' }
 StObjectTranscriptPresenter >> withInspectorLayout [
 	
-
-	^ SpBoxLayout
-		newTopToBottom 
-			add: logList ;
-			add: zoom ;
-		yourself
+	^ SpPanedLayout newTopToBottom 
+			add: logList ;			
+			add: (tabLayout := SpTabLayout new
+				add: recordsInspector label: 'All logs';
+				add: selectedRecordInspector label: 'Selected Log';
+				whenTabSelectedDo: [ :ann | self tabSelected: ann presenter ];
+				yourself);
+			yourself
 ]
 
-{ #category : 'customization' }
+{ #category : 'layout' }
 StObjectTranscriptPresenter >> withoutInspectorLayout [
 	
 
