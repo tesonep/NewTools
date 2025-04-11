@@ -29,6 +29,34 @@ StProtocolNameChooserPresenterTest >> testAddButtonIsDiabledWhenTextFieldIsEmpty
 ]
 
 { #category : 'tests' }
+StProtocolNameChooserPresenterTest >> testCreatingProtocolThatDoesntExists [
+"When creating a protocol that doesn't exist beforehand, it should create it correctly with the same name as written."
+	| protocolName |
+
+	protocolName := UUID new asString36.
+	presenter concernedClass: self class.
+	
+	presenter protocolName: protocolName.
+	presenter doAcceptFromTextInput.
+	self assert: presenter selectedProtocolName equals: protocolName 
+
+]
+
+{ #category : 'tests' }
+StProtocolNameChooserPresenterTest >> testCreatingProtocolThatExists [
+"When creating a protocol that does exist beforehand, it should create the name of the suggested protocol instead of the name written."
+	| protocolName |
+
+	protocolName := 'acc' .
+	presenter concernedClass: self class.
+	
+	presenter protocolName: protocolName.
+	presenter doAcceptFromTextInput.
+	self assert: presenter selectedProtocolName equals: 'accessing' 
+
+]
+
+{ #category : 'tests' }
 StProtocolNameChooserPresenterTest >> testSmokeTest [
 
 	| window |
