@@ -57,7 +57,7 @@ StProtocolNameChooserPresenterTest >> testCreatingProtocolThatExists [
 ]
 
 { #category : 'tests' }
-StProtocolNameChooserPresenterTest >> testSmokeTest [
+StProtocolNameChooserPresenterTest >> testSmoke [
 
 	| window |
 	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].

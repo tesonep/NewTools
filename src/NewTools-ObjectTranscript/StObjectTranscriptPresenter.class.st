@@ -266,11 +266,11 @@ StObjectTranscriptPresenter >> performSelection: aSelection [
 StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 
 	| rec |
-	rec := aLogger recordings copy.
+	rec := aLogger entries copy.
 	logList items: rec.
-	rec size > 0 
-		ifTrue: [ logList reapplyOrResetFilter.
-					logList selectLast. ]
+	rec size > 0 ifTrue: [
+			logList reapplyOrResetFilter.
+			logList selectLast ]
 ]
 
 { #category : 'actions' }
@@ -327,11 +327,10 @@ StObjectTranscriptPresenter >> stopLogger [
 { #category : 'private - actions' }
 StObjectTranscriptPresenter >> tabSelected: aPresenter [
 
-	aPresenter =  recordsInspector 
-		ifTrue: [ self inspect: logger recordings inspector: aPresenter ].
-	 aPresenter = selectedRecordInspector 
-		ifTrue: [ self inspect: self selectedItem inspector: aPresenter ]
-	
+	aPresenter = recordsInspector ifTrue: [
+		self inspect: logger entries inspector: aPresenter ].
+	aPresenter = selectedRecordInspector ifTrue: [
+		self inspect: self selectedItem inspector: aPresenter ]
 ]
 
 { #category : 'accessing' }
