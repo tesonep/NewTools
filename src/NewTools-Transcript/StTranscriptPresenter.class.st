@@ -53,7 +53,7 @@ StTranscriptPresenter class >> menuCommandOn: aBuilder [
 		help: 'Transcript';
 		keyText: 'o, t';
 		help: 'Window on the new Transcript output stream, which is useful for writing log messages.';
-		iconName: self taskbarIconName
+		iconName: #transcript
 	
 ]
 
