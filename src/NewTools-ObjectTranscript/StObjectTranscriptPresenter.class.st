@@ -162,22 +162,20 @@ StObjectTranscriptPresenter >> addActions [
 
 	logList
 		addActionWith: [ :item | item
-			name: 'Hide/Show inspector';
-			iconName: #inspect;
+			dynamicName: [
+				showInspector 
+					ifTrue: ['Hide inspector' ]
+					ifFalse: ['Show inspector' ] ];
 			action: [ self showInspector: showInspector not ] ];
 		addActionWith: [ :item | item
 			name: 'Flush entities';
-			iconName: #delete;
 			action: [ self flush ]];
 		addActionWith: [ :item | item
-			name: 'Start logger';
-			iconName: #start;
-			action: [ self startLogger ]];
-		addActionWith: [ :item | item
-			name: 'Stop logger';
-			iconName: #stop;
-			action: [ self stopLogger ]]
-	
+			dynamicName: [
+				self isLoggerRunning 
+					ifTrue: ['Stop logger' ]
+					ifFalse: ['Start logger' ] ];
+			action: [ self switchLogger ] ]
 ]
 
 { #category : 'initialization' }
@@ -243,6 +241,12 @@ StObjectTranscriptPresenter >> inspect: anObject inspector: aPresenter [
 	
 	aPresenter model: anObject asInspectorModel
 		
+]
+
+{ #category : 'accessing' }
+StObjectTranscriptPresenter >> isLoggerRunning [
+
+	^ logger isRunning
 ]
 
 { #category : 'testing' }
@@ -352,6 +356,14 @@ StObjectTranscriptPresenter >> startLogger [
 StObjectTranscriptPresenter >> stopLogger [
 
 	logger stop
+]
+
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> switchLogger [
+
+	self isLoggerRunning 
+		ifTrue: [ self stopLogger ]
+		ifFalse: [ self startLogger ]
 ]
 
 { #category : 'private' }
