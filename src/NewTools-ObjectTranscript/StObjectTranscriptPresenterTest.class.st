@@ -1,8 +1,6 @@
 Class {
 	#name : 'StObjectTranscriptPresenterTest',
 	#superclass : 'TestCase',
-	#traits : 'SpTMorphicUIRedrawer',
-	#classTraits : 'SpTMorphicUIRedrawer classTrait',
 	#instVars : [
 		'presenter'
 	],
@@ -25,13 +23,12 @@ StObjectTranscriptPresenterTest >> testOpenedLogIsSelectedLog [
 
 		[  
 			window := presenter open.
-			self waitUntilUIRedrawed.
+			20 milliSeconds wait.
 			#thisIsATest emit.
 			presenter selectLastItem. 
-			self waitUntilUIRedrawed.
+			20 milliSeconds wait.
 			self 
 				assert: presenter logList selectedItem  
-				
 				equals: presenter selectedRecordInspector model inspectedObject  
 		] ensure: [ window close ].
 	
