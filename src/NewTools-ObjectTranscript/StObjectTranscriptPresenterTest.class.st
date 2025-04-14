@@ -24,7 +24,9 @@ StObjectTranscriptPresenterTest >> testOpenedLogIsSelectedLog [
 			window := presenter open.
 			#thisIsATest emit.
 			presenter selectLastItem. 
-			self assert: presenter logList selectedItem  equals: presenter selectedRecordInspector model inspectedObject  
+			self 
+				assert: presenter logList selectedItem  
+				equals: presenter selectedRecordInspector model inspectedObject  
 		] ensure: [ window close ].
 	
 
@@ -68,15 +70,13 @@ StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 { #category : 'tests' }
 StObjectTranscriptPresenterTest >> testUnselectWhenChangingToAllLogsTab [
 
-	| window item |
+	| window |
 	 
-	[self shouldnt: [ 
+	[ 
 		window := presenter open.
-		item := 30 emit.
-		presenter logList selectItem: item. 
+		presenter selectLastItem. 
+		self deny: presenter logList selectedItem equals: nil.
 		presenter tabLayout select: presenter recordsInspector.
 		self assert: presenter logList selectedItem equals: nil ] 
-	
-	
-	raise: Error ] ensure: [ window close ]
+	ensure: [ window close ]
 ]
