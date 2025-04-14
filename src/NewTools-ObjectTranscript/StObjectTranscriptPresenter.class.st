@@ -215,12 +215,35 @@ StObjectTranscriptPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+StObjectTranscriptPresenter >> initializeLogList [
+
+	logList 
+		beResizable;
+		addColumn: (SpStringTableColumn new
+			width: 180;
+			title: 'Timestamp';
+			evaluated:  [ :each | each timestamp ];
+			yourself);
+		addColumn: (SpStringTableColumn new
+			width: 150;
+			title: 'Name';
+			evaluated:  [ :each | each name ];
+			yourself);
+		addColumn: (SpStringTableColumn new
+			title: 'Contents';
+			evaluated:  [ :each | self printOneLineContents: each  ];
+			yourself)
+	
+]
+
+{ #category : 'initialization' }
 StObjectTranscriptPresenter >> initializePresenters [
 
-	logList := self instantiate: SpFilteringListPresenter.
+	logList := self newEasyColumnView.
+	self initializeLogList.
 	recordsInspector := self instantiate: StInspectorPresenter. 
 	selectedRecordInspector := self instantiate: StInspectorPresenter.
-
+	
 	self addActions
 ]
 
@@ -290,9 +313,15 @@ StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 	| rec |
 	rec := aLogger entries copy.
 	logList items: rec.
-	rec size > 0 ifTrue: [
+	"rec size > 0 ifTrue: [
 			logList reapplyOrResetFilter.
-			logList selectLast ]
+			logList selectLast ]"
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> printOneLineContents: aSignal [
+
+		^ String streamContents: [ :aStream | aSignal printOneLineContentsOn: aStream ] 
 ]
 
 { #category : 'private' }
@@ -315,8 +344,10 @@ StObjectTranscriptPresenter >> refresh [
 StObjectTranscriptPresenter >> selectLastItem [ 
 
 	logList 
-		selectIndex: logList listPresenter listSize 
-		scrollToSelection: true
+		selectIndex: logList listSize
+		"Old code that was changed when changing the logList to a ColumnView. WIll be deleted when finished if 
+			not necessary"
+		"scrollToSelection: true"
 ]
 
 { #category : 'accessing' }
@@ -392,7 +423,7 @@ StObjectTranscriptPresenter >> windowTitle [
 StObjectTranscriptPresenter >> withInspectorLayout [
 	
 	^ SpPanedLayout newTopToBottom 
-			add: logList ;			
+			add: logList;
 			add: (tabLayout := SpTabLayout new
 				add: recordsInspector label: 'All logs';
 				add: selectedRecordInspector label: 'Selected Log';
