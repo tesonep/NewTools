@@ -16,6 +16,21 @@ presenter logger: StObjectTranscriptLogger instance.
 ]
 
 { #category : 'tests' }
+StObjectTranscriptPresenterTest >> testOpenedLogIsSelectedLog [
+
+	| window |
+	 
+		[  
+			window := presenter open.
+			#thisIsATest emit.
+			presenter selectLastItem. 
+			self assert: presenter logList selectedItem  equals: presenter selectedRecordInspector model inspectedObject  
+		] ensure: [ window close ].
+	
+
+]
+
+{ #category : 'tests' }
 StObjectTranscriptPresenterTest >> testSmoke [
 
 	| window |
@@ -48,4 +63,20 @@ StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 	self assert: win initialExtent equals: 550 @ 850 ] ensure: [
 		win close.
 		StObjectTranscriptPresenter showInspector: current ]
+]
+
+{ #category : 'tests' }
+StObjectTranscriptPresenterTest >> testUnselectWhenChangingToAllLogsTab [
+
+	| window item |
+	 
+	[self shouldnt: [ 
+		window := presenter open.
+		item := 30 emit.
+		presenter logList selectItem: item. 
+		presenter tabLayout select: presenter recordsInspector.
+		self assert: presenter logList selectedItem equals: nil ] 
+	
+	
+	raise: Error ] ensure: [ window close ]
 ]

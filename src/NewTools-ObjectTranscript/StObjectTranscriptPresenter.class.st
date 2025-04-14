@@ -328,7 +328,8 @@ StObjectTranscriptPresenter >> stopLogger [
 StObjectTranscriptPresenter >> tabSelected: aPresenter [
 
 	aPresenter = recordsInspector ifTrue: [
-		self inspect: logger entries inspector: aPresenter ].
+		self inspect: logger entries inspector: aPresenter.
+		logList selectItem: nil].
 	aPresenter = selectedRecordInspector ifTrue: [
 		self inspect: self selectedItem inspector: aPresenter ]
 ]
