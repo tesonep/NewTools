@@ -239,6 +239,12 @@ StObjectTranscriptPresenter >> isOpened [
 	^ isOpened ifNil: [ isOpened := false ]
 ]
 
+{ #category : 'private' }
+StObjectTranscriptPresenter >> logList [ 
+	
+	^ logList 
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> logger: aLogger [
 	
@@ -273,6 +279,12 @@ StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 			logList selectLast ]
 ]
 
+{ #category : 'private' }
+StObjectTranscriptPresenter >> recordsInspector [
+
+	^ recordsInspector 
+]
+
 { #category : 'actions' }
 StObjectTranscriptPresenter >> refresh [ 
 	
@@ -295,6 +307,12 @@ StObjectTranscriptPresenter >> selectLastItem [
 StObjectTranscriptPresenter >> selectedItem [
 
 	^  logList selectedItem
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> selectedRecordInspector [
+
+	^ selectedRecordInspector 
 ]
 
 { #category : 'actions' }
@@ -324,12 +342,18 @@ StObjectTranscriptPresenter >> stopLogger [
 	logger stop
 ]
 
+{ #category : 'private' }
+StObjectTranscriptPresenter >> tabLayout [ 
+	
+	^ tabLayout 
+]
+
 { #category : 'private - actions' }
 StObjectTranscriptPresenter >> tabSelected: aPresenter [
 
 	aPresenter = recordsInspector ifTrue: [
 		self inspect: logger entries inspector: aPresenter.
-		logList selectItem: nil].
+		logList selectItem: nil ].
 	aPresenter = selectedRecordInspector ifTrue: [
 		self inspect: self selectedItem inspector: aPresenter ]
 ]
