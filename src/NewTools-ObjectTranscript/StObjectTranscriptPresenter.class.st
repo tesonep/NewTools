@@ -33,6 +33,7 @@ Class {
 	#name : 'StObjectTranscriptPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
+		'toolbar',
 		'logList',
 		'recordsInspector',
 		'selectedRecordInspector',
@@ -40,7 +41,9 @@ Class {
 		'inspectSelectedItem',
 		'showInspector',
 		'isOpened',
-		'tabLayout'
+		'tabLayout',
+		'showHideInspectorButton',
+		'startStopLoggerButton'
 	],
 	#classVars : [
 		'ShowInspector'
@@ -212,7 +215,7 @@ StObjectTranscriptPresenter >> initializeLogList [
 		addColumn: (SpStringTableColumn new
 			width: 180;
 			title: 'Timestamp';
-			evaluated:  [ :each | each timestamp ];
+			evaluated:  [ :each | each timestamp asStringYMDHM ];
 			yourself);
 		addColumn: (SpStringTableColumn new
 			width: 150;
@@ -229,12 +232,38 @@ StObjectTranscriptPresenter >> initializeLogList [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> initializePresenters [
 
+	toolbar := self newToolbar.
 	logList := self newEasyColumnView.
+	self initializeToolbar.
 	self initializeLogList.
 	recordsInspector := self instantiate: StInspectorPresenter. 
 	selectedRecordInspector := self instantiate: StInspectorPresenter.
 	
 	self addActions
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> initializeToolbar [
+
+	toolbar := self newToolbar 
+  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+		
+	toolbar 
+		add: (showHideInspectorButton := toolbar newToolbarButton
+			icon: (self application iconNamed: #inspect);
+			help: 'Switch between showing/hiding the inspector';
+			action: [ self showInspector: showInspector not ]);
+		add: (toolbar newToolbarButton 
+			icon: (self application iconNamed: #smallDelete );
+			label: 'Flush';
+			help: 'Flushes entities out of the Object Transcript';
+			action: [ self flush ]);
+		add: (startStopLoggerButton := toolbar newToolbarButton 
+			help: 'Starts/Stops logger';
+			action: [ self switchLogger ]).
+	
 ]
 
 { #category : 'initialization' }
@@ -284,7 +313,7 @@ StObjectTranscriptPresenter >> logger: aLogger [
 	aLogger ifNil: [ ^ self ].
 	logger := aLogger.
 	logger addAsClient: self. 
-	self populateItemsFrom: logger
+	self updatePresenter
 	
 ]
 
@@ -367,19 +396,36 @@ StObjectTranscriptPresenter >> showInspector: aBoolean [
 	showInspector := aBoolean.
 	self layout: self defaultLayout.
 	
-	aBoolean ifTrue: [ tabLayout select: recordsInspector ]
+	aBoolean 
+		ifTrue: [ 
+			tabLayout select: recordsInspector.
+		 	showHideInspectorButton 
+				label: 'Hide' ]
+		ifFalse: [ 
+		 	showHideInspectorButton 
+				label: 'Show' ]
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> startLogger [
 
-	logger start
+	logger start.
+	startStopLoggerButton 
+		label: 'Stop logger';
+		icon: (self application iconNamed: #pause ).
+	'logger-is-running' emit
+	
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> stopLogger [
 
-	logger stop
+	'logger-has-stopped' emit.
+	logger stop.
+	startStopLoggerButton 
+		label: 'Start logger';
+		icon: (self application iconNamed: #glamorousGo )
+	
 ]
 
 { #category : 'actions' }
@@ -406,6 +452,16 @@ StObjectTranscriptPresenter >> tabSelected: aPresenter [
 		self inspect: self selectedItem inspector: aPresenter ]
 ]
 
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> updatePresenter [ 
+
+	logger ifNil: [ ^ self ].
+	super updatePresenter.
+	self startLogger.
+	self showInspector: true.
+	self populateItemsFrom: logger
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> windowTitle [ 
 
@@ -414,15 +470,18 @@ StObjectTranscriptPresenter >> windowTitle [
 
 { #category : 'layout' }
 StObjectTranscriptPresenter >> withInspectorLayout [
-	
-	^ SpPanedLayout newTopToBottom 
+		
+	^ SpBoxLayout newTopToBottom
+		add: toolbar expand: false;
+		add: (SpPanedLayout newTopToBottom 
 			add: logList;
 			add: (tabLayout := SpTabLayout new
 				add: recordsInspector label: 'All logs';
 				add: selectedRecordInspector label: 'Selected Log';
 				whenTabSelectedDo: [ :ann | self tabSelected: ann presenter ];
 				yourself);
-			yourself
+			yourself);
+		yourself
 ]
 
 { #category : 'layout' }
@@ -431,6 +490,7 @@ StObjectTranscriptPresenter >> withoutInspectorLayout [
 
 	^ SpBoxLayout
 		newTopToBottom 
+			add: toolbar expand: false;
 			add: logList ;
 		yourself
 ]
