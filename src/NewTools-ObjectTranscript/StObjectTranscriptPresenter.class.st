@@ -135,20 +135,8 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 { #category : 'registration' }
 StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
 
-"Place it should go when its finished"
-"	
 	<worldMenu>
-	(aBuilder item: #Browse)
-		parent: #InputOutput;
-		label: 'Object Transcript';
-		order: 3;
-		iconName: #transcript;
-		help: 'Tool to be able to see logs in this instance of Pharo.';
-		action: [ self open ]
-"
-
-	<worldMenu>
-	(aBuilder item: #n)
+	(aBuilder item: #ObjectTranscript )
 		parent: #NewToolsMenu;
 		label: 'Object Transcript';
 		order: 4;
