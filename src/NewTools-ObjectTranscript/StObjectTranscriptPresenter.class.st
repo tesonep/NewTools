@@ -135,12 +135,24 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 { #category : 'registration' }
 StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
 
+"Place it should go when its finished"
+"	
 	<worldMenu>
 	(aBuilder item: #Browse)
-		parent: #Browse;
+		parent: #InputOutput;
 		label: 'Object Transcript';
-		order: 5;
-		iconName: #playground;
+		order: 3;
+		iconName: #transcript;
+		help: 'Tool to be able to see logs in this instance of Pharo.';
+		action: [ self open ]
+"
+
+	<worldMenu>
+	(aBuilder item: #n)
+		parent: #NewToolsMenu;
+		label: 'Object Transcript';
+		order: 4;
+		iconName: #transcript;
 		help: 'Tool to be able to see logs in this instance of Pharo.';
 		action: [ self open ]
 ]
@@ -150,22 +162,20 @@ StObjectTranscriptPresenter >> addActions [
 
 	logList
 		addActionWith: [ :item | item
-			name: 'Hide/Show inspector';
-			iconName: #inspect;
+			dynamicName: [
+				showInspector 
+					ifTrue: ['Hide inspector' ]
+					ifFalse: ['Show inspector' ] ];
 			action: [ self showInspector: showInspector not ] ];
 		addActionWith: [ :item | item
 			name: 'Flush entities';
-			iconName: #delete;
 			action: [ self flush ]];
 		addActionWith: [ :item | item
-			name: 'Start logger';
-			iconName: #start;
-			action: [ self startLogger ]];
-		addActionWith: [ :item | item
-			name: 'Stop logger';
-			iconName: #stop;
-			action: [ self stopLogger ]]
-	
+			dynamicName: [
+				self isLoggerRunning 
+					ifTrue: ['Stop logger' ]
+					ifFalse: ['Start logger' ] ];
+			action: [ self switchLogger ] ]
 ]
 
 { #category : 'initialization' }
@@ -193,7 +203,9 @@ StObjectTranscriptPresenter >> defaultShowInspector [
 StObjectTranscriptPresenter >> flush [
 
 	logger reset.
-	self populateItemsFrom: logger
+	self populateItemsFrom: logger.
+	tabLayout select: recordsInspector
+	
 ]
 
 { #category : 'initialization' }
@@ -205,12 +217,35 @@ StObjectTranscriptPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+StObjectTranscriptPresenter >> initializeLogList [
+
+	logList 
+		beResizable;
+		addColumn: (SpStringTableColumn new
+			width: 180;
+			title: 'Timestamp';
+			evaluated:  [ :each | each timestamp ];
+			yourself);
+		addColumn: (SpStringTableColumn new
+			width: 150;
+			title: 'Name';
+			evaluated:  [ :each | each name ];
+			yourself);
+		addColumn: (SpStringTableColumn new
+			title: 'Contents';
+			evaluated:  [ :each | self printOneLineContents: each  ];
+			yourself)
+	
+]
+
+{ #category : 'initialization' }
 StObjectTranscriptPresenter >> initializePresenters [
 
-	logList := self instantiate: SpFilteringListPresenter.
+	logList := self newEasyColumnView.
+	self initializeLogList.
 	recordsInspector := self instantiate: StInspectorPresenter. 
 	selectedRecordInspector := self instantiate: StInspectorPresenter.
-
+	
 	self addActions
 ]
 
@@ -219,11 +254,9 @@ StObjectTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter whenOpenedDo: [ 
-		self selectLastItem.
 		isOpened := true ].
 	aWindowPresenter whenClosedDo: [ 
-		logger ifNotNil: [ 
-			logger removeAsClient: self ] ]
+		self removeFromLogger ]
 ]
 
 { #category : 'actions' }
@@ -233,10 +266,28 @@ StObjectTranscriptPresenter >> inspect: anObject inspector: aPresenter [
 		
 ]
 
+{ #category : 'accessing' }
+StObjectTranscriptPresenter >> isLoggerRunning [
+
+	^ logger isRunning
+]
+
 { #category : 'testing' }
 StObjectTranscriptPresenter >> isOpened [ 
 	
 	^ isOpened ifNil: [ isOpened := false ]
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> logList [ 
+	
+	^ logList 
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> logger [
+
+	^ logger
 ]
 
 { #category : 'accessing' }
@@ -267,28 +318,41 @@ StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 
 	| rec |
 	rec := aLogger entries copy.
-	logList items: rec.
-	rec size > 0 ifTrue: [
-			logList reapplyOrResetFilter.
-			logList selectLast ]
+	logList updateItemsKeepingSelection: rec
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> printOneLineContents: aSignal [
+
+		^ String streamContents: [ :aStream | aSignal printOneLineContentsOn: aStream ] 
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> recordsInspector [
+
+	^ recordsInspector 
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> refresh [ 
 	
-	self populateItemsFrom: logger.
-	self selectLastItem.
+	self populateItemsFrom: logger
 	
 	
 
 ]
 
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> removeFromLogger [
+	
+	logger ifNil: [ ^ self ].
+	logger removeAsClient: self
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> selectLastItem [ 
 
-	logList 
-		selectIndex: logList listPresenter listSize 
-		scrollToSelection: true
+	^ logList selectIndex: logList listSize 
 ]
 
 { #category : 'accessing' }
@@ -297,13 +361,19 @@ StObjectTranscriptPresenter >> selectedItem [
 	^  logList selectedItem
 ]
 
+{ #category : 'private' }
+StObjectTranscriptPresenter >> selectedRecordInspector [
+
+	^ selectedRecordInspector 
+]
+
 { #category : 'actions' }
 StObjectTranscriptPresenter >> setInspectSingleEntry [
 
 	inspectSelectedItem := true
 ]
 
-{ #category : 'customization' }
+{ #category : 'actions' }
 StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.
@@ -324,11 +394,26 @@ StObjectTranscriptPresenter >> stopLogger [
 	logger stop
 ]
 
+{ #category : 'actions' }
+StObjectTranscriptPresenter >> switchLogger [
+
+	self isLoggerRunning 
+		ifTrue: [ self stopLogger ]
+		ifFalse: [ self startLogger ]
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> tabLayout [ 
+	
+	^ tabLayout 
+]
+
 { #category : 'private - actions' }
 StObjectTranscriptPresenter >> tabSelected: aPresenter [
 
 	aPresenter = recordsInspector ifTrue: [
-		self inspect: logger entries inspector: aPresenter ].
+		self inspect: logger entries inspector: aPresenter.
+		logList selectItem: nil ].
 	aPresenter = selectedRecordInspector ifTrue: [
 		self inspect: self selectedItem inspector: aPresenter ]
 ]
@@ -343,7 +428,7 @@ StObjectTranscriptPresenter >> windowTitle [
 StObjectTranscriptPresenter >> withInspectorLayout [
 	
 	^ SpPanedLayout newTopToBottom 
-			add: logList ;			
+			add: logList;
 			add: (tabLayout := SpTabLayout new
 				add: recordsInspector label: 'All logs';
 				add: selectedRecordInspector label: 'Selected Log';
