@@ -8,11 +8,24 @@ Class {
 	#package : 'NewTools-ObjectTranscript'
 }
 
-{ #category : 'tests' }
+{ #category : 'running' }
 StObjectTranscriptPresenterTest >> setUp [ 
+	
+	super setUp.
+	presenter := StObjectTranscriptPresenter new.
+	presenter logger: StObjectTranscriptLogger instance.
+	presenter startLogger
 
-presenter := StObjectTranscriptPresenter new.
-presenter logger: StObjectTranscriptLogger instance.
+]
+
+{ #category : 'running' }
+StObjectTranscriptPresenterTest >> tearDown [ 
+
+	presenter logger stop.
+	presenter removeFromLogger.
+	presenter withWindowDo: #close.
+	
+	super tearDown
 ]
 
 { #category : 'tests' }
@@ -20,17 +33,15 @@ StObjectTranscriptPresenterTest >> testOpenedLogIsSelectedLog [
 
 	| window |
 	
-	"This test fails when executed on PharoCITestingEnvironment even if they pass in normal conditions,  so 
-	 	they are skipped on it."
-	self skipOnPharoCITestingEnvironment.
-		[  
-			window := presenter open.
-			#thisIsATest emit.
-			presenter selectLastItem. 
-			self 
-				assert: presenter logList selectedItem  
-				equals: presenter selectedRecordInspector model inspectedObject  
-		] ensure: [ window close ].
+	[  		
+		window := presenter open.
+		#thisIsATest emit.
+		presenter selectLastItem.
+		self 
+			
+			assert: presenter logList selectedItem  
+			equals: presenter selectedRecordInspector model inspectedObject ] 
+	ensure: [ window close ].
 	
 
 ]
