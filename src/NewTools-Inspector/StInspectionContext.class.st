@@ -16,7 +16,8 @@ Class {
 		'title',
 		'order',
 		'methodSelector',
-		'evaluator'
+		'evaluator',
+		'application'
 	],
 	#category : 'NewTools-Inspector-Model',
 	#package : 'NewTools-Inspector',
@@ -35,6 +36,12 @@ StInspectionContext class >> fromPragma: aPragma [
 StInspectionContext >> active: aBoolean [
 
 	active := aBoolean
+]
+
+{ #category : 'private - factory' }
+StInspectionContext >> basicNewInspectionPresenter [
+
+	^ self basicNewInspectionPresenter: (self newPresenterBuilderOnApplication: application)
 ]
 
 { #category : 'private - factory' }
@@ -79,25 +86,26 @@ StInspectionContext >> debugInspectorPresenter: aBuilder [
 	
 	I create a code presenter that contains code to recreate this presenter.
 	This is useful for debugging and reporting errors when rendering/building"
-
 	| debugExpression |
-	debugExpression := String streamContents: [ :str |
-		str nextPutAll: '"Error while creating the inspector. Debug it by executing the following:"'; cr.
-		str nextPutAll: '| collector pragma context |'; cr.
-		str nextPutAll: 'collector := StInspectionCollector on: self.'; cr.
-		str
+
+	debugExpression := String streamContents: [ :stream |
+		stream nextPutAll: '"Error while creating the inspector. Debug it by executing the following:"'; cr.
+		stream nextPutAll: '| collector pragma context |'; cr.
+		stream nextPutAll: 'collector := StInspectionCollector on: self.'; cr.
+		stream
 			nextPutAll: 'pragma := (';
 			nextPutAll: inspectedObject class name;
 			nextPutAll: ' lookupSelector: #';
 			nextPutAll: methodSelector;
 			nextPutAll: ') pragmas first.'; cr.
-		str nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
-		str nextPutAll: 'context basicNewInspectionPresenter'.
-	].
+		stream nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
+		stream nextPutAll: 'context basicNewInspectionPresenter' ].
 
-	"I am itself an evaluator, no need to some other one."
+	"I am itself an evaluator, no need to show other."
 	self withoutEvaluator.
+	
 	^ aBuilder newCode
+		addStyle: 'stCode';
 		beForObject: self inspectedObject;
 		text: debugExpression;
 		yourself
@@ -184,6 +192,7 @@ StInspectionContext >> newInspectionPresenterOnApplication: anApplication [
 StInspectionContext >> newInspectionViewOnApplication: anApplication [
 	| presenter |
 
+	application := anApplication.
 	presenter := self newInspectionPresenterOnApplication: anApplication.
 	^ presenter ifNotNil: [ 
 		presenter asInspection
