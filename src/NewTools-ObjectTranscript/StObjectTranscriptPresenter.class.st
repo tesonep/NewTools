@@ -203,7 +203,9 @@ StObjectTranscriptPresenter >> defaultShowInspector [
 StObjectTranscriptPresenter >> flush [
 
 	logger reset.
-	self populateItemsFrom: logger
+	self populateItemsFrom: logger.
+	tabLayout select: recordsInspector
+	
 ]
 
 { #category : 'initialization' }
@@ -252,11 +254,9 @@ StObjectTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter whenOpenedDo: [ 
-		self selectLastItem.
 		isOpened := true ].
 	aWindowPresenter whenClosedDo: [ 
-		logger ifNotNil: [ 
-			logger removeAsClient: self ] ]
+		self removeFromLogger ]
 ]
 
 { #category : 'actions' }
@@ -282,6 +282,12 @@ StObjectTranscriptPresenter >> isOpened [
 StObjectTranscriptPresenter >> logList [ 
 	
 	^ logList 
+]
+
+{ #category : 'private' }
+StObjectTranscriptPresenter >> logger [
+
+	^ logger
 ]
 
 { #category : 'accessing' }
@@ -312,10 +318,7 @@ StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 
 	| rec |
 	rec := aLogger entries copy.
-	logList items: rec.
-	"rec size > 0 ifTrue: [
-			logList reapplyOrResetFilter.
-			logList selectLast ]"
+	logList updateItemsKeepingSelection: rec
 ]
 
 { #category : 'initialization' }
@@ -333,21 +336,23 @@ StObjectTranscriptPresenter >> recordsInspector [
 { #category : 'actions' }
 StObjectTranscriptPresenter >> refresh [ 
 	
-	self populateItemsFrom: logger.
-	self selectLastItem.
+	self populateItemsFrom: logger
 	
 	
 
 ]
 
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> removeFromLogger [
+	
+	logger ifNil: [ ^ self ].
+	logger removeAsClient: self
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> selectLastItem [ 
 
-	logList 
-		selectIndex: logList listSize
-		"Old code that was changed when changing the logList to a ColumnView. WIll be deleted when finished if 
-			not necessary"
-		"scrollToSelection: true"
+	^ logList selectIndex: logList listSize 
 ]
 
 { #category : 'accessing' }
@@ -368,7 +373,7 @@ StObjectTranscriptPresenter >> setInspectSingleEntry [
 	inspectSelectedItem := true
 ]
 
-{ #category : 'customization' }
+{ #category : 'actions' }
 StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.

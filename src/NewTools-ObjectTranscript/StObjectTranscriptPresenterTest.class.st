@@ -75,11 +75,9 @@ StObjectTranscriptPresenterTest >> testUnselectWhenChangingToAllLogsTab [
 
 	| window |
 	
-	"This test fails when executed on PharoCITestingEnvironment even if they pass in normal conditions,  so 
-		they are skipped on it."
-	self skipOnPharoCITestingEnvironment.
 	[ 
 		window := presenter open.
+		#thisIsATest emit.
 		presenter selectLastItem. 
 		self deny: presenter logList selectedItem equals: nil.
 		presenter tabLayout select: presenter recordsInspector.
