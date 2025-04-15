@@ -8,11 +8,42 @@ Class {
 	#package : 'NewTools-ObjectTranscript'
 }
 
-{ #category : 'tests' }
+{ #category : 'running' }
 StObjectTranscriptPresenterTest >> setUp [ 
+	
+	super setUp.
+	presenter := StObjectTranscriptPresenter new.
+	presenter logger: StObjectTranscriptLogger instance.
+	presenter startLogger
 
-presenter := StObjectTranscriptPresenter new.
-presenter logger: StObjectTranscriptLogger instance.
+]
+
+{ #category : 'running' }
+StObjectTranscriptPresenterTest >> tearDown [ 
+
+	presenter logger stop.
+	presenter removeFromLogger.
+	presenter withWindowDo: #close.
+	
+	super tearDown
+]
+
+{ #category : 'tests' }
+StObjectTranscriptPresenterTest >> testOpenedLogIsSelectedLog [
+
+	| window |
+	
+	[  		
+		window := presenter open.
+		#thisIsATest emit.
+		presenter selectLastItem.
+		self 
+			
+			assert: presenter logList selectedItem  
+			equals: presenter selectedRecordInspector model inspectedObject ] 
+	ensure: [ window close ].
+	
+
 ]
 
 { #category : 'tests' }
@@ -48,4 +79,19 @@ StObjectTranscriptPresenterTest >> testTrueShowInspectorShowsInspector [
 	self assert: win initialExtent equals: 550 @ 850 ] ensure: [
 		win close.
 		StObjectTranscriptPresenter showInspector: current ]
+]
+
+{ #category : 'tests' }
+StObjectTranscriptPresenterTest >> testUnselectWhenChangingToAllLogsTab [
+
+	| window |
+	
+	[ 
+		window := presenter open.
+		#thisIsATest emit.
+		presenter selectLastItem. 
+		self deny: presenter logList selectedItem equals: nil.
+		presenter tabLayout select: presenter recordsInspector.
+		self assert: presenter logList selectedItem equals: nil ] 
+	ensure: [ window close ]
 ]
