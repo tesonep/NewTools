@@ -1,4 +1,4 @@
-Extension { #name : 'OCIRMethod' }
+Extension { #name : 'IRMethod' }
 
 { #category : '*NewTools-Inspector-Extensions' }
 IRMethod >> inpectionIr: aBuilder [

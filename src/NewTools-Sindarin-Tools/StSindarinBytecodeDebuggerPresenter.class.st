@@ -11,8 +11,9 @@ Class {
 		'bytecodeList',
 		'currentPC'
 	],
-	#category : 'NewTools-Sindarin-Tools',
-	#package : 'NewTools-Sindarin-Tools'
+	#category : 'NewTools-Sindarin-Tools-Presenters',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Presenters'
 }
 
 { #category : 'debugger extension' }

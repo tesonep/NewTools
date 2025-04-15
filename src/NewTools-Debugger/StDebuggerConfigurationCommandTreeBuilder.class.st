@@ -21,6 +21,12 @@ StDebuggerConfigurationCommandTreeBuilder class >> displayStrategy [
 ]
 
 { #category : 'accessing' }
+StDebuggerConfigurationCommandTreeBuilder class >> generalConfigurationGroupName [
+
+	^ 'General debugger configuration'
+]
+
+{ #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder class >> groupDescription [
 	^ 'Debugger configuration actions'
 ]
@@ -69,6 +75,5 @@ StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupDescriptio
 
 { #category : 'accessing' }
 StDebuggerConfigurationCommandTreeBuilder >> generalConfigurationGroupName [
-
-	^ 'General debugger configuration'
+	^ self class generalConfigurationGroupName
 ]

@@ -101,7 +101,7 @@ StHaltInspectionItem >> printScope [
 { #category : 'updating' }
 StHaltInspectionItem >> removeInPresenterContext: aStObjectBreakpointInspection [
 
-	UIManager default inform: 'Edit your code to remove halts'
+	aStObjectBreakpointInspection inform: 'Edit your code to remove halts'
 ]
 
 { #category : 'accessing' }

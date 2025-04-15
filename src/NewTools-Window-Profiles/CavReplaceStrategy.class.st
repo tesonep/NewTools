@@ -2,7 +2,7 @@
 I'm a strategy that replaces the previous window that was in the placeholder by a new one!
 I automatically close the previous one. 
 
-It only work if the window has the exact same size and position as the placehokder registered.
+It only work if the window has the exact same size and position as the placeholder registered.
 "
 Class {
 	#name : 'CavReplaceStrategy',
@@ -28,8 +28,8 @@ CavReplaceStrategy >> placePresenter: aPresenter [
 	
 	(SystemWindow allInstances select: [ :each |
 		 each position = placeHolder position 
-			and: [ each kind = aPresenter class ]]) do: [ :each | each delete ].
+			and: [ placeHolder kind = aPresenter class ]]) do: [ :each | each delete ].
 	(SpWindow allInstances select: [ :each |
 		 each position = placeHolder position 
-				and: [ each kind = aPresenter class ]]) do: [ :each | each delete ]
+				and: [ placeHolder kind = aPresenter class ]]) do: [ :each | each delete ]
 ]

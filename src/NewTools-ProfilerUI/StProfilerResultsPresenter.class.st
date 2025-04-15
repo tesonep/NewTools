@@ -127,17 +127,21 @@ StProfilerResultsPresenter >> handleTreeRootChanged: event [
 { #category : 'initialization' }
 StProfilerResultsPresenter >> initializeActions [
 
+	| pres |
 	treeTable
 		whenSelectedItemChangedSend: #handleSelectionChanged
 		to: self.
 
 	"Report"
 	reportButton action: [
-		UIManager default edit: viewModel report label: 'Profiling Report' ].
-	"Configuration section actions"
+		pres := SpTextPresenter new
+			        text: viewModel report;
+			        open.
+		pres withWindowDo: [ :w | w title: 'Profiling Report' ] ].
 	collapseAllButton action: [
 		treeTable collapseAll.
 		treeTable takeKeyboardFocus ].
+	"Configuration section actions"
 
 	expandAllButton action: [
 		treeTable expandAll.

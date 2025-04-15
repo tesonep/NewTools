@@ -9,3 +9,9 @@ Class {
 SindarinSkipAllToSelectionCommand class >> defaultIconName [
 	^ #rightSide
 ]
+
+{ #category : 'testing' }
+SindarinSkipAllToSelectionCommand class >> isAbstract [
+
+	^ self == SindarinSkipAllToSelectionCommand 
+]

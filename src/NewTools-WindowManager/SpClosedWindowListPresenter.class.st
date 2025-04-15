@@ -116,7 +116,9 @@ SpClosedWindowListPresenter class >> subscribeToWindowClosedAnnoucements [
 { #category : 'instance creation' }
 SpClosedWindowListPresenter class >> uniqueInstance [
 
-	^ UniqueInstance ifNil: [ UniqueInstance := self basicNew initialize ]
+	^ UniqueInstance ifNil: [
+			  UniqueInstance := self basicNew application:
+				                    StPharoApplication current; initialize ]
 ]
 
 { #category : 'events subscription' }

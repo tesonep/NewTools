@@ -52,6 +52,12 @@ CavWindowProfile >> named: aString [
 ]
 
 { #category : 'accessing' }
+CavWindowProfile >> placeHolderDictionnary [
+
+	^ placeHolderDictionary
+]
+
+{ #category : 'accessing' }
 CavWindowProfile >> placeHolders [
 	| res |
 	res := OrderedCollection new.

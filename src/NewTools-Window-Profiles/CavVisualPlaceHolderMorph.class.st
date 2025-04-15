@@ -34,6 +34,14 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 	presenter openDialog
 ]
 
+{ #category : 'event handling' }
+CavVisualPlaceHolderMorph >> handleClick: anEvent [
+
+	anEvent yellowButtonPressed
+		ifTrue: [ self remove ]
+		ifFalse: [ self changeStrategy ]
+]
+
 { #category : 'initialization' }
 CavVisualPlaceHolderMorph >> initialize [
 
@@ -42,11 +50,42 @@ CavVisualPlaceHolderMorph >> initialize [
 	self borderColor: UITheme current selectionColor.
 	self color: (UITheme current lightSelectionColor alpha: 0.2).
 	self eventHandler: MorphicEventHandler new.
-	self eventHandler on: #click send: #changeStrategy to: self.
+	self eventHandler on: #mouseDown send: #handleClick: to: self.
+	
+]
+
+{ #category : 'accessing' }
+CavVisualPlaceHolderMorph >> placeHolder [
+
+	^ placeHolder
 ]
 
 { #category : 'accessing' }
 CavVisualPlaceHolderMorph >> placeHolder: aPlaceHolder [
 
 	placeHolder := aPlaceHolder
+]
+
+{ #category : 'removing' }
+CavVisualPlaceHolderMorph >> remove [
+
+	| presenter class key |
+	presenter := SpConfirmDialog new
+		             title: 'Remove placeholder';
+		             label: 'Are you sure you want to remove it ?';
+		             onAccept: [ :dialog |
+				             class := Smalltalk at:
+						                      self submorphs first contents asString
+							                      asSymbol.
+				             key := CavroisWindowManager current currentProfile
+					                    placeHolderDictionnary at: class.
+				             (CavroisWindowManager current currentProfile
+					              placeHoldersFor: class) do: [ :p |
+						             p = self placeHolder ifTrue: [ key remove: p ] ].
+				             key ifEmpty: [
+							             CavroisWindowManager current currentProfile
+								             placeHolderDictionnary removeKey: class ].
+				             self delete.
+				             CavroisWindowManager current removeVisualPlaceholders ].
+	presenter openDialog
 ]

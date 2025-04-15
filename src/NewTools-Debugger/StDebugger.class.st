@@ -76,7 +76,6 @@ Class {
 	#classTraits : 'TDebugger classTrait',
 	#instVars : [
 		'code',
-		'toolbar',
 		'stackTable',
 		'inspector',
 		'breakpointInspector',
@@ -87,7 +86,8 @@ Class {
 		'debuggerActionModel',
 		'unsavedCodeChanges',
 		'programmaticallyClosed',
-		'stackAndCodeContainer'
+		'stackAndCodeContainer',
+		'toolbarPresenter'
 	],
 	#classVars : [
 		'EnableStackColoring'
@@ -171,6 +171,13 @@ StDebugger class >> debugSession: aDebugSession [
 	^ debugger
 ]
 
+{ #category : 'commands' }
+StDebugger class >> debuggerCodeCommandGroupFor: rootCommandGroup [
+
+	^ rootCommandGroup / StDebuggerCodeCommandTreeBuilder groupName
+	  / StDebuggerCodeCommandTreeBuilder new codeDebugCommandsGroupName
+]
+
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
@@ -189,6 +196,11 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
 			   #beVerticalCodeThenStack #beVerticalStackThenCode );
 		description: ''
+]
+
+{ #category : 'commands' }
+StDebugger class >> debuggerToolbarCommandGroupFor: rootCommandGroup [
+	^ rootCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName
 ]
 
 { #category : 'accessing' }
@@ -334,15 +346,14 @@ StDebugger >> buildContextMenus [
 	| stackGroup codeCommands debuggerCommandGroup |
 	
 	debuggerCommandGroup := self rootCommandsGroup.
+
 	"Stack"
 	stackGroup := debuggerCommandGroup / StDebuggerStackCommandTreeBuilder groupName. 
 	stackTable actions: stackGroup.
 	 
 	"Toolbar"
 	toolbarCommandGroup := debuggerCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
-	SpToolbarPresenterBuilder new
-		toolbarPresenter: toolbar;
-		visit: toolbarCommandGroup.
+	self buildToolbar.
 
 	"Code"
 	codeCommands := debuggerCommandGroup / StDebuggerCodeCommandTreeBuilder groupName.
@@ -350,6 +361,67 @@ StDebugger >> buildContextMenus [
 	
 	"Configuration"
 	stackHeader toolbarActions: (debuggerCommandGroup / StDebuggerConfigurationCommandTreeBuilder groupName)
+]
+
+{ #category : 'toolbar' }
+StDebugger >> buildToolbar [
+
+	| toolbar standardCommands menuBar |
+	toolbar := self newToolbar.
+	toolbar addStyle: 'stToolbar'.
+	toolbar displayMode: self application toolbarDisplayMode.
+	standardCommands := (self toolbarStandardCommandsGroups collect:	#allCommands) flattened.
+	self buildToolbar: toolbar withCommands: standardCommands.
+
+	menuBar := self newMenuBar.
+	self
+		buildToolbarMenus: menuBar
+		withCommandsGroups: self toolbarAdvancedCommandsGroups.
+
+	self toolbarPresenter layout: (SpBoxLayout newLeftToRight
+			 add: toolbar expand: false;
+			 add: (SpBoxLayout newTopToBottom
+					  add: menuBar;
+					  hAlignStart;
+					  vAlignCenter;
+					  yourself)
+			 expand: false;
+			 yourself)
+]
+
+{ #category : 'toolbar' }
+StDebugger >> buildToolbar: toolbar withCommands: commands [
+
+	commands do: [ :command |
+		| buttonPresenter |
+		buttonPresenter := command
+			                   configureAsToolbarButton;
+			                   buildPresenter.
+		buttonPresenter icon: (toolbar iconNamed: command iconName).
+		toolbar add: buttonPresenter ]
+]
+
+{ #category : 'toolbar' }
+StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGroups [
+
+	(advancedCommandGroups sort: [ :a :b| a name < b name ]) do: [ :cmdGroup |
+		| menuButton |
+		menuButton := self newMenu.
+		cmdGroup allCommands do: [ :cmd |
+			menuButton addItem: [ :item |
+				item
+					name: cmd name;
+					icon: (self iconNamed: cmd iconName);
+					description: cmd description;
+					action: [ cmd execute ];
+					enabled: cmd canBeExecuted ] ].
+
+		menuBar addGroup: [ :group |
+			group addItem: [ :item |
+				item
+					name: (self toolbarMenuNameForGroup: cmdGroup);
+					icon: (self toolbarMenuIconForGroup: cmdGroup);
+					subMenu: menuButton ] ] ]
 ]
 
 { #category : 'commands - support' }
@@ -454,7 +526,7 @@ StDebugger >> code [
 StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: #toolbar expand: false;
+		  add: self toolbarPresenter expand: false;
 		  add: #code;
 		  yourself
 ]
@@ -614,36 +686,10 @@ StDebugger >> doBrowseImplementors [
 ]
 
 { #category : 'commands' }
-StDebugger >> doBrowseMethodInheritance [
-
-	| cls |
-	(self stackSelectionMethodContext value: self) method isDoIt ifTrue: [ 
-		^ self ].
-	cls := self stackSelectionReceiverClassContext value: self.
-	cls isBlock ifTrue: [ 
-		cls := (self stackSelectionMethodContext value: self) methodClass ].
-	self systemNavigation
-		methodHierarchyBrowserForClass:
-		(self stackSelectionReceiverClassContext value: self)
-		selector: (self stackSelectionMethodSelectorContext value: self)
-]
-
-{ #category : 'commands' }
 StDebugger >> doBrowseMethodReferences [
 
 	self systemNavigation browseAllSendersOrUsersOf:
 		(self stackSelectionMethodSelectorContext value: self)
-]
-
-{ #category : 'commands' }
-StDebugger >> doBrowseMethodVersions [
-
-	| target |
-	target := self stackSelectionMethodContext.
-	target isBlock ifTrue: [ target := target method ].
-	(self application toolNamed: #versionBrowser)
-		browseVersionsForClass: target methodClass
-		selector: target selector
 ]
 
 { #category : 'commands' }
@@ -658,6 +704,11 @@ StDebugger >> doBrowseSenders [
 
 	self systemNavigation browseAllSendersOf:
 		(self stackSelectionMethodSelectorContext value: self)
+]
+
+{ #category : 'accessing' }
+StDebugger >> environment [
+	^self class environment
 ]
 
 { #category : 'accessing - model' }
@@ -802,7 +853,6 @@ StDebugger >> initializeInspector [
 StDebugger >> initializePresenters [
 
 	self initializeStack.
-	self initializeToolbar.
 	self initializeCode.
 	self initializeInspector.
 	self initializeExtensionTools.
@@ -856,14 +906,6 @@ StDebugger >> initializeStack [
 			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
 	stackHeader label: 'Stack'
-]
-
-{ #category : 'initialization' }
-StDebugger >> initializeToolbar [
-
-	toolbar := self newToolbar.
-	toolbar addStyle: 'stToolbar'.
-	toolbar displayMode: self application toolbarDisplayMode
 ]
 
 { #category : 'initialization' }
@@ -1235,27 +1277,47 @@ StDebugger >> stackOfSize: anInteger [
 ]
 
 { #category : 'commands - support' }
+StDebugger >> stackSelectionMethod [
+	^self selectedContext homeMethod
+]
+
+{ #category : 'commands - support' }
 StDebugger >> stackSelectionMethodContext [
 
-	^ [ :dbg | stackTable selection selectedItem homeMethod ]
+	^ [ :dbg | dbg stackSelectionMethod ]
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionMethodSelector [
+	^self stackSelectionMethod selector
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionMethodSelectorContext [
 
-	^ [ :dbg | stackTable selection selectedItem method selector ]
+	^ [ :dbg | dbg stackSelectionMethodSelector ]
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionReceiver [
+	^self selectedContext receiver
+]
+
+{ #category : 'commands - support' }
+StDebugger >> stackSelectionReceiverClass [
+	^self stackSelectionReceiver class
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverClassContext [
 
-	^ [ :dbg | stackTable selection selectedItem receiver class ]
+	^ [ :dbg | dbg stackSelectionReceiverClass ]
 ]
 
 { #category : 'commands - support' }
 StDebugger >> stackSelectionReceiverContext [
 
-	^ [ :dbg | stackTable selection selectedItem receiver ]
+	^ [ :dbg | dbg stackSelectionReceiver ]
 ]
 
 { #category : 'accessing - presenters' }
@@ -1312,10 +1374,42 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
 ]
 
-{ #category : 'accessing - presenters' }
-StDebugger >> toolbar [
+{ #category : 'toolbar' }
+StDebugger >> toolbarAdvancedCommandsGroups [
 
-	^ toolbar
+	^ toolbarCommandGroup groups reject: [ :g |
+		  StDebuggerToolbarCommandTreeBuilder toolbarGroupsNames includes:
+			  g name ]
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarMenuIconForGroup: aGroup [
+
+	self application toolbarDisplayMode == SpToolbarDisplayMode modeLabel
+		ifTrue: [ ^ nil ].
+	^ aGroup icon
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarMenuNameForGroup: aGroup [
+
+	self application toolbarDisplayMode == SpToolbarDisplayMode modeIcon
+		ifTrue: [ ^ '' ].
+	^ aGroup name
+]
+
+{ #category : 'accessing - presenters' }
+StDebugger >> toolbarPresenter [
+
+	^ toolbarPresenter ifNil:[toolbarPresenter := SpPresenter new]
+]
+
+{ #category : 'toolbar' }
+StDebugger >> toolbarStandardCommandsGroups [
+
+	^ toolbarCommandGroup groups select: [ :g |
+		  StDebuggerToolbarCommandTreeBuilder toolbarGroupsNames includes:
+			  g name ]
 ]
 
 { #category : 'code pane' }
@@ -1512,7 +1606,7 @@ StDebugger >> updateStep [
 		p update ]
 ]
 
-{ #category : 'updating - presenters' }
+{ #category : 'toolbar' }
 StDebugger >> updateToolbar [
 	
 	toolbarCommandGroup ifNil: [ ^ self ].

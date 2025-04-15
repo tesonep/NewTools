@@ -32,6 +32,12 @@ StDebuggerExtensionSettingsCommand class >> defaultShortcut [
 	^ nil
 ]
 
+{ #category : 'accessing' }
+StDebuggerExtensionSettingsCommand >> canBeExecuted [
+
+	^ true
+]
+
 { #category : 'executing' }
 StDebuggerExtensionSettingsCommand >> execute [
 

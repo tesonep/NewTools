@@ -1,35 +1,26 @@
+"
+The Sindarin scripting context interaction model supersedes the debugger interaction model in Sindarin debugger scripting presenters, with local custom bindings configured by external clients.
+These custom bindings are selected in priority when looking up for bindings.
+
+This interaction model returns the direct value of variables put in bindings.
+"
 Class {
 	#name : 'StSindarinContextInteractionModel',
-	#superclass : 'SpCodeScriptingInteractionModel',
-	#instVars : [
-		'context'
-	],
-	#category : 'NewTools-Sindarin-Tools',
-	#package : 'NewTools-Sindarin-Tools'
+	#superclass : 'StDebuggerContextInteractionModel',
+	#category : 'NewTools-Sindarin-Tools-Model',
+	#package : 'NewTools-Sindarin-Tools',
+	#tag : 'Model'
 }
 
 { #category : 'binding' }
 StSindarinContextInteractionModel >> bindingOf: aString [
-	^ self bindings at: aString ifAbsent: [ 
-		  (context receiver class hasSlotNamed: aString)
-			  ifTrue: [ context receiver class slotNamed: aString ]
-			  ifFalse: [ context temporaryVariableNamed: aString ] ]
+
+	^ self bindings
+		  associationAt: aString
+		  ifAbsent: [ super bindingOf: aString ]
 ]
 
-{ #category : 'accessing' }
-StSindarinContextInteractionModel >> context [
-	^ context
-]
-
-{ #category : 'accessing' }
-StSindarinContextInteractionModel >> context: anObject [
-	context := anObject
-]
-
-{ #category : 'testing' }
-StSindarinContextInteractionModel >> hasBindingOf: aString [
-	self bindings at: aString ifAbsent: [ 
-		^ (context receiver class hasSlotNamed: aString) or: [ 
-			  (context temporaryVariableNamed: aString) isNotNil ] ].
-	^ true
+{ #category : 'binding' }
+StSindarinContextInteractionModel >> isScripting [
+	^true
 ]

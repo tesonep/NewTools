@@ -4,11 +4,12 @@ Extension { #name : 'StWindowPresenter' }
 StWindowPresenter >> openWith: aSpecLayout [
 
 	CavroisWindowManager current currentProfile ifNotNil: [
-		((CavroisWindowManager current currentProfile placeHoldersFor:
-			  self presenter class) first isKindOf: CavNullWindowPlaceHolder)
-			ifFalse: [
-				CavroisWindowManager current placePresenter: self presenter.
-				self initialPosition: self presenter position ] ].
+			((CavroisWindowManager current currentProfile placeHoldersFor:
+				  self presenter class) first isKindOf: CavNullWindowPlaceHolder)
+				ifFalse: [
+						CavroisWindowManager current placePresenter: self presenter.
 
-	self openWithLayout: aSpecLayout
+						self initialPosition: self presenter position.
+						self initialExtent: self presenter extent ] ].
+	self isVisible ifTrue: [ self openWithLayout: aSpecLayout ]
 ]

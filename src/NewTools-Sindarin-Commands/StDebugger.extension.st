@@ -4,7 +4,7 @@ Extension { #name : 'StDebugger' }
 StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup [
 
 	<extensionCommands>
-	| commands codeGroup toolbarGroup toolbarSindarinGroup |
+	| commands codeGroup  toolbarSindarinGroup |
 	commands := (Pragma allNamed: #codeExtensionDebugCommand:) collect: [ 
 		            :prg | 
 		            | class |
@@ -12,17 +12,14 @@ StDebugger class >> buildSindarinExtentionCommandsGroupWith: stDebuggerInstance 
 		            class forSpecContext: stDebuggerInstance ].
 
 
-	codeGroup := rootCommandGroup
-	             / StDebuggerCodeCommandTreeBuilder groupName
-	             / StDebuggerCodeCommandTreeBuilder new codeDebugCommandsGroupName.
+	codeGroup := self debuggerCodeCommandGroupFor: rootCommandGroup.
 	commands do: [ :c | codeGroup register: c ].
 
-	toolbarGroup := rootCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName.
 	toolbarSindarinGroup := CmCommandGroup forSpec
 			beToolbarPopoverButton;
-			name: 'Advanced Step';
-			icon: (stDebuggerInstance application iconNamed: #dropDown);
+			name: 'Advanced';
+			icon: (stDebuggerInstance application iconNamed: #smallDebugIt);
 			yourself.
-	toolbarGroup register: toolbarSindarinGroup.
+	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarSindarinGroup.
 	commands do: [ :c | toolbarSindarinGroup register: c ].		 
 ]
