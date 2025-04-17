@@ -240,9 +240,9 @@ StObjectTranscriptPresenter >> initializeToolbar [
 			label: 'Flush';
 			help: 'Flushes entities out of the Object Transcript';
 			action: [ self flush ]);
-		add: (startStopLoggerButton := toolbar newToolbarToggleButton 
+		add: (startStopLoggerButton := toolbar newToolbarButton 
 			help: 'Starts/Stops logger';
-			whenToggledDo: [ :aBoolean | self switchLogger: aBoolean ]).
+			action:[  self switchLogger ]).
 	
 ]
 
@@ -406,9 +406,9 @@ StObjectTranscriptPresenter >> stopLogger [
 ]
 
 { #category : 'actions' }
-StObjectTranscriptPresenter >> switchLogger: aBoolean [
+StObjectTranscriptPresenter >> switchLogger [
 
-	aBoolean
+	self isLoggerRunning
 		ifTrue: [ self stopLogger ]
 		ifFalse: [ self startLogger ]
 ]
@@ -434,7 +434,7 @@ StObjectTranscriptPresenter >> updatePresenter [
 
 	logger ifNil: [ ^ self ].
 	super updatePresenter.
-	self startLogger .
+	self startLogger.
 	self showInspector: true.
 	self populateItemsFrom: logger
 ]
