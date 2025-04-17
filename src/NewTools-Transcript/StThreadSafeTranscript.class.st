@@ -36,6 +36,12 @@ StThreadSafeTranscript class >> installThreadSafeAsTranscript [
 	Smalltalk globals at: #Transcript put: self uniqueInstance
 ]
 
+{ #category : 'instance creation' }
+StThreadSafeTranscript class >> new [
+
+	self error: 'You cannot create instances of this class. Use Singleton instead'
+]
+
 { #category : 'declare' }
 StThreadSafeTranscript class >> reset [
 	<script>
@@ -50,11 +56,12 @@ StThreadSafeTranscript class >> taskbarIconName [
 	^#transcript
 ]
 
-{ #category : 'declare' }
+{ #category : 'instance creation' }
 StThreadSafeTranscript class >> uniqueInstance [
+	
 	<script>
-
-	^ UniqueInstance ifNil: [ UniqueInstance := self new ]
+	^ UniqueInstance ifNil: [
+		UniqueInstance := self new ]
 ]
 
 { #category : 'stop conditions' }
@@ -151,7 +158,7 @@ StThreadSafeTranscript >> maxEntry: aNumber [
 	self allocateRecodings: maxEntry.
 ]
 
-{ #category : 'streaming' }
+{ #category : 'private' }
 StThreadSafeTranscript >> nextPut: aCharacter [
 
 	mutex critical: [
@@ -160,7 +167,7 @@ StThreadSafeTranscript >> nextPut: aCharacter [
 
 ]
 
-{ #category : 'streaming' }
+{ #category : 'private' }
 StThreadSafeTranscript >> nextPutAll: value [
 	"Ineffient way...."
 
@@ -174,7 +181,7 @@ StThreadSafeTranscript >> open [
 	^ StTranscriptPresenter openOn: self
 ]
 
-{ #category : 'streaming' }
+{ #category : 'private' }
 StThreadSafeTranscript >> rawNextPut: aCharacter [
 
 	
@@ -211,7 +218,7 @@ StThreadSafeTranscript >> space [
 	self nextPut: Character space
 ]
 
-{ #category : 'updating' }
+{ #category : 'private' }
 StThreadSafeTranscript >> stepGlobal [ 
 
 	" do nothing this is just to be compatible with the old transcript
