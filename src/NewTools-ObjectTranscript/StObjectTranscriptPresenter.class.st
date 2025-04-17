@@ -33,6 +33,7 @@ Class {
 	#name : 'StObjectTranscriptPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
+		'toolbar',
 		'logList',
 		'recordsInspector',
 		'selectedRecordInspector',
@@ -40,7 +41,9 @@ Class {
 		'inspectSelectedItem',
 		'showInspector',
 		'isOpened',
-		'tabLayout'
+		'tabLayout',
+		'showHideInspectorButton',
+		'startStopLoggerButton'
 	],
 	#classVars : [
 		'ShowInspector'
@@ -135,47 +138,14 @@ StObjectTranscriptPresenter class >> showInspector: aBoolean [
 { #category : 'registration' }
 StObjectTranscriptPresenter class >> worldMenuOn: aBuilder [
 
-"Place it should go when its finished"
-"	
 	<worldMenu>
-	(aBuilder item: #Browse)
-		parent: #InputOutput;
-		label: 'Object Transcript';
-		order: 3;
-		iconName: #transcript;
-		help: 'Tool to be able to see logs in this instance of Pharo.';
-		action: [ self open ]
-"
-
-	<worldMenu>
-	(aBuilder item: #n)
+	(aBuilder item: #ObjectTranscript )
 		parent: #NewToolsMenu;
 		label: 'Object Transcript';
 		order: 4;
 		iconName: #transcript;
 		help: 'Tool to be able to see logs in this instance of Pharo.';
 		action: [ self open ]
-]
-
-{ #category : 'actions' }
-StObjectTranscriptPresenter >> addActions [
-
-	logList
-		addActionWith: [ :item | item
-			dynamicName: [
-				showInspector 
-					ifTrue: ['Hide inspector' ]
-					ifFalse: ['Show inspector' ] ];
-			action: [ self showInspector: showInspector not ] ];
-		addActionWith: [ :item | item
-			name: 'Flush entities';
-			action: [ self flush ]];
-		addActionWith: [ :item | item
-			dynamicName: [
-				self isLoggerRunning 
-					ifTrue: ['Stop logger' ]
-					ifFalse: ['Start logger' ] ];
-			action: [ self switchLogger ] ]
 ]
 
 { #category : 'initialization' }
@@ -204,7 +174,8 @@ StObjectTranscriptPresenter >> flush [
 
 	logger reset.
 	self populateItemsFrom: logger.
-	tabLayout select: recordsInspector
+	tabLayout select: recordsInspector.
+	self inspect: logger entries inspector: recordsInspector 
 	
 ]
 
@@ -222,12 +193,14 @@ StObjectTranscriptPresenter >> initializeLogList [
 	logList 
 		beResizable;
 		addColumn: (SpStringTableColumn new
-			width: 180;
+			width: 150;
 			title: 'Timestamp';
-			evaluated:  [ :each | each timestamp ];
+			evaluated:  
+				[ :each | each timestamp asLocalStringYMDHM, '.',
+					(each timestamp nanoSecond asString copyFrom: 1 to: 3)];
 			yourself);
 		addColumn: (SpStringTableColumn new
-			width: 150;
+			width: 180;
 			title: 'Name';
 			evaluated:  [ :each | each name ];
 			yourself);
@@ -241,12 +214,36 @@ StObjectTranscriptPresenter >> initializeLogList [
 { #category : 'initialization' }
 StObjectTranscriptPresenter >> initializePresenters [
 
+	toolbar := self newToolbar.
 	logList := self newEasyColumnView.
+	self initializeToolbar.
 	self initializeLogList.
 	recordsInspector := self instantiate: StInspectorPresenter. 
-	selectedRecordInspector := self instantiate: StInspectorPresenter.
+	selectedRecordInspector := self instantiate: StInspectorPresenter
+]
+
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> initializeToolbar [
+
+	toolbar := self newToolbar 
+  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+		
+	toolbar 
+		add: (showHideInspectorButton := toolbar newToolbarButton 
+			icon: (self application iconNamed: #inspect);
+			help: 'Switch between showing/hiding the inspector';
+			action: [ self showInspector: showInspector not ]);
+		add: (toolbar newToolbarButton 
+			icon: (self application iconNamed: #smallDelete );
+			label: 'Flush';
+			help: 'Flushes entities out of the Object Transcript';
+			action: [ self flush ]);
+		add: (startStopLoggerButton := toolbar newToolbarButton 
+			help: 'Starts/Stops logger';
+			action:[  self switchLogger ]).
 	
-	self addActions
 ]
 
 { #category : 'initialization' }
@@ -259,7 +256,7 @@ StObjectTranscriptPresenter >> initializeWindow: aWindowPresenter [
 		self removeFromLogger ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'private - actions' }
 StObjectTranscriptPresenter >> inspect: anObject inspector: aPresenter [
 	
 	aPresenter model: anObject asInspectorModel
@@ -296,7 +293,7 @@ StObjectTranscriptPresenter >> logger: aLogger [
 	aLogger ifNil: [ ^ self ].
 	logger := aLogger.
 	logger addAsClient: self. 
-	self populateItemsFrom: logger
+	self updatePresenter
 	
 ]
 
@@ -313,7 +310,7 @@ StObjectTranscriptPresenter >> performSelection: aSelection [
 	
 ]
 
-{ #category : 'actions' }
+{ #category : 'private - actions' }
 StObjectTranscriptPresenter >> populateItemsFrom: aLogger [
 
 	| rec |
@@ -367,7 +364,7 @@ StObjectTranscriptPresenter >> selectedRecordInspector [
 	^ selectedRecordInspector 
 ]
 
-{ #category : 'actions' }
+{ #category : 'private - actions' }
 StObjectTranscriptPresenter >> setInspectSingleEntry [
 
 	inspectSelectedItem := true
@@ -378,26 +375,40 @@ StObjectTranscriptPresenter >> showInspector: aBoolean [
 
 	showInspector := aBoolean.
 	self layout: self defaultLayout.
-	
-	aBoolean ifTrue: [ tabLayout select: recordsInspector ]
+
+	aBoolean 
+		ifTrue: [ 
+			tabLayout select: recordsInspector.
+		 	showHideInspectorButton 
+				label: 'Hide' ]
+		ifFalse: [ 
+		 	showHideInspectorButton 
+				label: 'Show' ]
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> startLogger [
 
-	logger start
+	logger start.
+	startStopLoggerButton 
+		label: 'Stop logger';
+		icon: (self application iconNamed: #pause )
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> stopLogger [
 
-	logger stop
+	logger stop.
+	startStopLoggerButton
+		label: 'Start logger';
+		icon: (self application iconNamed: #go )
+	
 ]
 
 { #category : 'actions' }
 StObjectTranscriptPresenter >> switchLogger [
 
-	self isLoggerRunning 
+	self isLoggerRunning
 		ifTrue: [ self stopLogger ]
 		ifFalse: [ self startLogger ]
 ]
@@ -418,6 +429,16 @@ StObjectTranscriptPresenter >> tabSelected: aPresenter [
 		self inspect: self selectedItem inspector: aPresenter ]
 ]
 
+{ #category : 'initialization' }
+StObjectTranscriptPresenter >> updatePresenter [ 
+
+	logger ifNil: [ ^ self ].
+	super updatePresenter.
+	self startLogger.
+	self showInspector: true.
+	self populateItemsFrom: logger
+]
+
 { #category : 'accessing' }
 StObjectTranscriptPresenter >> windowTitle [ 
 
@@ -426,15 +447,18 @@ StObjectTranscriptPresenter >> windowTitle [
 
 { #category : 'layout' }
 StObjectTranscriptPresenter >> withInspectorLayout [
-	
-	^ SpPanedLayout newTopToBottom 
+		
+	^ SpBoxLayout newTopToBottom
+		add: toolbar expand: false;
+		add: (SpPanedLayout newTopToBottom 
 			add: logList;
 			add: (tabLayout := SpTabLayout new
 				add: recordsInspector label: 'All logs';
 				add: selectedRecordInspector label: 'Selected Log';
 				whenTabSelectedDo: [ :ann | self tabSelected: ann presenter ];
 				yourself);
-			yourself
+			yourself);
+		yourself
 ]
 
 { #category : 'layout' }
@@ -443,6 +467,7 @@ StObjectTranscriptPresenter >> withoutInspectorLayout [
 
 	^ SpBoxLayout
 		newTopToBottom 
+			add: toolbar expand: false;
 			add: logList ;
 		yourself
 ]
