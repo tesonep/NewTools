@@ -8,6 +8,13 @@ Class {
 	#package : 'NewTools-Transcript-Tests'
 }
 
+{ #category : 'running' }
+StThreadSafeTranscriptTest >> setUp [ 
+
+	super setUp.
+	t := StThreadSafeTranscript createTestingInstance
+]
+
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPut [
 
@@ -39,15 +46,6 @@ StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testShow [
 
-	t show: 'toto'.
-	self assert: t contents equals: 'toto' 
-]
-
-{ #category : 'tests' }
-StThreadSafeTranscriptTest >> testShowAfterClear [
-
-	| t |
-	t := StThreadSafeTranscript new clear.
 	t show: 'toto'.
 	self assert: t contents equals: 'toto' 
 ]
