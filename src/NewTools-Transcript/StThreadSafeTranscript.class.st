@@ -23,6 +23,13 @@ Class {
 	#package : 'NewTools-Transcript'
 }
 
+{ #category : 'private - testing' }
+StThreadSafeTranscript class >> createTestingInstance [
+"This method SHOULD NOT be used. It is only used for testing, and doing so would break the singleton."
+
+	^ super new.
+]
+
 { #category : 'declare' }
 StThreadSafeTranscript class >> install [
 
@@ -61,7 +68,7 @@ StThreadSafeTranscript class >> uniqueInstance [
 	
 	<script>
 	^ UniqueInstance ifNil: [
-		UniqueInstance := self new ]
+		UniqueInstance := super new ]
 ]
 
 { #category : 'stop conditions' }
@@ -75,10 +82,28 @@ StThreadSafeTranscript >> << anObject [
  	anObject putOn: self
 ]
 
+{ #category : 'private - actions' }
+StThreadSafeTranscript >> addEntry: aString [
+
+	index := index >= maxEntry
+		ifTrue: [ 1 ]
+		ifFalse: [ index + 1 ].
+	recordings at: index put: aString.
+	self announce
+
+	
+]
+
 { #category : 'initialization' }
 StThreadSafeTranscript >> allocateRecodings: size [
 
 	recordings := Array new: size
+]
+
+{ #category : 'private - actions' }
+StThreadSafeTranscript >> announce [
+	
+	SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new.
 ]
 
 { #category : 'streaming' }
@@ -100,27 +125,20 @@ StThreadSafeTranscript >> contents [
 	"probably super inefficient again... "
 	
 	^ String streamContents: [ :s |
-		1 to: index do: [ :i | s << (recordings at: i )] ] 
+		1 to: index do: [ :i | s << (recordings at: i ) asString ] ] 
 ]
 
 { #category : 'stop conditions' }
 StThreadSafeTranscript >> cr [
-	"Output a cr on the receiver, buffered and not yet shown"
+	"Output a cr on the receiver"
 
 	self nextPut: Character cr
 ]
 
-{ #category : 'stop conditions' }
-StThreadSafeTranscript >> crShow: anObject [
-	"Output anObject asString on the receiver preceded by a cr and show the output"
-
-	self critical: [ self cr; show: anObject ]
-]
-
-{ #category : 'streaming' }
+{ #category : 'private - actions' }
 StThreadSafeTranscript >> critical: block [
 	"Execute block making sure only one thread accesses the receiver"
-
+	
 	^ mutex critical: block
 ]
 
@@ -145,10 +163,9 @@ StThreadSafeTranscript >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	maxEntry := 5000.
+	maxEntry := 1000.
 	index := 0.
 	self allocateRecodings: maxEntry
-	
 ]
 
 { #category : 'initialization' }
@@ -158,20 +175,20 @@ StThreadSafeTranscript >> maxEntry: aNumber [
 	self allocateRecodings: maxEntry.
 ]
 
-{ #category : 'private' }
+{ #category : 'private - events' }
 StThreadSafeTranscript >> nextPut: aCharacter [
 
 	mutex critical: [
-		self rawNextPut: aCharacter ].
+		self addEntry: aCharacter asString ].
 	^ aCharacter
 
 ]
 
-{ #category : 'private' }
+{ #category : 'private - events' }
 StThreadSafeTranscript >> nextPutAll: value [
 	"Ineffient way...."
 
-	self critical: [ value do: [ :each | self rawNextPut: each  ] ].
+	self critical: [ self addEntry: value asString ].
 	^ value
 ]
 
@@ -179,18 +196,6 @@ StThreadSafeTranscript >> nextPutAll: value [
 StThreadSafeTranscript >> open [ 
 
 	^ StTranscriptPresenter openOn: self
-]
-
-{ #category : 'private' }
-StThreadSafeTranscript >> rawNextPut: aCharacter [
-
-	
-		index := index >= maxEntry
-						ifTrue: [ 1 ]
-			         ifFalse: [ index + 1 ].
-		recordings at: index put: aCharacter.
-		SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new.
-	
 ]
 
 { #category : 'streaming' }
@@ -208,17 +213,17 @@ StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
 
-	self critical: [ self << anObject  ]
+	self critical: [ self << anObject ]
 ]
 
 { #category : 'stop conditions' }
 StThreadSafeTranscript >> space [
-	"Output a space on the receiver, buffered and not yet shown"
+	"Output a space on the receiver"
 
 	self nextPut: Character space
 ]
 
-{ #category : 'private' }
+{ #category : 'private - events' }
 StThreadSafeTranscript >> stepGlobal [ 
 
 	" do nothing this is just to be compatible with the old transcript
@@ -229,7 +234,7 @@ StThreadSafeTranscript >> stepGlobal [
 
 { #category : 'stop conditions' }
 StThreadSafeTranscript >> tab [
-	"Output a tab on the receiver, buffered and not yet shown"
+	"Output a tab on the receiver"
 
 	self nextPut: Character tab
 ]

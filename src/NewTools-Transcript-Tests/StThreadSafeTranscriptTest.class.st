@@ -1,6 +1,9 @@
 Class {
 	#name : 'StThreadSafeTranscriptTest',
 	#superclass : 'TestCase',
+	#instVars : [
+		't'
+	],
 	#category : 'NewTools-Transcript-Tests',
 	#package : 'NewTools-Transcript-Tests'
 }
@@ -8,21 +11,6 @@ Class {
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPut [
 
-	| t |
-	t := StThreadSafeTranscript new.
-	t nextPut: $a.
-	t << 'toto'.
-	t cr.
-	t nextPutAll: 'tintin'.
-	self assert: t contents equals: 'atoto
-tintin' 
-]
-
-{ #category : 'tests' }
-StThreadSafeTranscriptTest >> testNextPutAfterClear [
-
-	| t |
-	t := StThreadSafeTranscript new clear.
 	t nextPut: $a.
 	t << 'toto'.
 	t cr.
@@ -34,38 +22,15 @@ tintin'
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 
-	| t |
-	t := StThreadSafeTranscript new.
-	t maxEntry: 5.
-	t << 'abcdefgh'.
-	self assert: t contents equals: 'fgh' 
-]
-
-{ #category : 'tests' }
-StThreadSafeTranscriptTest >> testNextPutIsOverMaxEntryAfterClear [
-
-	| t |
-	t := StThreadSafeTranscript new clear.
-	t maxEntry: 5.
-	t << 'abcdefgh'.
-	self assert: t contents equals: 'fgh' 
+	t maxEntry: 1.
+	t << 'A'.
+	t << 'B'.
+	self assert: t contents equals: 'B' 
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 
-	| t |
-	t := StThreadSafeTranscript new.
-	t maxEntry: 5.
-	t << 'toto'.
-	self assert: t contents equals: 'toto' 
-]
-
-{ #category : 'tests' }
-StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntryAfterClear [
-
-	| t |
-	t := StThreadSafeTranscript new clear.
 	t maxEntry: 5.
 	t << 'toto'.
 	self assert: t contents equals: 'toto' 
@@ -74,8 +39,6 @@ StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntryAfterClear [
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testShow [
 
-	| t |
-	t := StThreadSafeTranscript new.
 	t show: 'toto'.
 	self assert: t contents equals: 'toto' 
 ]
@@ -92,8 +55,6 @@ StThreadSafeTranscriptTest >> testShowAfterClear [
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testShowAndClear [
 
-	| t |
-	t := StThreadSafeTranscript new.
 	t show: 'toto'.
 	self assert: t contents equals: 'toto'.
 	t clear.
