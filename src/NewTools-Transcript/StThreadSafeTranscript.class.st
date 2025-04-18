@@ -14,7 +14,8 @@ Class {
 		'mutex',
 		'recordings',
 		'index',
-		'maxEntry'
+		'maxEntry',
+		'worker'
 	],
 	#classVars : [
 		'UniqueInstance'
@@ -103,7 +104,7 @@ StThreadSafeTranscript >> allocateRecodings: size [
 { #category : 'private - actions' }
 StThreadSafeTranscript >> announce [
 	
-	SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new.
+	self worker schedule: [ SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new ]
 ]
 
 { #category : 'streaming' }
@@ -237,4 +238,10 @@ StThreadSafeTranscript >> tab [
 	"Output a tab on the receiver"
 
 	self nextPut: Character tab
+]
+
+{ #category : 'accessing' }
+StThreadSafeTranscript >> worker [ 
+
+	^ worker ifNil: [ worker := TKTWorker new start ] 
 ]

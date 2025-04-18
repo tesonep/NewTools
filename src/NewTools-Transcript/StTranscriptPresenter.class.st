@@ -9,8 +9,7 @@ Class {
 	#superclass : 'StPresenter',
 	#instVars : [
 		'text',
-		'transcript',
-		'worker'
+		'transcript'
 	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
@@ -84,8 +83,7 @@ StTranscriptPresenter >> initialize [
 
 	super initialize.
 	self registerToAnnouncer. 
-	transcript := StThreadSafeTranscript uniqueInstance.
-	worker := TKTWorker new.
+	transcript := StThreadSafeTranscript uniqueInstance
 ]
 
 { #category : 'initialization' }
@@ -147,7 +145,7 @@ StTranscriptPresenter >> unregister [
 { #category : 'accessing' }
 StTranscriptPresenter >> updateNewEntry [
 
-	text text: transcript contents.
+	text text: transcript contents
 	
 ]
 
