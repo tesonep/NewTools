@@ -159,6 +159,7 @@ StThreadSafeTranscript >> flush [
 
 { #category : 'testing' }
 StThreadSafeTranscript >> hasBindingOf: aString [
+
 	^ false
 ]
 

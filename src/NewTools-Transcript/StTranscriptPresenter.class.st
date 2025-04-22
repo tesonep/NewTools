@@ -88,6 +88,7 @@ StTranscriptPresenter >> clear [
 
 { #category : 'actions' }
 StTranscriptPresenter >> fetchOld [ 
+
 	text appendText: transcript contents
 ]
 
@@ -122,7 +123,6 @@ StTranscriptPresenter >> initializePresenters [
 
 	text := self newText.
 	text beEditable.
-	leftToolbar := self newToolbar.
 	self initializeToolbars
 	
 	
@@ -201,7 +201,6 @@ StTranscriptPresenter >> text [
 StTranscriptPresenter >> transcript: aTranscript [
 
 	transcript := aTranscript
-	"self updateNewEntry"
 ]
 
 { #category : 'registration' }
