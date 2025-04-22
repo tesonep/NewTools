@@ -6,7 +6,7 @@ BaselineOf >> inspectionProject: aBuilder [
 	| specs |
 	
 	specs := self project version spec packageSpecsInLoadOrder.
-	^ aBuilder newTabl
+	^ aBuilder newTable
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

@@ -102,6 +102,11 @@ AbstractFileReference >> inspectionGifContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItems: aBuilder [
+	| items |
+	
+	items := 	self directories, self files.
+	self isRoot ifFalse: [ 
+		items := items copyWithFirst: self parent ]. 
 
 	^  aBuilder newTable 
 		beResizable;
