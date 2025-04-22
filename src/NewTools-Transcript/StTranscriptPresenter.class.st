@@ -79,6 +79,17 @@ StTranscriptPresenter class >> registerToolsOn: aRegistry [
 	aRegistry register: self as: #transcript
 ]
 
+{ #category : 'actions' }
+StTranscriptPresenter >> clear [
+	
+	text clearContent
+]
+
+{ #category : 'actions' }
+StTranscriptPresenter >> fetchOld [ 
+	text appendText: transcript contents
+]
+
 { #category : 'initialization' }
 StTranscriptPresenter >> initialize [ 
 
@@ -117,7 +128,7 @@ StTranscriptPresenter >> initializeToolBar [
 			label: 'Fetch';
 			icon: (self application iconNamed: #down );
 			help: 'Fetches the old recordings of the transcript';
-			action: [ transcript fetchOld ])
+			action: [ self fetchOld ])
 ]
 
 { #category : 'initialization' }
@@ -125,7 +136,6 @@ StTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		whenOpenedDo: [ self updateNewEntry ];
 		whenClosedDo: [ self unregister ]
 ]
 
@@ -141,7 +151,6 @@ StTranscriptPresenter >> layout [
 { #category : 'registration' }
 StTranscriptPresenter >> registerToAnnouncer [
 
-	
 	SystemAnnouncer uniqueInstance
 		when: NewEntryToTranscript
 		send: #updateNewEntry: 
@@ -157,8 +166,8 @@ StTranscriptPresenter >> text [
 { #category : 'accessing' }
 StTranscriptPresenter >> transcript: aTranscript [
 
-	transcript := aTranscript.
-	self updateNewEntry
+	transcript := aTranscript
+	"self updateNewEntry"
 ]
 
 { #category : 'registration' }
@@ -168,10 +177,9 @@ StTranscriptPresenter >> unregister [
 ]
 
 { #category : 'accessing' }
-StTranscriptPresenter >> updateNewEntry [
+StTranscriptPresenter >> updateNewEntry: anAnnouncement [
 
-	text text: transcript contents
-	
+	text appendText: anAnnouncement entry
 ]
 
 { #category : 'accessing' }

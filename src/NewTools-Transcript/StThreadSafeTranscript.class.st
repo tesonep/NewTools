@@ -90,7 +90,7 @@ StThreadSafeTranscript >> addEntry: aString [
 		ifTrue: [ 1 ]
 		ifFalse: [ index + 1 ].
 	recordings at: index put: aString.
-	self announce
+	self announce: aString
 
 	
 ]
@@ -102,9 +102,14 @@ StThreadSafeTranscript >> allocateRecordings: size [
 ]
 
 { #category : 'private - actions' }
-StThreadSafeTranscript >> announce [
-	
-	self worker schedule: [ SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new ]
+StThreadSafeTranscript >> announce: aString [
+
+	self worker schedule: [ 
+		SystemAnnouncer uniqueInstance 
+			announce: (
+				NewEntryToTranscript new 
+				entry: aString;
+				yourself ) ]
 ]
 
 { #category : 'accessing' }
@@ -115,14 +120,13 @@ StThreadSafeTranscript >> clear [
 		index := 0 ]
 ]
 
-{ #category : 'streaming' }
+{ #category : 'compatibility' }
 StThreadSafeTranscript >> close [
 	"Close the receiver, indicating it is not longer needed"
 ]
 
 { #category : 'accessing' }
 StThreadSafeTranscript >> contents [ 
-	"probably super inefficient again... "
 	
 	^ String streamContents: [ :s |
 		1 to: index do: [ :i | s << (recordings at: i ) asString ] ] 
@@ -147,12 +151,6 @@ StThreadSafeTranscript >> endEntry [
 	"Show the currently buffered output"
 ]
 
-{ #category : 'accessing' }
-StThreadSafeTranscript >> fetchOld [
-
-	self show: 'Fetching old... (NOT IMPLEMENTED YET)', Character cr asString 
-]
-
 { #category : 'compatibility' }
 StThreadSafeTranscript >> flush [
 	
@@ -169,7 +167,7 @@ StThreadSafeTranscript >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	maxEntry := 1000.
+	maxEntry := 3000.
 	index := 0.
 	self allocateRecordings: maxEntry
 ]
@@ -211,13 +209,14 @@ StThreadSafeTranscript >> reset [
 
 { #category : 'updating' }
 StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
+
 	^ false
 ]
 
 { #category : 'streaming' }
 StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
-
+	
 	self critical: [ self << anObject ]
 ]
 
@@ -230,11 +229,8 @@ StThreadSafeTranscript >> space [
 
 { #category : 'compatibility' }
 StThreadSafeTranscript >> stepGlobal [ 
-
-	" do nothing this is just to be compatible with the old transcript
-	Not having this method while morphic is calling you is a bad idea and you are dead.
-	
-	"
+	"Do nothing this is just to be compatible with the old transcript
+		Not having this method while morphic is calling you is a bad idea and you are dead."
 ]
 
 { #category : 'streaming' }
@@ -246,6 +242,6 @@ StThreadSafeTranscript >> tab [
 
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> worker [ 
-
+	worker ensureIsWorking.
 	^ worker ifNil: [ worker := TKTWorker new start ] 
 ]
