@@ -115,7 +115,7 @@ StThreadSafeTranscript >> announce: aString [
 { #category : 'accessing' }
 StThreadSafeTranscript >> clear [
 
-	mutex critical: [
+	self critical: [
 		self allocateRecordings: maxEntry.
 		index := 0 ]
 ]
@@ -183,7 +183,7 @@ StThreadSafeTranscript >> maxEntry: aNumber [
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> nextPut: aCharacter [
 
-	mutex critical: [
+	self critical: [
 		self addEntry: aCharacter asString ].
 	^ aCharacter
 
@@ -218,7 +218,7 @@ StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
 	
-	self critical: [ self << anObject ]
+	self << anObject
 ]
 
 { #category : 'streaming' }
