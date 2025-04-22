@@ -9,7 +9,8 @@ Class {
 	#superclass : 'StPresenter',
 	#instVars : [
 		'text',
-		'transcript'
+		'transcript',
+		'toolbar'
 	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
@@ -91,9 +92,32 @@ StTranscriptPresenter >> initializePresenters [
 
 
 	text := self newText.
-	text beEditable
+	text beEditable.
+	toolbar := self newToolbar.
+	self initializeToolBar
 	
 	
+]
+
+{ #category : 'initialization' }
+StTranscriptPresenter >> initializeToolBar [
+
+	toolbar := self newToolbar 
+  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+	
+	toolbar
+		add: (toolbar newToolbarButton 
+			label: 'Clear';
+			icon: (self application iconNamed: #changeRemove );
+			help: 'Clears the transcriptor';
+			action: [ transcript clear ]);
+		add: (toolbar newToolbarButton 
+			label: 'Fetch';
+			icon: (self application iconNamed: #down );
+			help: 'Fetches the old recordings of the transcript';
+			action: [ transcript fetchOld ])
 ]
 
 { #category : 'initialization' }
@@ -105,10 +129,11 @@ StTranscriptPresenter >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self unregister ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'layout' }
 StTranscriptPresenter >> layout [ 
 
 	^ SpBoxLayout newLeftToRight 
+			add: toolbar;
 			add: text;
 			yourself
 ]

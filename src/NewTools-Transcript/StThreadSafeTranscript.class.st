@@ -149,6 +149,12 @@ StThreadSafeTranscript >> endEntry [
 ]
 
 { #category : 'streaming' }
+StThreadSafeTranscript >> fetchOld [
+
+	self show: 'Fetching old... (NOT IMPLEMENTED YET)'	
+]
+
+{ #category : 'streaming' }
 StThreadSafeTranscript >> flush [
 	
 	
