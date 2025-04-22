@@ -10,7 +10,8 @@ Class {
 	#instVars : [
 		'text',
 		'transcript',
-		'toolbar'
+		'leftToolbar',
+		'rightToolBar'
 	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
@@ -99,36 +100,60 @@ StTranscriptPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+StTranscriptPresenter >> initializeLeftToolbar [
+
+	leftToolbar := self newToolbar 
+  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+	
+	leftToolbar
+		add: (leftToolbar newToolbarButton 
+			label: 'Clear';
+			icon: (self application iconNamed: #changeRemove );
+			help: 'Clears the transcriptor';
+			action: [ self clear ])
+			
+]
+
+{ #category : 'initialization' }
 StTranscriptPresenter >> initializePresenters [ 
 
 
 	text := self newText.
 	text beEditable.
-	toolbar := self newToolbar.
-	self initializeToolBar
+	leftToolbar := self newToolbar.
+	self initializeToolbars
 	
 	
 ]
 
 { #category : 'initialization' }
-StTranscriptPresenter >> initializeToolBar [
-
-	toolbar := self newToolbar 
-  		addStyle: 'stToolbar';
+StTranscriptPresenter >> initializeRightToolbar [
+		
+	rightToolBar := self newToolbar 
+	  		addStyle: 'stToolbar';
   		displayMode: self application toolbarDisplayMode;
   		yourself.
-	
-	toolbar
-		add: (toolbar newToolbarButton 
-			label: 'Clear';
-			icon: (self application iconNamed: #changeRemove );
-			help: 'Clears the transcriptor';
-			action: [ self clear ]);
-		add: (toolbar newToolbarButton 
+			
+	rightToolBar 
+		add: (rightToolBar newToolbarButton 
+			label: 'Reset';
+			icon: (self application iconNamed: #glamorousTrash );
+			help: 'Resets the old recordings of the transcript';
+			action: [ self reset ]);
+		add: (rightToolBar newToolbarButton 
 			label: 'Fetch';
 			icon: (self application iconNamed: #down );
 			help: 'Fetches the old recordings of the transcript';
 			action: [ self fetchOld ])
+]
+
+{ #category : 'initialization' }
+StTranscriptPresenter >> initializeToolbars [
+
+	self initializeLeftToolbar.
+	self initializeRightToolbar
 ]
 
 { #category : 'initialization' }
@@ -143,9 +168,12 @@ StTranscriptPresenter >> initializeWindow: aWindowPresenter [
 StTranscriptPresenter >> layout [ 
 
 	^ SpBoxLayout newTopToBottom 
-			add: toolbar expand: false;
-			add: text;
-			yourself
+		add: (SpBoxLayout newLeftToRight 
+			add: leftToolbar ;
+			add: rightToolBar expand: false ) 
+			expand: false;
+		add: text;
+		yourself
 ]
 
 { #category : 'registration' }
@@ -155,6 +183,12 @@ StTranscriptPresenter >> registerToAnnouncer [
 		when: NewEntryToTranscript
 		send: #updateNewEntry: 
 		to: self
+]
+
+{ #category : 'actions' }
+StTranscriptPresenter >> reset [
+
+	transcript clear
 ]
 
 { #category : 'accessing' }
