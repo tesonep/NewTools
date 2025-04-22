@@ -626,7 +626,7 @@ StMessageBrowser >> selectedClass [
 
 { #category : 'api' }
 StMessageBrowser >> selectedMessage: aMessage [
-	messageList updateVisitedScopesFrom: aMessage
+	messageList updateScopesFrom: aMessage
 ]
 
 { #category : 'accessing' }

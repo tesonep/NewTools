@@ -3,21 +3,65 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'messageBrowser',
-		'secondMessageWindow'
+		'secondMessageWindow',
+		'backendForTest'
 	],
 	#category : 'NewTools-MethodBrowsers-Tests',
 	#package : 'NewTools-MethodBrowsers-Tests'
 }
 
 { #category : 'running' }
+StMessageBrowserTest >> setUp [
+
+	super setUp.
+	backendForTest := SpMorphicBackendForTest new
+]
+
+{ #category : 'running' }
 StMessageBrowserTest >> tearDown [
+
+	StMBTestClass2 removeSelector: #aSelectorWithASingleMethodImplementation.
+	StMBTestClass compile: 'aSelectorWithASingleMethodImplementation
+
+	^ self'.
 
 	messageBrowser ifNotNil: [ messageBrowser close ].
 	secondMessageWindow ifNotNil: [ secondMessageWindow close ].
 	super tearDown
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - updates' }
+StMessageBrowserTest >> testAddingASecondMethodDoesNotChangeSelection [
+
+	| oldSelection |
+	
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	
+	oldSelection := messageBrowser presenter messageList selectedItem.
+	
+	StMBTestClass2 compile: 'aSelectorWithASingleMethodImplementation ^ 42'.
+	backendForTest waitUntilUIRedrawed.
+	
+	self assert: messageBrowser presenter messageList selectedItem equals: oldSelection.
+
+]
+
+{ #category : 'tests - updates' }
+StMessageBrowserTest >> testAddingASecondMethodHasCorrectTitle [
+
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	
+	self assert: messageBrowser presenter windowTitle equals: 'Implementors of #aSelectorWithASingleMethodImplementation [1]'.
+	
+	StMBTestClass2 compile: 'aSelectorWithASingleMethodImplementation ^ 42'.
+	backendForTest waitUntilUIRedrawed.
+
+	self assert: messageBrowser presenter messageList numberOfElements equals: 2.
+	self assert: messageBrowser presenter windowTitle equals: 'Implementors of #aSelectorWithASingleMethodImplementation [2]'.
+
+]
+
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testAskingImplementorsOfASelectorShouldRespectSelectedScope [
 
 	| presenter secondPresenter |
@@ -34,7 +78,7 @@ StMessageBrowserTest >> testAskingImplementorsOfASelectorShouldRespectSelectedSc
 		
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testAskingReferencesOfAClassShouldRespectSelectedScope [
 
 	| presenter secondPresenter |
@@ -51,7 +95,7 @@ StMessageBrowserTest >> testAskingReferencesOfAClassShouldRespectSelectedScope [
 		
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testAskingSendersOfASelectorShouldRespectSelectedScope [
 
 	| presenter secondPresenter |
@@ -70,7 +114,39 @@ StMessageBrowserTest >> testAskingSendersOfASelectorShouldRespectSelectedScope [
 
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - compiling' }
+StMessageBrowserTest >> testCompilingMethodElseWhereChangeTheText [
+
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	
+	self assert: messageBrowser presenter textPresenter text equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode.
+
+	StMBTestClass compile: 'aSelectorWithASingleMethodImplementation ^ 42'.
+	backendForTest waitUntilUIRedrawed.
+
+	self assert: messageBrowser presenter textPresenter text equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode.
+
+
+]
+
+{ #category : 'tests - compiling' }
+StMessageBrowserTest >> testCompilingMethodElseWhereOnAChangedTextDoesNotChangeTheText [
+
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
+	
+	self assert: messageBrowser presenter textPresenter text equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode.
+	backendForTest waitUntilUIRedrawed.
+
+	backendForTest setUnacceptedTextOn: messageBrowser presenter textPresenter to: 'asbc'.
+
+	StMBTestClass compile: 'aSelectorWithASingleMethodImplementation ^ 42'.
+	backendForTest waitUntilUIRedrawed.
+
+	self assert: messageBrowser presenter textPresenter text equals: 'asbc'
+
+]
+
+{ #category : 'tests - title' }
 StMessageBrowserTest >> testOpeningAMessageBrowserOnASingleMethodHasCorrectTitle [
 
 	messageBrowser := StMessageBrowser browse: { StMBTestClass >> #aSelectorWithASingleMethodImplementation }.
@@ -78,7 +154,7 @@ StMessageBrowserTest >> testOpeningAMessageBrowserOnASingleMethodHasCorrectTitle
 	self assert: messageBrowser title equals: 'Message Browser [1]'
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - title' }
 StMessageBrowserTest >> testOpeningImplementorsAndChangingScopeShowsCorrectTitle [
 
 	| presenter |
@@ -90,7 +166,7 @@ StMessageBrowserTest >> testOpeningImplementorsAndChangingScopeShowsCorrectTitle
 	self assert: messageBrowser title equals: 'Implementors of #aSelectorWithASingleMethodImplementation [1]'
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - title' }
 StMessageBrowserTest >> testOpeningImplementorsShowsCorrectTitle [
 
 	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
@@ -102,8 +178,7 @@ StMessageBrowserTest >> testOpeningImplementorsShowsCorrectTitle [
 StMessageBrowserTest >> testOpeningImplementorsWithASingleImplementationHasOneAndSelectsIt [
 
 	| presenter |
-	messageBrowser := StMessageBrowser browseImplementorsOf:
-		                  #aSelectorWithASingleMethodImplementation.
+	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
 	presenter := messageBrowser presenter.
 
 	self assert: presenter messageList listPresenter model size equals: 1.
@@ -116,7 +191,7 @@ StMessageBrowserTest >> testOpeningImplementorsWithASingleImplementationHasOneAn
 		assert: (presenter textPresenter text) equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testOpeningWithASpecificScopeActivatesIt [
 
 	| presenter anotherScope |
@@ -128,7 +203,7 @@ StMessageBrowserTest >> testOpeningWithASpecificScopeActivatesIt [
 	self assert: presenter messageList selectedScope equals: anotherScope
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testOpeningWithASpecificScopeIncludesItInTheList [
 
 	| presenter anotherScope |
@@ -164,7 +239,7 @@ StMessageBrowserTest >> testRemovingAMethodCallsTheRefactoring [
 	mockSelectDialog verifyIn: self.
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testScopeListHasCorrectNumberOfElements [
 
 	| presenter |
@@ -174,7 +249,7 @@ StMessageBrowserTest >> testScopeListHasCorrectNumberOfElements [
 	self assert: presenter toolbarPresenter scopeList items size equals: 4 "Current Image, Package and Class, hierarchy"
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testScopeListHasCorrectOrder [
 
 	| presenter |
@@ -187,7 +262,7 @@ StMessageBrowserTest >> testScopeListHasCorrectOrder [
 		hasSameElements: { 'Current image'. 'Packages: NewTools-MethodBrowsers-Tests'. 'Hier: StMBTestClass'. 'Classes: StMBTestClass' }
 ]
 
-{ #category : 'tests' }
+{ #category : 'tests - scopes' }
 StMessageBrowserTest >> testSelectingElementsDoesNotDuplicateScopes [
 
 	| presenter |

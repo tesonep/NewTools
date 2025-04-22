@@ -227,14 +227,21 @@ StMessageListPresenter >> listPresenter [
 { #category : 'accessing' }
 StMessageListPresenter >> locationOf: anItem [
 
+	| protocolOrOriginName |
 	^ String streamContents: [ :aStream | 
 		3 to: (cachedHierarchy at: anItem) size do: [ :i | aStream << '    ' ].
-		aStream << (self methodClassNameForItem: anItem) << ' ('.
-		anItem isFromTrait
-			ifTrue: [ aStream
-					<< anItem compiledMethod origin name;
-					space ].
-		aStream << (self protocolNameForItem: anItem) << ')' ]
+		protocolOrOriginName := anItem isFromTrait
+			ifTrue: [ anItem compiledMethod origin name ]
+			ifFalse: [ self protocolNameForItem: anItem ].
+
+		aStream  << (self methodClassNameForItem: anItem).
+					
+		protocolOrOriginName ifNotEmpty: [ 
+				aStream 
+					<< ' (';
+					<< protocolOrOriginName;
+					<< ' )' ]
+		 ]
 ]
 
 { #category : 'private' }
@@ -355,6 +362,12 @@ StMessageListPresenter >> selectIndex: anInteger [
 StMessageListPresenter >> selectedIndex [
 
 	^ listPresenter selection selectedIndex
+]
+
+{ #category : 'accessing' }
+StMessageListPresenter >> selectedItem [
+	
+	^ listPresenter selectedItem 
 ]
 
 { #category : 'accessing' }
