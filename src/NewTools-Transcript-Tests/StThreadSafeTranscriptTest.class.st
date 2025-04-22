@@ -16,6 +16,15 @@ StThreadSafeTranscriptTest >> setUp [
 ]
 
 { #category : 'tests' }
+StThreadSafeTranscriptTest >> testAppend [ 
+
+	t show: 'AB'.
+	self assert: t contents equals: 'AB'.
+	t show: 'C'.
+	self assert: t contents equals: 'ABC'
+]
+
+{ #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPut [
 
 	t nextPut: $a.

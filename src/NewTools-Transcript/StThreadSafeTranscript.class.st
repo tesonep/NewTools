@@ -243,6 +243,7 @@ StThreadSafeTranscript >> tab [
 
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> worker [ 
-	worker ensureIsWorking.
-	^ worker ifNil: [ worker := TKTWorker new start ] 
+
+	worker ifNil: [ worker := TKTWorker new start ].
+	^ worker ensureIsWorking
 ]
