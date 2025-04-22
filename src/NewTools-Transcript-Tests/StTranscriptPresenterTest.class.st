@@ -32,7 +32,7 @@ StTranscriptPresenterTest >> testAnnouncementIsWritten [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		(Delay forSeconds: 0.3) wait.
+		300 milliSeconds wait.
 		self assert: presenter text text equals: 'test' ]
 	ensure: [ window close ]
 ]
@@ -45,7 +45,7 @@ StTranscriptPresenterTest >> testClear [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		(Delay forSeconds: 0.3) wait.
+		300 milliSeconds wait.
 		self assert: presenter text text equals: 'test'.
 		presenter clear.
 		self assert: presenter text text equals: ''.
@@ -61,7 +61,7 @@ StTranscriptPresenterTest >> testFetchOld [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		(Delay forSeconds: 0.3) wait.
+		300 milliSeconds wait.
 		presenter clear.
 		self assert: presenter text text equals: ''.
 		presenter fetchOld.
@@ -77,7 +77,7 @@ StTranscriptPresenterTest >> testReset [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		(Delay forSeconds: 0.3) wait.
+		300 milliSeconds wait.
 		self assert: presenter text text equals: 'test'.
 		self assert: transcript contents equals: 'test'.
 		presenter reset.
