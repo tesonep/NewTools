@@ -26,7 +26,7 @@ Class {
 
 { #category : 'private - testing' }
 StThreadSafeTranscript class >> createTestingInstance [
-"This method SHOULD NOT be used. It is only used for testing, and doing so would break the singleton."
+"This method SHOULD NOT be used. It is only used for testing."
 
 	^ super new.
 ]
@@ -72,7 +72,7 @@ StThreadSafeTranscript class >> uniqueInstance [
 		UniqueInstance := super new ]
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> << anObject [
 	"Write anObject to the receiver, dispatching using #putOn:
 	This is a shortcut for both nextPut: and nextPutAll: since anObject can be both
@@ -96,7 +96,7 @@ StThreadSafeTranscript >> addEntry: aString [
 ]
 
 { #category : 'initialization' }
-StThreadSafeTranscript >> allocateRecodings: size [
+StThreadSafeTranscript >> allocateRecordings: size [
 
 	recordings := Array new: size
 ]
@@ -107,21 +107,20 @@ StThreadSafeTranscript >> announce [
 	self worker schedule: [ SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new ]
 ]
 
-{ #category : 'streaming' }
+{ #category : 'accessing' }
 StThreadSafeTranscript >> clear [
 
 	mutex critical: [
-		self allocateRecodings: maxEntry.
-		index := 0.
-		SystemAnnouncer uniqueInstance announce: NewEntryToTranscript new  ]
+		self allocateRecordings: maxEntry.
+		index := 0 ]
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> close [
 	"Close the receiver, indicating it is not longer needed"
 ]
 
-{ #category : 'protected low level' }
+{ #category : 'accessing' }
 StThreadSafeTranscript >> contents [ 
 	"probably super inefficient again... "
 	
@@ -129,7 +128,7 @@ StThreadSafeTranscript >> contents [
 		1 to: index do: [ :i | s << (recordings at: i ) asString ] ] 
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> cr [
 	"Output a cr on the receiver"
 
@@ -143,18 +142,18 @@ StThreadSafeTranscript >> critical: block [
 	^ mutex critical: block
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'compatibility' }
 StThreadSafeTranscript >> endEntry [
 	"Show the currently buffered output"
 ]
 
-{ #category : 'streaming' }
+{ #category : 'accessing' }
 StThreadSafeTranscript >> fetchOld [
 
-	self show: 'Fetching old... (NOT IMPLEMENTED YET)'	
+	self show: 'Fetching old... (NOT IMPLEMENTED YET)', Character cr asString 
 ]
 
-{ #category : 'streaming' }
+{ #category : 'compatibility' }
 StThreadSafeTranscript >> flush [
 	
 	
@@ -172,17 +171,17 @@ StThreadSafeTranscript >> initialize [
 	mutex := Mutex new.
 	maxEntry := 1000.
 	index := 0.
-	self allocateRecodings: maxEntry
+	self allocateRecordings: maxEntry
 ]
 
 { #category : 'initialization' }
 StThreadSafeTranscript >> maxEntry: aNumber [
 
 	maxEntry := aNumber.
-	self allocateRecodings: maxEntry.
+	self allocateRecordings: maxEntry.
 ]
 
-{ #category : 'private - events' }
+{ #category : 'private - accessing' }
 StThreadSafeTranscript >> nextPut: aCharacter [
 
 	mutex critical: [
@@ -191,9 +190,8 @@ StThreadSafeTranscript >> nextPut: aCharacter [
 
 ]
 
-{ #category : 'private - events' }
+{ #category : 'private - accessing' }
 StThreadSafeTranscript >> nextPutAll: value [
-	"Ineffient way...."
 
 	self critical: [ self addEntry: value asString ].
 	^ value
@@ -205,10 +203,10 @@ StThreadSafeTranscript >> open [
 	^ StTranscriptPresenter openOn: self
 ]
 
-{ #category : 'streaming' }
+{ #category : 'accessing' }
 StThreadSafeTranscript >> reset [
 
-	self clear
+	^ self clear
 ]
 
 { #category : 'updating' }
@@ -216,21 +214,21 @@ StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 	^ false
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
 
 	self critical: [ self << anObject ]
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> space [
 	"Output a space on the receiver"
 
 	self nextPut: Character space
 ]
 
-{ #category : 'private - events' }
+{ #category : 'compatibility' }
 StThreadSafeTranscript >> stepGlobal [ 
 
 	" do nothing this is just to be compatible with the old transcript
@@ -239,14 +237,14 @@ StThreadSafeTranscript >> stepGlobal [
 	"
 ]
 
-{ #category : 'stop conditions' }
+{ #category : 'streaming' }
 StThreadSafeTranscript >> tab [
 	"Output a tab on the receiver"
 
 	self nextPut: Character tab
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 StThreadSafeTranscript >> worker [ 
 
 	^ worker ifNil: [ worker := TKTWorker new start ] 

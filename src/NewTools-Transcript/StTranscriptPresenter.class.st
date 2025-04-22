@@ -112,7 +112,7 @@ StTranscriptPresenter >> initializeToolBar [
 			label: 'Clear';
 			icon: (self application iconNamed: #changeRemove );
 			help: 'Clears the transcriptor';
-			action: [ transcript clear ]);
+			action: [ self clear ]);
 		add: (toolbar newToolbarButton 
 			label: 'Fetch';
 			icon: (self application iconNamed: #down );
@@ -132,8 +132,8 @@ StTranscriptPresenter >> initializeWindow: aWindowPresenter [
 { #category : 'layout' }
 StTranscriptPresenter >> layout [ 
 
-	^ SpBoxLayout newLeftToRight 
-			add: toolbar;
+	^ SpBoxLayout newTopToBottom 
+			add: toolbar expand: false;
 			add: text;
 			yourself
 ]
@@ -144,7 +144,7 @@ StTranscriptPresenter >> registerToAnnouncer [
 	
 	SystemAnnouncer uniqueInstance
 		when: NewEntryToTranscript
-		send: #updateNewEntry
+		send: #updateNewEntry: 
 		to: self
 ]
 
