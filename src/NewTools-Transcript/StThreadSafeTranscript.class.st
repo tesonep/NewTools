@@ -173,7 +173,7 @@ StThreadSafeTranscript >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	maxEntry := 3000.
+	maxEntry := 2000.
 	index := 0.
 	self allocateRecordings: maxEntry
 ]
