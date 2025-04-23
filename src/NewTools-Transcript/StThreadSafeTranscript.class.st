@@ -229,6 +229,12 @@ StThreadSafeTranscript >> show: anObject [
 ]
 
 { #category : 'streaming' }
+StThreadSafeTranscript >> showCr: anObject [
+
+	self critical: [ self show: anObject ; cr ]
+]
+
+{ #category : 'streaming' }
 StThreadSafeTranscript >> space [
 	"Output a space on the receiver"
 
@@ -251,6 +257,8 @@ StThreadSafeTranscript >> tab [
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> worker [ 
 
-	worker ifNil: [ worker := TKTWorker new start ].
+	worker ifNil: [ 
+		worker := TKTWorker new start. 
+		worker name: 'ThreadSafeTranscript worker: ', UUID new asString ].
 	^ worker ensureIsWorking
 ]

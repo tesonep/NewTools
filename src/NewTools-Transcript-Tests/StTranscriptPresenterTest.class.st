@@ -81,7 +81,7 @@ StTranscriptPresenterTest >> testReset [
 		self assert: presenter text text equals: 'test'.
 		self assert: transcript contents equals: 'test'.
 		presenter reset.
-		self assert: presenter text text equals: 'test'.
+		self assert: presenter text text equals: ''.
 		self assert: transcript contents equals: '' ]
 	ensure: [ window close ]
 ]

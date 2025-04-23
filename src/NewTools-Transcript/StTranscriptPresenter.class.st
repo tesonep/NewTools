@@ -49,6 +49,12 @@ StTranscriptPresenter class >> exampleDefault [
 	self new open
 ]
 
+{ #category : 'tools registry' }
+StTranscriptPresenter class >> maxEmptySteps [
+"Maximum amount of steps with the queue empty for the service to stop"
+	^ 5
+]
+
 { #category : 'accessing' }
 StTranscriptPresenter class >> menuCommandOn: aBuilder [
 
@@ -118,7 +124,8 @@ StTranscriptPresenter >> initialize [
 
 	super initialize.
 	self registerToAnnouncer. 
-	transcript := StThreadSafeTranscript uniqueInstance
+	transcript := StThreadSafeTranscript uniqueInstance.
+	keepServiceAliveStep := 0
 ]
 
 { #category : 'initialization' }
@@ -206,7 +213,7 @@ StTranscriptPresenter >> maybeStopService [
 			^ self ].
 		
 	keepServiceAliveStep := keepServiceAliveStep + 1.
-	keepServiceAliveStep = 5 
+	keepServiceAliveStep = self class maxEmptySteps 
 		ifTrue: [ service stop ].
 
 ]
