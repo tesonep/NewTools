@@ -23,8 +23,7 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 		             display: [ :each | each title ];
 		             onAccept: [ :dialog |
 			             placeHolder strategy:
-					             dialog presenter selectedItem new.
-			             CavroisWindowManager current removeVisualPlaceholders ].
+					             dialog presenter selectedItem new ].
 	description := presenter newText text:
 		               presenter list selectedItem comment.
 	presenter layout add: description.
