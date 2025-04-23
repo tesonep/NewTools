@@ -18,7 +18,10 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 	| presenter description |
 	presenter := SpSelectDialog new
 		             title: 'Change Strategy';
-		             label: 'Select the strategy you want to use';
+		             label:
+			             'Current strategy is '
+			             , placeHolder strategy class asString
+			             , ' , select the strategy you want to use';
 		             items: CavWindowStrategy subclasses;
 		             display: [ :each | each title ];
 		             onAccept: [ :dialog |
