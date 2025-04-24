@@ -2,7 +2,7 @@ Class {
 	#name : 'StThreadSafeTranscriptTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		't'
+		'transcript'
 	],
 	#category : 'NewTools-Transcript-Tests',
 	#package : 'NewTools-Transcript-Tests'
@@ -12,58 +12,126 @@ Class {
 StThreadSafeTranscriptTest >> setUp [ 
 
 	super setUp.
-	t := StThreadSafeTranscript createTestingInstance
+	transcript := StThreadSafeTranscript createTestingInstance
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testAppend [ 
 
-	t show: 'AB'.
-	self assert: t contents equals: 'AB'.
-	t show: 'C'.
-	self assert: t contents equals: 'ABC'
+	transcript show: 'AB'.
+	self assert: transcript contents equals: 'AB'.
+	transcript show: 'C'.
+	self assert: transcript contents equals: 'ABC'
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testClear [
+
+	transcript show: 'toto'.
+	self assert: transcript contents equals: 'toto'.
+	transcript clear.
+	self assert: transcript contents equals: ''.
+	 
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testCr [
+
+	transcript cr.
+	self assert: transcript contents equals: '
+'
+		
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testCrShow [
+
+	transcript crShow: 'toto'.
+	self assert: transcript contents equals: '
+toto' 
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testLesserThanLesserThan [
+
+	transcript << 'toto'.
+	self assert: transcript contents equals: 'toto'.
+	transcript << #(30 30 42 30).
+	self assert: transcript contents equals: 'toto30304230'
+		
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPut [
 
-	t nextPut: $a.
-	t << 'toto'.
-	t cr.
-	t nextPutAll: 'tintin'.
-	self assert: t contents equals: 'atoto
+	transcript nextPut: $a.
+	transcript << 'toto'.
+	transcript cr.
+	transcript nextPutAll: 'tintin'.
+	self assert: transcript contents equals: 'atoto
 tintin' 
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testNextPutAll [
+
+	transcript nextPutAll: #(30 30 42 30).
+	self assert: transcript contents equals: '#(30 30 42 30)'
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPutIsOverMaxEntry [
 
-	t maxEntry: 1.
-	t << 'A'.
-	t << 'B'.
-	self assert: t contents equals: 'B' 
+	transcript maxEntry: 1.
+	transcript << 'A'.
+	transcript << 'B'.
+	self assert: transcript contents equals: 'B' 
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testNextPutIsUnderMaxEntry [
 
-	t maxEntry: 5.
-	t << 'toto'.
-	self assert: t contents equals: 'toto' 
+	transcript maxEntry: 5.
+	transcript << 'toto'.
+	self assert: transcript contents equals: 'toto' 
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testShow [
 
-	t show: 'toto'.
-	self assert: t contents equals: 'toto' 
+	transcript show: 'toto'.
+	self assert: transcript contents equals: 'toto' 
 ]
 
 { #category : 'tests' }
 StThreadSafeTranscriptTest >> testShowAndClear [
 
-	t show: 'toto'.
-	self assert: t contents equals: 'toto'.
-	t clear.
-	self assert: t contents isEmpty
+	transcript show: 'toto'.
+	self assert: transcript contents equals: 'toto'.
+	transcript clear.
+	self assert: transcript contents isEmpty
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testShowCr [
+
+	transcript showCr: 'toto'.
+	self assert: transcript contents equals: 'toto
+' 
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testSpace [
+
+	transcript space.
+	self assert: transcript contents equals: ' '
+		
+]
+
+{ #category : 'tests' }
+StThreadSafeTranscriptTest >> testTab [
+
+	transcript tab.
+	self assert: transcript contents equals: '	'
+		
 ]

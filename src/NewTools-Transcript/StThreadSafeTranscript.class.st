@@ -24,7 +24,7 @@ Class {
 	#package : 'NewTools-Transcript'
 }
 
-{ #category : 'private - testing' }
+{ #category : 'private - test support' }
 StThreadSafeTranscript class >> createTestingInstance [
 "This method SHOULD NOT be used. It is only used for testing."
 
@@ -80,7 +80,8 @@ StThreadSafeTranscript >> << anObject [
 	No further conversions of anObject are applied.
 	Return self to accomodate chaining."
 
- 	anObject putOn: self
+	self critical: [  
+		anObject putOn: self ]
 ]
 
 { #category : 'private - actions' }
@@ -91,8 +92,6 @@ StThreadSafeTranscript >> addEntry: aString [
 		ifFalse: [ index + 1 ].
 	recordings at: index put: aString.
 	self announce: aString
-
-	
 ]
 
 { #category : 'initialization' }
@@ -104,7 +103,7 @@ StThreadSafeTranscript >> allocateRecordings: size [
 { #category : 'private - actions' }
 StThreadSafeTranscript >> announce: aString [
 
-	self worker schedule: [ 
+	self worker schedule: [
 		SystemAnnouncer uniqueInstance 
 			announce: (
 				NewEntryToTranscript new 
@@ -139,6 +138,12 @@ StThreadSafeTranscript >> cr [
 	self nextPut: Character cr
 ]
 
+{ #category : 'streaming' }
+StThreadSafeTranscript >> crShow: anObject [
+
+	self critical: [ self cr; show: anObject ]
+]
+
 { #category : 'private - actions' }
 StThreadSafeTranscript >> critical: block [
 	"Execute block making sure only one thread accesses the receiver"
@@ -168,7 +173,7 @@ StThreadSafeTranscript >> initialize [
 
 	super initialize.
 	mutex := Mutex new.
-	maxEntry := 3000.
+	maxEntry := 2000.
 	index := 0.
 	self allocateRecordings: maxEntry
 ]
@@ -192,7 +197,8 @@ StThreadSafeTranscript >> nextPut: aCharacter [
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> nextPutAll: value [
 
-	self critical: [ self addEntry: value asString ].
+	self critical: [ 
+		self addEntry: value asString ].
 	^ value
 ]
 
@@ -208,7 +214,7 @@ StThreadSafeTranscript >> reset [
 	^ self clear
 ]
 
-{ #category : 'updating' }
+{ #category : 'compatibility' }
 StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 
 	^ false
@@ -218,7 +224,14 @@ StThreadSafeTranscript >> shoutAboutToStyle: aPluggableShoutMorphOrView [
 StThreadSafeTranscript >> show: anObject [
 	"Output anObject asString on the receiver and show the output"
 	
-	self << anObject
+	self critical: [  
+		self << anObject ]
+]
+
+{ #category : 'streaming' }
+StThreadSafeTranscript >> showCr: anObject [
+
+	self critical: [ self show: anObject ; cr ]
 ]
 
 { #category : 'streaming' }
@@ -244,6 +257,8 @@ StThreadSafeTranscript >> tab [
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> worker [ 
 
-	worker ifNil: [ worker := TKTWorker new start ].
+	worker ifNil: [ 
+		worker := TKTWorker new start. 
+		worker name: 'ThreadSafeTranscript worker: ', UUID new asString ].
 	^ worker ensureIsWorking
 ]

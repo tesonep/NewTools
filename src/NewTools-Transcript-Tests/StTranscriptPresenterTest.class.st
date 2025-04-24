@@ -81,7 +81,7 @@ StTranscriptPresenterTest >> testReset [
 		self assert: presenter text text equals: 'test'.
 		self assert: transcript contents equals: 'test'.
 		presenter reset.
-		self assert: presenter text text equals: 'test'.
+		self assert: presenter text text equals: ''.
 		self assert: transcript contents equals: '' ]
 	ensure: [ window close ]
 ]
@@ -93,5 +93,5 @@ StTranscriptPresenterTest >> testSmoke [
 	
 	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].
 
-	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ]
 ]
