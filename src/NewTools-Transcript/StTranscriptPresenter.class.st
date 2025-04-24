@@ -9,7 +9,14 @@ Class {
 	#superclass : 'StPresenter',
 	#instVars : [
 		'text',
-		'transcript'
+		'transcript',
+		'leftToolbar',
+		'rightToolBar',
+		'worker',
+		'service',
+		'mutex',
+		'waitingEntries',
+		'keepServiceAliveStep'
 	],
 	#category : 'NewTools-Transcript',
 	#package : 'NewTools-Transcript'
@@ -40,6 +47,12 @@ StTranscriptPresenter class >> exampleDefault [
 	<script>
 	
 	self new open
+]
+
+{ #category : 'tools registry' }
+StTranscriptPresenter class >> maxEmptySteps [
+"Maximum amount of steps with the queue empty for the service to stop"
+	^ 5
 ]
 
 { #category : 'accessing' }
@@ -78,12 +91,58 @@ StTranscriptPresenter class >> registerToolsOn: aRegistry [
 	aRegistry register: self as: #transcript
 ]
 
+{ #category : 'actions' }
+StTranscriptPresenter >> clear [
+	
+	text clearContent
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> ensureTranscriptService [
+		
+	service ifNotNil: [ 
+		service isRunning ifFalse: [ service restart ].
+		^ service ].
+	
+	service := TKTParameterizableService new.
+	service name: 'Transcript service: ', UUID new asString.
+	service stepDelay: 50 milliSeconds.
+	service step: [ self processEntries ].
+	service start.
+	
+	^ service
+]
+
+{ #category : 'actions' }
+StTranscriptPresenter >> fetchOld [ 
+
+	text appendText: transcript contents
+]
+
 { #category : 'initialization' }
 StTranscriptPresenter >> initialize [ 
 
 	super initialize.
 	self registerToAnnouncer. 
-	transcript := StThreadSafeTranscript uniqueInstance
+	transcript := StThreadSafeTranscript uniqueInstance.
+	keepServiceAliveStep := 0
+]
+
+{ #category : 'initialization' }
+StTranscriptPresenter >> initializeLeftToolbar [
+
+	leftToolbar := self newToolbar 
+  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+	
+	leftToolbar
+		add: (leftToolbar newToolbarButton 
+			label: 'Clear';
+			icon: (self application iconNamed: #changeRemove );
+			help: 'Clears the transcriptor';
+			action: [ self clear ])
+			
 ]
 
 { #category : 'initialization' }
@@ -91,9 +150,38 @@ StTranscriptPresenter >> initializePresenters [
 
 
 	text := self newText.
-	text beEditable
+	text beEditable.
+	self initializeToolbars
 	
 	
+]
+
+{ #category : 'initialization' }
+StTranscriptPresenter >> initializeRightToolbar [
+		
+	rightToolBar := self newToolbar 
+	  		addStyle: 'stToolbar';
+  		displayMode: self application toolbarDisplayMode;
+  		yourself.
+			
+	rightToolBar 
+		add: (rightToolBar newToolbarButton 
+			label: 'Reset';
+			icon: (self application iconNamed: #glamorousTrash );
+			help: 'Resets the old recordings of the transcript';
+			action: [ self reset ]);
+		add: (rightToolBar newToolbarButton 
+			label: 'Fetch';
+			icon: (self application iconNamed: #down );
+			help: 'Fetches the old recordings of the transcript';
+			action: [ self fetchOld ])
+]
+
+{ #category : 'initialization' }
+StTranscriptPresenter >> initializeToolbars [
+
+	self initializeLeftToolbar.
+	self initializeRightToolbar
 ]
 
 { #category : 'initialization' }
@@ -101,26 +189,65 @@ StTranscriptPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		whenOpenedDo: [ self updateNewEntry ];
 		whenClosedDo: [ self unregister ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'layout' }
 StTranscriptPresenter >> layout [ 
 
-	^ SpBoxLayout newLeftToRight 
-			add: text;
-			yourself
+	^ SpBoxLayout newTopToBottom 
+		add: (SpBoxLayout newLeftToRight 
+			add: leftToolbar ;
+			add: rightToolBar expand: false ) 
+			expand: false;
+		add: text;
+		yourself
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> maybeStopService [
+
+	self waitingEntries isEmpty 
+		ifFalse: [ 
+			keepServiceAliveStep := 0.
+			^ self ].
+		
+	keepServiceAliveStep := keepServiceAliveStep + 1.
+	keepServiceAliveStep = self class maxEmptySteps 
+		ifTrue: [ service stop ].
+
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> mutex [
+		
+	^ mutex ifNil: [ mutex := Mutex new ]
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> processEntries [
+	
+	self mutex critical: [  
+		| entry |
+		self maybeStopService.
+		[ entry := self waitingEntries nextOrNil ]
+			whileNotNil: [ text appendText: entry ] ]
 ]
 
 { #category : 'registration' }
 StTranscriptPresenter >> registerToAnnouncer [
 
-	
 	SystemAnnouncer uniqueInstance
 		when: NewEntryToTranscript
-		send: #updateNewEntry
+		send: #updateNewEntry: 
 		to: self
+]
+
+{ #category : 'actions' }
+StTranscriptPresenter >> reset [
+
+	transcript clear.
+	self clear
 ]
 
 { #category : 'accessing' }
@@ -132,25 +259,40 @@ StTranscriptPresenter >> text [
 { #category : 'accessing' }
 StTranscriptPresenter >> transcript: aTranscript [
 
-	transcript := aTranscript.
-	self updateNewEntry
+	transcript := aTranscript
 ]
 
 { #category : 'registration' }
 StTranscriptPresenter >> unregister [
 
-	^ SystemAnnouncer uniqueInstance unsubscribe: self
+	self ensureTranscriptService stop.
+	SystemAnnouncer uniqueInstance unsubscribe: self
 ]
 
-{ #category : 'accessing' }
-StTranscriptPresenter >> updateNewEntry [
+{ #category : 'private' }
+StTranscriptPresenter >> updateNewEntry: anAnnouncement [
 
-	text text: transcript contents.
-	
+	self mutex critical: [ 
+		self waitingEntries nextPut: anAnnouncement entry.
+		self ensureTranscriptService ]
+]
+
+{ #category : 'private' }
+StTranscriptPresenter >> waitingEntries [
+
+	^ waitingEntries ifNil: [ waitingEntries := WaitfreeQueue new ]
 ]
 
 { #category : 'accessing' }
 StTranscriptPresenter >> windowTitle [
 
 	^ 'Transcript'
+]
+
+{ #category : 'accessing' }
+StTranscriptPresenter >> worker [
+
+	worker ifNil: [ worker := TKTWorker new start ].
+	worker ensureIsWorking.
+	^ worker
 ]
