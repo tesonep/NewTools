@@ -93,5 +93,5 @@ StTranscriptPresenterTest >> testSmoke [
 	
 	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].
 
-	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ]
 ]
