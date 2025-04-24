@@ -258,7 +258,14 @@ StThreadSafeTranscript >> tab [
 StThreadSafeTranscript >> worker [ 
 
 	worker ifNil: [ 
-		worker := TKTWorker new start. 
-		worker name: 'ThreadSafeTranscript worker: ', UUID new asString ].
+		worker := TKTWorker new  
+			name: 'ThreadSafeTranscript worker: ', UUID new asString ; 
+			start ].
 	^ worker ensureIsWorking
+]
+
+{ #category : 'private - accessing' }
+StThreadSafeTranscript >> workerProcess [
+
+	^ worker process process
 ]
