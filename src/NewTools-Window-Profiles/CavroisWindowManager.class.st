@@ -271,19 +271,19 @@ CavroisWindowManager class >> renameProfile [
 				             profile := dialog presenter selectedItem.
 				             dialog presenter delete ].
 	presenter openModal.
-
-	presenter := SpRequestDialog new
-		             title: 'Rename ' , profile key;
-		             label: 'What is the new name of your profile ?';
-		             text: '';
-		             acceptLabel: 'Confirm';
-		             cancelLabel: 'Cancel';
-		             onAccept: [ :dialog |
-				             self
-					             updateProfile: profile
-					             withName: dialog presenter text.
-				             MenubarMorph reset ];
-		             openDialog
+	profile ifNotNil: [
+			presenter := SpRequestDialog new
+				             title: 'Rename ' , profile key;
+				             label: 'What is the new name of your profile ?';
+				             text: '';
+				             acceptLabel: 'Confirm';
+				             cancelLabel: 'Cancel';
+				             onAccept: [ :dialog |
+						             self
+							             updateProfile: profile
+							             withName: dialog presenter text.
+						             MenubarMorph reset ];
+				             openDialog ]
 ]
 
 { #category : 'actions' }
@@ -383,13 +383,13 @@ CavroisWindowManager class >> toggleProfilePlaceholders [
 		 morph isKindOf: CavVisualPlaceHolderMorph ])
 		ifTrue: [ self current removeVisualPlaceholders ]
 		ifFalse: [
-			self current currentProfile ifNotNil: [
-				| allWindows |
-				allWindows := self currentWorld windowsSatisfying: [ :w |
-					              w isCollapsed not ].
-				self current currentProfile placeHolders do: [ :each |
-					each display ].
-				allWindows do: [ :w | w hide ] ] ]
+				self current currentProfile ifNotNil: [
+						| allWindows |
+						allWindows := self currentWorld windowsSatisfying: [ :w |
+							              w isCollapsed not ].
+						self current currentProfile placeHolders do: [ :each |
+							each display ].
+						allWindows do: [ :w | w hide ] ] ]
 ]
 
 { #category : 'updating' }

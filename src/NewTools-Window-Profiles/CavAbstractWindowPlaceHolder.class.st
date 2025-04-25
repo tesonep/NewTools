@@ -9,8 +9,7 @@ Class {
 		'kind',
 		'position',
 		'strategy',
-		'count',
-		'visualPlaceHolder'
+		'count'
 	],
 	#category : 'NewTools-Window-Profiles-Model',
 	#package : 'NewTools-Window-Profiles',
@@ -53,6 +52,7 @@ CavAbstractWindowPlaceHolder >> count: aNumber [
 { #category : 'api' }
 CavAbstractWindowPlaceHolder >> display [
 
+	| visualPlaceHolder |
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
@@ -65,7 +65,7 @@ CavAbstractWindowPlaceHolder >> display [
 							                       (TextMorph new contents:
 									                        kind printString) width / 2)
 					                      @ position y + 3).
-					visualPlaceHolder placeHolder: self.
+	visualPlaceHolder placeHolder: self.
 	visualPlaceHolder openInWorld
 ]
 
