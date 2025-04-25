@@ -1,3 +1,6 @@
+"
+I'm a test presenter for testing how the StPresenters react to settings changes announcements from their applications.
+"
 Class {
 	#name : 'StTestSettingChangeReactivePresenter',
 	#superclass : 'StPresenter',
