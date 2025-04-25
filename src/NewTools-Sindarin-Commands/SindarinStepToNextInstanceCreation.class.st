@@ -12,6 +12,11 @@ Class {
 	#package : 'NewTools-Sindarin-Commands'
 }
 
+{ #category : 'default' }
+SindarinStepToNextInstanceCreation class >> defaultDescription [ 
+	^'Steps to the next object instantiation'
+]
+
 { #category : 'accessing - defaults' }
 SindarinStepToNextInstanceCreation class >> defaultIconName [
 	^ #smallNew

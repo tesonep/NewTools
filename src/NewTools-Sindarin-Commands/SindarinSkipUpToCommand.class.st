@@ -29,12 +29,8 @@ SindarinSkipUpToCommand class >> defaultName [
 
 { #category : 'hooks' }
 SindarinSkipUpToCommand >> execute [
-	| targetNode |
-	
-	self flag: 'Context should actually be a debugger or a sindarin debugger'.
-	self flag: 'Suspicious call to internal debugger UI state'.
-	targetNode := self context sindarinDebugger
-		bestNodeFor: self context code selectionInterval.
-	self context sindarinDebugger skipUpToNode: targetNode.
+
+	self context sindarinDebugger skipUpToNode:
+		self context sindarinTargetNode.
 	self context forceSessionUpdate
 ]

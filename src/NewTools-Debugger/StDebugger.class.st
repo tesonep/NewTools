@@ -171,6 +171,13 @@ StDebugger class >> debugSession: aDebugSession [
 	^ debugger
 ]
 
+{ #category : 'commands' }
+StDebugger class >> debuggerCodeCommandGroupFor: rootCommandGroup [
+
+	^ rootCommandGroup / StDebuggerCodeCommandTreeBuilder groupName
+	  / StDebuggerCodeCommandTreeBuilder new codeDebugCommandsGroupName
+]
+
 { #category : 'accessing' }
 StDebugger class >> debuggerContextClass [
 	^ StDebuggerContext
@@ -189,6 +196,11 @@ StDebugger class >> debuggerLayoutSettingsOn: aBuilder [
 			#( #beHorizontalCodeThenStack #beHorizontalStackThenCode
 			   #beVerticalCodeThenStack #beVerticalStackThenCode );
 		description: ''
+]
+
+{ #category : 'commands' }
+StDebugger class >> debuggerToolbarCommandGroupFor: rootCommandGroup [
+	^ rootCommandGroup / StDebuggerToolbarCommandTreeBuilder groupName
 ]
 
 { #category : 'accessing' }
@@ -392,7 +404,7 @@ StDebugger >> buildToolbar: toolbar withCommands: commands [
 { #category : 'toolbar' }
 StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGroups [
 
-	advancedCommandGroups do: [ :cmdGroup |
+	(advancedCommandGroups sort: [ :a :b| a name < b name ]) do: [ :cmdGroup |
 		| menuButton |
 		menuButton := self newMenu.
 		cmdGroup allCommands do: [ :cmd |
@@ -401,7 +413,8 @@ StDebugger >> buildToolbarMenus: menuBar withCommandsGroups: advancedCommandGrou
 					name: cmd name;
 					icon: (self iconNamed: cmd iconName);
 					description: cmd description;
-					action: [ cmd execute ] ] ].
+					action: [ cmd execute ];
+					enabled: cmd canBeExecuted ] ].
 
 		menuBar addGroup: [ :group |
 			group addItem: [ :item |

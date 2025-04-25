@@ -44,6 +44,12 @@ CavAbstractWindowPlaceHolder >> count [
 	^ count
 ]
 
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> count: aNumber [
+
+	count := aNumber
+]
+
 { #category : 'api' }
 CavAbstractWindowPlaceHolder >> display [
 

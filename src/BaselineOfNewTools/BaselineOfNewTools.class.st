@@ -161,7 +161,9 @@ BaselineOfNewTools >> baseline: spec [
 		
 			"Houston we have a bug, ColorPicker depends on roassal! "
 			package: 'ColorPicker'  with: [ spec requires: #('NewTools-Core' ) ];
-			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ].
+			package: 'ColorPicker-Tests' with: [ spec requires: #( ColorPicker ) ];
+			
+			package: 'NewTools-ProcessBrowser' with: [ spec requires: #('NewTools-Core') ].
 
 		spec
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
@@ -259,6 +261,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'WelcomeBrowser' with: #( 'NewTools-WelcomeBrowser' );
 			group: 'ShortcutsBrowser' with: #( 'NewTools-ShortcutsBrowser' );	
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
+			group: 'ProcessBrowser' with: #('NewTools-ProcessBrowser');
 			group: 'DependencyAnalyser' with: #('NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests');
 			
 
@@ -283,6 +286,7 @@ BaselineOfNewTools >> baseline: spec [
 						'WelcomeBrowser'
 						'ShortcutsBrowser'
 						'ColorPickerGroup'
+						'ProcessBrowser'
 						'DependencyAnalyser' ) ]
 ]
 

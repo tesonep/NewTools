@@ -42,12 +42,7 @@ SindarinJumpToCaretCommand class >> defaultName [
 { #category : 'execution' }
 SindarinJumpToCaretCommand >> execute [
 
-	| targetNode |
-	self flag:
-		'Context should actually be a debugger or a sindarin debugger'.
-	self flag: 'Suspicious call to internal debugger UI state'.
-	targetNode := self context sindarinDebugger bestNodeFor:
-		              self context code selectionInterval.
-	self context sindarinDebugger moveToNode: targetNode.
-	self context forceSessionUpdate.
+	self context sindarinDebugger moveToNode:
+		self context sindarinTargetNode.
+	self context forceSessionUpdate
 ]

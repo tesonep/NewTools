@@ -385,15 +385,18 @@ StFinderPresenter >> defaultLayout [
 				   addLast: configButton;
 				   yourself)
 		  expand: false;
-			add: (SpBoxLayout newLeftToRight
+		  add: (SpBoxLayout newLeftToRight
 				   add: searchOptions;
 				   add: environmentBar;
 				   yourself)
-			expand: false;
-			add: resultTree;
-			add: resultButtonBar expand: false;		
-			add: previewSourcePresenter;
-			addLast: resultStatusBar expand: false;
+		  expand: false;
+		  add: (SpPanedLayout newTopToBottom
+				   add: (SpBoxLayout newTopToBottom
+						    add: resultTree;
+						    add: resultButtonBar expand: false;
+						    yourself);
+				   add: previewSourcePresenter);
+		  addLast: resultStatusBar expand: false;
 		  yourself
 ]
 

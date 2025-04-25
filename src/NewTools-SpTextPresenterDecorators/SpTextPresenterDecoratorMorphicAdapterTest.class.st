@@ -41,5 +41,23 @@ SpTextPresenterDecoratorMorphicAdapterTest >> testRemoveAllTextPresenterDecorato
 ]
 
 { #category : 'tests' }
+SpTextPresenterDecoratorMorphicAdapterTest >> testRemoveAllTextPresenterDecoratorsWhenThereAreMoreThanOne [
+
+	| anotherDecorator |
+	anotherDecorator := SpTextPresenterDecorator new.
+	anotherDecorator highlightColor: Color red.	
+	anotherDecorator title: 'Another test segment decoration'.
+	anotherDecorator icon: (self iconNamed: #halt).
+	anotherDecorator iconBlock: [ :seg| seg].
+	anotherDecorator interval: (42 to: 90).
+
+	self assertEmpty: widget segments.
+	adapter addTextSegmentDecoration: decorator.
+	adapter addTextSegmentDecoration: anotherDecorator.
+	adapter removeAllTextSegmentDecorations.
+	self assertEmpty: widget segments
+]
+
+{ #category : 'tests' }
 SpTextPresenterDecoratorMorphicAdapterTest >> testTransformTextPresenterDecoratorToSegment [
 ]
