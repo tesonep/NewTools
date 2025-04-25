@@ -52,8 +52,7 @@ CavVisualPlaceHolderMorph >> initialize [
 	self borderColor: UITheme current selectionColor.
 	self color: (UITheme current lightSelectionColor alpha: 0.2).
 	self eventHandler: MorphicEventHandler new.
-	self eventHandler on: #mouseDown send: #handleClick: to: self.
-	
+	self eventHandler on: #mouseDown send: #handleClick: to: self
 ]
 
 { #category : 'accessing' }

@@ -297,7 +297,7 @@ CavroisWindowManager class >> renameProfileItem: aBuilder [
 		iconName: #edit
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class initialization' }
 CavroisWindowManager class >> reset [
 
 	<script>
