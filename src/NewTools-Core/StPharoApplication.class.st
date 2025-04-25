@@ -47,6 +47,12 @@ StPharoApplication class >> use: application during: aBlock [
 	^ aBlock ensure: [ Current := oldCurrent ]
 ]
 
+{ #category : 'settings' }
+StPharoApplication >> codeShowLineNumbers [
+
+	^ StPharoSettings codeShowLineNumbers
+]
+
 { #category : 'accessing - resources' }
 StPharoApplication >> defaultWindowExtent [
 	
