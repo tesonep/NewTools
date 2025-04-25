@@ -20,7 +20,11 @@ To fully understand my fonctionnalities, you can:
 
 - Lastly, with 'Export Profile', current profile will be saved in a STON file in the Preferences folder as ""Profile:YourProfileName.ston"".
 Any profile can be load with 'Import Profile', make sure your file has 'Profile' in it to work.
-
+A profile can be loaded in the StartUp Preferences files, just add this piece of code in it:   StartupAction
+        name: 'Load Profile'
+        code: [
+			CavroisWindowManager current makeProfileCurrent: profileName
+        ].
 "
 Class {
 	#name : 'CavroisWindowManager',
