@@ -520,6 +520,23 @@ CavroisWindowManager >> kindFor: aString [
 	^ classToolMapping at: aString ifAbsent: [ #Unknown ]
 ]
 
+{ #category : 'action' }
+CavroisWindowManager >> makeProfileCurrent: aProfileName [
+
+	| profile |
+	profile := STON fromString:
+		           FileLocator preferences asFileReference / 'pharo'
+		           / ('Profile:{1}.ston' format: { aProfileName }).
+	currentProfile ifNotNil: [
+			self profiles
+				at: (currentProfile name copyReplaceAll: '(Current)' with: '')
+				put: currentProfile.
+			self profiles removeKey: (self profiles keyAtValue: currentProfile) ].
+	self profiles at: aProfileName , ' (Current)' put: profile.
+	self currentProfile: profile.
+	MenubarMorph reset
+]
+
 { #category : 'actions' }
 CavroisWindowManager >> nextPlaceHolderIndexFor: aWindowType ifAbsent: aBlock [
 
