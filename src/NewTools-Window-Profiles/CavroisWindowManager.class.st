@@ -125,10 +125,10 @@ CavroisWindowManager class >> createProfile [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
-			             self updateCurrentProfileBeforeCreation.
-			             self current addProfileFromWindows:
-					             dialog presenter text , ' (Current)'.
-			             MenubarMorph reset ];
+				             self current updatePreviousCurrentProfile.
+				             self current addProfileFromWindows:
+						             dialog presenter text , ' (Current)'.
+				             MenubarMorph reset ];
 		             openDialog
 ]
 
@@ -407,20 +407,6 @@ CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileK
 ]
 
 { #category : 'updating' }
-CavroisWindowManager class >> updateCurrentProfileBeforeCreation [
-
-	| oldProfile oldKey newKey |
-	self current currentProfile ifNotNil: [
-		oldProfile := self current currentProfile.
-		oldKey := self current profiles keyAtValue: oldProfile.
-		newKey := oldKey copyReplaceAll: '(Current)' with: ''.
-
-		self current profiles
-			at: newKey put: oldProfile;
-			removeKey: oldKey ]
-]
-
-{ #category : 'updating' }
 CavroisWindowManager class >> updateProfile [
 
 	self current updateProfile
@@ -527,11 +513,7 @@ CavroisWindowManager >> makeProfileCurrent: aProfileName [
 	profile := STON fromString:
 		           FileLocator preferences asFileReference / 'pharo'
 		           / ('Profile:{1}.ston' format: { aProfileName }).
-	currentProfile ifNotNil: [
-			self profiles
-				at: (currentProfile name copyReplaceAll: '(Current)' with: '')
-				put: currentProfile.
-			self profiles removeKey: (self profiles keyAtValue: currentProfile) ].
+	self updatePreviousCurrentProfile.
 	self profiles at: aProfileName , ' (Current)' put: profile.
 	self currentProfile: profile.
 	MenubarMorph reset
@@ -635,6 +617,19 @@ CavroisWindowManager >> transitionToProfile [
 				 w model presenter class = placeHolder kind) ifTrue: [
 				w position: placeHolder position.
 				w extent: placeHolder extent ] ] ]
+]
+
+{ #category : 'update' }
+CavroisWindowManager >> updatePreviousCurrentProfile [
+
+	| oldProfile oldKey newKey |
+	currentProfile ifNotNil: [
+			oldProfile := currentProfile.
+			oldKey := profiles keyAtValue: oldProfile.
+			newKey := oldKey copyReplaceAll: '(Current)' with: ''.
+			profiles
+				at: newKey put: oldProfile;
+				removeKey: oldKey ]
 ]
 
 { #category : 'updating' }
