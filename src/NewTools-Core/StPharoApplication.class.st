@@ -70,14 +70,18 @@ StPharoApplication >> defaultWindowPresenterClass [
 StPharoApplication >> initialize [
 
 	super initialize.
-	self initializeConfiguration
+	self initializeConfiguration.
+	self subscribeToSettingsAnnouncements
 ]
 
 { #category : 'initialization' }
 StPharoApplication >> initializeConfiguration [
 
 	self resetConfiguration.
-	self class codeSupportAnnouncer weak when: UIThemeChanged send: #resetConfiguration to: self
+	self class codeSupportAnnouncer weak
+		when: UIThemeChanged
+		send: #resetConfiguration
+		to: self
 ]
 
 { #category : 'private - factory' }
@@ -121,11 +125,27 @@ StPharoApplication >> run [
 StPharoApplication >> shutDown: quitting [
 ]
 
+{ #category : 'settings' }
+StPharoApplication >> stPharoSettingChanged: aPharoSettingChangeAnnouncement [
+
+	(self windows collect: #presenter) do: [ :presenter |
+		presenter announce: aPharoSettingChangeAnnouncement ]
+]
+
 { #category : 'system startup' }
 StPharoApplication >> startUp: resuming [
 
 	self resetConfiguration.
 	self resetBackend.
+]
+
+{ #category : 'settings' }
+StPharoApplication >> subscribeToSettingsAnnouncements [
+
+	self class codeSupportAnnouncer weak
+		when: CodeShowLineNumbersChanged
+		send: #stPharoSettingChanged:
+		to: self
 ]
 
 { #category : 'tool management' }

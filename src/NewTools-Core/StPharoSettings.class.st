@@ -18,9 +18,10 @@ StPharoSettings class >> codeShowLineNumbers [
 ]
 
 { #category : 'settings' }
-StPharoSettings class >> codeShowLineNumbers: aBoolean [ 
+StPharoSettings class >> codeShowLineNumbers: aBoolean [
 
-	CodeShowLineNumbers := aBoolean
+	CodeShowLineNumbers := aBoolean.
+	self codeSupportAnnouncer announce: CodeShowLineNumbersChanged new
 ]
 
 { #category : 'defaults' }
