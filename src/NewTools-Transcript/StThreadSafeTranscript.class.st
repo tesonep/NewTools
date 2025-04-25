@@ -266,6 +266,9 @@ StThreadSafeTranscript >> worker [
 
 { #category : 'private - accessing' }
 StThreadSafeTranscript >> workerProcess [
+	"I need this access to be able to mark the transcript process as a known process 
+	 (used in testUnknownProcesses)
+	 DO NOT USE!"
 
-	^ worker process process
+	^ self worker process process
 ]
