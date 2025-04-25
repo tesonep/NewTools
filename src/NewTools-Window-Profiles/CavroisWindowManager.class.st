@@ -323,12 +323,16 @@ CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
 CavroisWindowManager class >> saveProfile: aLocation [
 
 	| fileString fileName file saveName |
+	self current currentProfile ifNil: [
+			self inform: 'No profile registered'.
+			^ self ].
 	saveName := self current currentProfile name
 		            copyReplaceAll: '(Current)'
 		            with: ''.
 	fileString := STON toString: self current currentProfile.
 	fileName := 'Profile:' , saveName trimBoth , '.ston'.
 	file := aLocation / fileName.
+
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
 ]
