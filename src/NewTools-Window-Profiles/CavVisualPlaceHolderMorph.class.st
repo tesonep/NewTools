@@ -87,7 +87,6 @@ CavVisualPlaceHolderMorph >> remove [
 				             key ifEmpty: [
 							             CavroisWindowManager current currentProfile
 								             placeHolderDictionnary removeKey: class ].
-				             self delete.
-				             CavroisWindowManager current removeVisualPlaceholders ].
+				             self delete ].
 	presenter openDialog
 ]

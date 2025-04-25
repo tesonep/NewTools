@@ -182,7 +182,9 @@ CavroisWindowManager class >> loadProfile [
 									at: baseName put: oldProfile;
 									removeKey: oldKey ].
 						self current profiles
-							at: profile name , ' (Current)'
+							at:
+							(profile name copyReplaceAll: '(Current)' with: '')
+							, ' (Current)'
 							put: profile.
 						self current currentProfile: profile.
 						MenubarMorph reset ]
