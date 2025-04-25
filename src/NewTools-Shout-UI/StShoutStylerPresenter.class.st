@@ -3,7 +3,7 @@ Provides a Spec presenter to preview how a Shout code style would be displayed i
 It also allows you to apply the selected style.
 
 ```
-SHStylePresenter open.
+StShoutStylerPresenter open.
 ```
 "
 Class {
