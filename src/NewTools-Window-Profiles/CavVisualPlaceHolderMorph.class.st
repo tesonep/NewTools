@@ -18,13 +18,15 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 	| presenter description |
 	presenter := SpSelectDialog new
 		             title: 'Change Strategy';
-		             label: 'Select the strategy you want to use';
+		             label:
+			             'Current strategy is '
+			             , placeHolder strategy class asString
+			             , ' , select the strategy you want to use';
 		             items: CavWindowStrategy subclasses;
 		             display: [ :each | each title ];
 		             onAccept: [ :dialog |
 			             placeHolder strategy:
-					             dialog presenter selectedItem new.
-			             CavroisWindowManager current removeVisualPlaceholders ].
+					             dialog presenter selectedItem new ].
 	description := presenter newText text:
 		               presenter list selectedItem comment.
 	presenter layout add: description.
