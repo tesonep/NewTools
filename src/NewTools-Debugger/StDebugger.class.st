@@ -803,10 +803,11 @@ StDebugger >> initialize [
 	super initialize.
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
-  	self subscribeToExtensionToggleAnnouncement.
+	self subscribeToExtensionToggleAnnouncement.
 	self subscribeToLayoutChangesAnnouncement.
-	
-	programmaticallyClosed := false.
+	self subscribeToSettingsChangesAnnouncements.
+
+	programmaticallyClosed := false
 ]
 
 { #category : 'initialization' }
@@ -864,7 +865,6 @@ StDebugger >> initializePresenters [
 	self initializeInspector.
 	self initializeExtensionTools.
 	self setStackAndCodeContainer.
-	self subscribeToSettingsChangesAnnouncements.
 	self layout: self defaultLayout
 ]
 
