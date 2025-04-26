@@ -822,9 +822,8 @@ StDebugger >> initializeCode [
 
 	code := self instantiate: StDebuggerCodePresenter.
 	code debuggerActionModel: self debuggerActionModel.
-	code whenSubmitDo: [ :text |	
-		self acceptCodeChanges: text string forContext: self selectedContext.
-		code adapter widget formatSourceCode. ].
+	code whenSubmitDo: [ :text |
+		self acceptCodeChanges: text string forContext: self selectedContext ].
 	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ]
 ]
 
