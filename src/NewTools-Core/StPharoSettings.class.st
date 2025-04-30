@@ -14,7 +14,8 @@ Class {
 StPharoSettings class >> codeShowLineNumbers [
 	"Defines if code editors will display line numbers"
 
-	^ CodeShowLineNumbers ifNil: [ CodeShowLineNumbers := self defaultCodeShowLineNumbers ]
+	^ CodeShowLineNumbers ifNil: [
+		  CodeShowLineNumbers := StPharoApplication defaultCodeShowLineNumbers ]
 ]
 
 { #category : 'settings' }
@@ -22,12 +23,6 @@ StPharoSettings class >> codeShowLineNumbers: aBoolean [
 
 	CodeShowLineNumbers := aBoolean.
 	self codeSupportAnnouncer announce: CodeShowLineNumbersChanged new
-]
-
-{ #category : 'defaults' }
-StPharoSettings class >> defaultCodeShowLineNumbers [
-
-	^ true
 ]
 
 { #category : 'defaults' }
