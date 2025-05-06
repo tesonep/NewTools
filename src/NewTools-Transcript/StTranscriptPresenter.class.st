@@ -139,7 +139,7 @@ StTranscriptPresenter >> initializeLeftToolbar [
 		add: (leftToolbar newToolbarButton 
 			label: 'Clear';
 			icon: (self application iconNamed: #changeRemove );
-			help: 'Clears the transcriptor';
+			help: 'Clears the transcript';
 			action: [ self clear ])
 			
 ]
@@ -167,12 +167,12 @@ StTranscriptPresenter >> initializeRightToolbar [
 		add: (rightToolBar newToolbarButton 
 			label: 'Reset';
 			icon: (self application iconNamed: #glamorousTrash );
-			help: 'Resets the old recordings of the transcript';
+			help: 'Resets the transcript history';
 			action: [ self reset ]);
 		add: (rightToolBar newToolbarButton 
 			label: 'Fetch';
 			icon: (self application iconNamed: #down );
-			help: 'Fetches the old recordings of the transcript';
+			help: 'Fetches transcript history';
 			action: [ self fetchOld ])
 ]
 
