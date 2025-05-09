@@ -45,7 +45,7 @@ CompiledCode >> inspectionAST: aBuilder [
 CompiledCode >> inspectionBytecode: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Bytecode'>
 
-	^ aBuilder newListView 
+	^ aBuilder newEasyListView
 		items: self symbolicBytecodes;
 		display: [ :aBytecode | aBytecode printString ];
 		yourself
