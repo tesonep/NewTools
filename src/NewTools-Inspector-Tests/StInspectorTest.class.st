@@ -30,12 +30,12 @@ StInspectorTest >> testBuildPresentationWithDoesNotUndertandShouldReturnCodePres
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithDnuingPresentation) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithDnuingPresentation:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	
 	"Smoke test -> creating an inspection presenter should not fail. Instead it should create an error presenter"
-	context newInspectionPresenter
+	context newInspectionPresenterOnApplication: SpApplication new
 ]
 
 { #category : 'tests' }
@@ -44,12 +44,12 @@ StInspectorTest >> testBuildPresentationWithFailureShouldReturnCodePresenter [
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithFailingPresentation) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithFailingPresentation:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	
 	"Smoke test -> creating an inspection presenter should not fail. Instead it should create an error presenter"
-	context newInspectionPresenter
+	context newInspectionPresenterOnApplication: SpApplication new
 ]
 
 { #category : 'tests' }
@@ -58,12 +58,12 @@ StInspectorTest >> testBuildPresentationWithHaltShouldReturnCodePresenter [
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithHaltingPresentation) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithHaltingPresentation:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	
 	"Smoke test -> creating an inspection presenter should not fail. Instead it should create an error presenter"
-	context newInspectionPresenter
+	context newInspectionPresenterOnApplication: SpApplication new
 ]
 
 { #category : 'tests' }
@@ -72,7 +72,7 @@ StInspectorTest >> testConfigureContextWithDoesNotUnderstandShouldMarkContextAsE
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithDnuingContext) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithDnuingContext:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	self assert: context isErrorContext
@@ -84,7 +84,7 @@ StInspectorTest >> testConfigureContextWithErrorShouldMarkContextAsError [
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithFailingContext) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithFailingContext:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	self assert: context isErrorContext
@@ -96,7 +96,7 @@ StInspectorTest >> testConfigureContextWithHaltShouldMarkContextAsError [
 
 	| collector pragma context |
 	collector := StInspectionCollector on: StInspectorMockObject new.
-	pragma := (StInspectorMockObject >> #methodWithHaltingContext) pragmas first.
+	pragma := (StInspectorMockObject >> #methodWithHaltingContext:) pragmas first.
 
 	context := collector contextFromPragma: pragma.
 	self assert: context isErrorContext

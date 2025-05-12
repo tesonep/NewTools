@@ -32,7 +32,7 @@ StMetaInspectionTest >> testInspectionMeta [
 
 	presenter := self newInspectionOn: Object new.
 	self 
-		assert: Object new inspectionMeta class
+		assert: (Object new inspectionMeta: presenter) class
 		equals: inspectionClass
 ]
 
