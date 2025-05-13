@@ -26,5 +26,6 @@ StDebuggerSessionPresenter >> defaultLayout [
 
 { #category : 'layout' }
 StDebuggerSessionPresenter >> initializePresenters [
-	sessionInspector := (StDebuggerMetaSession forDebugger: debugger) inspectionRaw
+
+	sessionInspector := (StDebuggerMetaSession forDebugger: debugger) inspectionRaw: self
 ]
