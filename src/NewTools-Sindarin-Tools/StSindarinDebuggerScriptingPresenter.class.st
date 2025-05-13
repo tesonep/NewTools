@@ -88,18 +88,17 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
-
-	resultLabel := self newLabel.
 	code := self newCode.
+	code interactionModel: StSindarinContextInteractionModel new.
 	code syntaxHighlight: true.
+	"code contextMenu: [  ]."
 	code text: 'sindarin stepOver'.
-	code whenTextChangedDo: [
-		hasUnsavedCodeChanges := true.
-		self updateLabel ].
-	resultInspection := nil inspectionRaw.
+	self updateCode.
+	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
+	self flag: 'set the doit conetxt of the code to the current selected context'.
+	resultInspection := nil inspectionRaw: self.
 	resultInspection owner: self.
-	self initializeToolbar.
-	self updateLabel
+	self initializeToolbar
 ]
 
 { #category : 'initialization' }

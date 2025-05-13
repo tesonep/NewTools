@@ -23,14 +23,6 @@ StRawInspectionPresenter class >> buildCommandsGroupWith: presenter forRoot: aCm
 		register: (SpBrowsePointersToCommand forSpecContext: presenter)
 ]
 
-{ #category : 'layout' }
-StRawInspectionPresenter class >> defaultLayout [
-
-	^ SpBoxLayout newTopToBottom 
-		add: #attributeTable;
-		yourself
-]
-
 { #category : 'accessing' }
 StRawInspectionPresenter class >> label [
 
@@ -59,6 +51,14 @@ StRawInspectionPresenter >> addValuesColumn [
 StRawInspectionPresenter >> addVariablesColumn [
 
 	attributeTable addColumn: self variablesColumn
+]
+
+{ #category : 'layout' }
+StRawInspectionPresenter >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom 
+		add: attributeTable;
+		yourself
 ]
 
 { #category : 'ports' }
@@ -166,9 +166,7 @@ StRawInspectionPresenter >> selectedPath [
 { #category : 'building' }
 StRawInspectionPresenter >> setAttributeTable [
 
-	attributeTable
-		roots: self inspectorNodes;
-		children: [ :node | node children ]
+	attributeTable children: [ :node | node children ]
 ]
 
 { #category : 'stepping' }
@@ -183,6 +181,12 @@ StRawInspectionPresenter >> step [
 
 	mementoNodes := rootNodes collect: #mementoValue.
 	attributeTable updateRootsKeepingSelection: rootNodes
+]
+
+{ #category : 'building' }
+StRawInspectionPresenter >> updatePresenter [
+
+	attributeTable roots: self inspectorNodes
 ]
 
 { #category : 'building' }

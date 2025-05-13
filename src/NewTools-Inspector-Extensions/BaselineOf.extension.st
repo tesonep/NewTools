@@ -1,12 +1,12 @@
 Extension { #name : 'BaselineOf' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-BaselineOf >> inspectionProject [
+BaselineOf >> inspectionProject: aBuilder [
 	<inspectorPresentationOrder: 10 title: 'Project'>
 	| specs |
 	
 	specs := self project version spec packageSpecsInLoadOrder.
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 
@@ -19,12 +19,12 @@ BaselineOf >> inspectionProject [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-BaselineOf >> inspectionRecord [
+BaselineOf >> inspectionRecord: aBuilder [
 	<inspectorPresentationOrder: 20 title: 'Record'>
 	| specs |
 	
 	specs := self project version record spec packageSpecsInLoadOrder.
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 

@@ -1,10 +1,10 @@
 Extension { #name : 'SymbolicBytecode' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-SymbolicBytecode >> inspectionSource [
+SymbolicBytecode >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
-	^ SpCodePresenter new 
+	^ aBuilder newCode 
 		beForBehavior: self method methodClass;
 		text: self method sourceCode;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight

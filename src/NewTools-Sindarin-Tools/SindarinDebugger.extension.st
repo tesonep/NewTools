@@ -11,10 +11,10 @@ SindarinDebugger >> debuggerExtensionKey [
 ]
 
 { #category : '*NewTools-Sindarin-Tools' }
-SindarinDebugger >> inspectionSindarinDebugger [
+SindarinDebugger >> inspectionSindarinDebugger: aBuilder [
 	<inspectorPresentationOrder: -10 title: 'Sindarin'>
 
-	^ StSindarinDebuggerPresenter on: self
+	^ aBuilder instantiate: StSindarinDebuggerPresenter on: self
 ]
 
 { #category : '*NewTools-Sindarin-Tools' }

@@ -225,14 +225,14 @@ StProcessBrowser >> changePriorityOfSelectedProcess [
 { #category : 'initialization' }
 StProcessBrowser >> connectPresenters [
 
-	processListPresenter outputActivationPort
+	processListPresenter outputSelectionPort
 		transmitTo: stackListPresenter defaultInputPort
-			transform: [ :aProcess | self model stackListFor: aProcess ].
+		transform: [ :aProcess | self model stackListFor: aProcess ].
 			
 	processListPresenter outputSelectionPort 
 		transmitDo: [ self updateToolbar ].
 		
-	stackListPresenter outputActivationPort
+	stackListPresenter outputSelectionPort
 		transmitDo: [ :aContext | self updateCodeFromContext: aContext ]
 ]
 
@@ -327,12 +327,10 @@ StProcessBrowser >> initializePresenters [
 		fillWith: self generalToolbarActions.
 			
 	(processListPresenter := self newEasyListView)
-		activateOnSingleClick;
 		actions: self processListActions;
 		display: [ :aProcess | self displayForProcess: aProcess ].
 
 	(stackListPresenter := self newEasyListView)
-		activateOnSingleClick;
 		actions: self contextToolbarActions;
 		display: [ :aContext | self displayForContext: aContext ].
 	

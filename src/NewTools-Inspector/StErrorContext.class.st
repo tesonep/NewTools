@@ -15,9 +15,9 @@ Class {
 }
 
 { #category : 'initialization' }
-StErrorContext >> basicNewInspectionPresenter [
+StErrorContext >> basicNewInspectionPresenter: builder [
 
-	^ self debugInspectorPresenter
+	^ self debugInspectorPresenter: builder
 ]
 
 { #category : 'initialization' }

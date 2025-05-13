@@ -1,24 +1,24 @@
 Extension { #name : 'Package' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Package >> baselineInspector [
-
+Package >> inspectionBaselineInspector: aBuilder [
 	<inspectorPresentationOrder: 2 title: 'Belongs to Baselines'>
 	| items |
+
 	items := BaselineOf allSubclasses select: [ :e | e allPackageNames includes: self name ].
-	^ SpListPresenter new
+	^ aBuilder newList
 		items: items;
 		yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Package >> overwiew [
-
+Package >> inspectionOverwiew: aBuilder [
 	<inspectorPresentationOrder: 1 title: 'Overwiew'>
 	| items |
+	
 	items :={ 'Classes' -> self classes . 'Defined classes' -> self definedClasses . 'Methods' -> self methods }.
 	items := items collect: [ :e | StInspectorAssociationNode hostObject: e ].
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		alternateRowsColor;
 		items: items;
 		addColumn: (SpStringTableColumn

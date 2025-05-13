@@ -1,10 +1,10 @@
 Extension { #name : 'OCProgramNode' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-OCProgramNode >> inspectionAST [
+OCProgramNode >> inspectionAST: aBuilder [
 	<inspectorPresentationOrder: 35 title: 'AST'>
 
-	^ SpTreePresenter new 
+	^ aBuilder newTree 
 		roots: { self };
 		children: [ :aNode | aNode children ];
 		display: [ :each | 
@@ -20,20 +20,20 @@ OCProgramNode >> inspectionAST [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-OCProgramNode >> inspectionASTDump [
+OCProgramNode >> inspectionASTDump: aBuilder [
+	<inspectorPresentationOrder: 50 title: 'AST Dump'>
 
-	  <inspectorPresentationOrder: 50 title: 'AST Dump'>
-	  ^ SpCodePresenter new
-		    text: (OCParser parseExpression: self dump) formattedCode;
-		    beForScripting;
-		    "this is an expression"yourself
+	^ aBuilder newCode 
+		text: (RBParser parseExpression: self dump) formattedCode; 
+		beForScripting; "this is an expression"
+		yourself
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-OCProgramNode >> inspectionSource [
+OCProgramNode >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 30 title: 'Method Source'>
 
-	^ SpCodePresenter new 
+	^ aBuilder newCode 
 		beForMethod: self methodNode;
 		text: (self source ifNil: [ self formattedCode ]);
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
