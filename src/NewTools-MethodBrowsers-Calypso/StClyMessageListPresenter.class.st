@@ -2,7 +2,6 @@ Class {
 	#name : 'StClyMessageListPresenter',
 	#superclass : 'StComposedMessageListPresenter',
 	#instVars : [
-		'scopes',
 		'query',
 		'navigationEnvironment'
 	],

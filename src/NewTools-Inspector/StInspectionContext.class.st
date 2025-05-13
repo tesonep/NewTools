@@ -16,7 +16,8 @@ Class {
 		'title',
 		'order',
 		'methodSelector',
-		'evaluator'
+		'evaluator',
+		'application'
 	],
 	#category : 'NewTools-Inspector-Model',
 	#package : 'NewTools-Inspector',
@@ -40,13 +41,20 @@ StInspectionContext >> active: aBoolean [
 { #category : 'private - factory' }
 StInspectionContext >> basicNewInspectionPresenter [
 
+	^ self basicNewInspectionPresenter: (self newPresenterBuilderOnApplication: application)
+]
+
+{ #category : 'private - factory' }
+StInspectionContext >> basicNewInspectionPresenter: aBuilder [
+
 	^ self methodSelectorNeedsBuilder 
 		ifTrue: [ 
 			self inspectedObject 
 				inspectorPerform: self methodSelector 
-				with: self newPresenterBuilder ]
+				with: aBuilder ]
 		ifFalse: [ 
-			self inspectedObject inspectorPerform: self methodSelector ]
+			Warning signal: 'Inspections made without presenter builder are no longer supported. Please rewrite your inspection using it (chech in the system for examples)'.
+			^ nil ]
 ]
 
 { #category : 'accessing' }
@@ -72,31 +80,32 @@ StInspectionContext >> contextMethodSelector [
 ]
 
 { #category : 'initialization' }
-StInspectionContext >> debugInspectorPresenter [
+StInspectionContext >> debugInspectorPresenter: aBuilder [
 
 	"Create a debug inspector presenter.
 	
 	I create a code presenter that contains code to recreate this presenter.
 	This is useful for debugging and reporting errors when rendering/building"
-
 	| debugExpression |
-	debugExpression := String streamContents: [ :str |
-		str nextPutAll: '"Error while creating the inspector. Debug it by executing the following:"'; cr.
-		str nextPutAll: '| collector pragma context |'; cr.
-		str nextPutAll: 'collector := StInspectionCollector on: self.'; cr.
-		str
+
+	debugExpression := String streamContents: [ :stream |
+		stream nextPutAll: '"Error while creating the inspector. Debug it by executing the following:"'; cr.
+		stream nextPutAll: '| collector pragma context |'; cr.
+		stream nextPutAll: 'collector := StInspectionCollector on: self.'; cr.
+		stream
 			nextPutAll: 'pragma := (';
 			nextPutAll: inspectedObject class name;
 			nextPutAll: ' lookupSelector: #';
 			nextPutAll: methodSelector;
 			nextPutAll: ') pragmas first.'; cr.
-		str nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
-		str nextPutAll: 'context basicNewInspectionPresenter'.
-	].
+		stream nextPutAll: 'context := collector basicContextFromPragma: pragma.'; cr.
+		stream nextPutAll: 'context basicNewInspectionPresenter' ].
 
-	"I am itself an evaluator, no need to some other one."
+	"I am itself an evaluator, no need to show other."
 	self withoutEvaluator.
-	^ SpCodePresenter new
+	
+	^ aBuilder newCode
+		addStyle: 'stCode';
 		beForObject: self inspectedObject;
 		text: debugExpression;
 		yourself
@@ -168,23 +177,27 @@ StInspectionContext >> methodSelectorNeedsBuilder [
 ]
 
 { #category : 'private - factory' }
-StInspectionContext >> newInspectionPresenter [
+StInspectionContext >> newInspectionPresenterOnApplication: anApplication [
+	| builder |
 
+	builder := self newPresenterBuilderOnApplication: anApplication.
 	"Create an inspection presenter for the current object and pragma.
 	If creation fails, create a debug inspector instead"
-	^ [self basicNewInspectionPresenter]
-		on: Exception do: [ :error |
-			self debugInspectorPresenter ]
+	^ [ self basicNewInspectionPresenter: builder ]
+		on: Exception 
+		do: [ :error | self debugInspectorPresenter: builder ]
 ]
 
 { #category : 'factory' }
-StInspectionContext >> newInspectionView [
+StInspectionContext >> newInspectionViewOnApplication: anApplication [
 	| presenter |
 
-	presenter := self newInspectionPresenter.
-	^ presenter asInspection
-		context: self;
-		yourself
+	application := anApplication.
+	presenter := self newInspectionPresenterOnApplication: anApplication.
+	^ presenter ifNotNil: [ 
+		presenter asInspection
+			context: self;
+			yourself ]
 ]
 
 { #category : 'private - factory' }
@@ -192,6 +205,14 @@ StInspectionContext >> newPresenterBuilder [
 
 	^ SpPresenterBuilder new
 		application: StPharoApplication current;
+		yourself
+]
+
+{ #category : 'private - factory' }
+StInspectionContext >> newPresenterBuilderOnApplication: anApplication [
+
+	^ SpPresenterBuilder new
+		application: anApplication;
 		yourself
 ]
 

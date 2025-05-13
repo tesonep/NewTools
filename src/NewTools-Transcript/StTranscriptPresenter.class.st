@@ -12,7 +12,6 @@ Class {
 		'transcript',
 		'leftToolbar',
 		'rightToolBar',
-		'worker',
 		'service',
 		'mutex',
 		'waitingEntries',
@@ -140,7 +139,7 @@ StTranscriptPresenter >> initializeLeftToolbar [
 		add: (leftToolbar newToolbarButton 
 			label: 'Clear';
 			icon: (self application iconNamed: #changeRemove );
-			help: 'Clears the transcriptor';
+			help: 'Clears the transcript';
 			action: [ self clear ])
 			
 ]
@@ -168,12 +167,12 @@ StTranscriptPresenter >> initializeRightToolbar [
 		add: (rightToolBar newToolbarButton 
 			label: 'Reset';
 			icon: (self application iconNamed: #glamorousTrash );
-			help: 'Resets the old recordings of the transcript';
+			help: 'Resets the transcript history';
 			action: [ self reset ]);
 		add: (rightToolBar newToolbarButton 
 			label: 'Fetch';
 			icon: (self application iconNamed: #down );
-			help: 'Fetches the old recordings of the transcript';
+			help: 'Fetches transcript history';
 			action: [ self fetchOld ])
 ]
 
@@ -226,12 +225,21 @@ StTranscriptPresenter >> mutex [
 
 { #category : 'private' }
 StTranscriptPresenter >> processEntries [
+	| entries |
 	
-	self mutex critical: [  
-		| entry |
-		self maybeStopService.
-		[ entry := self waitingEntries nextOrNil ]
-			whileNotNil: [ text appendText: entry ] ]
+	self maybeStopService.
+	self waitingEntries ifEmpty: [ ^ self ].
+	
+	entries := #().
+	self mutex critical: [
+		entries := self waitingEntries copy. 
+		self waitingEntries removeAll ].
+
+	self application defer: [
+		| newText |
+		newText := String streamContents: [ :stream | 
+			entries do: [ :each | stream nextPutAll: each ] ].
+		text appendText: newText ]
 ]
 
 { #category : 'registration' }
@@ -272,27 +280,19 @@ StTranscriptPresenter >> unregister [
 { #category : 'private' }
 StTranscriptPresenter >> updateNewEntry: anAnnouncement [
 
+	self ensureTranscriptService.
 	self mutex critical: [ 
-		self waitingEntries nextPut: anAnnouncement entry.
-		self ensureTranscriptService ]
+		self waitingEntries add: anAnnouncement entry ]
 ]
 
 { #category : 'private' }
 StTranscriptPresenter >> waitingEntries [
 
-	^ waitingEntries ifNil: [ waitingEntries := WaitfreeQueue new ]
+	^ waitingEntries ifNil: [ waitingEntries := OrderedCollection new: 100 ]
 ]
 
 { #category : 'accessing' }
 StTranscriptPresenter >> windowTitle [
 
 	^ 'Transcript'
-]
-
-{ #category : 'accessing' }
-StTranscriptPresenter >> worker [
-
-	worker ifNil: [ worker := TKTWorker new start ].
-	worker ensureIsWorking.
-	^ worker
 ]

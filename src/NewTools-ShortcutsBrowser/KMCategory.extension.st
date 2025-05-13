@@ -9,5 +9,5 @@ KMCategory >> scopeName [
 { #category : '*NewTools-ShortcutsBrowser' }
 KMCategory >> shortcuts [
 
-	^ (self entriesAt: #all) keymaps
+	^ (self entriesAt: #all) keymaps asOrderedCollection
 ]

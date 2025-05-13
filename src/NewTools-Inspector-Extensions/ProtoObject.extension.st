@@ -19,11 +19,11 @@ ProtoObject >> inspectionContexts [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-ProtoObject >> inspectionRaw [
+ProtoObject >> inspectionRaw: aBuilder [
 	"This is the most basic presentation showing the state of the object"
 	<inspectorPresentationOrder: 900 title: 'Raw'>
 
-	^ StRawInspectionPresenter on: self
+	^ aBuilder instantiate: StRawInspectionPresenter on: self
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }

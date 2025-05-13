@@ -23,7 +23,9 @@ SmalltalkCISpec {
   			'Metacello.*',
   			'System-Settings-Tests.*',
   			'System-Dependencies-Tests',
-  			'ReleaseTests.*' ],
+  			'ReleaseTests.*',
+  			'Files-Tests.*',
+  			'Zinc-Tests.*' ],
   		#classes : [
   			#OutOfMemoryTest,
   			#TraitFileOutTest,

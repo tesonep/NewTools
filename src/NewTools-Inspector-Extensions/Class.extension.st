@@ -1,7 +1,7 @@
 Extension { #name : 'Class' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-Class >> inspectionAllReferences [
+Class >> inspectionAllReferences: aBuilder [
 	<inspectorPresentationOrder: 920 title: 'All References'>
 	| allReferences allClassesReferencing sortBlock treeTable childrenBlock |
 	
@@ -17,7 +17,7 @@ Class >> inspectionAllReferences [
 		(allReferences	select: [ :rbMethodDef | 
 				rbMethodDef methodClass == aClass ])	asSortedCollection: sortBlock ].
 	
-	treeTable := SpTreeTablePresenter new.	
+	treeTable := aBuilder newTreeTable.	
 	treeTable
 		roots: allClassesReferencing;
 		children: childrenBlock.
@@ -27,23 +27,22 @@ Class >> inspectionAllReferences [
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Class >> inspectionClassComment [
+Class >> inspectionClassComment: aBuilder [
 	"This provides an editable comment of the current class"
-
 	<inspectorPresentationOrder: 920 title: 'Comment'>
-	^ SpTextPresenter new
-		  text: self comment;
-		  whenSubmitDo: [ :text | self comment: text stamp: '' ]
+	
+	^ aBuilder newText
+		text: self comment;
+		whenSubmitDo: [ :text | self comment: text stamp: '' ]
 ]
 
 { #category : '*NewTools-Inspector-Extensions' }
-Class >> inspectionClassDefinition [
-
+Class >> inspectionClassDefinition: aBuilder [
 	"This provides an editable comment of the current class"
-
 	<inspectorPresentationOrder: 915 title: 'Definition'>
-	^ SpCodePresenter new
-		  beForObject: self;
-		  text: self definitionString;
-		  whenSubmitDo: [ :code | (Smalltalk compiler evaluate: code) fluidInstall ]
+	
+	^ aBuilder newCode
+	  beForObject: self;
+	  text: self definitionString;
+	  whenSubmitDo: [ :code | (Smalltalk compiler evaluate: code) fluidInstall ]
 ]

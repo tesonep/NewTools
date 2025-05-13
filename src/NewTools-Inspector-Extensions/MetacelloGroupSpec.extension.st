@@ -1,14 +1,14 @@
 Extension { #name : 'MetacelloGroupSpec' }
 
 { #category : '*NewTools-Inspector-Extensions' }
-MetacelloGroupSpec >> inspectionIncludes [
+MetacelloGroupSpec >> inspectionIncludes: aBuilder [
 	<inspectorPresentationOrder: 10 title: 'Include'>
 	| specs |
 
 	specs := self project version spec packageSpecsInLoadOrder 
 		select: [ :each | self includes includes: each name ].
 		
-	^ SpTablePresenter new
+	^ aBuilder newTable
 		addColumn: (SpStringTableColumn 
 			title: 'Type' 
 			evaluated: [ :aSpec | aSpec type ]) 
