@@ -144,7 +144,6 @@ StProcessBrowser >> buildGeneralToolbarActions [
 
 { #category : 'private' }
 StProcessBrowser >> buildProcessToolbarActions [
-
 	^ SpActionGroup new
 		addActionWith: [ :action | action 
 			name: 'Terminate';
