@@ -143,7 +143,7 @@ StPharoApplication >> startUp: resuming [
 StPharoApplication >> subscribeToSettingsAnnouncements [
 
 	self class codeSupportAnnouncer weak
-		when: CodeShowLineNumbersChanged
+		when: SpCodeShowLineNumbersChanged
 		send: #stPharoSettingChanged:
 		to: self
 ]

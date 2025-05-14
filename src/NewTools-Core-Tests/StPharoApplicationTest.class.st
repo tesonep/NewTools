@@ -27,7 +27,7 @@ StPharoApplicationTest >> testSettingChangesSubscription [
 
 	self
 		assert: presenter changedSetting class
-		identicalTo: CodeShowLineNumbersChanged
+		identicalTo: SpCodeShowLineNumbersChanged
 ]
 
 { #category : 'tests' }
