@@ -83,25 +83,6 @@ CavWindowStrategyTest >> testExactReplaceStrategyDoesNotChangeExtentAndPosition 
 ]
 
 { #category : 'tests' }
-CavWindowStrategyTest >> testNullStrategyDoesNotChangeExtentAndPosition [
-
-	| strategy |
-	self skip.
-	self flag: #revisitAlexis.
-	[ strategy := CavNullStrategy new.
-	strategy placeHolder: placeHolder.
-	strategy placePresenter: presenter.
-	presenter open. 
-	self assert: presenter extent equals: 666@42.
-	self assert: presenter position equals: 10@10.] ensure: [ presenter delete ] 
-
-	
-	
-	
-	
-]
-
-{ #category : 'tests' }
 CavWindowStrategyTest >> testPopUpReplaceStrategyDoesNotChangeExtentAndPosition [
 
 	| strategy |

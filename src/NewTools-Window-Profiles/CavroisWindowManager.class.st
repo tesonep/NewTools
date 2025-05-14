@@ -20,7 +20,11 @@ To fully understand my fonctionnalities, you can:
 
 - Lastly, with 'Export Profile', current profile will be saved in a STON file in the Preferences folder as ""Profile:YourProfileName.ston"".
 Any profile can be load with 'Import Profile', make sure your file has 'Profile' in it to work.
-
+A profile can be loaded in the StartUp Preferences files, just add this piece of code in it:   StartupAction
+        name: 'Load Profile'
+        code: [
+			CavroisWindowManager current makeProfileCurrent: profileName
+        ].
 "
 Class {
 	#name : 'CavroisWindowManager',
@@ -125,10 +129,10 @@ CavroisWindowManager class >> createProfile [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
-			             self updateCurrentProfileBeforeCreation.
-			             self current addProfileFromWindows:
-					             dialog presenter text , ' (Current)'.
-			             MenubarMorph reset ];
+				             self current updatePreviousCurrentProfile.
+				             self current addProfileFromWindows:
+						             dialog presenter text , ' (Current)'.
+				             MenubarMorph reset ];
 		             openDialog
 ]
 
@@ -182,7 +186,9 @@ CavroisWindowManager class >> loadProfile [
 									at: baseName put: oldProfile;
 									removeKey: oldKey ].
 						self current profiles
-							at: profile name , ' (Current)'
+							at:
+							(profile name copyReplaceAll: '(Current)' with: '')
+							, ' (Current)'
 							put: profile.
 						self current currentProfile: profile.
 						MenubarMorph reset ]
@@ -269,19 +275,19 @@ CavroisWindowManager class >> renameProfile [
 				             profile := dialog presenter selectedItem.
 				             dialog presenter delete ].
 	presenter openModal.
-
-	presenter := SpRequestDialog new
-		             title: 'Rename ' , profile key;
-		             label: 'What is the new name of your profile ?';
-		             text: '';
-		             acceptLabel: 'Confirm';
-		             cancelLabel: 'Cancel';
-		             onAccept: [ :dialog |
-				             self
-					             updateProfile: profile
-					             withName: dialog presenter text.
-				             MenubarMorph reset ];
-		             openDialog
+	profile ifNotNil: [
+			presenter := SpRequestDialog new
+				             title: 'Rename ' , profile key;
+				             label: 'What is the new name of your profile ?';
+				             text: '';
+				             acceptLabel: 'Confirm';
+				             cancelLabel: 'Cancel';
+				             onAccept: [ :dialog |
+						             self
+							             updateProfile: profile
+							             withName: dialog presenter text.
+						             MenubarMorph reset ];
+				             openDialog ]
 ]
 
 { #category : 'actions' }
@@ -295,7 +301,7 @@ CavroisWindowManager class >> renameProfileItem: aBuilder [
 		iconName: #edit
 ]
 
-{ #category : 'accessing' }
+{ #category : 'class initialization' }
 CavroisWindowManager class >> reset [
 
 	<script>
@@ -321,12 +327,16 @@ CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
 CavroisWindowManager class >> saveProfile: aLocation [
 
 	| fileString fileName file saveName |
+	self current currentProfile ifNil: [
+			self inform: 'No profile registered'.
+			^ self ].
 	saveName := self current currentProfile name
 		            copyReplaceAll: '(Current)'
 		            with: ''.
 	fileString := STON toString: self current currentProfile.
 	fileName := 'Profile:' , saveName trimBoth , '.ston'.
 	file := aLocation / fileName.
+
 	file writeStreamDo: [ :stream | stream nextPutAll: fileString ].
 	self inform: 'Profile saved !'
 ]
@@ -377,13 +387,13 @@ CavroisWindowManager class >> toggleProfilePlaceholders [
 		 morph isKindOf: CavVisualPlaceHolderMorph ])
 		ifTrue: [ self current removeVisualPlaceholders ]
 		ifFalse: [
-			self current currentProfile ifNotNil: [
-				| allWindows |
-				allWindows := self currentWorld windowsSatisfying: [ :w |
-					              w isCollapsed not ].
-				self current currentProfile placeHolders do: [ :each |
-					each display ].
-				allWindows do: [ :w | w hide ] ] ]
+				self current currentProfile ifNotNil: [
+						| allWindows |
+						allWindows := self currentWorld windowsSatisfying: [ :w |
+							              w isCollapsed not ].
+						self current currentProfile placeHolders do: [ :each |
+							each display ].
+						allWindows do: [ :w | w hide ] ] ]
 ]
 
 { #category : 'updating' }
@@ -398,20 +408,6 @@ CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileK
 		put: self current profiles values first.
 	self current profiles removeKey: oldKey.
 	self current currentProfile: (self current profiles at: newKey)
-]
-
-{ #category : 'updating' }
-CavroisWindowManager class >> updateCurrentProfileBeforeCreation [
-
-	| oldProfile oldKey newKey |
-	self current currentProfile ifNotNil: [
-		oldProfile := self current currentProfile.
-		oldKey := self current profiles keyAtValue: oldProfile.
-		newKey := oldKey copyReplaceAll: '(Current)' with: ''.
-
-		self current profiles
-			at: newKey put: oldProfile;
-			removeKey: oldKey ]
 ]
 
 { #category : 'updating' }
@@ -514,6 +510,19 @@ CavroisWindowManager >> kindFor: aString [
 	^ classToolMapping at: aString ifAbsent: [ #Unknown ]
 ]
 
+{ #category : 'action' }
+CavroisWindowManager >> makeProfileCurrent: aProfileName [
+
+	| profile |
+	profile := STON fromString:
+		           FileLocator preferences asFileReference / 'pharo'
+		           / ('Profile:{1}.ston' format: { aProfileName }).
+	self updatePreviousCurrentProfile.
+	self profiles at: aProfileName , ' (Current)' put: profile.
+	self currentProfile: profile.
+	MenubarMorph reset
+]
+
 { #category : 'actions' }
 CavroisWindowManager >> nextPlaceHolderIndexFor: aWindowType ifAbsent: aBlock [
 
@@ -612,6 +621,19 @@ CavroisWindowManager >> transitionToProfile [
 				 w model presenter class = placeHolder kind) ifTrue: [
 				w position: placeHolder position.
 				w extent: placeHolder extent ] ] ]
+]
+
+{ #category : 'update' }
+CavroisWindowManager >> updatePreviousCurrentProfile [
+
+	| oldProfile oldKey newKey |
+	currentProfile ifNotNil: [
+			oldProfile := currentProfile.
+			oldKey := profiles keyAtValue: oldProfile.
+			newKey := oldKey copyReplaceAll: '(Current)' with: ''.
+			profiles
+				at: newKey put: oldProfile;
+				removeKey: oldKey ]
 ]
 
 { #category : 'updating' }
