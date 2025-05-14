@@ -22,7 +22,7 @@ StPharoSettings class >> codeShowLineNumbers [
 StPharoSettings class >> codeShowLineNumbers: aBoolean [
 
 	CodeShowLineNumbers := aBoolean.
-	self codeSupportAnnouncer announce: CodeShowLineNumbersChanged new
+	self codeSupportAnnouncer announce: SpCodeShowLineNumbersChanged new
 ]
 
 { #category : 'defaults' }

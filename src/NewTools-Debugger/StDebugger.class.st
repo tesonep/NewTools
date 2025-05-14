@@ -1390,7 +1390,7 @@ StDebugger >> subscribeToLayoutChangesAnnouncement [
 StDebugger >> subscribeToSettingsChangesAnnouncements [
 
 	self announcer
-		when: CodeShowLineNumbersChanged
+		when: SpCodeShowLineNumbersChanged
 		send: #codeShowLineNumbersChanged:
 		to: self
 ]

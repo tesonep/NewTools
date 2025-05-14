@@ -28,12 +28,12 @@ StTestSettingChangeReactivePresenter >> initialize [
 
 	super initialize.
 	self announcer
-		when: CodeShowLineNumbersChanged
+		when: SpCodeShowLineNumbersChanged
 		send: #settingChanged:
 		to: self
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 StTestSettingChangeReactivePresenter >> settingChanged: aSettingChangedAnnouncement [
 
 	changedSetting := aSettingChangedAnnouncement
