@@ -10,6 +10,27 @@ Class {
 }
 
 { #category : 'tests' }
+StPharoApplicationTest >> testSettingChangesSubscription [
+
+	| app presenter window oldSetting |
+	app := StPharoApplication basicNew.
+	app subscribeToSettingsAnnouncements.
+	presenter := StTestSettingChangeReactivePresenter new.
+	presenter application: app.
+	window := SpWindowPresenter presenter: presenter.
+	app registerWindow: window.
+
+	self assert: presenter changedSetting isNil.
+
+	oldSetting := StPharoSettings codeShowLineNumbers.
+	StPharoSettings codeShowLineNumbers: oldSetting.
+
+	self
+		assert: presenter changedSetting class
+		identicalTo: CodeShowLineNumbersChanged
+]
+
+{ #category : 'tests' }
 StPharoApplicationTest >> testToolRegistration [
 	
 	| app |

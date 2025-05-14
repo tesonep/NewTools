@@ -531,6 +531,12 @@ StDebugger >> codeLayout [
 		  yourself
 ]
 
+{ #category : 'subscription' }
+StDebugger >> codeShowLineNumbersChanged: aCodeShowLineNumbersChangedAnnouncement [
+
+	self code announce: aCodeShowLineNumbersChangedAnnouncement
+]
+
 { #category : 'initialization' }
 StDebugger >> connectPresenters [
 
@@ -797,10 +803,11 @@ StDebugger >> initialize [
 	super initialize.
 	self debuggerActionModel updateContextPredicate.
 	self forceSessionUpdate.
-  	self subscribeToExtensionToggleAnnouncement.
+	self subscribeToExtensionToggleAnnouncement.
 	self subscribeToLayoutChangesAnnouncement.
-	
-	programmaticallyClosed := false.
+	self subscribeToSettingsChangesAnnouncements.
+
+	programmaticallyClosed := false
 ]
 
 { #category : 'initialization' }
@@ -815,7 +822,7 @@ StDebugger >> initializeCode [
 
 	code := self instantiate: StDebuggerCodePresenter.
 	code debuggerActionModel: self debuggerActionModel.
-	code whenSubmitDo: [ :text | 
+	code whenSubmitDo: [ :text |
 		self acceptCodeChanges: text string forContext: self selectedContext ].
 	code whenResetDo: [ self discardCodeChangesFor: self selectedContext ]
 ]
@@ -857,7 +864,6 @@ StDebugger >> initializePresenters [
 	self initializeInspector.
 	self initializeExtensionTools.
 	self setStackAndCodeContainer.
-
 	self layout: self defaultLayout
 ]
 
@@ -1200,6 +1206,12 @@ StDebugger >> settings [
 	^ self class settings 
 ]
 
+{ #category : 'subscription' }
+StDebugger >> showLineNumbersAndUpdate [
+
+	self code showLineNumbersAndUpdate
+]
+
 { #category : 'stack' }
 StDebugger >> stack [
 	^ self debuggerActionModel stack 
@@ -1372,6 +1384,15 @@ StDebugger >> subscribeToExtensionToggleAnnouncement [
 StDebugger >> subscribeToLayoutChangesAnnouncement [
 
 	self class codeSupportAnnouncer weak when: StDebuggerLayoutChangedAnnouncement send: #updateLayout to: self
+]
+
+{ #category : 'subscription' }
+StDebugger >> subscribeToSettingsChangesAnnouncements [
+
+	self announcer
+		when: CodeShowLineNumbersChanged
+		send: #codeShowLineNumbersChanged:
+		to: self
 ]
 
 { #category : 'toolbar' }
