@@ -617,7 +617,24 @@ CavroisWindowManager >> transitionToProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	self currentProfile reset.
-	self allCurrentWindows do: [ :each |
-		self currentProfile add: (self placeHolderFromWindow: each) ]
+	| windowsByKind placeholdersByKind |
+	windowsByKind := Dictionary new.
+	placeholdersByKind := Dictionary new.
+
+	self allCurrentWindows do: [ :window |
+			(windowsByKind
+				 at: (self placeHolderFromWindow: window) kind
+				 ifAbsentPut: [ OrderedCollection new ]) add: window ].
+	self currentProfile placeHolders do: [ :ph |
+			placeholdersByKind
+				at: ph kind
+				put: (placeholdersByKind at: ph kind ifAbsent: [ 0 ]) + 1 ].
+	windowsByKind keysAndValuesDo: [ :kind :windows |
+			| existingCount newCount |
+			existingCount := placeholdersByKind at: kind ifAbsent: [ 0 ].
+			newCount := windows size - existingCount.
+			newCount > 0 ifTrue: [
+					1 to: newCount do: [ :i |
+						self currentProfile add:
+							(self placeHolderFromWindow: windows first) ] ] ]
 ]
