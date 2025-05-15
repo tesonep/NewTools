@@ -102,8 +102,9 @@ AbstractFileReference >> inspectionGifContext: aContext [
 
 { #category : '*NewTools-Inspector-Extensions' }
 AbstractFileReference >> inspectionItems: aBuilder [
+	<inspectorPresentationOrder: 0 title: 'Items'>
 	| items |
-	
+
 	items := 	self directories, self files.
 	self isRoot ifFalse: [ 
 		items := items copyWithFirst: self parent ]. 
