@@ -77,40 +77,42 @@ StWelcomeBrowser >> addPresenter: aPresenter [
 { #category : 'accessing - contents' }
 StWelcomeBrowser >> changesContent [
 
-	^ '# Pharo 12 changes overview
+	^ '# Pharo 13 changes overview
 
 A large international community of developers worked hard to prepare a new release of the Pharo platform.
 
 ## Highlights
 
 ### Tools
-
-- Fluid class syntax is now default (old definition method is deprecated)
-- More tools migrated to Spec2
-- Enhancements on Spec2
-- Leaner version of Metacello
-- Strict mode for FFI
+	- Spec Tools remembering their size
+	- Microdown enhancements
+	- HDPI support 
+	- Zoomable UI 
+	- New list, tables and trees allowing any presenter as their content
+	- Better source code text navigation and edition
+	- New Process Browser
+	- New Transcript (introducing also the Object Transcript)
+	- Organic window manager 
 
 ### System 
-
-- New breakpoint system
-- New architecture for refactorings (migration on its way)
-- Code Loading speed improvement
-- Fully optimised version of package tags
+	- Better refactorings UX Cleaner leaner code logic
+	- More robust and faster halt implementation
+	- Debug points to enhance debugging experience
    
 ### Virtual machine
-
-- Permanent space available
-- String/ByteArray comparisson speed up
+   - Async IO using epoll on unixes
+   - Faster byte array / string comparisons
+   - Improve windows support for non ASCII filenames
+   - FreeBSD support
+   - Update SDL2 version in OSX (Intel & Apple)
+   - Minimal MacOS version required raised to MacOS 11 and above
 
 ## Status
 Current Pharo development status:
-1. 338 forks on GitHub
-2. 865 issues closed since Pharo 11
-3. 1895 Pull requests processed since Pharo 11, not counting separately managed projects:
+1. XXX forks on GitHub
+2. XXX issues closed since Pharo 12
+3. XXXX Pull requests processed since Pharo 12, not counting separately managed projects:
 - [http://github.com/pharo-spec/NewTools](http://github.com/pharo-spec/NewTools)
-- [http://github.com/pharo-spec/NewTools-DocumentBrowser](http://github.com/pharo-spec/NewTools-DocumentBrowser)
-- [https://github.com/pharo-spec/NewTools-WelcomeBrowser](https://github.com/pharo-spec/NewTools-WelcomeBrowser)
 - [http://github.com/pharo-spec/Spec](http://github.com/pharo-spec/Spec)
 - [http://github.com/pharo-vcs/Iceberg](http://github.com/pharo-vcs/Iceberg)
 - [https://github.com/pharo-graphics/Roassal](https://github.com/pharo-graphics/Roassal)
