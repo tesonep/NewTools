@@ -5,6 +5,7 @@ CompiledMethod >> inspectionPragmas: aBuilder [
 	<inspectorPresentationOrder: 50 title: 'Pragmas'> 
 
 	^ aBuilder newList
+		addStyle: 'stList';
 		items: self pragmas;
 		display: [ :aPragma | aPragma printString ];
 		yourself
