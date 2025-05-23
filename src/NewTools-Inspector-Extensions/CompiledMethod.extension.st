@@ -21,7 +21,7 @@ CompiledMethod >> inspectionPragmasContext: aContext [
 CompiledMethod >> inspectionSource: aBuilder [
 	<inspectorPresentationOrder: 20 title: 'Method Source'>
 	
-	^ aBuilder newMethod
+	^ aBuilder newCode
 		addStyle: 'stCode';
 		beForMethod: self method;
 		text: self sourceCode;
