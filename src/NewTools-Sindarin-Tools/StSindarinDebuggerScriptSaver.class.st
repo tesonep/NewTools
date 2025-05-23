@@ -34,5 +34,5 @@ StSindarinDebuggerScriptSaver class >> scripts [
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptSaver class >> scriptsNames [
-   ^ scripts key
+   ^ scripts keys
 ]

@@ -42,14 +42,21 @@ StSindarinDebuggerScriptSaverPresenter >> initializePresenters [
 
 	scriptList := self newList.
 
-	scriptList items: #( 1 2 3 )
+	scriptList items: StSindarinDebuggerScriptSaver scriptsNames.
+	
 ]
 
 { #category : 'showing' }
 StSindarinDebuggerScriptSaverPresenter >> openModal [
-
+	self reloadListSrcipt.
 	super openModal cancelled ifTrue: [ ^ nil ].
 	^ chooseElement
+]
+
+{ #category : 'as yet unclassified' }
+StSindarinDebuggerScriptSaverPresenter >> reloadListSrcipt [
+
+	scriptList items: StSindarinDebuggerScriptSaver scriptsNames.
 ]
 
 { #category : 'transmission' }
