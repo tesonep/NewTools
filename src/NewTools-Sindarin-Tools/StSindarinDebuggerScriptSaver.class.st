@@ -17,7 +17,7 @@ StSindarinDebuggerScriptSaver class >> clearScripts [
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptSaver class >> loadScript: aString [
-	^ self scripts at: aString.
+	^ self scripts at: aString ifAbsent: nil.
 	
 ]
 
