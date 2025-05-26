@@ -90,13 +90,11 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
-	
 	scriptNameInput := self newTextInput.
-	scriptNameInput text: 'lastModified'.
 	resultLabel := self newLabel.
 	code := self newCode.
+	self loadLastScript.
 	code syntaxHighlight: true.
-	code text: 'sindarin stepOver'.
 	code whenTextChangedDo: [
 			hasUnsavedCodeChanges := true.
 			self updateLabel ].
@@ -104,7 +102,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	resultInspection := nil inspectionRaw: self.
 	resultInspection owner: self.
 	self initializeToolbar.
-	self updateLabel
+	self updateLabel.
 ]
 
 { #category : 'initialization' }
@@ -114,6 +112,14 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 		addStyle: 'stToolbar';
 		beIcons;
 		fillWith: self toolbarActions
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> loadLastScript [
+	|script|
+	script := (StSindarinDebuggerScriptSaver loadScript: 'lastModified') ifNil: ['sindarin stepOver'].
+	scriptNameInput text: 'lastModified'.
+	code text: script .
 ]
 
 { #category : 'actions' }
@@ -136,6 +142,11 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 	self flag: 'todo'
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> saveLastScript [
+	StSindarinDebuggerScriptSaver saveScript: 'lastModified' code: code text.
 ]
 
 { #category : 'actions' }
@@ -202,4 +213,10 @@ StSindarinDebuggerScriptingPresenter >> updatePresenter [
 
 	self updateCode.
 	super updatePresenter
+]
+
+{ #category : 'updating' }
+StSindarinDebuggerScriptingPresenter >> windowIsClosing [ 
+	self saveLastScript.
+	super windowIsClosing.
 ]
