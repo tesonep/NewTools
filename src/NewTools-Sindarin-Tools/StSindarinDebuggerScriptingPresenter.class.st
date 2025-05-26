@@ -127,7 +127,7 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 	|dialog scriptName|
 	
 	dialog := StSindarinDebuggerScriptSaverPresenter newApplication: self application.
-	scriptName := dialog openModal.
+	scriptName := dialog openModal ifNil: [^ self].
 	
 	scriptNameInput text: scriptName .	
 	code text: (StSindarinDebuggerScriptSaver loadScript: scriptName) .
