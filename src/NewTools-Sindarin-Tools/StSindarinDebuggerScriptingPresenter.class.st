@@ -18,7 +18,8 @@ Class {
 		'toolbar',
 		'sindarinDebugger',
 		'resultLabel',
-		'hasUnsavedCodeChanges'
+		'hasUnsavedCodeChanges',
+		'scriptNameInput'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -51,6 +52,7 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 StSindarinDebuggerScriptingPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
+		add: #scriptNameInput expand: false;
 		add: #code;
 		add: #resultLabel 
 			expand: false 
@@ -88,7 +90,9 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
-
+	
+	scriptNameInput := self newTextInput.
+	scriptNameInput text: 'lastModified'.
 	resultLabel := self newLabel.
 	code := self newCode.
 	code syntaxHighlight: true.
@@ -114,7 +118,19 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadScript [
-	self flag: 'todo'
+	|dialog scriptName|
+	
+	dialog := StSindarinDebuggerScriptSaverPresenter newApplication: self application.
+	scriptName := dialog openModal.
+	
+	scriptNameInput text: scriptName .	
+	code text: (StSindarinDebuggerScriptSaver loadScript: scriptName) .
+	hasUnsavedCodeChanges := false.
+	
+	self updateLabel .
+	self updatePresenter .
+	
+	
 ]
 
 { #category : 'actions' }
@@ -124,7 +140,9 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
-	self flag: 'todo'.
+
+	StSindarinDebuggerScriptSaver saveScript: (scriptNameInput text) code: (code text).
+
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
 ]
