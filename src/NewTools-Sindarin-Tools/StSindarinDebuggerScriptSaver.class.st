@@ -17,14 +17,14 @@ StSindarinDebuggerScriptSaver class >> clearScripts [
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptSaver class >> loadScript: aString [
-	^ scripts at: aString.
+	^ self scripts at: aString ifAbsent: nil.
 	
 ]
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptSaver class >> saveScript: aStringKey code: aStringValue [
 	
-	scripts add: aStringKey -> aStringValue.
+	self scripts add: aStringKey -> aStringValue.
 ]
 
 { #category : 'accessing' }
