@@ -48,13 +48,13 @@ StSindarinDebuggerScriptSaverPresenter >> initializePresenters [
 
 { #category : 'showing' }
 StSindarinDebuggerScriptSaverPresenter >> openModal [
-	self reloadListSrcipt.
+	self reloadListScript.
 	super openModal cancelled ifTrue: [ ^ nil ].
 	^ chooseElement
 ]
 
 { #category : 'as yet unclassified' }
-StSindarinDebuggerScriptSaverPresenter >> reloadListSrcipt [
+StSindarinDebuggerScriptSaverPresenter >> reloadListScript [
 
 	scriptList items: StSindarinDebuggerScriptSaver scriptsNames.
 ]
