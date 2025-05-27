@@ -52,7 +52,10 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 StSindarinDebuggerScriptingPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
-		add: #scriptNameInput expand: false;
+		add: #scriptNameInput 
+			expand: false
+			fill: false
+			padding: 2;
 		add: #code;
 		add: #resultLabel 
 			expand: false 
