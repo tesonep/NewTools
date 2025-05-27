@@ -3,12 +3,21 @@ Class {
 	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'scriptList',
+		'filter',
 		'chooseElement'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
 	#tag : 'Presenters'
 }
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptSaverPresenter >> applyFilter [
+	|filtered|
+	filtered := StSindarinDebuggerScriptSaver scriptsNames select: [ :each |
+		each asLowercase includesSubstring: filter text asLowercase ].
+	scriptList items: filtered
+]
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptSaverPresenter >> connectPresenters [
@@ -20,43 +29,34 @@ StSindarinDebuggerScriptSaverPresenter >> connectPresenters [
 StSindarinDebuggerScriptSaverPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		  add: scriptList;
-		  yourself
+		spacing: 8;
+		add: filter expand: false; 
+		add: scriptList;
+		yourself
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptSaverPresenter >> initializeDialogWindow: aWindows [
-
-	aWindows
-		addButton: 'Cancel' do: [ :presenter |
-				presenter triggerCancelAction.
-				presenter close ];
-		addDefaultButton: 'Load Script' do: [ :presenter |
-				chooseElement ifNotNil: [
-							presenter beOk.
-							presenter close ] ]
+StSindarinDebuggerScriptSaverPresenter >> initializeDialogWindow: aWindow [
+	super initializeDialogWindow: aWindow.
+	aWindow title: 'Load a script'.
 ]
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptSaverPresenter >> initializePresenters [
 
 	scriptList := self newList.
-
-	scriptList items: StSindarinDebuggerScriptSaver scriptsNames.
+	
+	filter := self newTextInput.
+	filter whenTextChangedDo: [ self applyFilter ].
+	
+	self applyFilter.
 	
 ]
 
 { #category : 'showing' }
 StSindarinDebuggerScriptSaverPresenter >> openModal [
-	self reloadListScript.
 	super openModal cancelled ifTrue: [ ^ nil ].
 	^ chooseElement
-]
-
-{ #category : 'as yet unclassified' }
-StSindarinDebuggerScriptSaverPresenter >> reloadListScript [
-
-	scriptList items: StSindarinDebuggerScriptSaver scriptsNames.
 ]
 
 { #category : 'transmission' }
