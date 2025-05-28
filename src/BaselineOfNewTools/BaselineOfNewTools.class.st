@@ -92,7 +92,6 @@ BaselineOfNewTools >> baseline: spec [
 	
 			"Debug points"
 			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' )];
-			package: 'NewTools-DebugPointsBrowser-Tests' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' ) ];
 			package: 'NewTools-ObjectCentricDebugPoints' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
 			package: 'NewTools-ProjectLoader-Microdown';
@@ -198,7 +197,6 @@ BaselineOfNewTools >> baseline: spec [
 				    	'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Utils'
 						'NewTools-DebugPointsBrowser'
-						'NewTools-DebugPointsBrowser-Tests'
 						'NewTools-ObjectCentricDebugPoints' );
 
 			group: 'Spotter' with: #( 
