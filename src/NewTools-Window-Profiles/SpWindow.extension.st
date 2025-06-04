@@ -1,13 +1,13 @@
-Extension { #name : 'SpWindow' }
+Extension { #name : 'SpWindowMorph' }
 
 { #category : '*NewTools-Window-Profiles' }
-SpWindow >> configurePlaceHolder: aPlaceHolder [
+SpWindowMorph >> configurePlaceHolder: aPlaceHolder [
 	
 	aPlaceHolder kind: self model presenter class 
 ]
 
 { #category : '*NewTools-Window-Profiles' }
-SpWindow >> position: aNewPosition [
+SpWindowMorph >> position: aNewPosition [
 
 	super position: aNewPosition.
 	model ifNotNil: [ model position: aNewPosition ]
