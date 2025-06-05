@@ -1,3 +1,6 @@
+"
+I am the model used by the StProcessBrowser
+"
 Class {
 	#name : 'StProcessBrowserModel',
 	#superclass : 'Object',
@@ -5,8 +8,9 @@ Class {
 		'processList',
 		'lastUpdate'
 	],
-	#category : 'NewTools-ProcessBrowser',
-	#package : 'NewTools-ProcessBrowser'
+	#category : 'NewTools-ProcessBrowser-Browsers',
+	#package : 'NewTools-ProcessBrowser',
+	#tag : 'Browsers'
 }
 
 { #category : 'defaults' }
