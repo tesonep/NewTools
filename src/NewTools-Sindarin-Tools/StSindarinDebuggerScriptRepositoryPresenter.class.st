@@ -1,5 +1,5 @@
 Class {
-	#name : 'StSindarinDebuggerScriptSaverPresenter',
+	#name : 'StSindarinDebuggerScriptRepositoryPresenter',
 	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'scriptList',
@@ -12,21 +12,21 @@ Class {
 }
 
 { #category : 'actions' }
-StSindarinDebuggerScriptSaverPresenter >> applyFilter [
+StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
 	|filtered|
-	filtered := StSindarinDebuggerScriptSaver scriptsNames select: [ :each |
+	filtered := StSindarinDebuggerScriptRepository scriptsNames select: [ :each |
 		each asLowercase includesSubstring: filter text asLowercase ].
 	scriptList items: filtered
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptSaverPresenter >> connectPresenters [
+StSindarinDebuggerScriptRepositoryPresenter >> connectPresenters [
 
 	scriptList transmitTo: self
 ]
 
 { #category : 'layout' }
-StSindarinDebuggerScriptSaverPresenter >> defaultLayout [
+StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 8;
@@ -36,13 +36,13 @@ StSindarinDebuggerScriptSaverPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptSaverPresenter >> initializeDialogWindow: aWindow [
+StSindarinDebuggerScriptRepositoryPresenter >> initializeDialogWindow: aWindow [
 	super initializeDialogWindow: aWindow.
 	aWindow title: 'Load a script'.
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptSaverPresenter >> initializePresenters [
+StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 
 	scriptList := self newList.
 	
@@ -54,13 +54,13 @@ StSindarinDebuggerScriptSaverPresenter >> initializePresenters [
 ]
 
 { #category : 'showing' }
-StSindarinDebuggerScriptSaverPresenter >> openModal [
+StSindarinDebuggerScriptRepositoryPresenter >> openModal [
 	super openModal cancelled ifTrue: [ ^ nil ].
 	^ chooseElement
 ]
 
 { #category : 'transmission' }
-StSindarinDebuggerScriptSaverPresenter >> setModel: aListElement [
+StSindarinDebuggerScriptRepositoryPresenter >> setModel: aListElement [
 
 	chooseElement := aListElement
 ]

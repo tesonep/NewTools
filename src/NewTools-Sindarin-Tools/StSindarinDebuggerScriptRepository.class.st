@@ -1,5 +1,5 @@
 Class {
-	#name : 'StSindarinDebuggerScriptSaver',
+	#name : 'StSindarinDebuggerScriptRepository',
 	#superclass : 'Object',
 	#classInstVars : [
 		'scripts'
@@ -10,29 +10,29 @@ Class {
 }
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptSaver class >> clearScripts [
+StSindarinDebuggerScriptRepository class >> clearScripts [
 	<script>
 	scripts := Dictionary new.
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptSaver class >> loadScript: aString [
+StSindarinDebuggerScriptRepository class >> loadScript: aString [
 	^ self scripts at: aString ifAbsent: nil.
 	
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptSaver class >> saveScript: aStringKey code: aStringValue [
+StSindarinDebuggerScriptRepository class >> saveScript: aStringKey code: aStringValue [
 	
 	self scripts add: aStringKey -> aStringValue.
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptSaver class >> scripts [
+StSindarinDebuggerScriptRepository class >> scripts [
 	^ scripts ifNil: [ scripts := Dictionary new]
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptSaver class >> scriptsNames [
+StSindarinDebuggerScriptRepository class >> scriptsNames [
    ^ self scripts keys
 ]

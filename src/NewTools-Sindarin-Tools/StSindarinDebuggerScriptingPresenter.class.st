@@ -120,7 +120,7 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadLastScript [
 	|script|
-	script := (StSindarinDebuggerScriptSaver loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	script := (StSindarinDebuggerScriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
 	scriptNameInput text: 'Last updated'.
 	code text: script .
 ]
@@ -129,11 +129,11 @@ StSindarinDebuggerScriptingPresenter >> loadLastScript [
 StSindarinDebuggerScriptingPresenter >> loadScript [
 	|dialog scriptName|
 	
-	dialog := StSindarinDebuggerScriptSaverPresenter newApplication: self application.
+	dialog := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
 	scriptName := dialog openModal ifNil: [^ self].
 	
 	scriptNameInput text: scriptName .	
-	code text: (StSindarinDebuggerScriptSaver loadScript: scriptName) .
+	code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
 	hasUnsavedCodeChanges := false.
 	
 	self updateLabel .
@@ -149,13 +149,13 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
-	StSindarinDebuggerScriptSaver saveScript: 'Last updated' code: code text.
+	StSindarinDebuggerScriptRepository saveScript: 'Last updated' code: code text.
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 
-	StSindarinDebuggerScriptSaver saveScript: (scriptNameInput text) code: (code text).
+	StSindarinDebuggerScriptRepository saveScript: (scriptNameInput text) code: (code text).
 
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
