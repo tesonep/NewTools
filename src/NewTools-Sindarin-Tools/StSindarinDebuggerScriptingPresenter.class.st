@@ -120,8 +120,8 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadLastScript [
 	|script|
-	script := (StSindarinDebuggerScriptSaver loadScript: 'lastModified') ifNil: ['sindarin stepOver'].
-	scriptNameInput text: 'lastModified'.
+	script := (StSindarinDebuggerScriptSaver loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	scriptNameInput text: 'Last updated'.
 	code text: script .
 ]
 
@@ -149,7 +149,7 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
-	StSindarinDebuggerScriptSaver saveScript: 'lastModified' code: code text.
+	StSindarinDebuggerScriptSaver saveScript: 'Last updated' code: code text.
 ]
 
 { #category : 'actions' }
