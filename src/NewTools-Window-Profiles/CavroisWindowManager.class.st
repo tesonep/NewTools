@@ -8,7 +8,7 @@ To fully understand my fonctionnalities, you can:
 
 - Click on 'New Profile' in the Profiles menu.
 
-- Select 'Show/hide current profile' to display visual placeholders of the current profile
+- Select 'Toggle profile preview' to display visual placeholders of the current profile
 ( - Left click on one of them allows to change the strategy associated with the window 
   - Right click on one of them to remove a registered window from the current profile ).
 
