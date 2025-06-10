@@ -127,10 +127,11 @@ StSindarinDebuggerScriptingPresenter >> loadLastScript [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadScript [
-	|dialog scriptName|
+	|repositoryPresenter scriptName|
 	
-	dialog := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
-	scriptName := dialog openModal ifNil: [^ self].
+	repositoryPresenter := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	
+	scriptName := repositoryPresenter openModal ifNil: [^ self].
 	
 	scriptNameInput text: scriptName .	
 	code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
