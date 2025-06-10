@@ -90,7 +90,11 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 	(aBuilder item: #'New Profile')
 		parent: #ProfileAction;
 		order: 1;
-		action: [ self createProfile ];
+		action: [
+				self current profiles size < 1
+					ifTrue: [ self createProfile ]
+					ifFalse: [
+						self inform: 'Profile limit reached. Delete one to continue.' ] ];
 		help: 'Creates a local profile based on your image';
 		iconName: #add
 ]
@@ -98,19 +102,23 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 
-	self current profiles keysDo: [ :k |
-		(aBuilder item: k)
-			parent: #UserProfiles;
-			action: [ self switchToProfile: k ];
-			order: 0;
-			help: 'Profile';
-			iconName: #userProfile ]
+	(aBuilder item: 'Profile list')
+		parent: #UserProfiles;
+		order: 0;
+		help: 'Profile';
+		iconName: #userProfile;
+		with: [
+				self current profiles keysDo: [ :k |
+							(aBuilder item: k)
+								parent: 'Profile list';
+								action: [ self switchToProfile: k ];
+								help: 'Profile List' ] ]
 ]
 
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 
-	(aBuilder item: #'Show/Hide current profile')
+	(aBuilder item: #'Toggle profile preview')
 		parent: #ProfileAction;
 		order: 3;
 		action: [ self toggleProfilePlaceholders ];
