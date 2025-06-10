@@ -9,7 +9,9 @@ Class {
 		'kind',
 		'position',
 		'strategy',
-		'count'
+		'count',
+		'xPercentage',
+		'yPercentage'
 	],
 	#category : 'NewTools-Window-Profiles-Model',
 	#package : 'NewTools-Window-Profiles',
@@ -144,4 +146,28 @@ CavAbstractWindowPlaceHolder >> strategy: aStrategy [
 
 	strategy := aStrategy.
 	aStrategy placeHolder: self.
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> xPercentage [
+
+	^ xPercentage
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> xPercentage: anObject [
+
+	xPercentage := anObject
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> yPercentage [
+
+	^ yPercentage
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> yPercentage: anObject [
+
+	yPercentage := anObject
 ]
