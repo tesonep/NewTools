@@ -59,6 +59,17 @@ StPlaygroundPagePresenterTest >> testAddToolbarCommandsTo [
 	self assert: (commands includes: class)
 ]
 
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testContents [
+	|string|
+	string := 'coucou'.
+	self openInstance.
+	
+	self assert: presenter text text equals:''.
+	presenter contents: string.
+	self assert: presenter text text equals: string.
+]
+
 { #category : 'tests - commands' }
 StPlaygroundPagePresenterTest >> testDoEvaluateAllAndGo [
 	| value |
@@ -119,6 +130,34 @@ StPlaygroundPagePresenterTest >> testDoEvaluateDeclareGlobal [
 ]
 
 { #category : 'tests' }
+StPlaygroundPagePresenterTest >> testEnsureContentsFlushed [
+	|page|
+	page := StPlaygroundPage new contents: 'test'.
+	self openInstance.
+	
+	self assert: presenter page contents equals: ''.
+	
+	presenter loadPage: page.
+	presenter ensureContentsFlushed.
+	
+	self assert: presenter page contents equals: 'test'.
+	
+]
+
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testLoadPage [ 
+	|page|
+	page := (StPlaygroundPage new) contents: 'test'.
+	page flush.
+	self openInstance.
+	
+	self assert: presenter text text equals: ''.
+	presenter loadPage: page.
+	self assert: presenter text text equals: 'test'.
+	
+]
+
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 	| memory fileReference |
 	
@@ -146,6 +185,96 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 ]
 
 { #category : 'tests' }
+StPlaygroundPagePresenterTest >> testRemoveAllBindings [
+	self newPage.
+	
+	
+	self assert: (presenter text interactionModel hasBindingOf: #thisPlayground ).
+	presenter removeAllBindings.
+	self deny: (presenter text interactionModel hasBindingOf: #thisPlayground ).
+]
+
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testScript [
+	| value |
+	self openInstance.
+	
+	"presenter open."
+	presenter script currentClass: nil.
+	presenter script newClass: #Test86 withVars: { #hello . #world }.
+	presenter contents: 'this'.
+	presenter whenActivatedDo: [ :selection | value := selection value ].
+	
+	presenter doEvaluateAllAndGo. 
+	self assert: (value isKindOf: presenter script currentClass).
+	
+	presenter contents: 'this hello: ''hello''.', String crlf, 'this world: 86'.
+	presenter doEvaluateAllAndGo.
+	
+	presenter contents: 'this hello'.
+	presenter doEvaluateAllAndGo.
+	self assert: value equals: 'hello'.
+	
+	presenter contents: 'this world'.
+	presenter doEvaluateAllAndGo.
+	self assert: value equals: 86.
+	
+	presenter contents: 'thisPlaygroundScript newMethod: ''bestAnimEver ^ 86'''.
+	presenter doEvaluateAllAndGo.
+	
+	presenter contents: 'this bestAnimEver'.
+	presenter doEvaluateAllAndGo.
+	self assert: value equals: 86.
+	
+	presenter contents: 'thisPlaygroundScript newVar: #themostimportantanimtosee'.
+	presenter doEvaluateAllAndGo.
+	presenter contents: 'this themostimportantanimtosee: 86'.
+	presenter doEvaluateAllAndGo.
+	presenter contents: 'this themostimportantanimtosee'.
+	presenter doEvaluateAllAndGo.
+	self assert: value equals: 86.
+	
+	
+	presenter script removeClass.
+	
+
+]
+
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testSelectAll [
+	|string|
+	string := 'test
+coucou
+non non non
+pk tu prend le dernier'.
+
+	self openInstance.
+	
+	self assert: presenter text text equals: ''.
+	
+	presenter contents: string.
+	
+	self assert: presenter selectAll text equals: string.
+]
+
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testSelectedTextOrLine [
+	|string|
+	string := 'test
+coucou
+non non non
+pk tu prend le dernier'.
+
+	self openInstance.
+	
+	self assert: presenter text text equals: ''.
+	
+	presenter contents: string.
+	
+	self assert: presenter selectedTextOrLine equals: ((string substrings: String cr) at: 4).
+]
+
+{ #category : 'tests' }
 StPlaygroundPagePresenterTest >> testToolbarActions [
 
 	| group commands class |
@@ -154,4 +283,18 @@ StPlaygroundPagePresenterTest >> testToolbarActions [
 	group := presenter toolbarActions.
 	commands := group allCommands collect: [ :each | each innerCommand class ] as: Array.
 	self assert: (commands includes: class)
+]
+
+{ #category : 'tests' }
+StPlaygroundPagePresenterTest >> testUpdateContents [
+	
+	self openInstance.
+	
+	self assert: presenter page contents equals: ''.
+	
+	presenter updateContents: 'test'.
+	presenter ensureContentsFlushed.
+	
+	self assert: presenter page contents equals: 'test'.
+	
 ]

@@ -138,7 +138,6 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 	self initializeInspectorPanel.
 	
 	bindingList transmitTo: inspector.
-
 ]
 
 { #category : 'testing' }

@@ -13,7 +13,8 @@ Class {
 		'toggleLineNumberButton',
 		'page',
 		'activationBlock',
-		'loading'
+		'loading',
+		'script'
 	],
 	#classVars : [
 		'CacheDirectory'
@@ -32,6 +33,7 @@ StPlaygroundPagePresenter class >> baseToolbarCommands [
 		StPlaygroundBindingsCommand.				
 		StPlaygroundVersionsCommand.
 		StPlaygroundPagesCommand.
+		StPlaygroundScriptCommand.
 	}
 ]
 
@@ -191,9 +193,18 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 
 { #category : 'initialization' }
 StPlaygroundPagePresenter >> initialize [
-
-	loading := false.
-	super initialize
+	|workspaceVariable1 workspaceVariable2|
+   loading := false.
+   super initialize.
+	workspaceVariable1 := (WorkspaceVariable key: #thisPlayground value: self ).
+	workspaceVariable2 := (WorkspaceVariable key: #thisPlaygroundModel value: (self text interactionModel)).
+	
+	
+	script := StPlaygroundScript init: {workspaceVariable1 . workspaceVariable2 } asOrderedCollection text: text.
+	script newDefaultClass.
+	
+	"text interactionModel addBindings: {workspaceVariable1 . workspaceVariable2}."
+	  
 ]
 
 { #category : 'initialization' }
@@ -328,6 +339,11 @@ StPlaygroundPagePresenter >> removeAllBindings [
 ]
 
 { #category : 'accessing' }
+StPlaygroundPagePresenter >> script [ 
+	^ script.
+]
+
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> selectAll [
 	
 	^ text selectAll
@@ -430,4 +446,10 @@ StPlaygroundPagePresenter >> windowIcon [
 StPlaygroundPagePresenter >> windowTitle [
 
 	^ 'Playground'
+]
+
+{ #category : 'accessing' }
+StPlaygroundPagePresenter >> windowTitle: aString [
+	titleHolder := aString.
+	self update.
 ]

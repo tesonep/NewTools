@@ -1,24 +1,24 @@
 Class {
-	#name : 'StPlaygroundTest',
+	#name : 'StPlaygroundPresenterTest',
 	#superclass : 'StPlaygroundBaseTest',
 	#category : 'NewTools-Playground-Tests',
 	#package : 'NewTools-Playground-Tests'
 }
 
 { #category : 'running' }
-StPlaygroundTest >> classToTest [
+StPlaygroundPresenterTest >> classToTest [
 
 	^ StPlaygroundPresenter
 ]
 
 { #category : 'running' }
-StPlaygroundTest >> initializeInstanceBeforeInitialization: aPresenter [
+StPlaygroundPresenterTest >> initializeInstanceBeforeInitialization: aPresenter [
 
 	aPresenter setModelBeforeInitialization: self newPage
 ]
 
 { #category : 'instance creation' }
-StPlaygroundTest >> newPlayground [
+StPlaygroundPresenterTest >> newPlayground [
 
 	^ StPlaygroundPresenter 
 		newApplication: application
@@ -27,7 +27,7 @@ StPlaygroundTest >> newPlayground [
 ]
 
 { #category : 'tests' }
-StPlaygroundTest >> testContents [
+StPlaygroundPresenterTest >> testContents [
 
 	presenter open.
 	self waitUntilUIRedrawed.
@@ -37,7 +37,18 @@ StPlaygroundTest >> testContents [
 ]
 
 { #category : 'tests' }
-StPlaygroundTest >> testLoadPage [
+StPlaygroundPresenterTest >> testDefaultKeyboardFocus [ 
+	|res|
+	presenter open.
+	self waitUntilUIRedrawed.
+
+	res := presenter defaultKeyboardFocus.
+	
+	self assert: (res isKindOf: StPlaygroundPagePresenter)
+]
+
+{ #category : 'tests' }
+StPlaygroundPresenterTest >> testLoadPage [
 
 	| page |
 	presenter open.
@@ -55,7 +66,19 @@ StPlaygroundTest >> testLoadPage [
 ]
 
 { #category : 'tests' }
-StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
+StPlaygroundPresenterTest >> testNewInspectorFor [
+	|model res|
+	presenter open.
+	self waitUntilUIRedrawed.
+	model := StPlaygroundInteractionModel new.
+	
+	res := presenter newInspectorFor: model.
+	self assert: res owner equals: presenter.
+	self assert: (res isKindOf: StObjectInspectorPresenter)
+]
+
+{ #category : 'tests' }
+StPlaygroundPresenterTest >> testNewInspectorForWorksWhenModelIsNil [
 	| inspectorPanel |
 
 	inspectorPanel := presenter newInspectorFor: nil.
@@ -64,7 +87,21 @@ StPlaygroundTest >> testNewInspectorForWorksWhenModelIsNil [
 ]
 
 { #category : 'tests' }
-StPlaygroundTest >> testStopProcessing [
+StPlaygroundPresenterTest >> testPage [
+	|page1 page2|
+	presenter open.
+	self waitUntilUIRedrawed.
+	
+	page1 := self newPage contents: 'test'; flush ; yourself.
+	page2 := self newPage contents: 'test33'; flush ; yourself.
+
+	presenter loadPage: page1; loadPage: page2.
+	
+	self assert: presenter page equals: page2.
+]
+
+{ #category : 'tests' }
+StPlaygroundPresenterTest >> testStopProcessing [
 
 	| page |
 	presenter open.
