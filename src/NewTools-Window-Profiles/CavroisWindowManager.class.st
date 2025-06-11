@@ -545,17 +545,27 @@ CavroisWindowManager >> nextPlaceHolderIndexFor: aWindowType ifAbsent: aBlock [
 ]
 
 { #category : 'recording' }
-CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [ 
-	
+CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
+
 	| placeHolder |
 	placeHolder := CavWindowPlaceHolder new
-			extent: aWindowPresenter extent ;
-			position: aWindowPresenter bounds origin ;
-			yourself.
+		               extent: aWindowPresenter extent;
+		               position: aWindowPresenter position;
+		               widthPercentage:
+			               aWindowPresenter extent x
+			               / self currentWorld bounds width * 100;
+		               heightPercentage:
+			               aWindowPresenter extent y
+			               / self currentWorld bounds height * 100;
+		               xPercentage:
+			               aWindowPresenter bounds origin x
+			               / self currentWorld bounds width * 100;
+		               yPercentage:
+			               aWindowPresenter bounds origin y
+			               / self currentWorld bounds height * 100.
 	placeHolder configureStrategy.
 	aWindowPresenter configurePlaceHolder: placeHolder.
-	^ placeHolder 
-			
+	^ placeHolder
 ]
 
 { #category : 'operations' }
