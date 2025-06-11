@@ -445,7 +445,7 @@ CavroisWindowManager class >> updateProfile: aProfile withName: aName [
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfileItem: aBuilder [
 
-	(aBuilder item: #'Update current profile')
+	(aBuilder item: #'Update profile')
 		parent: #ProfileAction;
 		order: 2;
 		enabled: [ self current currentProfile isNotNil ];
