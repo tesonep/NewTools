@@ -92,7 +92,7 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 		parent: #ProfileAction;
 		order: 1;
 		action: [
-				self current profiles size < 1
+				self current profiles size < 10
 					ifTrue: [ self createProfile ]
 					ifFalse: [
 						self inform: 'Profile limit reached. Delete one to continue.' ] ];
