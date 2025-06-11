@@ -52,19 +52,17 @@ CavAbstractWindowPlaceHolder >> count: aNumber [
 { #category : 'api' }
 CavAbstractWindowPlaceHolder >> display [
 
-	| visualPlaceHolder |
+	| visualPlaceHolder textMorph |
+	textMorph := TextMorph new contents:
+		             kind printString , ' - ' , self strategy printString.
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
-		                     addMorph: (TextMorph new
-				                      contents: kind printString;
-				                      position: position x
-					                      +
-						                      (extent x
-						                       -
-							                       (TextMorph new contents:
-									                        kind printString) width / 2)
-					                      @ position y + 3).
+		                     addMorph: (textMorph position:
+					                      position x
+					                      + (extent x - textMorph width / 2)
+					                      @ (position y + 3)).
+
 	visualPlaceHolder placeHolder: self.
 	visualPlaceHolder openInWorld
 ]

@@ -8,7 +8,7 @@ To fully understand my fonctionnalities, you can:
 
 - Click on 'New Profile' in the Profiles menu.
 
-- Select 'Show/hide current profile' to display visual placeholders of the current profile
+- Select 'Toggle profile preview' to display visual placeholders of the current profile
 ( - Left click on one of them allows to change the strategy associated with the window 
   - Right click on one of them to remove a registered window from the current profile ).
 
@@ -50,6 +50,7 @@ CavroisWindowManager class >> addProfileDeletionItem: aBuilder [
 	(aBuilder item: #'Delete Profile')
 		parent: #ProfileAction;
 		order: 5;
+		enabled:[self current currentProfile isNotNil];
 		action: [ self deleteProfile ];
 		help: 'Remove a profile';
 		iconName: #trash
@@ -79,7 +80,8 @@ CavroisWindowManager class >> addProfileImportExportItems: aBuilder [
 	(aBuilder item: #'Export Profile')
 		parent: #ImportExport;
 		order: 8;
-		action: [ self saveProfile: self current defaultLocation];
+		enabled: [ self current currentProfile isNotNil ];
+		action: [ self saveProfile: self current defaultLocation ];
 		help: 'Export a profile';
 		iconName: #smallRedo
 ]
@@ -90,7 +92,11 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 	(aBuilder item: #'New Profile')
 		parent: #ProfileAction;
 		order: 1;
-		action: [ self createProfile ];
+		action: [
+				self current profiles size < 10
+					ifTrue: [ self createProfile ]
+					ifFalse: [
+						self inform: 'Profile limit reached. Delete one to continue.' ] ];
 		help: 'Creates a local profile based on your image';
 		iconName: #add
 ]
@@ -98,21 +104,27 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 
-	self current profiles keysDo: [ :k |
-		(aBuilder item: k)
-			parent: #UserProfiles;
-			action: [ self switchToProfile: k ];
-			order: 0;
-			help: 'Profile';
-			iconName: #userProfile ]
+	(aBuilder item: 'Profile list')
+		parent: #UserProfiles;
+		order: 0;
+		help: 'Profile';
+		enabled: [ self current currentProfile isNotNil ];
+		iconName: #userProfile;
+		with: [
+				self current profiles keysDo: [ :k |
+							(aBuilder item: k)
+								parent: 'Profile list';
+								action: [ self switchToProfile: k ];
+								help: 'Profile List' ] ]
 ]
 
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 
-	(aBuilder item: #'Show/Hide current profile')
+	(aBuilder item: #'Toggle profile preview')
 		parent: #ProfileAction;
 		order: 3;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self toggleProfilePlaceholders ];
 		help: 'Show the placeholders of the current profile in the World';
 		iconName: #haloView
@@ -247,7 +259,7 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
 		renameProfileItem: aBuilder;
-		resetWindowsToCurrentProfile: aBuilder;
+		resetWindowsToCurrentProfileItem: aBuilder;
 		addProfileImportExportItems: aBuilder;
 		addProfileHelpItem: aBuilder
 ]
@@ -296,6 +308,7 @@ CavroisWindowManager class >> renameProfileItem: aBuilder [
 	(aBuilder item: #'Rename profile')
 		parent: #ProfileAction;
 		order: 4;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self current profiles ifNotEmpty: [ self renameProfile ] ];
 		help: 'Rename a profile';
 		iconName: #edit
@@ -310,11 +323,12 @@ CavroisWindowManager class >> reset [
 ]
 
 { #category : 'initialization' }
-CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
+CavroisWindowManager class >> resetWindowsToCurrentProfileItem: aBuilder [
 
 	(aBuilder item: #'Reset Windows')
 		parent: #ProfileAction;
 		order: 6;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
 				self current currentProfile ifNotNil: [
 						self current transitionToProfile ] ];
@@ -431,15 +445,16 @@ CavroisWindowManager class >> updateProfile: aProfile withName: aName [
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfileItem: aBuilder [
 
-	(aBuilder item: #'Update current profile')
+	(aBuilder item: #'Update profile')
 		parent: #ProfileAction;
 		order: 2;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
-			self current currentProfile
-				ifNil: [ self inform: 'No profile has been created yet' ]
-				ifNotNil: [
-					self updateProfile.
-					self inform: 'Profile has been updated' ] ];
+				self current currentProfile
+					ifNil: [ self inform: 'No profile has been created yet' ]
+					ifNotNil: [
+							self updateProfile.
+							self inform: 'Profile has been updated' ] ];
 		help:
 			'Allows you to register new window(s) in profile or to modify previous ones';
 		iconName: #save
@@ -610,17 +625,31 @@ CavroisWindowManager >> setNextPlaceHolderIndex: anInteger for: aWindowType [
 { #category : 'transitions' }
 CavroisWindowManager >> transitionToProfile [
 
-	| allWindows |
+	| allWindows windowsByType |
 	allWindows := self currentWorld windowsSatisfying: [ :w |
 		              w isCollapsed not and:
 			              (w isKindOf: SpDialogWindowMorph) not ].
+	windowsByType := Dictionary new.
+	allWindows do: [ :w |
+			| windowType |
+			windowType := w model class.
+			w model presenter ifNotNil: [ :pres | windowType := pres class ].
+			(windowsByType
+				 at: windowType
+				 ifAbsentPut: [ OrderedCollection new ]) add: w ].
+	windowsByType keysAndValuesDo: [ :windowType :windows |
+			| placeHolders |
+			placeHolders := self currentProfile placeHoldersFor: windowType.
 
-	self currentProfile placeHolders do: [ :placeHolder |
-		allWindows do: [ :w |
-			(w model class = placeHolder kind or:
-				 w model presenter class = placeHolder kind) ifTrue: [
-				w position: placeHolder position.
-				w extent: placeHolder extent ] ] ]
+			(placeHolders first isKindOf: CavNullWindowPlaceHolder) ifTrue: [
+					placeHolders := self currentProfile placeHoldersFor:
+						                windows first model class ].
+			windows withIndexDo: [ :window :index |
+					| placeHolderIndex placeHolder |
+					placeHolderIndex := index - 1 % placeHolders size + 1.
+					placeHolder := placeHolders at: placeHolderIndex.
+					window position: placeHolder position.
+					window extent: placeHolder extent ] ]
 ]
 
 { #category : 'update' }
