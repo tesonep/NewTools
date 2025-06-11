@@ -50,6 +50,7 @@ CavroisWindowManager class >> addProfileDeletionItem: aBuilder [
 	(aBuilder item: #'Delete Profile')
 		parent: #ProfileAction;
 		order: 5;
+		enabled:[self current currentProfile isNotNil];
 		action: [ self deleteProfile ];
 		help: 'Remove a profile';
 		iconName: #trash
@@ -106,6 +107,7 @@ CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 		parent: #UserProfiles;
 		order: 0;
 		help: 'Profile';
+		enabled: [ self current currentProfile isNotNil ];
 		iconName: #userProfile;
 		with: [
 				self current profiles keysDo: [ :k |
@@ -121,6 +123,7 @@ CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 	(aBuilder item: #'Toggle profile preview')
 		parent: #ProfileAction;
 		order: 3;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self toggleProfilePlaceholders ];
 		help: 'Show the placeholders of the current profile in the World';
 		iconName: #haloView
@@ -255,7 +258,7 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
 		renameProfileItem: aBuilder;
-		resetWindowsToCurrentProfile: aBuilder;
+		resetWindowsToCurrentProfileItem: aBuilder;
 		addProfileImportExportItems: aBuilder;
 		addProfileHelpItem: aBuilder
 ]
@@ -304,6 +307,7 @@ CavroisWindowManager class >> renameProfileItem: aBuilder [
 	(aBuilder item: #'Rename profile')
 		parent: #ProfileAction;
 		order: 4;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self current profiles ifNotEmpty: [ self renameProfile ] ];
 		help: 'Rename a profile';
 		iconName: #edit
@@ -318,11 +322,12 @@ CavroisWindowManager class >> reset [
 ]
 
 { #category : 'initialization' }
-CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
+CavroisWindowManager class >> resetWindowsToCurrentProfileItem: aBuilder [
 
 	(aBuilder item: #'Reset Windows')
 		parent: #ProfileAction;
 		order: 6;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
 				self current currentProfile ifNotNil: [
 						self current transitionToProfile ] ];
@@ -442,12 +447,13 @@ CavroisWindowManager class >> updateProfileItem: aBuilder [
 	(aBuilder item: #'Update current profile')
 		parent: #ProfileAction;
 		order: 2;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
-			self current currentProfile
-				ifNil: [ self inform: 'No profile has been created yet' ]
-				ifNotNil: [
-					self updateProfile.
-					self inform: 'Profile has been updated' ] ];
+				self current currentProfile
+					ifNil: [ self inform: 'No profile has been created yet' ]
+					ifNotNil: [
+							self updateProfile.
+							self inform: 'Profile has been updated' ] ];
 		help:
 			'Allows you to register new window(s) in profile or to modify previous ones';
 		iconName: #save
