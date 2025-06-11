@@ -1,7 +1,7 @@
 Extension { #name : 'StObjectBreakpointInspection' }
 
 { #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectBreakpointInspection class >> browseBreakpointMethodCommandFor: presenter [
+StObjectBreakpointInspection classSide >> browseBreakpointMethodCommandFor: presenter [
 
 	^ ((SpBrowseClassCommand forContext: presenter)
 		selector: #doBrowseBreakpointMethod;
@@ -11,7 +11,7 @@ StObjectBreakpointInspection class >> browseBreakpointMethodCommandFor: presente
 ]
 
 { #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectBreakpointInspection class >> objectCentricCommandsWith: presenter forRootGroup: aCmCommandsGroup [
+StObjectBreakpointInspection classSide >> objectCentricCommandsWith: presenter forRootGroup: aCmCommandsGroup [
 	<extensionCommands>
 	
 	aCmCommandsGroup
@@ -20,7 +20,7 @@ StObjectBreakpointInspection class >> objectCentricCommandsWith: presenter forRo
 ]
 
 { #category : '*NewTools-ObjectCentricBreakpoints' }
-StObjectBreakpointInspection class >> removeBreakpointCommandFor: presenter [
+StObjectBreakpointInspection classSide >> removeBreakpointCommandFor: presenter [
 	| cmd |
 	cmd := StRemoveBreakpointCommand forSpecContext: presenter.
 	cmd iconName: #smallDelete.

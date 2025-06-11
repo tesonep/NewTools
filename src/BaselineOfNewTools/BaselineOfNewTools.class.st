@@ -89,7 +89,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FontChooser' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';
-			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 	
 			"Debug points"
 			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' )];
@@ -99,7 +98,7 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader-Microdown';
 	
 			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector' 'NewTools-Debugger-Breakpoints-Tools') ] ;
+			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector') ] ;
 	
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
@@ -194,7 +193,6 @@ BaselineOfNewTools >> baseline: spec [
 
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
-				    	'NewTools-Debugger-Breakpoints-Tools'
 				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    	'NewTools-Debugger-Fuel-Tests' 
