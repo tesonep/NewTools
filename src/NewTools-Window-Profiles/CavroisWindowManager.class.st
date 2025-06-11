@@ -80,7 +80,8 @@ CavroisWindowManager class >> addProfileImportExportItems: aBuilder [
 	(aBuilder item: #'Export Profile')
 		parent: #ImportExport;
 		order: 8;
-		action: [ self saveProfile: self current defaultLocation];
+		enabled: [ self current currentProfile isNotNil ];
+		action: [ self saveProfile: self current defaultLocation ];
 		help: 'Export a profile';
 		iconName: #smallRedo
 ]
