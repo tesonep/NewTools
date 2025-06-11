@@ -19,7 +19,8 @@ Class {
 		'sindarinDebugger',
 		'resultLabel',
 		'hasUnsavedCodeChanges',
-		'scriptNameInput'
+		'scriptNameInput',
+		'scriptRepository'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -106,6 +107,10 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	resultInspection owner: self.
 	self initializeToolbar.
 	self updateLabel.
+	
+	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	
+
 ]
 
 { #category : 'initialization' }
@@ -127,20 +132,36 @@ StSindarinDebuggerScriptingPresenter >> loadLastScript [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadScript [
-	|repositoryPresenter scriptName|
+	|scriptName|
 	
-	repositoryPresenter := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	self layout: self loadScriptLayout.
 	
-	scriptName := repositoryPresenter openModal ifNil: [^ self].
+	scriptRepository applyFilter.
 	
-	scriptNameInput text: scriptName .	
-	code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
-	hasUnsavedCodeChanges := false.
+	scriptRepository whenOkButtonDo: [ 
+		scriptName := scriptRepository chooseElement.
+		scriptName ifNotNil: [
+			scriptNameInput text: scriptName .	
+			code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
+			hasUnsavedCodeChanges := false.
 	
-	self updateLabel .
-	self updatePresenter .
+			self updateLabel .
+			self updatePresenter .
+		].
 	
-	
+		self layout: self defaultLayout.
+	].
+
+	scriptRepository whenCancelButtonDo: [ 
+		self layout: self defaultLayout.
+	]
+]
+
+{ #category : 'layout' }
+StSindarinDebuggerScriptingPresenter >> loadScriptLayout [ 
+	^ SpBoxLayout newTopToBottom
+		add: #scriptRepository;
+		yourself
 ]
 
 { #category : 'actions' }

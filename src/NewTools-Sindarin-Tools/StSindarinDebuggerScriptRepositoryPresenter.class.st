@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'scriptList',
 		'filter',
-		'chooseElement'
+		'chooseElement',
+		'okButton',
+		'cancelButton'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -19,6 +21,11 @@ StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
 	scriptList items: filtered
 ]
 
+{ #category : 'accessing' }
+StSindarinDebuggerScriptRepositoryPresenter >> chooseElement [
+	^ chooseElement 
+]
+
 { #category : 'initialization' }
 StSindarinDebuggerScriptRepositoryPresenter >> connectPresenters [
 
@@ -27,11 +34,19 @@ StSindarinDebuggerScriptRepositoryPresenter >> connectPresenters [
 
 { #category : 'layout' }
 StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
+	|buttonRow|
+	
+	buttonRow := SpBoxLayout newLeftToRight
+		spacing: 6;
+		add: #okButton;
+		add: #cancelButton;
+		yourself.
 
 	^ SpBoxLayout newTopToBottom
-		spacing: 8;
-		add: filter expand: false; 
-		add: scriptList;
+		spacing: 5;
+		add: #filter expand: false; 
+		add: #scriptList;
+		add: buttonRow expand: false;
 		yourself
 ]
 
@@ -47,20 +62,33 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 	scriptList := self newList.
 	
 	filter := self newTextInput.
+	filter placeholder: 'Filter ...'.
 	filter whenTextChangedDo: [ self applyFilter ].
+	
+	okButton := self newButton.
+	okButton 
+		label: 'OK'.
+	
+	cancelButton := self newButton.
+	cancelButton 
+		label: 'Cancel'.
 	
 	self applyFilter.
 	
-]
-
-{ #category : 'showing' }
-StSindarinDebuggerScriptRepositoryPresenter >> openModal [
-	super openModal cancelled ifTrue: [ ^ nil ].
-	^ chooseElement
 ]
 
 { #category : 'transmission' }
 StSindarinDebuggerScriptRepositoryPresenter >> setModel: aListElement [
 
 	chooseElement := aListElement
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryPresenter >> whenCancelButtonDo: aBlock [
+	cancelButton action: aBlock .
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryPresenter >> whenOkButtonDo: aBlock [
+	okButton action: aBlock .
 ]
