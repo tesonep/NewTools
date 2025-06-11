@@ -11,7 +11,9 @@ Class {
 		'strategy',
 		'count',
 		'xPercentage',
-		'yPercentage'
+		'yPercentage',
+		'widthPercentage',
+		'heightPercentage'
 	],
 	#category : 'NewTools-Window-Profiles-Model',
 	#package : 'NewTools-Window-Profiles',
@@ -81,6 +83,18 @@ CavAbstractWindowPlaceHolder >> extent: aPoint [
 	extent := aPoint
 ]
 
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> heightPercentage [
+
+	^ heightPercentage
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> heightPercentage: anObject [
+
+	heightPercentage := anObject
+]
+
 { #category : 'initialization' }
 CavAbstractWindowPlaceHolder >> increment [ 
 	
@@ -146,6 +160,18 @@ CavAbstractWindowPlaceHolder >> strategy: aStrategy [
 
 	strategy := aStrategy.
 	aStrategy placeHolder: self.
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> widthPercentage [
+
+	^ widthPercentage
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> widthPercentage: anObject [
+
+	widthPercentage := anObject
 ]
 
 { #category : 'accessing' }

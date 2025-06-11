@@ -535,16 +535,19 @@ CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
 	| placeHolder |
 	placeHolder := CavWindowPlaceHolder new
 		               extent: aWindowPresenter extent;
+		               position: aWindowPresenter position;
+		               widthPercentage:
+			               aWindowPresenter extent x
+			               / self currentWorld bounds width * 100;
+		               heightPercentage:
+			               aWindowPresenter extent y
+			               / self currentWorld bounds height * 100;
 		               xPercentage:
 			               aWindowPresenter bounds origin x
 			               / self currentWorld bounds width * 100;
 		               yPercentage:
 			               aWindowPresenter bounds origin y
 			               / self currentWorld bounds height * 100.
-	placeHolder position:
-		self currentWorld bounds width * (placeHolder xPercentage / 100)
-		@
-		(self currentWorld bounds height * (placeHolder yPercentage / 100)).
 	placeHolder configureStrategy.
 	aWindowPresenter configurePlaceHolder: placeHolder.
 	^ placeHolder
