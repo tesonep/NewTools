@@ -5,7 +5,7 @@ Class {
 		'scriptList',
 		'filter',
 		'chooseElement',
-		'okButton',
+		'loadButton',
 		'cancelButton'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
@@ -38,14 +38,14 @@ StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
 	
 	buttonRow := SpBoxLayout newLeftToRight
 		spacing: 6;
-		add: #okButton;
+		add: #loadButton;
 		add: #cancelButton;
 		yourself.
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 5;
-		add: #filter expand: false; 
 		add: #scriptList;
+		add: #filter expand: false;
 		add: buttonRow expand: false;
 		yourself
 ]
@@ -65,13 +65,11 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 	filter placeholder: 'Filter ...'.
 	filter whenTextChangedDo: [ self applyFilter ].
 	
-	okButton := self newButton.
-	okButton 
-		label: 'OK'.
+	loadButton := self newButton.
+	loadButton label: 'Load'.
 	
 	cancelButton := self newButton.
-	cancelButton 
-		label: 'Cancel'.
+	cancelButton label: 'Cancel'.
 	
 	self applyFilter.
 	
@@ -89,6 +87,6 @@ StSindarinDebuggerScriptRepositoryPresenter >> whenCancelButtonDo: aBlock [
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> whenOkButtonDo: aBlock [
-	okButton action: aBlock .
+StSindarinDebuggerScriptRepositoryPresenter >> whenLoadButtonDo: aBlock [
+	loadButton action: aBlock .
 ]

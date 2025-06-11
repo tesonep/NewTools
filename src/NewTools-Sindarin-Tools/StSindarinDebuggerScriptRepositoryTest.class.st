@@ -1,9 +1,6 @@
 Class {
 	#name : 'StSindarinDebuggerScriptRepositoryTest',
 	#superclass : 'TestCase',
-	#instVars : [
-		'scriptSaver'
-	],
 	#category : 'NewTools-Sindarin-Tools-Tests',
 	#package : 'NewTools-Sindarin-Tools',
 	#tag : 'Tests'

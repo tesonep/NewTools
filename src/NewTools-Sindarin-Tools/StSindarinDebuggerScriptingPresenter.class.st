@@ -138,7 +138,7 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 	
 	scriptRepository applyFilter.
 	
-	scriptRepository whenOkButtonDo: [ 
+	scriptRepository whenLoadButtonDo: [ 
 		scriptName := scriptRepository chooseElement.
 		scriptName ifNotNil: [
 			scriptNameInput text: scriptName .	
