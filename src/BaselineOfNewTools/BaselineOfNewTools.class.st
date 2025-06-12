@@ -68,6 +68,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
 			package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
+			package: 'NewTools-Pulse' with: [ spec requires: #( 'NewTools-Spotter' ) ];
+			package: 'NewTools-Pulse-Tests' with: [ spec requires: #( 'NewTools-Pulse' ) ];
 	
 			"file browser"
 			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
@@ -209,7 +211,9 @@ BaselineOfNewTools >> baseline: spec [
 				   		'NewTools-Spotter' 
 						'NewTools-Spotter-Extensions'
 				   		'NewTools-Spotter-Tests' 
-						'NewTools-Spotter-Processors-Tests' );
+						'NewTools-Spotter-Processors-Tests'
+						'NewTools-Pulse'
+						'NewTools-Pulse-Tests' );
 
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
 
