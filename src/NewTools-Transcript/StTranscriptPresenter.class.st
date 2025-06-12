@@ -28,24 +28,24 @@ StTranscriptPresenter class >> defaultPreferredExtent [
 ]
 
 { #category : 'accessing' }
-StTranscriptPresenter class >> example [
+StTranscriptPresenter class >> exampleDefault [
 	"this example shows that we can use a different instance than the singleton."
+
 	<script>
-	
-	| t tr |
-	t := self new. 
-	tr := StThreadSafeTranscript new.
-	tr show: 'Hello Pharo I''m a new textual transcript'.
-	t transcript: tr.
-	t open. 
+	^ self new open
 ]
 
 { #category : 'accessing' }
-StTranscriptPresenter class >> exampleDefault [
+StTranscriptPresenter class >> exampleNonGlobalTranscript [
 	"this example shows that we can use a different instance than the singleton."
+
 	<script>
-	
-	self new open
+	| presenter transcript |
+	presenter := self new.
+	transcript := StThreadSafeTranscript new.
+	transcript show: 'Hello Pharo I''m a new textual transcript'.
+	presenter transcript: transcript.
+	^ presenter open
 ]
 
 { #category : 'tools registry' }
@@ -119,11 +119,11 @@ StTranscriptPresenter >> fetchOld [
 ]
 
 { #category : 'initialization' }
-StTranscriptPresenter >> initialize [ 
+StTranscriptPresenter >> initialize [
 
 	super initialize.
-	self registerToAnnouncer. 
-	transcript := StThreadSafeTranscript uniqueInstance.
+	self registerToAnnouncer.
+	transcript := StThreadSafeTranscript defaultInstance.
 	keepServiceAliveStep := 0
 ]
 

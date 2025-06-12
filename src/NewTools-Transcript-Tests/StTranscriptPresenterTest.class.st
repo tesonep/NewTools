@@ -24,7 +24,7 @@ StTranscriptPresenterTest >> tearDown [
 	super tearDown
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 StTranscriptPresenterTest >> testAnnouncementIsWritten [
 
 	| window |
@@ -37,7 +37,7 @@ StTranscriptPresenterTest >> testAnnouncementIsWritten [
 	ensure: [ window close ]
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 StTranscriptPresenterTest >> testClear [
 
 	| window |
@@ -53,7 +53,7 @@ StTranscriptPresenterTest >> testClear [
 	ensure: [ window close ]
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 StTranscriptPresenterTest >> testFetchOld [
 
 	| window |
@@ -69,7 +69,7 @@ StTranscriptPresenterTest >> testFetchOld [
 	ensure: [ window close ]
 ]
 
-{ #category : 'running' }
+{ #category : 'tests' }
 StTranscriptPresenterTest >> testReset [
 
 	| window |
@@ -86,12 +86,15 @@ StTranscriptPresenterTest >> testReset [
 	ensure: [ window close ]
 ]
 
-{ #category : 'running' }
-StTranscriptPresenterTest >> testSmoke [ 
+{ #category : 'tests' }
+StTranscriptPresenterTest >> testSmoke [
 
 	| window |
-	
 	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].
+
+	[ self shouldnt: [ window := StTranscriptPresenter exampleDefault ] raise: Error ] ensure: [ window close ].
+
+	[ self shouldnt: [ window := StTranscriptPresenter exampleNonGlobalTranscript ] raise: Error ] ensure: [ window close ].
 
 	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ]
 ]
