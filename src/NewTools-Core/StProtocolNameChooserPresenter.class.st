@@ -179,7 +179,8 @@ StProtocolNameChooserPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'New protocol name'.
-	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ]
+	aWindowPresenter whenOpenedDo: [ protocolNameField takeKeyboardFocus ].
+	aWindowPresenter okAction: [ :text | self doAcceptFromTextInput ] 
 ]
 
 { #category : 'private - accessing' }
