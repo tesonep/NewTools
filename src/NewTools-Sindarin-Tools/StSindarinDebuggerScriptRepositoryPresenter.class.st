@@ -6,7 +6,9 @@ Class {
 		'filter',
 		'chooseElement',
 		'loadButton',
-		'cancelButton'
+		'cancelButton',
+		'scriptRepository',
+		'repositoryChooser'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -16,7 +18,8 @@ Class {
 { #category : 'actions' }
 StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
 	|filtered|
-	filtered := StSindarinDebuggerScriptRepository scriptsNames select: [ :each |
+	
+	filtered := scriptRepository scriptsNames select: [ :each |
 		each asLowercase includesSubstring: filter text asLowercase ].
 	scriptList items: filtered
 ]
@@ -44,6 +47,7 @@ StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 5;
+		add: repositoryChooser expand: false;
 		add: #scriptList;
 		add: #filter expand: false;
 		add: buttonRow expand: false;
@@ -57,8 +61,7 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializeDialogWindow: aWindow [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
-
+StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [	
 	scriptList := self newList.
 	
 	filter := self newTextInput.
@@ -71,13 +74,34 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 	cancelButton := self newButton.
 	cancelButton label: 'Cancel'.
 	
-	self applyFilter.
+	repositoryChooser := self newDropList.
+	repositoryChooser 
+		whenSelectedItemChangedDo: [ :each | self loadRepository: each ];
+		items: StSindarinDebuggerScriptRepository subclasses;
+		display: [ :each | each repositoryName ].
+		
+	scriptRepository := SindarinDefaultScriptRepository.
 	
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryPresenter >> loadRepository: aSindarinRepository [
+	scriptRepository := aSindarinRepository.
+	self applyFilter.
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryPresenter >> loadScript: aString [
+	^ scriptRepository loadScript: aString.
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryPresenter >> saveScript: aStringName code: aStringCode [
+	scriptRepository saveScript: aStringName code: aStringCode.
 ]
 
 { #category : 'transmission' }
 StSindarinDebuggerScriptRepositoryPresenter >> setModel: aListElement [
-
 	chooseElement := aListElement
 ]
 

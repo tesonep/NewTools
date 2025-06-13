@@ -96,6 +96,7 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	scriptNameInput := self newTextInput.
 	resultLabel := self newLabel.
+	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
 	code := self newCode.
 	self loadLastScript.
 	code syntaxHighlight: true.
@@ -107,8 +108,6 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	resultInspection owner: self.
 	self initializeToolbar.
 	self updateLabel.
-	
-	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
 	
 
 ]
@@ -125,8 +124,10 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadLastScript [
 	|script|
-	script := (StSindarinDebuggerScriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+		
+	script := (scriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
 	scriptNameInput text: 'Last updated'.
+	
 	code text: script .
 ]
 
@@ -142,7 +143,7 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 		scriptName := scriptRepository chooseElement.
 		scriptName ifNotNil: [
 			scriptNameInput text: scriptName .	
-			code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
+			code text: (scriptRepository loadScript: scriptName) .
 			hasUnsavedCodeChanges := false.
 	
 			self updateLabel .
@@ -171,13 +172,13 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
-	StSindarinDebuggerScriptRepository saveScript: 'Last updated' code: code text.
+	scriptRepository saveScript: 'Last updated' code: code text.
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 
-	StSindarinDebuggerScriptRepository saveScript: (scriptNameInput text) code: (code text).
+	scriptRepository saveScript: (scriptNameInput text) code: (code text).
 
 	hasUnsavedCodeChanges := false.
 	self updateLabel 

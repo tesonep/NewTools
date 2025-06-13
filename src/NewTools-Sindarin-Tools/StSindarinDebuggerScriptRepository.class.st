@@ -22,6 +22,12 @@ StSindarinDebuggerScriptRepository class >> loadScript: aString [
 ]
 
 { #category : 'accessing' }
+StSindarinDebuggerScriptRepository class >> repositoryName [
+	"Return the name of the repository."
+	self subclassResponsibility
+]
+
+{ #category : 'accessing' }
 StSindarinDebuggerScriptRepository class >> saveScript: aStringKey code: aStringValue [
 	
 	self scripts add: aStringKey -> aStringValue.
