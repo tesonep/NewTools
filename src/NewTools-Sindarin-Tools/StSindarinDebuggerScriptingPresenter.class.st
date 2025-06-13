@@ -133,7 +133,7 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepository [
 		scriptName := scriptChooser chooseElement.
 		scriptName ifNotNil: [
 			scriptNameInput text: scriptName .	
-			code text: (scriptChooser loadScript: scriptName) .
+			code text: (scriptRepositoryChooser loadScript: scriptName) .
 			hasUnsavedCodeChanges := false.
 	
 			self updateLabel .
@@ -155,7 +155,6 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepositoryChooser [
 	scriptRepositoryChooser 
 		findRepositories;
 		whenSelectedItemChangedDo: [ :item | 
-			self saveLastScript.
 			scriptChooser repository: item .
 			self loadLastScript.
 			self updateLabel.
@@ -177,7 +176,7 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 StSindarinDebuggerScriptingPresenter >> loadLastScript [
 	|script|
 		
-	script := (scriptChooser loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	script := (scriptRepositoryChooser loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
 	scriptNameInput text: 'Last updated'.
 	
 	code text: script .
@@ -209,7 +208,7 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
-	scriptChooser saveScript: 'Last updated' code: code text.
+	scriptRepositoryChooser saveScript: 'Last updated' code: code text.
 	
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
@@ -218,7 +217,7 @@ StSindarinDebuggerScriptingPresenter >> saveLastScript [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 
-	scriptChooser saveScript: (scriptNameInput text) code: (code text).
+	scriptRepositoryChooser saveScript: (scriptNameInput text) code: (code text).
 
 	hasUnsavedCodeChanges := false.
 	self updateLabel 

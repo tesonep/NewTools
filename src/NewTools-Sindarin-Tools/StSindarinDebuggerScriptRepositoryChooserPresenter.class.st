@@ -15,3 +15,13 @@ StSindarinDebuggerScriptRepositoryChooserPresenter >> display [
 StSindarinDebuggerScriptRepositoryChooserPresenter >> findRepositories [
 	self items: StSindarinDebuggerScriptRepository subclasses
 ]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptRepositoryChooserPresenter >> loadScript: aString [
+	^ self selectedItem loadScript: aString 
+]
+
+{ #category : 'accessing' }
+StSindarinDebuggerScriptRepositoryChooserPresenter >> saveScript: aStringKey code: aStringValue [
+	self selectedItem saveScript: aStringKey code: aStringValue
+]

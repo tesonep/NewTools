@@ -68,20 +68,10 @@ StSindarinDebuggerScriptChooserPresenter >> initializePresenters [
 	
 ]
 
-{ #category : 'actions' }
-StSindarinDebuggerScriptChooserPresenter >> loadScript: aString [
-	^ repository loadScript: aString.
-]
-
 { #category : 'accessing' }
 StSindarinDebuggerScriptChooserPresenter >> repository: aScriptRepository [
 	repository := aScriptRepository.
 	self applyFilter
-]
-
-{ #category : 'actions' }
-StSindarinDebuggerScriptChooserPresenter >> saveScript: aStringName code: aStringCode [
-	repository saveScript: aStringName code: aStringCode.
 ]
 
 { #category : 'transmission' }
