@@ -11,7 +11,8 @@ Class {
 		'inspector',
 		'parent',
 		'bindingPanel',
-		'inspectorPanel'
+		'inspectorPanel',
+		'buttonAdd'
 	],
 	#category : 'NewTools-Playground-View',
 	#package : 'NewTools-Playground',
@@ -52,15 +53,21 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 
 { #category : 'layout' }
 StPlaygroundBindingsPresenter >> defaultLayout [
-	
-	^ (SpBoxLayout newTopToBottom hAlignStart;
-		add: (SpPanedLayout newLeftToRight
-					positionOfSlider: 30 percent;
-					add: bindingPanel;
+	"^ (SpPanedLayout newLeftToRight
+				positionOfSlider: 30 percent;
+				add: bindingPanel;
+				add: inspectorPanel;
+				yourself)"
+
+	^ SpBoxLayout newLeftToRight 
+		add: (SpBoxLayout newTopToBottom 
+				add: bindingPanel withConstraints: [:c | c width: 250; height: 350];
+				add: (SpBoxLayout newTopToBottom add: buttonAdd; yourself) withConstraints: [:c | c width: 30; height: 30 ] );
+				
+		add: (SpBoxLayout newTopToBottom 
 					add: inspectorPanel;
 					yourself);
-		add: (self newButton label: 'coucouc' ; yourself)
-		yourself)
+		yourself. 
 ]
 
 { #category : 'initialization' }
@@ -76,13 +83,23 @@ StPlaygroundBindingsPresenter >> hasSelectedBinding [
 ]
 
 { #category : 'initialization' }
+StPlaygroundBindingsPresenter >> initializeButtons [
+	buttonAdd := self newButton. 
+	buttonAdd label: 'coucouc'; 
+	action: [ StPlaygroundCommandAddBinding new context: self; execute ].
+	
+]
+
+{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	aDialogWindowPresenter 
+	aDialogWindowPresenter
+		initialExtent: 750@450;
 		centeredRelativeTo: parent window;
 		addDefaultButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
 			presenter close ]
+		
 ]
 
 { #category : 'initialization' }
@@ -128,10 +145,14 @@ StPlaygroundBindingsPresenter >> initializeListPanel [
 			evaluated: [ :each | self scopeNameFor: each ];
 			beSortable;
 			yourself);
+		
 	   actions: self contextMenuActions;
 		yourself.
 	
+	
 	bindingPanel presenter: bindingList
+	
+
 ]
 
 { #category : 'initialization' }
@@ -139,6 +160,7 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 
 	self initializeListPanel.
 	self initializeInspectorPanel.
+	self initializeButtons.
 	
 	bindingList transmitTo: inspector.
 ]

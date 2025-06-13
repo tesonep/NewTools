@@ -19,7 +19,7 @@ Class {
 StPlaygroundBindingPresenter class >> model: anModelPresenter [
 	^ self basicNew 
 		setModelBeforeInitialization: anModelPresenter;
-		yourself
+		initialize
 ]
 
 { #category : 'layout' }
