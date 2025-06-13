@@ -1,5 +1,5 @@
 Class {
-	#name : 'StSindarinDebuggerScriptRepositoryPresenter',
+	#name : 'StSindarinDebuggerScriptChooserPresenter',
 	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'scriptList',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
+StSindarinDebuggerScriptChooserPresenter >> applyFilter [
 	|filtered|
 	filtered := repository scriptsNames select: [ :each |
 		each asLowercase includesSubstring: filter text asLowercase ].
@@ -23,18 +23,18 @@ StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepositoryPresenter >> chooseElement [
+StSindarinDebuggerScriptChooserPresenter >> chooseElement [
 	^ chooseElement 
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptRepositoryPresenter >> connectPresenters [
+StSindarinDebuggerScriptChooserPresenter >> connectPresenters [
 
 	scriptList transmitTo: self
 ]
 
 { #category : 'layout' }
-StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
+StSindarinDebuggerScriptChooserPresenter >> defaultLayout [
 	|buttonRow|
 	
 	buttonRow := SpBoxLayout newLeftToRight
@@ -52,7 +52,7 @@ StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [	
+StSindarinDebuggerScriptChooserPresenter >> initializePresenters [	
 	scriptList := self newList.
 	
 	filter := self newTextInput.
@@ -69,32 +69,32 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> loadScript: aString [
+StSindarinDebuggerScriptChooserPresenter >> loadScript: aString [
 	^ repository loadScript: aString.
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerScriptRepositoryPresenter >> repository: aScriptRepository [
+StSindarinDebuggerScriptChooserPresenter >> repository: aScriptRepository [
 	repository := aScriptRepository.
 	self applyFilter
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> saveScript: aStringName code: aStringCode [
+StSindarinDebuggerScriptChooserPresenter >> saveScript: aStringName code: aStringCode [
 	repository saveScript: aStringName code: aStringCode.
 ]
 
 { #category : 'transmission' }
-StSindarinDebuggerScriptRepositoryPresenter >> setModel: aListElement [
+StSindarinDebuggerScriptChooserPresenter >> setModel: aListElement [
 	chooseElement := aListElement
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> whenCancelButtonDo: aBlock [
+StSindarinDebuggerScriptChooserPresenter >> whenCancelButtonDo: aBlock [
 	cancelButton action: aBlock .
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> whenLoadButtonDo: aBlock [
+StSindarinDebuggerScriptChooserPresenter >> whenLoadButtonDo: aBlock [
 	loadButton action: aBlock .
 ]

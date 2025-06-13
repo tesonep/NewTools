@@ -20,8 +20,8 @@ Class {
 		'resultLabel',
 		'hasUnsavedCodeChanges',
 		'scriptNameInput',
-		'scriptRepository',
-		'scriptRepositoryChooser'
+		'scriptRepositoryChooser',
+		'scriptChooser'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -126,14 +126,14 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 StSindarinDebuggerScriptingPresenter >> initializeScriptRepository [
 	|scriptName|
 	
-	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
-	scriptRepository repository: self defaultScriptRepository. 
+	scriptChooser := StSindarinDebuggerScriptChooserPresenter newApplication: self application.
+	scriptChooser repository: self defaultScriptRepository. 
 	
-	scriptRepository whenLoadButtonDo: [ 
-		scriptName := scriptRepository chooseElement.
+	scriptChooser whenLoadButtonDo: [ 
+		scriptName := scriptChooser chooseElement.
 		scriptName ifNotNil: [
 			scriptNameInput text: scriptName .	
-			code text: (scriptRepository loadScript: scriptName) .
+			code text: (scriptChooser loadScript: scriptName) .
 			hasUnsavedCodeChanges := false.
 	
 			self updateLabel .
@@ -143,7 +143,7 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepository [
 		self layout: self defaultLayout.
 	].
 
-	scriptRepository whenCancelButtonDo: [ 
+	scriptChooser whenCancelButtonDo: [ 
 		self layout: self defaultLayout.
 	]
 ]
@@ -156,7 +156,7 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepositoryChooser [
 		findRepositories;
 		whenSelectedItemChangedDo: [ :item | 
 			self saveLastScript.
-			scriptRepository repository: item .
+			scriptChooser repository: item .
 			self loadLastScript.
 			self updateLabel.
 		].
@@ -177,7 +177,7 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 StSindarinDebuggerScriptingPresenter >> loadLastScript [
 	|script|
 		
-	script := (scriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	script := (scriptChooser loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
 	scriptNameInput text: 'Last updated'.
 	
 	code text: script .
@@ -189,7 +189,7 @@ StSindarinDebuggerScriptingPresenter >> loadLastScript [
 StSindarinDebuggerScriptingPresenter >> loadScript [	
 	self layout: self loadScriptLayout.
 	
-	scriptRepository applyFilter.
+	scriptChooser applyFilter.
 	
 	"check self initializeScriptRepository for loading script logic"
 ]
@@ -198,7 +198,7 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 StSindarinDebuggerScriptingPresenter >> loadScriptLayout [ 
 	^ SpBoxLayout newTopToBottom
 		add: self toolbarLayout expand: false;
-		add: #scriptRepository;
+		add: #scriptChooser ;
 		yourself
 ]
 
@@ -209,7 +209,7 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
-	scriptRepository saveScript: 'Last updated' code: code text.
+	scriptChooser saveScript: 'Last updated' code: code text.
 	
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
@@ -218,7 +218,7 @@ StSindarinDebuggerScriptingPresenter >> saveLastScript [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
 
-	scriptRepository saveScript: (scriptNameInput text) code: (code text).
+	scriptChooser saveScript: (scriptNameInput text) code: (code text).
 
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
