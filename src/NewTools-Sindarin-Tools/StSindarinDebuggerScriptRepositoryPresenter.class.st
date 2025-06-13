@@ -7,8 +7,7 @@ Class {
 		'chooseElement',
 		'loadButton',
 		'cancelButton',
-		'scriptRepository',
-		'repositoryChooser'
+		'repository'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -18,8 +17,7 @@ Class {
 { #category : 'actions' }
 StSindarinDebuggerScriptRepositoryPresenter >> applyFilter [
 	|filtered|
-	
-	filtered := scriptRepository scriptsNames select: [ :each |
+	filtered := repository scriptsNames select: [ :each |
 		each asLowercase includesSubstring: filter text asLowercase ].
 	scriptList items: filtered
 ]
@@ -47,17 +45,10 @@ StSindarinDebuggerScriptRepositoryPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 5;
-		add: repositoryChooser expand: false;
 		add: #scriptList;
 		add: #filter expand: false;
 		add: buttonRow expand: false;
 		yourself
-]
-
-{ #category : 'initialization' }
-StSindarinDebuggerScriptRepositoryPresenter >> initializeDialogWindow: aWindow [
-	super initializeDialogWindow: aWindow.
-	aWindow title: 'Load a script'.
 ]
 
 { #category : 'initialization' }
@@ -74,30 +65,23 @@ StSindarinDebuggerScriptRepositoryPresenter >> initializePresenters [
 	cancelButton := self newButton.
 	cancelButton label: 'Cancel'.
 	
-	repositoryChooser := self newDropList.
-	repositoryChooser 
-		whenSelectedItemChangedDo: [ :each | self loadRepository: each ];
-		items: StSindarinDebuggerScriptRepository subclasses;
-		display: [ :each | each repositoryName ].
-		
-	scriptRepository := SindarinDefaultScriptRepository.
 	
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> loadRepository: aSindarinRepository [
-	scriptRepository := aSindarinRepository.
-	self applyFilter.
+StSindarinDebuggerScriptRepositoryPresenter >> loadScript: aString [
+	^ repository loadScript: aString.
 ]
 
-{ #category : 'actions' }
-StSindarinDebuggerScriptRepositoryPresenter >> loadScript: aString [
-	^ scriptRepository loadScript: aString.
+{ #category : 'accessing' }
+StSindarinDebuggerScriptRepositoryPresenter >> repository: aScriptRepository [
+	repository := aScriptRepository.
+	self applyFilter
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerScriptRepositoryPresenter >> saveScript: aStringName code: aStringCode [
-	scriptRepository saveScript: aStringName code: aStringCode.
+	repository saveScript: aStringName code: aStringCode.
 ]
 
 { #category : 'transmission' }

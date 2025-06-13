@@ -20,7 +20,8 @@ Class {
 		'resultLabel',
 		'hasUnsavedCodeChanges',
 		'scriptNameInput',
-		'scriptRepository'
+		'scriptRepository',
+		'scriptRepositoryChooser'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -51,8 +52,9 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 
 { #category : 'layout' }
 StSindarinDebuggerScriptingPresenter >> defaultLayout [
+
 	^ SpBoxLayout newTopToBottom
-		add: #toolbar expand: false;
+		add: self toolbarLayout expand: false;
 		add: #scriptNameInput 
 			expand: false
 			fill: false
@@ -64,6 +66,11 @@ StSindarinDebuggerScriptingPresenter >> defaultLayout [
 			padding: 5;
 		add: #resultInspection;
 		yourself
+]
+
+{ #category : 'accessing' }
+StSindarinDebuggerScriptingPresenter >> defaultScriptRepository [
+	^ SindarinDefaultScriptRepository
 ]
 
 { #category : 'actions' }
@@ -96,7 +103,10 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	scriptNameInput := self newTextInput.
 	resultLabel := self newLabel.
-	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	
+	self initializeScriptRepository.
+	self initializeScriptRepositoryChooser.
+	
 	code := self newCode.
 	self loadLastScript.
 	code syntaxHighlight: true.
@@ -113,31 +123,11 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptingPresenter >> initializeToolbar [
-
-	toolbar := self newToolbar
-		addStyle: 'stToolbar';
-		beIcons;
-		fillWith: self toolbarActions
-]
-
-{ #category : 'actions' }
-StSindarinDebuggerScriptingPresenter >> loadLastScript [
-	|script|
-		
-	script := (scriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
-	scriptNameInput text: 'Last updated'.
-	
-	code text: script .
-]
-
-{ #category : 'actions' }
-StSindarinDebuggerScriptingPresenter >> loadScript [
+StSindarinDebuggerScriptingPresenter >> initializeScriptRepository [
 	|scriptName|
 	
-	self layout: self loadScriptLayout.
-	
-	scriptRepository applyFilter.
+	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	scriptRepository repository: self defaultScriptRepository. 
 	
 	scriptRepository whenLoadButtonDo: [ 
 		scriptName := scriptRepository chooseElement.
@@ -158,9 +148,56 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 	]
 ]
 
+{ #category : 'initialization' }
+StSindarinDebuggerScriptingPresenter >> initializeScriptRepositoryChooser [
+	
+	scriptRepositoryChooser := StSindarinDebuggerScriptRepositoryChooserPresenter newApplication: self application.
+	scriptRepositoryChooser 
+		findRepositories;
+		whenSelectedItemChangedDo: [ :item | 
+			self saveLastScript.
+			scriptRepository repository: item .
+			self loadLastScript.
+			self updateLabel.
+		].
+	
+	
+]
+
+{ #category : 'initialization' }
+StSindarinDebuggerScriptingPresenter >> initializeToolbar [
+	
+	toolbar := self newToolbar
+		addStyle: 'stToolbar';
+		beIcons;
+		fillWith: self toolbarActions
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> loadLastScript [
+	|script|
+		
+	script := (scriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	scriptNameInput text: 'Last updated'.
+	
+	code text: script .
+	
+	hasUnsavedCodeChanges := false.
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> loadScript [	
+	self layout: self loadScriptLayout.
+	
+	scriptRepository applyFilter.
+	
+	"check self initializeScriptRepository for loading script logic"
+]
+
 { #category : 'layout' }
 StSindarinDebuggerScriptingPresenter >> loadScriptLayout [ 
 	^ SpBoxLayout newTopToBottom
+		add: self toolbarLayout expand: false;
 		add: #scriptRepository;
 		yourself
 ]
@@ -173,6 +210,9 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveLastScript [
 	scriptRepository saveScript: 'Last updated' code: code text.
+	
+	hasUnsavedCodeChanges := false.
+	self updateLabel 
 ]
 
 { #category : 'actions' }
@@ -209,6 +249,14 @@ StSindarinDebuggerScriptingPresenter >> toolbarActions [
 
 	
 	^ group
+]
+
+{ #category : 'layout' }
+StSindarinDebuggerScriptingPresenter >> toolbarLayout [
+	^ SpBoxLayout newLeftToRight
+		add: #toolbar expand: false;
+		add: #scriptRepositoryChooser;
+		yourself.
 ]
 
 { #category : 'initialization' }
