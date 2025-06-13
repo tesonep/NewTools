@@ -90,11 +90,11 @@ StTranscriptPresenterTest >> testReset [
 StTranscriptPresenterTest >> testSmoke [
 
 	| window |
-	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
-	[ self shouldnt: [ window := StTranscriptPresenter exampleDefault ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := StTranscriptPresenter exampleDefault ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
-	[ self shouldnt: [ window := StTranscriptPresenter exampleNonGlobalTranscript ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := StTranscriptPresenter exampleNonGlobalTranscript ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
-	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ]
+	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ]
 ]
