@@ -121,7 +121,7 @@ CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 
-	(aBuilder item: #'Toggle profile preview')
+	(aBuilder item: #'Toggle Profile Preview')
 		parent: #ProfileAction;
 		order: 3;
 		enabled: [ self current currentProfile isNotNil ];
@@ -305,7 +305,7 @@ CavroisWindowManager class >> renameProfile [
 { #category : 'actions' }
 CavroisWindowManager class >> renameProfileItem: aBuilder [
 
-	(aBuilder item: #'Rename profile')
+	(aBuilder item: #'Rename Profile')
 		parent: #ProfileAction;
 		order: 4;
 		enabled: [ self current currentProfile isNotNil ];
@@ -325,7 +325,7 @@ CavroisWindowManager class >> reset [
 { #category : 'initialization' }
 CavroisWindowManager class >> resetWindowsToCurrentProfileItem: aBuilder [
 
-	(aBuilder item: #'Reset Windows')
+	(aBuilder item: #'Position Back Windows')
 		parent: #ProfileAction;
 		order: 6;
 		enabled: [ self current currentProfile isNotNil ];
@@ -445,7 +445,7 @@ CavroisWindowManager class >> updateProfile: aProfile withName: aName [
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfileItem: aBuilder [
 
-	(aBuilder item: #'Update profile')
+	(aBuilder item: #'Update Profile')
 		parent: #ProfileAction;
 		order: 2;
 		enabled: [ self current currentProfile isNotNil ];
@@ -658,8 +658,7 @@ CavroisWindowManager >> transitionToProfile [
 					| placeHolderIndex placeHolder |
 					placeHolderIndex := index - 1 % placeHolders size + 1.
 					placeHolder := placeHolders at: placeHolderIndex.
-					window position: placeHolder position.
-					window extent: placeHolder extent ] ]
+					placeHolder placePresenter: window ] ]
 ]
 
 { #category : 'update' }
