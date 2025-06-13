@@ -73,7 +73,7 @@ StFileSystemModel >> bookmarks [
 StFileSystemModel >> bookmarks: aCollectionOfGroupBookMark [
 	"Set the receiver's global bookmarks to aCollectionOfGroupBookMark"
 
-	Bookmarks := aCollectionOfGroupBookMark asOrderedCollection
+	Bookmarks := aCollectionOfGroupBookMark ifNotNil: [ aCollectionOfGroupBookMark asOrderedCollection ]
 ]
 
 { #category : 'utilities' }
