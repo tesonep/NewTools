@@ -52,12 +52,15 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 
 { #category : 'layout' }
 StPlaygroundBindingsPresenter >> defaultLayout [
-
-	^ SpPanedLayout newLeftToRight
-		positionOfSlider: 30 percent;
-		add: bindingPanel;
-		add: inspectorPanel;
-		yourself
+	
+	^ (SpBoxLayout newTopToBottom hAlignStart;
+		add: (SpPanedLayout newLeftToRight
+					positionOfSlider: 30 percent;
+					add: bindingPanel;
+					add: inspectorPanel;
+					yourself);
+		add: (self newButton label: 'coucouc' ; yourself)
+		yourself)
 ]
 
 { #category : 'initialization' }
