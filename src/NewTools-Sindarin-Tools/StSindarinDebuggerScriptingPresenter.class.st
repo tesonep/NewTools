@@ -104,7 +104,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	scriptNameInput := self newTextInput.
 	resultLabel := self newLabel.
 	
-	self initializeScriptRepository.
+	self initializeScriptChooser.
 	self initializeScriptRepositoryChooser.
 	
 	code := self newCode.
@@ -123,7 +123,7 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerScriptingPresenter >> initializeScriptRepository [
+StSindarinDebuggerScriptingPresenter >> initializeScriptChooser [
 	|scriptName|
 	
 	scriptChooser := StSindarinDebuggerScriptChooserPresenter newApplication: self application.
