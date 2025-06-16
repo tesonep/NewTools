@@ -14,7 +14,7 @@ Class {
 	#tag : 'UI'
 }
 
-{ #category : 'example' }
+{ #category : 'examples' }
 StOpenFilePresenter class >> complexExampleAdaptivePreviewer [
 
 	<example>
@@ -39,13 +39,13 @@ StOpenFilePresenter class >> complexExampleAdaptivePreviewer [
 
 	presenter columns: { StFileBrowserCreationDateColumn }.
 
-	presenter inspect.
+	"presenter inspect."
 	presenter openModal.
 	presenter resetBookmarks.
 	^ presenter confirm
 ]
 
-{ #category : 'example' }
+{ #category : 'examples' }
 StOpenFilePresenter class >> complexExampleTextPreviewer [
 
 	<example>
@@ -101,7 +101,7 @@ StOpenFilePresenter class >> exampleModal [
 	^ self chooseModalAndInspect
 ]
 
-{ #category : 'example' }
+{ #category : 'examples' }
 StOpenFilePresenter class >> examplePreviewer [
 
 	self new
