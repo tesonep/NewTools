@@ -21,7 +21,8 @@ Class {
 		'hasUnsavedCodeChanges',
 		'scriptNameInput',
 		'scriptRepositoryChooser',
-		'scriptChooser'
+		'scriptChooser',
+		'commandCreater'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -36,7 +37,16 @@ StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
-	self flag: 'todo'
+	self flag: 'todo'.
+	self layout: self createCommandLayout.
+]
+
+{ #category : 'layout' }
+StSindarinDebuggerScriptingPresenter >> createCommandLayout [
+	^ SpBoxLayout newTopToBottom 
+		add: self toolbarLayout expand: false;
+		add: commandCreater ;
+		yourself 
 ]
 
 { #category : 'accessing' }
@@ -100,12 +110,28 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 ]
 
 { #category : 'initialization' }
+StSindarinDebuggerScriptingPresenter >> initializeCommandCreater [
+	commandCreater := StSindarinDebuggerCreateCommandPresenter newApplication: self application.
+	commandCreater package: (self defaultScriptRepository package name). 
+	commandCreater 
+		whenCancelButtonDo: [ self layout: self defaultLayout ];
+		whenCreateButtonDo: [
+			commandCreater 
+				commandName: scriptNameInput text;
+				code: code text.
+			commandCreater createCommand.
+			self layout: self defaultLayout 
+		].
+]
+
+{ #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	scriptNameInput := self newTextInput.
 	resultLabel := self newLabel.
 	
 	self initializeScriptChooser.
 	self initializeScriptRepositoryChooser.
+	self initializeCommandCreater.
 	
 	code := self newCode.
 	self loadLastScript.
@@ -118,8 +144,6 @@ StSindarinDebuggerScriptingPresenter >> initializePresenters [
 	resultInspection owner: self.
 	self initializeToolbar.
 	self updateLabel.
-	
-
 ]
 
 { #category : 'initialization' }
@@ -154,7 +178,8 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepositoryChooser [
 	scriptRepositoryChooser := StSindarinDebuggerScriptRepositoryChooserPresenter newApplication: self application.
 	scriptRepositoryChooser 
 		findRepositories;
-		whenSelectedItemChangedDo: [ :item | 
+		whenSelectedItemChangedDo: [ :item |
+			commandCreater package: (item package name).
 			scriptChooser repository: item .
 			self loadLastScript.
 			self updateLabel.
