@@ -6,8 +6,7 @@ Class {
 		'virtualFS'
 	],
 	#category : 'NewTools-Window-Profiles-Tests',
-	#package : 'NewTools-Window-Profiles',
-	#tag : 'Tests'
+	#package : 'NewTools-Window-Profiles-Tests'
 }
 
 { #category : 'running' }

@@ -2,8 +2,7 @@ Class {
 	#name : 'CavWindowProfileTest',
 	#superclass : 'TestCase',
 	#category : 'NewTools-Window-Profiles-Tests',
-	#package : 'NewTools-Window-Profiles',
-	#tag : 'Tests'
+	#package : 'NewTools-Window-Profiles-Tests'
 }
 
 { #category : 'tests' }
