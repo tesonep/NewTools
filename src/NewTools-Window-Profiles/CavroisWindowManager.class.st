@@ -36,7 +36,8 @@ Class {
 		'defaultLocation',
 		'placeHolderIndices',
 		'cellSize',
-		'cells'
+		'cells',
+		'previousClosestPlaceholder'
 	],
 	#classVars : [
 		'Current'
@@ -632,6 +633,32 @@ CavroisWindowManager >> handleCellWindowDrop: aWindow at: aPoint [
 		closestPlaceHolder placePresenter: aWindow ]
 ]
 
+{ #category : 'handling' }
+CavroisWindowManager >> handleWindowDrag: aWindow at: aPoint [
+
+	| closestPlaceHolder closestDistance |
+	closestPlaceHolder := nil.
+	closestDistance := Float infinity.
+	World submorphs do: [ :morph |
+			(morph isKindOf: CavVisualPlaceHolderMorph) ifTrue: [
+					| distance |
+					distance := morph position distanceTo: aPoint.
+					distance < closestDistance ifTrue: [
+							closestPlaceHolder := morph.
+							closestDistance := distance ] ] ].
+
+	previousClosestPlaceholder ifNotNil: [
+			previousClosestPlaceholder ~= closestPlaceHolder ifTrue: [
+					previousClosestPlaceholder color:
+						(Smalltalk ui theme lightSelectionColor alpha: 0.4) ] ].
+
+	closestPlaceHolder ifNotNil: [
+			closestPlaceHolder color:
+				(Smalltalk ui theme lightSelectionColor alpha: 0.7) ].
+
+	previousClosestPlaceholder := closestPlaceHolder
+]
+
 { #category : 'initialization' }
 CavroisWindowManager >> initialize [
 
@@ -649,23 +676,41 @@ CavroisWindowManager >> initialize [
 { #category : 'initialization' }
 CavroisWindowManager >> initializeBlocks [
 
-	WorldMorph cavroisDropBlock: [ :anEvent |
-			| manager |
-			manager := CavroisWindowManager current.
-			manager cellSize ifNotNil: [
-					manager removeVisualPlaceholders.
-					manager
-						handleCellWindowDrop: anEvent contents
-						at: anEvent contents position ] ].
 	WorldMorph cavroisResizeBlock: [
 			CavroisWindowManager current cellSize ifNotNil: [ :size |
 					CavroisWindowManager current resetCells.
 					CavroisWindowManager current createPlaceHolderGrid: size ] ].
+
 	WorldMorph cavroisDragBlock: [ :aClient |
 			((aClient isKindOf: SystemWindow) or:
 				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
 					CavroisWindowManager current cellSize ifNotNil: [
-						CavroisWindowManager current cellDisplay ] ] ]
+							| dragProcess manager |
+							manager := CavroisWindowManager current.
+							manager cellDisplay.
+							dragProcess := [
+								               [ aClient owner notNil ] whileTrue: [
+										               manager
+											               handleWindowDrag: aClient
+											               at: aClient position.
+										               (Delay forMilliseconds: 1) wait ] ] forkAt:
+								               Processor userBackgroundPriority.
+							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
+
+	WorldMorph cavroisDropBlock: [ :anEvent |
+			| manager dragProcess |
+			manager := CavroisWindowManager current.
+			dragProcess := anEvent contents
+				               valueOfProperty: #cavroisDragProcess
+				               ifAbsent: nil.
+			dragProcess ifNotNil: [
+					dragProcess terminate.
+					anEvent contents removeProperty: #cavroisDragProcess ].
+			manager cellSize ifNotNil: [
+					manager removeVisualPlaceholders.
+					manager
+						handleCellWindowDrop: anEvent contents
+						at: anEvent contents position ] ]
 ]
 
 { #category : 'internals' }
