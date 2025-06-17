@@ -39,35 +39,29 @@ StPlaygroundBindingsPresenter >> bindings [
 
 { #category : 'private' }
 StPlaygroundBindingsPresenter >> contextMenuActions [
-
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
+		register: (StPlaygroundCommandAddBinding forSpecContext: self);
+		register: (StPlaygroundCommandModifBinding forSpecContext: self);
+		
+
+		
 		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
 			beDisplayedAsGroup;
 			register: (StRemoveAllBindingsCommand forSpecContext: self);
-			yourself);
+			yourself)
 		yourself
 ]
 
 { #category : 'layout' }
 StPlaygroundBindingsPresenter >> defaultLayout [
-	"^ (SpPanedLayout newLeftToRight
-				positionOfSlider: 30 percent;
+	^ (SpPanedLayout newLeftToRight
+				positionOfSlider: 35 percent;
 				add: bindingPanel;
 				add: inspectorPanel;
-				yourself)"
-
-	^ SpBoxLayout newLeftToRight 
-		add: (SpBoxLayout newTopToBottom 
-				add: bindingPanel withConstraints: [:c | c width: 250; height: 350];
-				add: (SpBoxLayout newTopToBottom add: buttonAdd; yourself) withConstraints: [:c | c width: 30; height: 30 ] );
-				
-		add: (SpBoxLayout newTopToBottom 
-					add: inspectorPanel;
-					yourself);
-		yourself. 
+				yourself)
 ]
 
 { #category : 'initialization' }
@@ -83,18 +77,10 @@ StPlaygroundBindingsPresenter >> hasSelectedBinding [
 ]
 
 { #category : 'initialization' }
-StPlaygroundBindingsPresenter >> initializeButtons [
-	buttonAdd := self newButton. 
-	buttonAdd label: 'coucouc'; 
-	action: [ StPlaygroundCommandAddBinding new context: self; execute ].
-	
-]
-
-{ #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter
-		initialExtent: 750@450;
+		initialExtent: 800@450;
 		centeredRelativeTo: parent window;
 		addDefaultButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
@@ -160,9 +146,10 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 
 	self initializeListPanel.
 	self initializeInspectorPanel.
-	self initializeButtons.
 	
 	bindingList transmitTo: inspector.
+	
+
 ]
 
 { #category : 'testing' }
@@ -204,6 +191,11 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 	^ self 
 		instantiate: aClass 
 		on: aBinding value
+]
+
+{ #category : 'accessing' }
+StPlaygroundBindingsPresenter >> parent [
+	^ parent 
 ]
 
 { #category : 'actions' }
@@ -274,6 +266,8 @@ StPlaygroundBindingsPresenter >> toolbarActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveAllBindingsCommand forSpecContext: self);
+		register: (StPlaygroundCommandAddBinding forSpecContext: self);
+		register: (StPlaygroundCommandModifBinding forSpecContext: self);
 		yourself
 ]
 
