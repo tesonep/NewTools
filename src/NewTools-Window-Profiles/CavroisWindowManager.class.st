@@ -481,6 +481,7 @@ CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileK
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfile [
 
+	self removeGrid.
 	self current updateProfile
 ]
 
