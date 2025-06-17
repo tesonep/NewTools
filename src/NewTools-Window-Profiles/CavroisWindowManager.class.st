@@ -34,7 +34,9 @@ Class {
 		'classToolMapping',
 		'currentProfile',
 		'defaultLocation',
-		'placeHolderIndices'
+		'placeHolderIndices',
+		'cellSize',
+		'cells'
 	],
 	#classVars : [
 		'Current'
@@ -130,6 +132,50 @@ CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 		iconName: #haloView
 ]
 
+{ #category : 'adding' }
+CavroisWindowManager class >> cellModeItem: aBuilder [
+
+	(aBuilder item: #'Cell Layout Mode')
+		parent: #ProfileAction;
+		order: 7;
+		help:
+			'Layout mode creating cells to help you position your window(s) ';
+		iconName: #table;
+		with: [
+				(aBuilder item: #'Choose Cell Size')
+					parent: #'Cell Layout Mode';
+					order: 0;
+					help: 'Define a size x size grid with cells';
+					iconName: #edit;
+					action: [ self chooseGridSize ].
+
+				(aBuilder item: #'Remove mode')
+					parent: #'Cell Layout Mode';
+					order: 2;
+					help: 'Turn off the cell mode';
+					iconName: #delete;
+					action: [ self removeGrid ] ]
+]
+
+{ #category : 'api' }
+CavroisWindowManager class >> chooseGridSize [
+
+	| presenter |
+	presenter := SpRequestDialog new
+		             title: 'Grid ';
+		             label: 'What is the size of the grid ?';
+		             text: '';
+		             acceptLabel: 'Confirm';
+		             cancelLabel: 'Cancel';
+		             onAccept: [ :dialog |
+				             self current resetCells.
+				             self current cellSize: dialog presenter text asNumber.
+				             self current createPlaceHolderGrid:
+						             dialog presenter text asNumber.
+				             MenubarMorph reset ];
+		             openDialog
+]
+
 { #category : 'instance creation' }
 CavroisWindowManager class >> createProfile [
 
@@ -141,6 +187,7 @@ CavroisWindowManager class >> createProfile [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
+				             self current resetCells.
 				             self current updatePreviousCurrentProfile.
 				             self current addProfileFromWindows:
 						             dialog presenter text , ' (Current)'.
@@ -261,7 +308,14 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		renameProfileItem: aBuilder;
 		resetWindowsToCurrentProfileItem: aBuilder;
 		addProfileImportExportItems: aBuilder;
-		addProfileHelpItem: aBuilder
+		addProfileHelpItem: aBuilder;
+		cellModeItem:aBuilder 
+]
+
+{ #category : 'removing' }
+CavroisWindowManager class >> removeGrid [
+
+	self current resetCells
 ]
 
 { #category : 'removing' }
@@ -482,6 +536,58 @@ CavroisWindowManager >> allCurrentWindows [
 				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
 ]
 
+{ #category : 'display' }
+CavroisWindowManager >> cellDisplay [
+
+	| visualPlaceHolder |
+	cells do: [ :each |
+			visualPlaceHolder := CavVisualPlaceHolderMorph new
+				                     extent: each extent;
+				                     position: each position.
+
+			visualPlaceHolder openInWorld ]
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cellSize [
+
+	^ cellSize
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cellSize: anObject [
+
+	cellSize := anObject
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cells [
+
+	^ cells
+]
+
+{ #category : 'creation' }
+CavroisWindowManager >> createPlaceHolderGrid: aSize [
+
+	| world createdCellSize existingWindows |
+	aSize ifNil: [ ^ self ].
+	existingWindows := self allCurrentWindows.
+	world := self currentWorld bounds.
+	createdCellSize := world width // aSize
+	                   @ (world height - 45 // aSize).
+	0 to: aSize - 1 do: [ :row |
+			0 to: aSize - 1 do: [ :col |
+					| origin randomWindow placeHolder |
+					origin := col * createdCellSize x
+					          @ (row * createdCellSize + 18) y.
+					randomWindow := existingWindows atRandom.
+					placeHolder := self placeHolderFromWindow: randomWindow.
+					placeHolder strategy: CavExactOnTopStrategy new.
+					placeHolder position: origin.
+					placeHolder extent: createdCellSize.
+					cells add: placeHolder ] ]
+]
+
 { #category : 'accessing' }
 CavroisWindowManager >> currentProfile [
 
@@ -506,6 +612,25 @@ CavroisWindowManager >> defaultLocation: aLocation [
 	defaultLocation := aLocation
 ]
 
+{ #category : 'handling' }
+CavroisWindowManager >> handleCellWindowDrop: aWindow at: aPoint [
+
+	| closestPlaceHolder closestDistance |
+	((aWindow isKindOf: SystemWindow) or:
+		 (aWindow isKindOf: SpWindowMorph)) ifFalse: [ ^ self ].
+	closestPlaceHolder := nil.
+	closestDistance := Float infinity.
+
+	cells do: [ :placeHolder |
+			| distance |
+			distance := placeHolder position distanceTo: aPoint.
+			distance < closestDistance ifTrue: [
+					closestPlaceHolder := placeHolder.
+					closestDistance := distance ] ].
+	closestPlaceHolder ifNotNil: [
+		closestPlaceHolder placePresenter: aWindow ]
+]
+
 { #category : 'initialization' }
 CavroisWindowManager >> initialize [
 
@@ -513,8 +638,33 @@ CavroisWindowManager >> initialize [
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	placeHolderIndices := Dictionary new.
+	cells := OrderedCollection new.
 	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
-	self resetProfiles
+	self resetProfiles.
+	self initializeBlocks 
+	
+]
+
+{ #category : 'initialization' }
+CavroisWindowManager >> initializeBlocks [
+
+	WorldMorph cavroisDropBlock: [ :anEvent |
+			| manager |
+			manager := CavroisWindowManager current.
+			manager cellSize ifNotNil: [
+					manager removeVisualPlaceholders.
+					manager
+						handleCellWindowDrop: anEvent contents
+						at: anEvent contents position ] ].
+	WorldMorph cavroisResizeBlock: [
+			CavroisWindowManager current cellSize ifNotNil: [ :size |
+					CavroisWindowManager current resetCells.
+					CavroisWindowManager current createPlaceHolderGrid: size ] ].
+	WorldMorph cavroisDragBlock: [ :aClient |
+			((aClient isKindOf: SystemWindow) or:
+				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
+					CavroisWindowManager current cellSize ifNotNil: [
+						CavroisWindowManager current cellDisplay ] ] ]
 ]
 
 { #category : 'internals' }
@@ -617,6 +767,12 @@ CavroisWindowManager >> removeVisualPlaceholders [
 		select: [ :morph |
 			morph visible = false and: (morph hasProperty: #isClosed) not ]
 		thenDo: [ :morph | morph visible: true ]
+]
+
+{ #category : 'initialization' }
+CavroisWindowManager >> resetCells [
+
+	cells := OrderedCollection new
 ]
 
 { #category : 'internals' }
