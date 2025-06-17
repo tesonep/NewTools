@@ -650,7 +650,7 @@ CavroisWindowManager >> handleWindowDrag: aWindow at: aPoint [
 	previousClosestPlaceholder ifNotNil: [
 			previousClosestPlaceholder ~= closestPlaceHolder ifTrue: [
 					previousClosestPlaceholder color:
-						(Smalltalk ui theme lightSelectionColor alpha: 0.4) ] ].
+						(Smalltalk ui theme lightSelectionColor alpha: 0.2) ] ].
 
 	closestPlaceHolder ifNotNil: [
 			closestPlaceHolder color:
@@ -693,7 +693,7 @@ CavroisWindowManager >> initializeBlocks [
 										               manager
 											               handleWindowDrag: aClient
 											               at: aClient position.
-										               (Delay forMilliseconds: 1) wait ] ] forkAt:
+										               (Delay forMilliseconds: 0.2) wait ] ] forkAt:
 								               Processor userBackgroundPriority.
 							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
 
