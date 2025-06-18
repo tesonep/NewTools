@@ -30,7 +30,7 @@ SindarinCommand class >> isAbstract [
 { #category : 'accessing' }
 SindarinCommand >> context: aDebugger [
 	super context: aDebugger.
-	sindarin := aDebugger sindarinDebugger.
+	"sindarin := aDebugger sindarinDebugger."
 	
 ]
 
