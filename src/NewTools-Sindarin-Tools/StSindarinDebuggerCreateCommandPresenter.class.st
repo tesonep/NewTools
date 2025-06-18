@@ -34,16 +34,13 @@ StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	| className description |
-	className := 'Sindarin', (commandName ifNil: ['Default']), 'MyCommand'.
+	className := 'Sindarin', (commandName ifNil: ['Default']), 'Command'.
 	description := descriptionInput text.
 	
 	SindarinCommand << className 
-		package: package .
-	
-	Transcript showCr: ('Class name ', className ).
-	Transcript showCr: ('Description ', description ).
-	Transcript showCr: ('Code ', code ).
-	Transcript showCr: ('Package ', package ).
+		package: package;
+		build;
+		install.
 	
 	"execute"
 	
