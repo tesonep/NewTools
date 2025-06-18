@@ -678,12 +678,12 @@ CavroisWindowManager >> initialize [
 { #category : 'initialization' }
 CavroisWindowManager >> initializeBlocks [
 
-	WorldMorph cavroisResizeBlock: [
+	WorldMorph resizeActionBlock: [
 			CavroisWindowManager current cellSize ifNotNil: [ :size |
 					CavroisWindowManager current resetCells.
 					CavroisWindowManager current createPlaceHolderGrid: size ] ].
 
-	WorldMorph cavroisDragBlock: [ :aClient |
+	WorldMorph dragActionBlock: [ :aClient |
 			((aClient isKindOf: SystemWindow) or:
 				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
 					CavroisWindowManager current cellSize ifNotNil: [
@@ -699,7 +699,7 @@ CavroisWindowManager >> initializeBlocks [
 								               Processor userBackgroundPriority.
 							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
 
-	WorldMorph cavroisDropBlock: [ :anEvent |
+	WorldMorph dropActionBlock: [ :anEvent |
 			| manager dragProcess |
 			manager := CavroisWindowManager current.
 			dragProcess := anEvent contents
