@@ -573,19 +573,17 @@ CavroisWindowManager >> cells [
 { #category : 'creation' }
 CavroisWindowManager >> createPlaceHolderGrid: aSize [
 
-	| world createdCellSize existingWindows |
+	| world createdCellSize |
 	aSize ifNil: [ ^ self ].
-	existingWindows := self allCurrentWindows.
 	world := self currentWorld bounds.
 	createdCellSize := world width // aSize
 	                   @ (world height - 45 // aSize).
 	0 to: aSize - 1 do: [ :row |
 			0 to: aSize - 1 do: [ :col |
-					| origin randomWindow placeHolder |
+					| origin placeHolder |
 					origin := col * createdCellSize x
 					          @ (row * createdCellSize + 18) y.
-					randomWindow := existingWindows atRandom.
-					placeHolder := self placeHolderFromWindow: randomWindow.
+					placeHolder := self placeHolderFromWindow: SystemWindow new.
 					placeHolder strategy: CavExactOnTopStrategy new.
 					placeHolder position: origin.
 					placeHolder extent: createdCellSize.
