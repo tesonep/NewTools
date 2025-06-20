@@ -6,8 +6,7 @@ Class {
 		'virtualFS'
 	],
 	#category : 'NewTools-Window-Profiles-Tests',
-	#package : 'NewTools-Window-Profiles',
-	#tag : 'Tests'
+	#package : 'NewTools-Window-Profiles-Tests'
 }
 
 { #category : 'running' }
@@ -56,6 +55,23 @@ CavroisWindowManagerTest >> testDeleteProfile [
 
 	self deny: (manager profiles includesKey: 'ProfileToDelete').
 	self assert: (manager profiles includesKey: 'ProfileToKeep')
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testGridCellsInitialization [
+
+	manager cellSize: 4.
+	manager createPlaceHolderGrid: manager cellSize.
+	self assert: manager cells size equals: 16
+]
+
+{ #category : 'tests' }
+CavroisWindowManagerTest >> testRemoveGridDeletePlaceholders [
+
+	manager cellSize: 4.
+	manager createPlaceHolderGrid: manager cellSize.
+	manager class removeGrid.
+	self assert: manager cells size equals: 0
 ]
 
 { #category : 'tests' }

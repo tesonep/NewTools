@@ -25,8 +25,10 @@ CavVisualPlaceHolderMorph >> changeStrategy [
 		             items: CavWindowStrategy subclasses;
 		             display: [ :each | each title ];
 		             onAccept: [ :dialog |
-			             placeHolder strategy:
-					             dialog presenter selectedItem new ].
+				             placeHolder strategy:
+						             dialog presenter selectedItem new.
+				             CavroisWindowManager toggleProfilePlaceholders.
+				             CavroisWindowManager toggleProfilePlaceholders ].
 	description := presenter newText text:
 		               presenter list selectedItem comment.
 	presenter layout add: description.

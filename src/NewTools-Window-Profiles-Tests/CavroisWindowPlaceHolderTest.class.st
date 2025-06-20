@@ -2,8 +2,7 @@ Class {
 	#name : 'CavroisWindowPlaceHolderTest',
 	#superclass : 'TestCase',
 	#category : 'NewTools-Window-Profiles-Tests',
-	#package : 'NewTools-Window-Profiles',
-	#tag : 'Tests'
+	#package : 'NewTools-Window-Profiles-Tests'
 }
 
 { #category : 'tests' }
@@ -20,7 +19,7 @@ CavroisWindowPlaceHolderTest >> testHolderStrategyBackLinkIsKeptOnSetter [
 
 
 	| h |
-	h := CavWindowPlaceHolder new.
+	h := CavWindowPlaceHolder new. 
 	h strategy: CavReplaceStrategy new. 
 	self assert: h strategy placeHolder equals: h 
 ]
