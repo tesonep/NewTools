@@ -1,9 +1,6 @@
 Class {
 	#name : 'SindarinCommand',
 	#superclass : 'CmCommand',
-	#instVars : [
-		'sindarin'
-	],
 	#category : 'NewTools-Sindarin-Commands',
 	#package : 'NewTools-Sindarin-Commands'
 }
@@ -25,13 +22,6 @@ SindarinCommand class >> forSpecContext: anObject [
 SindarinCommand class >> isAbstract [
 
 	^ self == SindarinCommand
-]
-
-{ #category : 'accessing' }
-SindarinCommand >> context: aDebugger [
-	super context: aDebugger.
-	"sindarin := aDebugger sindarinDebugger."
-	
 ]
 
 { #category : 'accessing' }

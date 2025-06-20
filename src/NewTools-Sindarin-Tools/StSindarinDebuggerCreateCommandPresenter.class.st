@@ -33,25 +33,31 @@ StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createCommand [
-	| className description |
-	className := 'Sindarin', (commandName ifNil: ['Default']), 'Command'.
-	description := descriptionInput text.
+	| name className description class |
+	name := (commandName ifNil: ['Default']) asCamelCase.
+	className := 'Sindarin{1}Command' format: {name}.
+	description := descriptionInput text ifNil: [''].
 	
-	SindarinCommand << className 
+	class := SindarinCommand << className 
 		package: package;
 		build;
 		install.
+
+	class compile: ('execute
+	|sindarin|
+	sindarin := self context sindarinDebugger.
+	self context debuggerActionModel preventUpdatesDuring: [
+		{1}
+	]' format: {'"TODO"'}) classified: 'executing'.
 	
-	"execute"
+	class class compile: ('defaultIconName
+	^#{1}' format: {iconNameSelected}) classified: 'initialization'.
 	
-	"defaultIconName"
-	"iconNameSelected"
+	class class compile: ('defaultDescription
+	^ ''{1}''' format: {description}) classified: 'initialization'.
 	
-	"defaultDescritpion"
-	"description"
-	
-	"defaultName"
-	"nameInput text asCamelCase"
+	class class compile: ('defaultName
+	^ ''{1}''' format: {name}) classified: 'initialization'.
 	
 ]
 
