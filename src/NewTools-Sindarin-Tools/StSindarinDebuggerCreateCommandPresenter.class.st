@@ -9,7 +9,8 @@ Class {
 		'iconList',
 		'iconNameSelected',
 		'commandName',
-		'code'
+		'code',
+		'projectName'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -48,7 +49,7 @@ StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	sindarin := self context sindarinDebugger.
 	self context debuggerActionModel preventUpdatesDuring: [
 		{1}
-	]' format: {'"TODO"'}) classified: 'executing'.
+	]' format: {code}) classified: 'executing'.
 	
 	class class compile: ('defaultIconName
 	^#{1}' format: {iconNameSelected}) classified: 'initialization'.
@@ -59,6 +60,27 @@ StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	class class compile: ('defaultName
 	^ ''{1}''' format: {name}) classified: 'initialization'.
 	
+	self createMenu.
+
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerCreateCommandPresenter >> createMenu [
+	StDebugger class compile: ('buildSindarin{2}ExtentionCommandsCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup
+	<extensionCommands>
+	| commands toolbarCommandGroup |
+	commands := (SindarinCommand subclasses select: [ :sub | sub packageName = ''{3}'']) collect: [ :each | each forSpecContext: stDebuggerInstance ].
+	
+	toolbarCommandGroup := CmCommandGroup forSpec
+		beToolbarPopoverButton;
+		name: ''{1}'';
+		icon: (stDebuggerInstance application iconNamed: #changeUpdate);
+		yourself.
+	
+	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarCommandGroup.
+	
+	commands do: [ :c | toolbarCommandGroup register: c ]' format: {projectName. projectName asCamelCase . package})
+	classified: 'extensions'
 ]
 
 { #category : 'layout' }
@@ -108,6 +130,11 @@ StSindarinDebuggerCreateCommandPresenter >> initializePresenters [
 { #category : 'accessing' }
 StSindarinDebuggerCreateCommandPresenter >> package: aPackageName [
 	package := aPackageName
+]
+
+{ #category : 'accessing' }
+StSindarinDebuggerCreateCommandPresenter >> projectName: aName [
+	projectName := aName.
 ]
 
 { #category : 'transmission' }

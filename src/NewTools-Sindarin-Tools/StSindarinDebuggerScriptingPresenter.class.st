@@ -112,8 +112,9 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializeCommandCreater [
 	commandCreater := StSindarinDebuggerCreateCommandPresenter newApplication: self application.
-	commandCreater package: (self defaultScriptRepository package name). 
 	commandCreater 
+		package: (self defaultScriptRepository package name);
+		projectName: (self defaultScriptRepository repositoryName);
 		whenCancelButtonDo: [ self layout: self defaultLayout ];
 		whenCreateButtonDo: [
 			commandCreater 
@@ -179,7 +180,9 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptRepositoryChooser [
 	scriptRepositoryChooser 
 		findRepositories;
 		whenSelectedItemChangedDo: [ :item |
-			commandCreater package: (item package name).
+			commandCreater 
+				package: (item package name);
+				projectName: (item repositoryName).
 			scriptChooser repository: item .
 			self loadLastScript.
 			self updateLabel.
