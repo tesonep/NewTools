@@ -693,7 +693,7 @@ CavroisWindowManager >> initializeBlocks [
 										               manager
 											               handleWindowDrag: aClient
 											               at: aClient position.
-										               (Delay forMilliseconds: 0.2) wait ] ] forkAt:
+										               (Delay forMilliseconds: 2) wait ] ] forkAt:
 								               Processor userBackgroundPriority.
 							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
 
