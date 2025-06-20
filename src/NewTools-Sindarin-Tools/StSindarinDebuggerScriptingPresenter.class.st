@@ -225,7 +225,10 @@ StSindarinDebuggerScriptingPresenter >> loadScript [
 StSindarinDebuggerScriptingPresenter >> loadScriptLayout [ 
 	^ SpBoxLayout newTopToBottom
 		add: self toolbarLayout expand: false;
-		add: #scriptChooser ;
+		add: #scriptChooser 
+			expand: true
+			fill: true
+			padding:2;
 		yourself
 ]
 

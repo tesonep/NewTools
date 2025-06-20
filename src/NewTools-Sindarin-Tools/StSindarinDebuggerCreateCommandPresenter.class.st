@@ -35,8 +35,8 @@ StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	| name className description class |
-	name := (commandName ifNil: ['Default']) asCamelCase.
-	className := 'Sindarin{1}Command' format: {name}.
+	name := commandName ifNil: ['Default'].
+	className := 'Sindarin{1}Command' format: {name asCamelCase}.
 	description := descriptionInput text ifNil: [''].
 	
 	class := SindarinCommand << className 
@@ -66,7 +66,7 @@ StSindarinDebuggerCreateCommandPresenter >> createCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createMenu [
-	StDebugger class compile: ('buildSindarin{2}ExtentionCommandsCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup
+	StDebugger class compile: ('buildSindarin{2}ExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup
 	<extensionCommands>
 	| commands toolbarCommandGroup |
 	commands := (SindarinCommand subclasses select: [ :sub | sub packageName = ''{3}'']) collect: [ :each | each forSpecContext: stDebuggerInstance ].
@@ -79,7 +79,7 @@ StSindarinDebuggerCreateCommandPresenter >> createMenu [
 	
 	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarCommandGroup.
 	
-	commands do: [ :c | toolbarCommandGroup register: c ]' format: {projectName. projectName asCamelCase . package})
+	commands do: [ :c | toolbarCommandGroup register: c ].' format: {projectName. projectName asCamelCase . package})
 	classified: 'extensions'
 ]
 
