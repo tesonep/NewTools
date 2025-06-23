@@ -2,7 +2,7 @@
 Row presenter for StPulse list presenter.
 "
 Class {
-	#name : 'StPulseRow',
+	#name : 'StPulseRowPresenter',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'iconPresenter',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'layout' }
-StPulseRow >> defaultLayout [
+StPulseRowPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
 		spacing: 5;
@@ -27,7 +27,7 @@ StPulseRow >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StPulseRow >> initializePresenters [
+StPulseRowPresenter >> initializePresenters [
 
 "	self addStyle: 'stRow'.
 	self addStyle: 'stPulseRow'."
@@ -44,7 +44,7 @@ StPulseRow >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StPulseRow >> updatePresenter [
+StPulseRowPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	

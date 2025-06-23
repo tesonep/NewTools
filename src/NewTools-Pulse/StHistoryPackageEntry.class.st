@@ -1,5 +1,5 @@
 "
-I wrap wrap a RPackage entry name, then later use PackageOrganizer to look for the package (look for self >> content to see the implementation)
+I wrap a StPackageEntry entry name, then later use PackageOrganizer to look for the package (look for self >> content to see the implementation)
 "
 Class {
 	#name : 'StHistoryPackageEntry',
