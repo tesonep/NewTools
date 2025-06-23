@@ -58,7 +58,7 @@ CavAbstractWindowPlaceHolder >> display [
 
 	| visualPlaceHolder textMorph |
 	textMorph := TextMorph new contents:
-		             kind printString , ' - ' , self strategy printString.
+		             kind printString , ' - ' , self strategy class title.
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
