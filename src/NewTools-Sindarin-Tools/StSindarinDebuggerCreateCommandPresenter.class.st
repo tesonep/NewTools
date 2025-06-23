@@ -79,7 +79,7 @@ StSindarinDebuggerCreateCommandPresenter >> createMenu [
 	
 	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarCommandGroup.
 	
-	commands do: [ :c | toolbarCommandGroup register: c ].' format: {projectName. projectName asCamelCase . package})
+	commands do: [ :command | toolbarCommandGroup register: command ].' format: {projectName. projectName asCamelCase . package})
 	classified: 'extensions'
 ]
 
