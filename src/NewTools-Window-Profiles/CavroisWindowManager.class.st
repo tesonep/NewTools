@@ -856,30 +856,10 @@ CavroisWindowManager >> setNextPlaceHolderIndex: anInteger for: aWindowType [
 { #category : 'transitions' }
 CavroisWindowManager >> transitionToProfile [
 
-	| allWindows windowsByType |
-	allWindows := self currentWorld windowsSatisfying: [ :w |
-		              w isCollapsed not and:
-			              (w isKindOf: SpDialogWindowMorph) not ].
-	windowsByType := Dictionary new.
-	allWindows do: [ :w |
-			| windowType |
-			windowType := w model class.
-			w model presenter ifNotNil: [ :pres | windowType := pres class ].
-			(windowsByType
-				 at: windowType
-				 ifAbsentPut: [ OrderedCollection new ]) add: w ].
-	windowsByType keysAndValuesDo: [ :windowType :windows |
-			| placeHolders |
-			placeHolders := self currentProfile placeHoldersFor: windowType.
-
-			(placeHolders first isKindOf: CavNullWindowPlaceHolder) ifTrue: [
-					placeHolders := self currentProfile placeHoldersFor:
-						                windows first model class ].
-			windows withIndexDo: [ :window :index |
-					| placeHolderIndex placeHolder |
-					placeHolderIndex := index - 1 % placeHolders size + 1.
-					placeHolder := placeHolders at: placeHolderIndex.
-					placeHolder placePresenter: window ] ]
+	self currentProfile placeHolders do: [ :ph |
+			ph windows do: [ :window |
+					window position: ph position.
+					window extent: ph extent ] ]
 ]
 
 { #category : 'update' }
