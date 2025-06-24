@@ -145,17 +145,26 @@ CavroisWindowManager class >> cellModeItem: aBuilder [
 		with: [
 				(aBuilder item: #'Choose Cell Size')
 					parent: #'Cell Layout Mode';
-					order: 0;
+					order: 1;
 					help: 'Define a size x size grid with cells';
 					iconName: #edit;
 					action: [ self chooseGridSize ].
 
-				(aBuilder item: #'Remove mode')
+				(aBuilder item: #'Toggle cell mode')
 					parent: #'Cell Layout Mode';
-					order: 2;
+					order: 0;
 					help: 'Turn off the cell mode';
-					iconName: #delete;
-					action: [ self removeGrid ] ]
+					iconName: (self current cells isEmpty
+							 ifTrue: [ #checkboxUnselected ]
+							 ifFalse: [ #checkboxSelected ]);
+					action: [
+							self current cells isEmpty
+								ifFalse: [ self removeGrid ]
+								ifTrue: [
+										self current resetCells.
+										self current cellSize: 3.
+										self current createPlaceHolderGrid: 3 ].
+							MenubarMorph reset ] ]
 ]
 
 { #category : 'api' }
@@ -169,11 +178,22 @@ CavroisWindowManager class >> chooseGridSize [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
-				             self current resetCells.
-				             self current cellSize: dialog presenter text asNumber.
-				             self current createPlaceHolderGrid:
-						             dialog presenter text asNumber.
-				             MenubarMorph reset ];
+				             | inputValue |
+				             inputValue := dialog presenter text.
+				             inputValue isAllDigits
+					             ifFalse: [
+						             self inform: 'Please enter a valid number' ]
+					             ifTrue: [
+							             inputValue := inputValue asNumber.
+							             (inputValue between: 1 and: 5)
+								             ifTrue: [
+										             self current resetCells.
+										             self current cellSize: inputValue.
+										             self current createPlaceHolderGrid: inputValue.
+										             MenubarMorph reset ]
+								             ifFalse: [
+									             self inform:
+											             'Please enter a number between 1 and 5' ] ] ];
 		             openDialog
 ]
 
