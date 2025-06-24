@@ -5,6 +5,7 @@ Class {
 	#name : 'CavAbstractWindowPlaceHolder',
 	#superclass : 'Object',
 	#instVars : [
+		'windows',
 		'extent',
 		'kind',
 		'position',
@@ -102,14 +103,14 @@ CavAbstractWindowPlaceHolder >> increment [
 { #category : 'initialization' }
 CavAbstractWindowPlaceHolder >> initialize [
 
-	super initialize. 
+	super initialize.
 	strategy := CavStackingStrategy new.
 	strategy placeHolder: self.
+	windows := OrderedCollection new.
 	"count is counting the number of opened window.
 	not really nice but let us get started."
 	kind := 'empty'.
-	count := 1.	
-
+	count := 1
 ]
 
 { #category : 'accessing' }
@@ -170,6 +171,12 @@ CavAbstractWindowPlaceHolder >> widthPercentage [
 CavAbstractWindowPlaceHolder >> widthPercentage: anObject [
 
 	widthPercentage := anObject
+]
+
+{ #category : 'accessing' }
+CavAbstractWindowPlaceHolder >> windows [
+
+	^ windows
 ]
 
 { #category : 'accessing' }
