@@ -34,6 +34,12 @@ CavAbstractWindowPlaceHolder class >> exampleTranscript [
 	
 ]
 
+{ #category : 'ston-core' }
+CavAbstractWindowPlaceHolder class >> stonAllInstVarNames [
+
+	^ super stonAllInstVarNames copyWithout: #windows
+]
+
 { #category : 'initialization' }
 CavAbstractWindowPlaceHolder >> configureStrategy [
 
