@@ -10,6 +10,12 @@ Class {
 }
 
 { #category : 'accessing' }
+CavWindowStrategy class >> title [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
 CavWindowStrategy >> placeHolder [
 
 	^ placeHolder
