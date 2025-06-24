@@ -30,5 +30,5 @@ CavWindowStrategy >> placeHolder: anObject [
 { #category : 'positioning' }
 CavWindowStrategy >> placePresenter: aPresenter [
 
-	
+	self placeHolder windows add: aPresenter
 ]

@@ -560,6 +560,25 @@ CavroisWindowManager >> allCurrentWindows [
 				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
 ]
 
+{ #category : 'actions' }
+CavroisWindowManager >> applyWorldResize [
+
+	self currentProfile ifNotNil: [
+			self currentProfile placeHolders do: [ :ph |
+					((SystemWindow allInstances union: SpWindowMorph allInstances)
+						 select: [ :window | ph windows includes: window ]) do: [
+							:window |
+							window extent:
+								ph widthPercentage / 100 * self currentWorld bounds width
+								@
+								(ph heightPercentage / 100 * self currentWorld bounds height).
+							window position:
+								ph xPercentage / 100 * self currentWorld bounds width
+								@ (ph yPercentage / 100 * self currentWorld bounds height).
+							ph position: window position.
+							ph extent: window extent ] ] ]
+]
+
 { #category : 'display' }
 CavroisWindowManager >> cellDisplay [
 
@@ -697,20 +716,20 @@ CavroisWindowManager >> initialize [
 CavroisWindowManager >> initializeBlocks [
 
 	WorldMorph resizeActionBlock: [
-			CavroisWindowManager current cellSize ifNotNil: [ :size |
-					CavroisWindowManager current resetCells.
-					CavroisWindowManager current createPlaceHolderGrid: size ] ].
+			self cellSize ifNotNil: [ :size |
+					self resetCells.
+					self createPlaceHolderGrid: size ].
+			self applyWorldResize ].
 
 	WorldMorph dragActionBlock: [ :aClient |
 			((aClient isKindOf: SystemWindow) or:
 				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
-					CavroisWindowManager current cellSize ifNotNil: [
-							| dragProcess manager |
-							manager := CavroisWindowManager current.
-							manager cellDisplay.
+					self cellSize ifNotNil: [
+							| dragProcess |
+							self cellDisplay.
 							dragProcess := [
 								               [ aClient owner notNil ] whileTrue: [
-										               manager
+										               self
 											               handleWindowDrag: aClient
 											               at: aClient position.
 										               (Delay forMilliseconds: 2) wait ] ] forkAt:
@@ -718,17 +737,16 @@ CavroisWindowManager >> initializeBlocks [
 							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
 
 	WorldMorph dropActionBlock: [ :anEvent |
-			| manager dragProcess |
-			manager := CavroisWindowManager current.
+			| dragProcess |
 			dragProcess := anEvent contents
 				               valueOfProperty: #cavroisDragProcess
 				               ifAbsent: nil.
 			dragProcess ifNotNil: [
 					dragProcess terminate.
 					anEvent contents removeProperty: #cavroisDragProcess ].
-			manager cellSize ifNotNil: [
-					manager removeVisualPlaceholders.
-					manager
+			self cellSize ifNotNil: [
+					self removeVisualPlaceholders.
+					self
 						handleCellWindowDrop: anEvent contents
 						at: anEvent contents position ] ]
 ]
@@ -779,6 +797,7 @@ CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
 		               yPercentage:
 			               aWindowPresenter bounds origin y
 			               / self currentWorld bounds height * 100.
+	placeHolder windows add: aWindowPresenter.
 	placeHolder configureStrategy.
 	aWindowPresenter configurePlaceHolder: placeHolder.
 	^ placeHolder
