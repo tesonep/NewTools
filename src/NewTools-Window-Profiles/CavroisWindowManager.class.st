@@ -898,7 +898,11 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	self currentProfile reset.
-	self allCurrentWindows do: [ :each |
-		self currentProfile add: (self placeHolderFromWindow: each) ]
+	| windowsInPlaceholders |
+	windowsInPlaceholders := Set new.
+	self currentProfile placeHolders do: [ :ph |
+		windowsInPlaceholders addAll: ph windows ].
+	((SystemWindow allInstances union: SpWindowMorph allInstances)
+		 reject: [ :w | windowsInPlaceholders includes: w ]) do: [ :w |
+		self currentProfile add: (self placeHolderFromWindow: w) ]
 ]
