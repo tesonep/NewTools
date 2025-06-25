@@ -30,6 +30,13 @@ CavWindowStrategy >> placeHolder: anObject [
 { #category : 'positioning' }
 CavWindowStrategy >> placePresenter: aPresenter [
 
-	(self placeHolder windows includes: aPresenter) ifFalse: [
-		self placeHolder windows add: aPresenter ]
+	aPresenter isSystemWindow
+		ifTrue: [
+				(self placeHolder windows includes: aPresenter) ifFalse: [
+					self placeHolder windows add: aPresenter ] ]
+		ifFalse: [
+				aPresenter whenBuiltDo: [
+						(self placeHolder windows includes: aPresenter owner window)
+							ifFalse: [
+							self placeHolder windows add: aPresenter owner window ] ] ]
 ]

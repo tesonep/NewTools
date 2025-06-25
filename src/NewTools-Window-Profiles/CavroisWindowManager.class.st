@@ -899,7 +899,10 @@ CavroisWindowManager >> updateProfile [
 	| windowsInPlaceholders |
 	windowsInPlaceholders := Set new.
 	self currentProfile placeHolders do: [ :ph |
-		windowsInPlaceholders addAll: ph windows ].
+			windowsInPlaceholders addAll: ph windows.
+			ph windows do: [ :window |
+					ph extent: window extent.
+					ph position: window position ] ].
 	(self allCurrentWindows reject: [ :w |
 		 windowsInPlaceholders includes: w ]) do: [ :w |
 		self currentProfile add: (self placeHolderFromWindow: w) ]
