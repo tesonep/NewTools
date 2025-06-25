@@ -114,8 +114,8 @@ BaselineOfNewTools >> baseline: spec [
 			
 			"Window Profile"
 			package: 'NewTools-Window-Profiles' with: [ spec requires: #('NewTools-Core')] ;
-			
-			
+			package: 'NewTools-Window-Profiles-Tests' with: [spec requires: #( 'NewTools-Core' 'NewTools-Window-Profiles' ) ]; 
+	
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
@@ -174,10 +174,9 @@ BaselineOfNewTools >> baseline: spec [
 
 			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
 			
-			group: 'Profile' with: #( 'NewTools-Window-Profiles' );
+			group: 'Profile' with: #( 'NewTools-Window-Profiles' 'NewTools-Window-Profiles-Tests' );
 			
 			group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
-			
 			
 			group: 'Debugger' with: #( 
 					 	'Core' 
