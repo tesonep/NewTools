@@ -104,16 +104,7 @@ StDebuggerContextPredicate >> printDescription [
 { #category : 'printing' }
 StDebuggerContextPredicate >> printDescriptionPrefixOn: str [
 
-	self printPostMortemDescriptionOn: str.
-	self printHaltDescriptionOn: str
-]
-
-{ #category : 'printing' }
-StDebuggerContextPredicate >> printHaltDescriptionOn: str [
-
-	context sourceNodeExecuted isHaltNode ifFalse: [ ^ self ].
-	str << 'Halt in'.
-	str space
+	self printPostMortemDescriptionOn: str
 ]
 
 { #category : 'printing' }

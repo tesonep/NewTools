@@ -87,7 +87,8 @@ Class {
 		'unsavedCodeChanges',
 		'programmaticallyClosed',
 		'stackAndCodeContainer',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'previousASTScope'
 	],
 	#classVars : [
 		'EnableStackColoring'
@@ -1607,11 +1608,9 @@ StDebugger >> updateStackFromSession: aSession [
 
 { #category : 'updating' }
 StDebugger >> updateStep [
-  | previousASTScope previousContext currentASTScope currentContext |
-	
-  	previousContext := self currentContext.
-	previousASTScope := debuggerActionModel previousASTScope. 
 
+	| previousContext currentASTScope currentContext |
+	previousContext := self currentContext.
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
 	self updateExtensionsFromSession: self session.
@@ -1622,9 +1621,14 @@ StDebugger >> updateStep [
 		                    currentContext pc) scope.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p |
-		previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes." "Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
-			p updateNodesFromScope: previousASTScope to: currentASTScope ].
-		p update ]
+			previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes.""Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
+					p
+						updateNodesFromScope:
+						(previousASTScope ifNil: [ currentASTScope ])
+						to: currentASTScope ].
+			p update ].
+
+	previousASTScope := currentASTScope
 ]
 
 { #category : 'toolbar' }
