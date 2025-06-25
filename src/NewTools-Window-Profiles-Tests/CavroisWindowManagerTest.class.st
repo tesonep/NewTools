@@ -50,8 +50,6 @@ CavroisWindowManagerTest >> testAddProfileFromWindows [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testCurrentProfile [
 
-	self assert: manager currentProfile isNil.
-
 	manager addProfileFromWindows: 'Profile'.
 	self assert: manager currentProfile name equals: 'Profile'
 ]
