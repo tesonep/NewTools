@@ -565,9 +565,7 @@ CavroisWindowManager >> applyWorldResize [
 
 	self currentProfile ifNotNil: [
 			self currentProfile placeHolders do: [ :ph |
-					((SystemWindow allInstances union: SpWindowMorph allInstances)
-						 select: [ :window | ph windows includes: window ]) do: [
-							:window |
+					ph windows do: [ :window |
 							window extent:
 								ph widthPercentage / 100 * self currentWorld bounds width
 								@
@@ -769,8 +767,7 @@ CavroisWindowManager >> makeProfileCurrent: aProfileName [
 	self updatePreviousCurrentProfile.
 	self profiles at: aProfileName , ' (Current)' put: profile.
 	self currentProfile: profile.
-	MenubarMorph reset.
-	self updateProfile
+	MenubarMorph reset
 ]
 
 { #category : 'actions' }

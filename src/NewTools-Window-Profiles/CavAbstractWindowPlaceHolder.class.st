@@ -183,7 +183,7 @@ CavAbstractWindowPlaceHolder >> widthPercentage: anObject [
 { #category : 'accessing' }
 CavAbstractWindowPlaceHolder >> windows [
 
-	^ windows
+	^ windows 
 ]
 
 { #category : 'accessing' }
