@@ -2,7 +2,6 @@ Class {
 	#name : 'StPulseSearchContext',
 	#superclass : 'Object',
 	#instVars : [
-		'spotter',
 		'browser'
 	],
 	#category : 'NewTools-Pulse-Model',
