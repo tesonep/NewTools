@@ -53,7 +53,7 @@ StPulseLoadingPresenter >> reset [
 	self layout removeAll
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'updating' }
 StPulseLoadingPresenter >> updateStep [
 	| step |
 
