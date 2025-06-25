@@ -897,7 +897,7 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 CavroisWindowManager >> updateProfile [
 
 	| windowsInPlaceholders |
-	windowsInPlaceholders := Set new.
+	windowsInPlaceholders := OrderedCollection new.
 	self currentProfile placeHolders do: [ :ph |
 			windowsInPlaceholders addAll: ph windows.
 			ph windows do: [ :window |
