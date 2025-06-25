@@ -44,11 +44,9 @@ StRawInspectionPresenter >> selectedPageName [
 ]
 
 { #category : '*NewTools-Debugger' }
-StRawInspectionPresenter >> updateNodesFromScope: oldASTScope to: newASTScope [
+StRawInspectionPresenter >> updateNodesFromScope: oldTemps to: newTemps [
 
-	| nodes newTemps oldTemps tempsToRemove tempsToAdd |
-	oldTemps := oldASTScope allTemps.
-	newTemps := newASTScope allTemps.
+	| nodes tempsToRemove tempsToAdd |
 	tempsToRemove := oldTemps difference: newTemps.
 	tempsToAdd := newTemps difference: oldTemps.
 	nodes := self attributeTable roots.

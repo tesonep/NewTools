@@ -1138,10 +1138,10 @@ StDebugger >> saveGeneratedCodeAndProceed [
 { #category : 'actions' }
 StDebugger >> selectNextExecutedExpression [
 
-	| sourceNodeExecuted |
-	sourceNodeExecuted := self currentContext sourceNodeExecuted.
-	self code selectionInterval:
-		(sourceNodeExecuted start to: sourceNodeExecuted stop)
+	| interval previouslyExecutedPC |
+	previouslyExecutedPC := self currentContext executedPC.
+	interval := self currentContext method debugInfo rangeForPC: previouslyExecutedPC.
+	self code selectionInterval: (interval first to: interval last)
 ]
 
 { #category : 'stack' }
@@ -1610,8 +1610,8 @@ StDebugger >> updateStep [
 	self updateToolbar.
 
 	currentContext := self currentContext.
-	currentASTScope := (currentContext compiledCode sourceNodeForPC:
-		                    currentContext pc) scope.
+	currentASTScope := currentContext compiledCode debugInfo
+		variablesAt: currentContext executedPC.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p |
 			previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes.""Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
