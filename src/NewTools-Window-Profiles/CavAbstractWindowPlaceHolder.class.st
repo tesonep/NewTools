@@ -69,6 +69,7 @@ CavAbstractWindowPlaceHolder >> display [
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
+		                     kind: kind;
 		                     addMorph: (textMorph position:
 					                      position x
 					                      + (extent x - textMorph width / 2)
