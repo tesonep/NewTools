@@ -5,7 +5,6 @@ Class {
 	#name : 'StPulseLoadingPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'imagePresenter',
 		'scales'
 	],
 	#category : 'NewTools-Pulse-View',
