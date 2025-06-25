@@ -5,7 +5,8 @@ Class {
 	#name : 'CavVisualPlaceHolderMorph',
 	#superclass : 'BorderedMorph',
 	#instVars : [
-		'placeHolder'
+		'placeHolder',
+		'kind'
 	],
 	#category : 'NewTools-Window-Profiles-Morphic',
 	#package : 'NewTools-Window-Profiles',
@@ -58,6 +59,18 @@ CavVisualPlaceHolderMorph >> initialize [
 ]
 
 { #category : 'accessing' }
+CavVisualPlaceHolderMorph >> kind [
+
+	^ kind
+]
+
+{ #category : 'accessing' }
+CavVisualPlaceHolderMorph >> kind: aKind [
+
+	kind := aKind
+]
+
+{ #category : 'accessing' }
 CavVisualPlaceHolderMorph >> placeHolder [
 
 	^ placeHolder
@@ -72,22 +85,19 @@ CavVisualPlaceHolderMorph >> placeHolder: aPlaceHolder [
 { #category : 'removing' }
 CavVisualPlaceHolderMorph >> remove [
 
-	| presenter class key |
+	| presenter key |
 	presenter := SpConfirmDialog new
 		             title: 'Remove placeholder';
 		             label: 'Are you sure you want to remove it ?';
 		             onAccept: [ :dialog |
-				             class := Smalltalk at:
-						                      self submorphs first contents asString
-							                      asSymbol.
 				             key := CavroisWindowManager current currentProfile
-					                    placeHolderDictionnary at: class.
+					                    placeHolderDictionnary at: kind.
 				             (CavroisWindowManager current currentProfile
-					              placeHoldersFor: class) do: [ :p |
+					              placeHoldersFor: kind) do: [ :p |
 						             p = self placeHolder ifTrue: [ key remove: p ] ].
 				             key ifEmpty: [
 							             CavroisWindowManager current currentProfile
-								             placeHolderDictionnary removeKey: class ].
+								             placeHolderDictionnary removeKey: kind ].
 				             self delete ].
 	presenter openDialog
 ]

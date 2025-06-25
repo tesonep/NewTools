@@ -69,6 +69,7 @@ CavAbstractWindowPlaceHolder >> display [
 	visualPlaceHolder := CavVisualPlaceHolderMorph new
 		                     extent: extent;
 		                     position: position;
+		                     kind: kind;
 		                     addMorph: (textMorph position:
 					                      position x
 					                      + (extent x - textMorph width / 2)
@@ -182,7 +183,7 @@ CavAbstractWindowPlaceHolder >> widthPercentage: anObject [
 { #category : 'accessing' }
 CavAbstractWindowPlaceHolder >> windows [
 
-	^ windows
+	^ windows 
 ]
 
 { #category : 'accessing' }

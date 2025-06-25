@@ -565,9 +565,7 @@ CavroisWindowManager >> applyWorldResize [
 
 	self currentProfile ifNotNil: [
 			self currentProfile placeHolders do: [ :ph |
-					((SystemWindow allInstances union: SpWindowMorph allInstances)
-						 select: [ :window | ph windows includes: window ]) do: [
-							:window |
+					ph windows do: [ :window |
 							window extent:
 								ph widthPercentage / 100 * self currentWorld bounds width
 								@
@@ -898,7 +896,14 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	self currentProfile reset.
-	self allCurrentWindows do: [ :each |
-		self currentProfile add: (self placeHolderFromWindow: each) ]
+	| windowsInPlaceholders |
+	windowsInPlaceholders := OrderedCollection new.
+	self currentProfile placeHolders do: [ :ph |
+			windowsInPlaceholders addAll: ph windows.
+			ph windows do: [ :window |
+					ph extent: window extent.
+					ph position: window position ] ].
+	(self allCurrentWindows reject: [ :w |
+		 windowsInPlaceholders includes: w ]) do: [ :w |
+		self currentProfile add: (self placeHolderFromWindow: w) ]
 ]
