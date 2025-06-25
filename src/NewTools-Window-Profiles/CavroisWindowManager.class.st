@@ -769,7 +769,8 @@ CavroisWindowManager >> makeProfileCurrent: aProfileName [
 	self updatePreviousCurrentProfile.
 	self profiles at: aProfileName , ' (Current)' put: profile.
 	self currentProfile: profile.
-	MenubarMorph reset
+	MenubarMorph reset.
+	self updateProfile
 ]
 
 { #category : 'actions' }
@@ -902,7 +903,7 @@ CavroisWindowManager >> updateProfile [
 	windowsInPlaceholders := Set new.
 	self currentProfile placeHolders do: [ :ph |
 		windowsInPlaceholders addAll: ph windows ].
-	((SystemWindow allInstances union: SpWindowMorph allInstances)
-		 reject: [ :w | windowsInPlaceholders includes: w ]) do: [ :w |
+	(self allCurrentWindows reject: [ :w |
+		 windowsInPlaceholders includes: w ]) do: [ :w |
 		self currentProfile add: (self placeHolderFromWindow: w) ]
 ]
