@@ -604,7 +604,8 @@ CavroisWindowManager >> cellSize: anObject [
 { #category : 'accessing' }
 CavroisWindowManager >> cells [
 
-	^ cells
+	^ cells ifNil: [ 
+		cells := OrderedCollection new ]
 ]
 
 { #category : 'creation' }
@@ -703,7 +704,6 @@ CavroisWindowManager >> initialize [
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	placeHolderIndices := Dictionary new.
-	cells := OrderedCollection new.
 	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
 	self resetProfiles.
 	self initializeBlocks 
