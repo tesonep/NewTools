@@ -4,15 +4,27 @@ I wrap a RPackage entry, to modify its behavior if required for the class
 Class {
 	#name : 'StPackageEntry',
 	#superclass : 'StEntry',
-	#category : 'NewTools-Spotter-Processors-Entries',
-	#package : 'NewTools-Spotter-Processors',
+	#category : 'NewTools-Pulse-Entries',
+	#package : 'NewTools-Pulse',
 	#tag : 'Entries'
 }
+
+{ #category : 'converting' }
+StPackageEntry >> asHistoryEntry [
+
+	^ StHistoryPackageEntry new: self
+]
 
 { #category : 'converting' }
 StPackageEntry >> asString [
 
 	^ content name
+]
+
+{ #category : 'accessing' }
+StPackageEntry >> categoryLabel [
+
+	^ 'package'
 ]
 
 { #category : 'evaluating' }

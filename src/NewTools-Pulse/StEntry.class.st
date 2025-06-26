@@ -10,8 +10,8 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : 'NewTools-Spotter-Processors-Entries',
-	#package : 'NewTools-Spotter-Processors',
+	#category : 'NewTools-Pulse-Entries',
+	#package : 'NewTools-Pulse',
 	#tag : 'Entries'
 }
 
@@ -36,6 +36,18 @@ StEntry >> = anEntry [
 		and: [ anEntry content = self content ]
 ]
 
+{ #category : 'accessing' }
+StEntry >> accept: aSpotter [
+
+	aSpotter visitWindowEntry: self
+]
+
+{ #category : 'converting' }
+StEntry >> asHistoryEntry [
+
+	^ nil
+]
+
 { #category : 'converting' }
 StEntry >> asString [ 
 
@@ -43,12 +55,20 @@ StEntry >> asString [
 ]
 
 { #category : 'accessing' }
+StEntry >> categoryLabel [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
 StEntry >> content [
+
 	^ content
 ]
 
 { #category : 'accessing' }
 StEntry >> content: anObject [
+
 	content := anObject
 ]
 
@@ -73,7 +93,7 @@ StEntry >> evaluateFor: aSpotter [
 { #category : 'comparing' }
 StEntry >> hash [
 
-	^ content hash
+	^ self content hash
 ]
 
 { #category : 'accessing' }
@@ -86,6 +106,13 @@ StEntry >> iconName [
 StEntry >> iconOn: anIconProvider [
 
 	^ anIconProvider iconNamed: self iconName
+]
+
+{ #category : 'initialization' }
+StEntry >> initialize [
+
+	self class initializeSlots: self.
+	super initialize
 ]
 
 { #category : 'accessing' }
@@ -106,14 +133,14 @@ StEntry >> printOn: aStream [
 	super printOn: aStream.	
 	aStream
 		<< '( ';
-		print: content;
+		print: self content;
 		<< ' )'
 ]
 
 { #category : 'accessing' }
 StEntry >> spotterPreview [
 
-	^ (content spotterPreview: SpPresenterBuilder new)
+	^ (self content spotterPreview: SpPresenterBuilder new)
 		addStyle: 'stSpotterPreview';
 		yourself
 ]
@@ -121,5 +148,5 @@ StEntry >> spotterPreview [
 { #category : 'spotter-extensions' }
 StEntry >> stSpotterProcessorsFor: aSpotterStep [
 
-	^ content stSpotterProcessorsFor: aSpotterStep
+	^ self content stSpotterProcessorsFor: aSpotterStep
 ]

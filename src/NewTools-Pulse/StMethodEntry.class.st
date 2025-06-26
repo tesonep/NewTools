@@ -4,10 +4,22 @@ I wrap a CompiledMethod, to modify its behavior if required for the class
 Class {
 	#name : 'StMethodEntry',
 	#superclass : 'StEntry',
-	#category : 'NewTools-Spotter-Processors-Entries',
-	#package : 'NewTools-Spotter-Processors',
+	#category : 'NewTools-Pulse-Entries',
+	#package : 'NewTools-Pulse',
 	#tag : 'Entries'
 }
+
+{ #category : 'accessing' }
+StMethodEntry >> accept: aSpotter [
+
+	aSpotter visitMethodEntry: self
+]
+
+{ #category : 'converting' }
+StMethodEntry >> asHistoryEntry [
+
+	^ StHistoryMethodEntry new: self
+]
 
 { #category : 'converting' }
 StMethodEntry >> asString [
@@ -15,10 +27,16 @@ StMethodEntry >> asString [
 	^ content selector
 ]
 
+{ #category : 'accessing' }
+StMethodEntry >> categoryLabel [
+
+	^ 'method'
+]
+
 { #category : 'evaluating' }
 StMethodEntry >> doEvaluate [
 
-	^ content browse
+	content browse
 ]
 
 { #category : 'accessing' }

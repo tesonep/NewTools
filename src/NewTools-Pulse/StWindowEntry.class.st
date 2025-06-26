@@ -4,8 +4,8 @@ I wrap a Window, to modify its behavior if required for the spotter
 Class {
 	#name : 'StWindowEntry',
 	#superclass : 'StEntry',
-	#category : 'NewTools-Spotter-Processors-Entries',
-	#package : 'NewTools-Spotter-Processors',
+	#category : 'NewTools-Pulse-Entries',
+	#package : 'NewTools-Pulse',
 	#tag : 'Entries'
 }
 
@@ -13,6 +13,12 @@ Class {
 StWindowEntry >> asString [ 
 
 	^ '{1} [{2}]' format: { content label. content className }
+]
+
+{ #category : 'accessing' }
+StWindowEntry >> categoryLabel [
+
+	^ 'window'
 ]
 
 { #category : 'evaluating' }
