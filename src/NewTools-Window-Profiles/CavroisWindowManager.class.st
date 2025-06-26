@@ -4,7 +4,7 @@ A profile is set of window configurations also called place holders.
 A place holder is a description of the window on the screen (extent, position, kind, strategy).
 A strategy is the way the window will be placed on the screen, such as replace the previous one, stacking...
 
-To fully understand my fonctionnalities, you can:
+To fully understand my functionalities, you can:
 
 - Click on 'New Profile' in the Profiles menu.
 
@@ -604,7 +604,8 @@ CavroisWindowManager >> cellSize: anObject [
 { #category : 'accessing' }
 CavroisWindowManager >> cells [
 
-	^ cells
+	^ cells ifNil: [ 
+		cells := OrderedCollection new ]
 ]
 
 { #category : 'creation' }
@@ -703,7 +704,6 @@ CavroisWindowManager >> initialize [
 	classToolMapping := Dictionary new.
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	placeHolderIndices := Dictionary new.
-	cells := OrderedCollection new.
 	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
 	self resetProfiles.
 	self initializeBlocks 
