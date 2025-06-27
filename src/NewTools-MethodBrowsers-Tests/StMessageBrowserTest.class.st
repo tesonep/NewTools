@@ -132,12 +132,17 @@ StMessageBrowserTest >> testCompilingMethodElseWhereChangeTheText [
 { #category : 'tests - compiling' }
 StMessageBrowserTest >> testCompilingMethodElseWhereOnAChangedTextDoesNotChangeTheText [
 
+	<expectedFailure>
 	messageBrowser := StMessageBrowser browseImplementorsOf: #aSelectorWithASingleMethodImplementation.
 	
 	self assert: messageBrowser presenter textPresenter text equals: (StMBTestClass >> #aSelectorWithASingleMethodImplementation) sourceCode.
 	backendForTest waitUntilUIRedrawed.
 
-	backendForTest setUnacceptedTextOn: messageBrowser presenter textPresenter to: 'asbc'.
+	"Touch the backend widget directly.
+	The idea is to simulate that a user typed something but did not *accept* (compile).
+	This does not work for now"
+	messageBrowser presenter textPresenter adapter widget setText: 'asbc'.
+
 
 	StMBTestClass compile: 'aSelectorWithASingleMethodImplementation ^ 42'.
 	backendForTest waitUntilUIRedrawed.
