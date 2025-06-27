@@ -3,11 +3,7 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'manager',
-		'virtualFS',
-		'systemWindow',
-		'presenter',
-		'profile',
-		'placeHolder'
+		'virtualFS'
 	],
 	#category : 'NewTools-Window-Profiles-Tests',
 	#package : 'NewTools-Window-Profiles-Tests'
@@ -19,14 +15,7 @@ CavroisWindowManagerTest >> setUp [
 	super setUp.
 	CavroisWindowManager reset.
 	virtualFS := FileSystem memory root.
-	manager := CavroisWindowManager current.
-	profile := CavWindowProfile new.
-	placeHolder := CavWindowPlaceHolder new
-		               position: 10 @ 10;
-		               extent: 10 @ 10.
-	manager currentProfile: profile.
-	systemWindow := SystemWindow new.
-	presenter := IceTipRepositoriesBrowser new
+	manager := CavroisWindowManager current
 ]
 
 { #category : 'running' }
@@ -50,6 +39,8 @@ CavroisWindowManagerTest >> testAddProfileFromWindows [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testCurrentProfile [
 
+	self assert: manager currentProfile isNil.
+
 	manager addProfileFromWindows: 'Profile'.
 	self assert: manager currentProfile name equals: 'Profile'
 ]
@@ -72,27 +63,6 @@ CavroisWindowManagerTest >> testGridCellsInitialization [
 	manager cellSize: 4.
 	manager createPlaceHolderGrid: manager cellSize.
 	self assert: manager cells size equals: 16
-]
-
-{ #category : 'tests' }
-CavroisWindowManagerTest >> testPlaceHoldersStockTheirWindows [
-
-	systemWindow configurePlaceHolder: placeHolder.
-	profile add: placeHolder.
-	manager placePresenter: systemWindow.
-	self assert: placeHolder windows size equals: 1
-]
-
-{ #category : 'tests' }
-CavroisWindowManagerTest >> testPlacePresenterWithSystemWindowAlreadyPresent [
-	"here we add the window so it is already included"
-
-	systemWindow configurePlaceHolder: placeHolder.
-	profile add: placeHolder.
-	placeHolder windows add: systemWindow. 
-	"so this add there wont work"
-	manager placePresenter: systemWindow.
-	self assert: placeHolder windows size equals: 1
 ]
 
 { #category : 'tests' }

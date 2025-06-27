@@ -205,6 +205,11 @@ StMessageBrowser class >> browseSendersOf: aSymbol inScope: aScope [
 	^ self browse: aSymbol senders asSendersOf: aSymbol inScope: aScope
 ]
 
+{ #category : 'instance creation' }
+StMessageBrowser class >> on: aClyNavigationEnvironment systemScope: aClySystemEnvironmentScope [ 
+	self shouldBeImplemented.
+]
+
 { #category : 'instance creation - old' }
 StMessageBrowser class >> openMessageList: messageList name: aString autoSelect: aSelector refreshingBlockSelector: aRefreshingBlockSelector [
 	
@@ -272,6 +277,12 @@ StMessageBrowser >> addHighlightedSegments [
 	textPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight 
 		interval: (highlightInterval first to: highlightInterval last + 1);
 		yourself)
+]
+
+{ #category : 'text selection' }
+StMessageBrowser >> autoSelect: aString [
+
+	self highlight: aString
 ]
 
 { #category : 'announcements' }
@@ -500,14 +511,19 @@ StMessageBrowser >> intervalOf: aSelector inCommentText: aText [
 
 { #category : 'api' }
 StMessageBrowser >> messages [
+
 	^ messageList messages
 ]
 
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
 
+	aCollection isArray ifTrue: [
+			Stdio stdout
+				nextPutAll: thisContext shortStack;
+				crlf ].
 	messageList messages: aCollection.
-	self toolbarPresenter updatePresenter.
+	self toolbarPresenter updatePresenter
 ]
 
 { #category : 'announcements' }
@@ -567,34 +583,17 @@ StMessageBrowser >> registerToAnnouncements [
 { #category : 'text selection' }
 StMessageBrowser >> searchedString: searchedString in: aString [
 	"Return the interval that corresponds to the portion of aString "
-	"This method takes care of finding complete match to searchedString. "
+
 	| string interval firstIndex |
-	
 	searchedString ifNil: [ ^ 0 to: 0 ].
-	aString isEmptyOrNil ifTrue: [ ^0 to: 0 ].
-	string := aString asString.
+	aString isEmptyOrNil ifTrue: [ ^ 0 to: 0 ].
 	interval := 0 to: 0.
-	
-	(searchedString includes: $:)
-		ifTrue: [ | list |
-			list := searchedString substrings: ':'.
-			list size = 1
-				ifTrue: [" binary selector "
-					firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-					firstIndex isZero
-						ifFalse: [ interval := firstIndex to: (firstIndex+searchedString size-1) ] ] 
-					
-				ifFalse: [
-					| lastIndex |
-					firstIndex := self findFirstOccurrenceOf: list first, ':' in: string. 
-					firstIndex >0 ifTrue: [ 
-								lastIndex := string findString: list last,':' startingAt: firstIndex+ (list first size -1).
-								interval := firstIndex to: (lastIndex + list last size) ] ] ]
-		ifFalse: [
-			" unary selector "
-			firstIndex := self findFirstOccurrenceOf: searchedString in: string.
-			 firstIndex > 0
-						ifTrue: [ interval := firstIndex to: (firstIndex+searchedString size - 1) ] ].
+
+	firstIndex := self
+		              findFirstOccurrenceOf: searchedString
+		              in: aString asString.
+	firstIndex > 0 ifTrue: [
+		interval := firstIndex to: firstIndex + searchedString size - 1 ].
 	^ interval
 ]
 

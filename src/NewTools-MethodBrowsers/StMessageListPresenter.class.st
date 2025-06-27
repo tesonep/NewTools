@@ -162,7 +162,6 @@ StMessageListPresenter >> doBrowseSenders [
 StMessageListPresenter >> doBrowseUsers [
 
 	| window |
-	
 	window := self systemNavigation browseAllUsersOfClassOrTrait: self selectedMethod methodClass.
 	window presenter switchScopeTo: self selectedScope.
 	^ window
