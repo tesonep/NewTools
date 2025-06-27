@@ -518,11 +518,7 @@ StMessageBrowser >> messages [
 { #category : 'api' }
 StMessageBrowser >> messages: aCollection [
 
-	aCollection isArray ifTrue: [
-			Stdio stdout
-				nextPutAll: thisContext shortStack;
-				crlf ].
-	messageList messages: aCollection.
+	messageList messages: aCollection asOrderedCollection.
 	self toolbarPresenter updatePresenter
 ]
 
