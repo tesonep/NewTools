@@ -10,8 +10,8 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : 'NewTools-Pulse-Entries',
-	#package : 'NewTools-Pulse',
+	#category : 'NewTools-Spotter-Entries',
+	#package : 'NewTools-Spotter',
 	#tag : 'Entries'
 }
 

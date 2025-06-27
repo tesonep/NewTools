@@ -4,8 +4,8 @@ I wrap a CompiledMethod, to modify its behavior if required for the class
 Class {
 	#name : 'StMethodEntry',
 	#superclass : 'StEntry',
-	#category : 'NewTools-Pulse-Entries',
-	#package : 'NewTools-Pulse',
+	#category : 'NewTools-Spotter-Entries',
+	#package : 'NewTools-Spotter',
 	#tag : 'Entries'
 }
 
