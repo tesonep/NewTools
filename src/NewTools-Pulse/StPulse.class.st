@@ -472,8 +472,7 @@ StPulse >> connectPresenters [
 			action: [ self giveFocusToPreviousResultList ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: Character arrowUp asKeyCombination;
-			action: [ self giveFocusToResultListAtLast ] ] ;
-		takeKeyboardFocus.
+			action: [ self giveFocusToResultListAtLast ] ].
 	listPresenter whenActivatedDo: [ self acceptSelection ].
 	self addKeyboardBehavior: listPresenter.
 	
