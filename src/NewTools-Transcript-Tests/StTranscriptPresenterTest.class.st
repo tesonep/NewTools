@@ -20,6 +20,7 @@ StTranscriptPresenterTest >> setUp [
 { #category : 'running' }
 StTranscriptPresenterTest >> tearDown [ 
 
+	presenter reset.
 	presenter withWindowDo: #close.
 	super tearDown
 ]
@@ -32,8 +33,9 @@ StTranscriptPresenterTest >> testAnnouncementIsWritten [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test' ]
+		[ 
+			100 milliSeconds wait.
+			self assert: presenter text text equals: 'test' ] fork ] 
 	ensure: [ window close ]
 ]
 
@@ -45,11 +47,12 @@ StTranscriptPresenterTest >> testClear [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test'.
-		presenter clear.
-		self assert: presenter text text equals: ''.
-		self assert: transcript contents equals: 'test' ]
+		[ 
+			100 milliSeconds wait.
+			self assert: presenter text text equals: 'test'.
+			presenter clear.
+			self assert: presenter text text equals: ''.
+			self assert: transcript contents equals: 'test' ] fork ]
 	ensure: [ window close ]
 ]
 
@@ -77,12 +80,13 @@ StTranscriptPresenterTest >> testReset [
 	[ 
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test'.
-		self assert: transcript contents equals: 'test'.
-		presenter reset.
-		self assert: presenter text text equals: ''.
-		self assert: transcript contents equals: '' ]
+		[ 
+			100 milliSeconds wait.
+			self assert: presenter text text equals: 'test'.
+			self assert: transcript contents equals: 'test'.
+			presenter reset.
+			self assert: presenter text text equals: ''.
+			self assert: transcript contents equals: '' ] fork ]
 	ensure: [ window close ]
 ]
 
