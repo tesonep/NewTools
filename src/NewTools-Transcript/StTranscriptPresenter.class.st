@@ -145,10 +145,11 @@ StTranscriptPresenter >> initializeLeftToolbar [
 ]
 
 { #category : 'initialization' }
-StTranscriptPresenter >> initializePresenters [ 
+StTranscriptPresenter >> initializePresenters [
 
-
-	text := self newText.
+	text := self newCode.
+	text syntaxHighlight: false.
+	text lineNumbers: false.
 	text beEditable.
 	self initializeToolbars
 	
