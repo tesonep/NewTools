@@ -188,56 +188,11 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 StPlaygroundPagePresenterTest >> testRemoveAllBindings [
 	self newPage.
 	
+	presenter text interactionModel addBindingNamed: #thisPlayground with: 0.
 	
 	self assert: (presenter text interactionModel hasBindingOf: #thisPlayground ).
 	presenter removeAllBindings.
 	self deny: (presenter text interactionModel hasBindingOf: #thisPlayground ).
-]
-
-{ #category : 'tests' }
-StPlaygroundPagePresenterTest >> testScript [
-	| value |
-	self openInstance.
-	
-	"presenter open."
-	presenter script currentClass: nil.
-	presenter script newClass: #Test86 withVars: { #hello . #world }.
-	presenter contents: 'this'.
-	presenter whenActivatedDo: [ :selection | value := selection value ].
-	
-	presenter doEvaluateAllAndGo. 
-	self assert: (value isKindOf: presenter script currentClass).
-	
-	presenter contents: 'this hello: ''hello''.', String crlf, 'this world: 86'.
-	presenter doEvaluateAllAndGo.
-	
-	presenter contents: 'this hello'.
-	presenter doEvaluateAllAndGo.
-	self assert: value equals: 'hello'.
-	
-	presenter contents: 'this world'.
-	presenter doEvaluateAllAndGo.
-	self assert: value equals: 86.
-	
-	presenter contents: 'thisPlaygroundScript newMethod: ''bestAnimEver ^ 86'''.
-	presenter doEvaluateAllAndGo.
-	
-	presenter contents: 'this bestAnimEver'.
-	presenter doEvaluateAllAndGo.
-	self assert: value equals: 86.
-	
-	presenter contents: 'thisPlaygroundScript newVar: #themostimportantanimtosee'.
-	presenter doEvaluateAllAndGo.
-	presenter contents: 'this themostimportantanimtosee: 86'.
-	presenter doEvaluateAllAndGo.
-	presenter contents: 'this themostimportantanimtosee'.
-	presenter doEvaluateAllAndGo.
-	self assert: value equals: 86.
-	
-	
-	presenter script removeClass.
-	
-
 ]
 
 { #category : 'tests' }

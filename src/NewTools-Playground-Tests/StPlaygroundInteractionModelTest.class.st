@@ -164,7 +164,7 @@ StPlaygroundInteractionModelTest >> testMakeBindingShared [
 ]
 
 { #category : 'tests' }
-StPlaygroundInteractionModelTest >> testRemoveBindingWithAKey [
+StPlaygroundInteractionModelTest >> testremoveBindingNamed [
 	|im1 dico|
 	
 	im1 := self newInteractionModel.
@@ -179,12 +179,11 @@ StPlaygroundInteractionModelTest >> testRemoveBindingWithAKey [
 	dico keysDo: [ :key | self assert: (im1 hasBindingOf: key) ].
 	dico keysAndValuesDo: [ :key :value | self assert: (im1 bindingOf: key) value equals: value ].
 	
-	im1 removeBindingWithAKey: #hello.
+	im1 removeBindingNamed: #hello.
 	
 	self deny: (im1 hasBindingOf: #hello).
 	
-	im1 removeBindingWithAKey: 'whereIsTheOnePiece'. "because we don't know where it is"
+	im1 removeBindingNamed: 'whereIsTheOnePiece'. "because we don't know where it is"
 	
 	self deny: (im1 hasBindingOf: #whereIsTheOnePiece).
-	
 ]
