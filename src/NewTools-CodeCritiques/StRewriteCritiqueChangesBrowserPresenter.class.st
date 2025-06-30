@@ -55,12 +55,9 @@ StRewriteCritiqueChangesBrowserPresenter class >> defaultLayout [
 ]
 
 { #category : 'accessing' }
-StRewriteCritiqueChangesBrowserPresenter class >> defaultPreferredExtent [ 
+StRewriteCritiqueChangesBrowserPresenter class >> defaultPreferredExtent [
 
-	| fontWidth rowHeight |
-	fontWidth := (StandardFonts defaultFont widthOfString: 'M').
-	rowHeight := self class inputTextHeight.
-	^ (70@20) * (fontWidth @ rowHeight)
+	^ 700 @ 600
 ]
 
 { #category : 'specs' }

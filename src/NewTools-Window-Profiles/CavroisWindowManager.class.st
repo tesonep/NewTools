@@ -4,11 +4,11 @@ A profile is set of window configurations also called place holders.
 A place holder is a description of the window on the screen (extent, position, kind, strategy).
 A strategy is the way the window will be placed on the screen, such as replace the previous one, stacking...
 
-To fully understand my fonctionnalities, you can:
+To fully understand my functionalities, you can:
 
 - Click on 'New Profile' in the Profiles menu.
 
-- Select 'Show/hide current profile' to display visual placeholders of the current profile
+- Select 'Toggle profile preview' to display visual placeholders of the current profile
 ( - Left click on one of them allows to change the strategy associated with the window 
   - Right click on one of them to remove a registered window from the current profile ).
 
@@ -34,7 +34,10 @@ Class {
 		'classToolMapping',
 		'currentProfile',
 		'defaultLocation',
-		'placeHolderIndices'
+		'placeHolderIndices',
+		'cellSize',
+		'cells',
+		'previousClosestPlaceholder'
 	],
 	#classVars : [
 		'Current'
@@ -50,6 +53,7 @@ CavroisWindowManager class >> addProfileDeletionItem: aBuilder [
 	(aBuilder item: #'Delete Profile')
 		parent: #ProfileAction;
 		order: 5;
+		enabled:[self current currentProfile isNotNil];
 		action: [ self deleteProfile ];
 		help: 'Remove a profile';
 		iconName: #trash
@@ -79,7 +83,8 @@ CavroisWindowManager class >> addProfileImportExportItems: aBuilder [
 	(aBuilder item: #'Export Profile')
 		parent: #ImportExport;
 		order: 8;
-		action: [ self saveProfile: self current defaultLocation];
+		enabled: [ self current currentProfile isNotNil ];
+		action: [ self saveProfile: self current defaultLocation ];
 		help: 'Export a profile';
 		iconName: #smallRedo
 ]
@@ -90,7 +95,11 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 	(aBuilder item: #'New Profile')
 		parent: #ProfileAction;
 		order: 1;
-		action: [ self createProfile ];
+		action: [
+				self current profiles size < 10
+					ifTrue: [ self createProfile ]
+					ifFalse: [
+						self inform: 'Profile limit reached. Delete one to continue.' ] ];
 		help: 'Creates a local profile based on your image';
 		iconName: #add
 ]
@@ -98,24 +107,94 @@ CavroisWindowManager class >> addProfileItem: aBuilder [
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileSwitchingItems: aBuilder [
 
-	self current profiles keysDo: [ :k |
-		(aBuilder item: k)
-			parent: #UserProfiles;
-			action: [ self switchToProfile: k ];
-			order: 0;
-			help: 'Profile';
-			iconName: #userProfile ]
+	(aBuilder item: 'Profile list')
+		parent: #UserProfiles;
+		order: 0;
+		help: 'Profile';
+		enabled: [ self current currentProfile isNotNil ];
+		iconName: #userProfile;
+		with: [
+				self current profiles keysDo: [ :k |
+							(aBuilder item: k)
+								parent: 'Profile list';
+								action: [ self switchToProfile: k ];
+								help: 'Profile List' ] ]
 ]
 
 { #category : 'adding' }
 CavroisWindowManager class >> addProfileVisibilityItem: aBuilder [
 
-	(aBuilder item: #'Show/Hide current profile')
+	(aBuilder item: #'Toggle Profile Preview')
 		parent: #ProfileAction;
 		order: 3;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self toggleProfilePlaceholders ];
 		help: 'Show the placeholders of the current profile in the World';
 		iconName: #haloView
+]
+
+{ #category : 'adding' }
+CavroisWindowManager class >> cellModeItem: aBuilder [
+
+	(aBuilder item: #'Cell Layout Mode')
+		parent: #ProfileAction;
+		order: 7;
+		help:
+			'Layout mode creating cells to help you position your window(s) ';
+		iconName: #table;
+		with: [
+				(aBuilder item: #'Choose Cell Size')
+					parent: #'Cell Layout Mode';
+					order: 1;
+					help: 'Define a size x size grid with cells';
+					iconName: #edit;
+					action: [ self chooseGridSize ].
+
+				(aBuilder item: #'Toggle cell mode')
+					parent: #'Cell Layout Mode';
+					order: 0;
+					help: 'Turn off the cell mode';
+					iconName: (self current cells isEmpty
+							 ifTrue: [ #checkboxUnselected ]
+							 ifFalse: [ #checkboxSelected ]);
+					action: [
+							self current cells isEmpty
+								ifFalse: [ self removeGrid ]
+								ifTrue: [
+										self current resetCells.
+										self current cellSize: 3.
+										self current createPlaceHolderGrid: 3 ].
+							MenubarMorph reset ] ]
+]
+
+{ #category : 'api' }
+CavroisWindowManager class >> chooseGridSize [
+
+	| presenter |
+	presenter := SpRequestDialog new
+		             title: 'Grid ';
+		             label: 'What is the size of the grid ?';
+		             text: '';
+		             acceptLabel: 'Confirm';
+		             cancelLabel: 'Cancel';
+		             onAccept: [ :dialog |
+				             | inputValue |
+				             inputValue := dialog presenter text.
+				             inputValue isAllDigits
+					             ifFalse: [
+						             self inform: 'Please enter a valid number' ]
+					             ifTrue: [
+							             inputValue := inputValue asNumber.
+							             (inputValue between: 1 and: 5)
+								             ifTrue: [
+										             self current resetCells.
+										             self current cellSize: inputValue.
+										             self current createPlaceHolderGrid: inputValue.
+										             MenubarMorph reset ]
+								             ifFalse: [
+									             self inform:
+											             'Please enter a number between 1 and 5' ] ] ];
+		             openDialog
 ]
 
 { #category : 'instance creation' }
@@ -129,6 +208,7 @@ CavroisWindowManager class >> createProfile [
 		             acceptLabel: 'Confirm';
 		             cancelLabel: 'Cancel';
 		             onAccept: [ :dialog |
+				             self current resetCells.
 				             self current updatePreviousCurrentProfile.
 				             self current addProfileFromWindows:
 						             dialog presenter text , ' (Current)'.
@@ -247,9 +327,16 @@ CavroisWindowManager class >> profileMenuItems: aBuilder [
 		addProfileDeletionItem: aBuilder;
 		addProfileVisibilityItem: aBuilder;
 		renameProfileItem: aBuilder;
-		resetWindowsToCurrentProfile: aBuilder;
+		resetWindowsToCurrentProfileItem: aBuilder;
 		addProfileImportExportItems: aBuilder;
-		addProfileHelpItem: aBuilder
+		addProfileHelpItem: aBuilder;
+		cellModeItem:aBuilder 
+]
+
+{ #category : 'removing' }
+CavroisWindowManager class >> removeGrid [
+
+	self current resetCells
 ]
 
 { #category : 'removing' }
@@ -293,9 +380,10 @@ CavroisWindowManager class >> renameProfile [
 { #category : 'actions' }
 CavroisWindowManager class >> renameProfileItem: aBuilder [
 
-	(aBuilder item: #'Rename profile')
+	(aBuilder item: #'Rename Profile')
 		parent: #ProfileAction;
 		order: 4;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [ self current profiles ifNotEmpty: [ self renameProfile ] ];
 		help: 'Rename a profile';
 		iconName: #edit
@@ -310,11 +398,12 @@ CavroisWindowManager class >> reset [
 ]
 
 { #category : 'initialization' }
-CavroisWindowManager class >> resetWindowsToCurrentProfile: aBuilder [
+CavroisWindowManager class >> resetWindowsToCurrentProfileItem: aBuilder [
 
-	(aBuilder item: #'Reset Windows')
+	(aBuilder item: #'Position Back Windows')
 		parent: #ProfileAction;
 		order: 6;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
 				self current currentProfile ifNotNil: [
 						self current transitionToProfile ] ];
@@ -351,6 +440,8 @@ CavroisWindowManager class >> startUp: isImageStarting [
 CavroisWindowManager class >> switchToProfile: profileKey [
 
 	| oldProfile newProfile oldKey newKey baseName presenter |
+	self current currentProfile = (self current profiles at: profileKey)
+		ifTrue: [ ^ self ].
 	presenter := SpConfirmDialog new
 		             title: 'Switch Profile';
 		             label: profileKey , 'will become the current profile';
@@ -359,8 +450,6 @@ CavroisWindowManager class >> switchToProfile: profileKey [
 		             onAccept: [ :dialog |
 				             oldProfile := self current currentProfile.
 				             newProfile := self current profiles at: profileKey.
-
-				             oldProfile = newProfile ifTrue: [ ^ self ].
 				             oldKey := self current profiles keyAtValue:
 						                       oldProfile.
 				             baseName := oldKey
@@ -413,7 +502,10 @@ CavroisWindowManager class >> updateCurrentProfileAfterDeletion: deletedProfileK
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfile [
 
-	self current updateProfile
+	self removeGrid.
+	self toggleProfilePlaceholders.
+	self current updateProfile.
+	self toggleProfilePlaceholders
 ]
 
 { #category : 'updating' }
@@ -431,15 +523,16 @@ CavroisWindowManager class >> updateProfile: aProfile withName: aName [
 { #category : 'updating' }
 CavroisWindowManager class >> updateProfileItem: aBuilder [
 
-	(aBuilder item: #'Update current profile')
+	(aBuilder item: #'Update Profile')
 		parent: #ProfileAction;
 		order: 2;
+		enabled: [ self current currentProfile isNotNil ];
 		action: [
-			self current currentProfile
-				ifNil: [ self inform: 'No profile has been created yet' ]
-				ifNotNil: [
-					self updateProfile.
-					self inform: 'Profile has been updated' ] ];
+				self current currentProfile
+					ifNil: [ self inform: 'No profile has been created yet' ]
+					ifNotNil: [
+							self updateProfile.
+							self inform: 'Profile has been updated' ] ];
 		help:
 			'Allows you to register new window(s) in profile or to modify previous ones';
 		iconName: #save
@@ -467,6 +560,74 @@ CavroisWindowManager >> allCurrentWindows [
 				  (w isCollapsed not and: (w isKindOf: SpDialogWindowMorph) not) ]
 ]
 
+{ #category : 'actions' }
+CavroisWindowManager >> applyWorldResize [
+
+	self currentProfile ifNotNil: [
+			self currentProfile placeHolders do: [ :ph |
+					ph windows do: [ :window |
+							window extent:
+								ph widthPercentage / 100 * self currentWorld bounds width
+								@
+								(ph heightPercentage / 100 * self currentWorld bounds height).
+							window position:
+								ph xPercentage / 100 * self currentWorld bounds width
+								@ (ph yPercentage / 100 * self currentWorld bounds height).
+							ph position: window position.
+							ph extent: window extent ] ] ]
+]
+
+{ #category : 'display' }
+CavroisWindowManager >> cellDisplay [
+
+	| visualPlaceHolder |
+	cells do: [ :each |
+			visualPlaceHolder := CavVisualPlaceHolderMorph new
+				                     extent: each extent;
+				                     position: each position.
+
+			visualPlaceHolder openInWorld ]
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cellSize [
+
+	^ cellSize
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cellSize: anObject [
+
+	cellSize := anObject
+]
+
+{ #category : 'accessing' }
+CavroisWindowManager >> cells [
+
+	^ cells ifNil: [ 
+		cells := OrderedCollection new ]
+]
+
+{ #category : 'creation' }
+CavroisWindowManager >> createPlaceHolderGrid: aSize [
+
+	| world createdCellSize |
+	aSize ifNil: [ ^ self ].
+	world := self currentWorld bounds.
+	createdCellSize := world width // aSize
+	                   @ (world height - 45 // aSize).
+	0 to: aSize - 1 do: [ :row |
+			0 to: aSize - 1 do: [ :col |
+					| origin placeHolder |
+					origin := col * createdCellSize x
+					          @ (row * createdCellSize + 18) y.
+					placeHolder := self placeHolderFromWindow: SystemWindow new.
+					placeHolder strategy: CavExactOnTopStrategy new.
+					placeHolder position: origin.
+					placeHolder extent: createdCellSize.
+					cells add: placeHolder ] ]
+]
+
 { #category : 'accessing' }
 CavroisWindowManager >> currentProfile [
 
@@ -491,6 +652,51 @@ CavroisWindowManager >> defaultLocation: aLocation [
 	defaultLocation := aLocation
 ]
 
+{ #category : 'handling' }
+CavroisWindowManager >> handleCellWindowDrop: aWindow at: aPoint [
+
+	| closestPlaceHolder closestDistance |
+	((aWindow isKindOf: SystemWindow) or:
+		 (aWindow isKindOf: SpWindowMorph)) ifFalse: [ ^ self ].
+	closestPlaceHolder := nil.
+	closestDistance := Float infinity.
+
+	cells do: [ :placeHolder |
+			| distance |
+			distance := placeHolder position distanceTo: aPoint.
+			distance < closestDistance ifTrue: [
+					closestPlaceHolder := placeHolder.
+					closestDistance := distance ] ].
+	closestPlaceHolder ifNotNil: [
+		closestPlaceHolder placePresenter: aWindow ]
+]
+
+{ #category : 'handling' }
+CavroisWindowManager >> handleWindowDrag: aWindow at: aPoint [
+
+	| closestPlaceHolder closestDistance |
+	closestPlaceHolder := nil.
+	closestDistance := Float infinity.
+	World submorphs do: [ :morph |
+			(morph isKindOf: CavVisualPlaceHolderMorph) ifTrue: [
+					| distance |
+					distance := morph position distanceTo: aPoint.
+					distance < closestDistance ifTrue: [
+							closestPlaceHolder := morph.
+							closestDistance := distance ] ] ].
+
+	previousClosestPlaceholder ifNotNil: [
+			previousClosestPlaceholder ~= closestPlaceHolder ifTrue: [
+					previousClosestPlaceholder color:
+						(Smalltalk ui theme lightSelectionColor alpha: 0.2) ] ].
+
+	closestPlaceHolder ifNotNil: [
+			closestPlaceHolder color:
+				(Smalltalk ui theme lightSelectionColor alpha: 0.7) ].
+
+	previousClosestPlaceholder := closestPlaceHolder
+]
+
 { #category : 'initialization' }
 CavroisWindowManager >> initialize [
 
@@ -499,7 +705,48 @@ CavroisWindowManager >> initialize [
 	defaultLocation := FileLocator preferences asFileReference / 'pharo'.
 	placeHolderIndices := Dictionary new.
 	ClyBrowserMorph postOpeningBlock: [ :w | self placePresenter: w ].
-	self resetProfiles
+	self resetProfiles.
+	self initializeBlocks 
+	
+]
+
+{ #category : 'initialization' }
+CavroisWindowManager >> initializeBlocks [
+
+	WorldMorph resizeActionBlock: [
+			self cellSize ifNotNil: [ :size |
+					self resetCells.
+					self createPlaceHolderGrid: size ].
+			self applyWorldResize ].
+
+	WorldMorph dragActionBlock: [ :aClient |
+			((aClient isKindOf: SystemWindow) or:
+				 (aClient isKindOf: SpWindowMorph)) ifTrue: [
+					self cellSize ifNotNil: [
+							| dragProcess |
+							self cellDisplay.
+							dragProcess := [
+								               [ aClient owner notNil ] whileTrue: [
+										               self
+											               handleWindowDrag: aClient
+											               at: aClient position.
+										               (Delay forMilliseconds: 2) wait ] ] forkAt:
+								               Processor userBackgroundPriority.
+							aClient setProperty: #cavroisDragProcess toValue: dragProcess ] ] ].
+
+	WorldMorph dropActionBlock: [ :anEvent |
+			| dragProcess |
+			dragProcess := anEvent contents
+				               valueOfProperty: #cavroisDragProcess
+				               ifAbsent: nil.
+			dragProcess ifNotNil: [
+					dragProcess terminate.
+					anEvent contents removeProperty: #cavroisDragProcess ].
+			self cellSize ifNotNil: [
+					self removeVisualPlaceholders.
+					self
+						handleCellWindowDrop: anEvent contents
+						at: anEvent contents position ] ]
 ]
 
 { #category : 'internals' }
@@ -530,17 +777,28 @@ CavroisWindowManager >> nextPlaceHolderIndexFor: aWindowType ifAbsent: aBlock [
 ]
 
 { #category : 'recording' }
-CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [ 
-	
+CavroisWindowManager >> placeHolderFromWindow: aWindowPresenter [
+
 	| placeHolder |
 	placeHolder := CavWindowPlaceHolder new
-			extent: aWindowPresenter extent ;
-			position: aWindowPresenter bounds origin ;
-			yourself.
+		               extent: aWindowPresenter extent;
+		               position: aWindowPresenter position;
+		               widthPercentage:
+			               aWindowPresenter extent x
+			               / self currentWorld bounds width * 100;
+		               heightPercentage:
+			               aWindowPresenter extent y
+			               / self currentWorld bounds height * 100;
+		               xPercentage:
+			               aWindowPresenter bounds origin x
+			               / self currentWorld bounds width * 100;
+		               yPercentage:
+			               aWindowPresenter bounds origin y
+			               / self currentWorld bounds height * 100.
+	placeHolder windows add: aWindowPresenter.
 	placeHolder configureStrategy.
 	aWindowPresenter configurePlaceHolder: placeHolder.
-	^ placeHolder 
-			
+	^ placeHolder
 ]
 
 { #category : 'operations' }
@@ -594,6 +852,12 @@ CavroisWindowManager >> removeVisualPlaceholders [
 		thenDo: [ :morph | morph visible: true ]
 ]
 
+{ #category : 'initialization' }
+CavroisWindowManager >> resetCells [
+
+	cells := OrderedCollection new
+]
+
 { #category : 'internals' }
 CavroisWindowManager >> resetProfiles [
 
@@ -610,17 +874,10 @@ CavroisWindowManager >> setNextPlaceHolderIndex: anInteger for: aWindowType [
 { #category : 'transitions' }
 CavroisWindowManager >> transitionToProfile [
 
-	| allWindows |
-	allWindows := self currentWorld windowsSatisfying: [ :w |
-		              w isCollapsed not and:
-			              (w isKindOf: SpDialogWindowMorph) not ].
-
-	self currentProfile placeHolders do: [ :placeHolder |
-		allWindows do: [ :w |
-			(w model class = placeHolder kind or:
-				 w model presenter class = placeHolder kind) ifTrue: [
-				w position: placeHolder position.
-				w extent: placeHolder extent ] ] ]
+	self currentProfile placeHolders do: [ :ph |
+			ph windows do: [ :window |
+					window position: ph position.
+					window extent: ph extent ] ]
 ]
 
 { #category : 'update' }
@@ -639,7 +896,14 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	self currentProfile reset.
-	self allCurrentWindows do: [ :each |
-		self currentProfile add: (self placeHolderFromWindow: each) ]
+	| windowsInPlaceholders |
+	windowsInPlaceholders := OrderedCollection new.
+	self currentProfile placeHolders do: [ :ph |
+			windowsInPlaceholders addAll: ph windows.
+			ph windows do: [ :window |
+					ph extent: window extent.
+					ph position: window position ] ].
+	(self allCurrentWindows reject: [ :w |
+		 windowsInPlaceholders includes: w ]) do: [ :w |
+		self currentProfile add: (self placeHolderFromWindow: w) ]
 ]

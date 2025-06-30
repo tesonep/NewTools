@@ -24,7 +24,7 @@ CavPopUpStrategy >> findSameKindWindowAs: aWidget [
 						  each model notNil and: [
 								  (each model presenter
 									   ifNotNil: [ each model presenter class = aWidget class ]
-									   ifNil: [ each model class = aWidget model class ]) and: [
+									   ifNil: [ each model class = aWidget class ]) and: [
 									  each ~= aWidget ] ] ] ]
 		  ifNone: [ ^ nil ]
 ]
@@ -33,6 +33,7 @@ CavPopUpStrategy >> findSameKindWindowAs: aWidget [
 CavPopUpStrategy >> placePresenter: aWindow [
 
 	| sameKindWindow windowToDelete |
+	super placePresenter: aWindow.
 	aWindow position: placeHolder position.
 	aWindow extent: placeHolder extent.
 

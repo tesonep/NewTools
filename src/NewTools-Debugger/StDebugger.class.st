@@ -78,7 +78,6 @@ Class {
 		'code',
 		'stackTable',
 		'inspector',
-		'breakpointInspector',
 		'stackHeader',
 		'extensionTools',
 		'extensionToolsNotebook',
@@ -808,13 +807,6 @@ StDebugger >> initialize [
 	self subscribeToSettingsChangesAnnouncements.
 
 	programmaticallyClosed := false
-]
-
-{ #category : 'initialization' }
-StDebugger >> initializeBreakpointInspector [
-	breakpointInspector := self
-		instantiate: StDebuggerBreakpointInspection
-		on: (StInspectorModel on: nil).
 ]
 
 { #category : 'code pane' }
