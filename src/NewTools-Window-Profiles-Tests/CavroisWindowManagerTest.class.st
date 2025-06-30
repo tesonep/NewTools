@@ -40,7 +40,6 @@ CavroisWindowManagerTest >> tearDown [
 { #category : 'tests' }
 CavroisWindowManagerTest >> testAddProfileFromWindows [
 
-	| profile |
 	profile := manager addProfileFromWindows: 'Profile'.
 
 	self assert: (manager profiles includesKey: 'Profile').
