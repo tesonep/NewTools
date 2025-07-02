@@ -42,7 +42,7 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StPlaygroundCommandAddBinding forSpecContext: self);
-		register: (StPlaygroundCommandModifBinding forSpecContext: self);
+		register: (StPlaygroundCommandModificationBinding forSpecContext: self);
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
 		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
@@ -257,7 +257,7 @@ StPlaygroundBindingsPresenter >> toolbarActions [
 		beRoot;
 		register: (StRemoveAllBindingsCommand forSpecContext: self);
 		register: (StPlaygroundCommandAddBinding forSpecContext: self);
-		register: (StPlaygroundCommandModifBinding forSpecContext: self);
+		register: (StPlaygroundCommandModificationBinding forSpecContext: self);
 		yourself
 ]
 

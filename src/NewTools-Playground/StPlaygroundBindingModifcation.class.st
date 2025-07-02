@@ -1,5 +1,5 @@
 Class {
-	#name : 'StPlaygroundBindingModif',
+	#name : 'StPlaygroundBindingModifcation',
 	#superclass : 'StPlaygroundBindingPresenter',
 	#instVars : [
 		'oldBinding'
@@ -10,16 +10,16 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundBindingModif class >> model: anModelPresenter [
+StPlaygroundBindingModifcation class >> model: aModelPresenter [
 	^ self basicNew 
-		interactionModel: anModelPresenter parent interactionModel;
-		setModelBeforeInitialization: anModelPresenter;
-		oldBinding: anModelPresenter selectedBinding;
+		interactionModel: aModelPresenter parent interactionModel;
+		setModelBeforeInitialization: aModelPresenter;
+		oldBinding: aModelPresenter selectedBinding;
 		initialize
 ]
 
 { #category : 'actions' }
-StPlaygroundBindingModif >> buttonAction [
+StPlaygroundBindingModifcation >> buttonAction [
 	|test|	
 		bindingName text ifEmpty: [ self error: 'I need a string to by identify' . ^ nil ].
 		bindingValue text ifEmpty: [ self error: 'I need a value' . ^ nil  ].
@@ -38,23 +38,23 @@ StPlaygroundBindingModif >> buttonAction [
 ]
 
 { #category : 'initialization' }
-StPlaygroundBindingModif >> initializeTextInput [
+StPlaygroundBindingModifcation >> initializeTextInput [
 	super initializeTextInput.
 	bindingName text: oldBinding key
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModif >> nameButton [
-	^ 'modif'
+StPlaygroundBindingModifcation >> nameButton [
+	^ 'Modification'
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModif >> oldBinding: aBinding [
+StPlaygroundBindingModifcation >> oldBinding: aBinding [
 	aBinding ifNil: [ self error: 'you can''t ' , 'change a nil binding'. self delete.  ].
 	oldBinding := aBinding
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModif >> windowTitle [ 
-	^ 'modif of ' , oldBinding key
+StPlaygroundBindingModifcation >> windowTitle [ 
+	^ 'Modification of ' , oldBinding key
 ]

@@ -26,10 +26,10 @@ StPlaygroundBindingAdd >> buttonAction [
 
 { #category : 'accessing' }
 StPlaygroundBindingAdd >> nameButton [ 
-	^ 'add'
+	^ 'Add'
 ]
 
 { #category : 'accessing' }
 StPlaygroundBindingAdd >> windowTitle [ 
-	^ 'new binding'
+	^ 'New binding'
 ]

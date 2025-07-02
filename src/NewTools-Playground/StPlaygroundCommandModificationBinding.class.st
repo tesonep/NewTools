@@ -1,5 +1,5 @@
 Class {
-	#name : 'StPlaygroundCommandModifBinding',
+	#name : 'StPlaygroundCommandModificationBinding',
 	#superclass : 'StPlaygroundCommand',
 	#category : 'NewTools-Playground-Command',
 	#package : 'NewTools-Playground',
@@ -7,23 +7,23 @@ Class {
 }
 
 { #category : 'default' }
-StPlaygroundCommandModifBinding class >> defaultDescription [ 
+StPlaygroundCommandModificationBinding class >> defaultDescription [ 
 	^ 'change the name and the value of a binding'
 ]
 
 { #category : 'default' }
-StPlaygroundCommandModifBinding class >> defaultIconName [ 
+StPlaygroundCommandModificationBinding class >> defaultIconName [ 
 	^ #edit
 ]
 
 { #category : 'default' }
-StPlaygroundCommandModifBinding class >> defaultName [ 
+StPlaygroundCommandModificationBinding class >> defaultName [ 
 	^ 'modif binding'
 ]
 
 { #category : 'executing' }
-StPlaygroundCommandModifBinding >> execute [ 
-	(StPlaygroundBindingModif
+StPlaygroundCommandModificationBinding >> execute [ 
+	(StPlaygroundBindingModifcation
 		model: context)
 		open
 ]
