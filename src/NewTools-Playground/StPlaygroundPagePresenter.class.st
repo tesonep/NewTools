@@ -33,7 +33,6 @@ StPlaygroundPagePresenter class >> baseToolbarCommands [
 		StPlaygroundBindingsCommand.				
 		StPlaygroundVersionsCommand.
 		StPlaygroundPagesCommand.
-		StPlaygroundScriptCommand.
 	}
 ]
 
@@ -193,17 +192,8 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 
 { #category : 'initialization' }
 StPlaygroundPagePresenter >> initialize [
-	|workspaceVariable1 workspaceVariable2|
    loading := false.
    super initialize.
-	workspaceVariable1 := (WorkspaceVariable key: #thisPlayground value: self ).
-	workspaceVariable2 := (WorkspaceVariable key: #thisPlaygroundModel value: (self text interactionModel)).
-	
-	
-	script := StPlaygroundScript init: {workspaceVariable1 . workspaceVariable2 } asOrderedCollection text: text.
-	script newDefaultClass.
-	
-	"text interactionModel addBindings: {workspaceVariable1 . workspaceVariable2}."
 	  
 ]
 
