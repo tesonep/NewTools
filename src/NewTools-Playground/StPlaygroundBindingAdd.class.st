@@ -10,8 +10,8 @@ Class {
 StPlaygroundBindingAdd >> buttonAction [
 	|test|	
 		
-		bindingName text isEmpty ifTrue: [ self error: 'I need a string to by identify' . ^ nil ].
-		bindingValue text isEmpty ifTrue: [ self error: 'I need a value' . ^ nil  ].
+		bindingName text ifEmpty: [ self error: 'I need a string to by identify' . ^ nil ].
+		bindingValue text ifEmpty: [ self error: 'I need a value' . ^ nil  ].
 
 
 		test := bindingValue evaluate: bindingValue text onCompileError: [ ^ self ] onError: [ :e | ^ self ].

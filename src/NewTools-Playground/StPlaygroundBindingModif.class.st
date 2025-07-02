@@ -21,9 +21,9 @@ StPlaygroundBindingModif class >> model: anModelPresenter [
 { #category : 'actions' }
 StPlaygroundBindingModif >> buttonAction [
 	|test|	
+		bindingName text ifEmpty: [ self error: 'I need a string to by identify' . ^ nil ].
+		bindingValue text ifEmpty: [ self error: 'I need a value' . ^ nil  ].
 		
-		bindingName text isEmpty ifTrue: [ self error: 'I need a string to by identify' . ^ nil ].
-		bindingValue text isEmpty ifTrue: [ self error: 'I need a value' . ^ nil  ].
 
 
 		test := bindingValue evaluate: bindingValue text onCompileError: [ ^ self ] onError: [ :e | ^ self ]. 		
@@ -50,6 +50,7 @@ StPlaygroundBindingModif >> nameButton [
 
 { #category : 'accessing' }
 StPlaygroundBindingModif >> oldBinding: aBinding [
+	aBinding ifNil: [ self error: 'you can''t ' , 'change a nil binding'. self delete.  ].
 	oldBinding := aBinding
 ]
 

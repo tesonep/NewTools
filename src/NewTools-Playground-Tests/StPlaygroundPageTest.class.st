@@ -94,13 +94,11 @@ StPlaygroundPageTest >> testFlush [
 	page := self newPage.
 	page basicContents: 'test'.
 
-	self assert: page contents isEmpty.
+	self assertEmpty: page.
 	
 	page flush.
 	
 	self assert: page contents equals: 'test'
-		
-
 	
 ]
 
@@ -140,11 +138,6 @@ StPlaygroundPageTest >> testModificationTime [
 	page flush.
 	
 	self assert: (self dateAroundToSecond: page modificationTime) equals: (self dateAroundToSecond: DateAndTime now).
-	
-	
-	
-	
-	
 ]
 
 { #category : 'tests' }

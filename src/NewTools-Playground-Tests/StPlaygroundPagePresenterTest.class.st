@@ -65,9 +65,9 @@ StPlaygroundPagePresenterTest >> testContents [
 	string := 'coucou'.
 	self openInstance.
 	
-	self assert: presenter text text equals:''.
+	self assert: presenter contents equals:''.
 	presenter contents: string.
-	self assert: presenter text text equals: string.
+	self assert: presenter contents equals: string.
 ]
 
 { #category : 'tests - commands' }

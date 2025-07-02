@@ -146,6 +146,11 @@ StPlaygroundPagePresenter >> basicPage: aPage [
 ]
 
 { #category : 'accessing' }
+StPlaygroundPagePresenter >> contents [
+	^ text text
+]
+
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> contents: aString [
 
 	text text: aString
@@ -192,8 +197,11 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 
 { #category : 'initialization' }
 StPlaygroundPagePresenter >> initialize [
-   loading := false.
-   super initialize.
+	loading := false.
+ 	super initialize.
+	
+	
+   
 	  
 ]
 
