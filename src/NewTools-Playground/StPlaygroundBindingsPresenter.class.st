@@ -43,11 +43,6 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 		beRoot;
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
-		register: (StPlaygroundCommandAddBinding forSpecContext: self);
-		register: (StPlaygroundCommandModifBinding forSpecContext: self);
-		
-
-		
 		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
 			beDisplayedAsGroup;
 			register: (StRemoveAllBindingsCommand forSpecContext: self);
@@ -58,7 +53,7 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 { #category : 'layout' }
 StPlaygroundBindingsPresenter >> defaultLayout [
 	^ (SpPanedLayout newLeftToRight
-				positionOfSlider: 35 percent;
+				positionOfSlider: 30 percent;
 				add: bindingPanel;
 				add: inspectorPanel;
 				yourself)
@@ -79,13 +74,11 @@ StPlaygroundBindingsPresenter >> hasSelectedBinding [
 { #category : 'initialization' }
 StPlaygroundBindingsPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
-	aDialogWindowPresenter
-		initialExtent: 800@450;
+	aDialogWindowPresenter 
 		centeredRelativeTo: parent window;
 		addDefaultButton: 'Close' do: [ :presenter | 
 			presenter triggerOkAction.
 			presenter close ]
-		
 ]
 
 { #category : 'initialization' }
@@ -266,8 +259,6 @@ StPlaygroundBindingsPresenter >> toolbarActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveAllBindingsCommand forSpecContext: self);
-		register: (StPlaygroundCommandAddBinding forSpecContext: self);
-		register: (StPlaygroundCommandModifBinding forSpecContext: self);
 		yourself
 ]
 
