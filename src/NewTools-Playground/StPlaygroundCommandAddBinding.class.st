@@ -25,5 +25,5 @@ StPlaygroundCommandAddBinding class >> defaultName [
 StPlaygroundCommandAddBinding >> execute [ 
 	(StPlaygroundBindingAdd
 		model: context)
-		open.
+		open
 ]

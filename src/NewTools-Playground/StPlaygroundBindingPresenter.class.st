@@ -26,7 +26,7 @@ StPlaygroundBindingPresenter class >> model: anModelPresenter [
 
 { #category : 'actions' }
 StPlaygroundBindingPresenter >> buttonAction [
-	self subclassResponsibility.
+	self subclassResponsibility
 ]
 
 { #category : 'layout' }
@@ -62,7 +62,7 @@ StPlaygroundBindingPresenter >> initializeButtons [
 { #category : 'initialization' }
 StPlaygroundBindingPresenter >> initializeCode [
 	bindingValue := self newCode.
-	bindingValue interactionModel: SpCodeScriptingInteractionModel new.
+	bindingValue interactionModel: SpCodeScriptingInteractionModel new
 ]
 
 { #category : 'initialization - deprecated' }
@@ -71,7 +71,7 @@ StPlaygroundBindingPresenter >> initializePresenter [
 
 	self initializeCode.
 	
-	self initializeButtons.
+	self initializeButtons
 	
 	
 	
@@ -83,7 +83,7 @@ StPlaygroundBindingPresenter >> initializePresenter [
 StPlaygroundBindingPresenter >> initializeTextInput [ 
 	bindingName := self newTextInput.
 	labelName := self newLabel.
-	labelName label: 'name'.
+	labelName label: 'name'
 ]
 
 { #category : 'accessing' }
@@ -93,10 +93,10 @@ StPlaygroundBindingPresenter >> interactionModel: aInteractionModel [
 
 { #category : 'accessing' }
 StPlaygroundBindingPresenter >> nameButton [
-	self subclassResponsibility.
+	self subclassResponsibility
 ]
 
 { #category : 'accessing - model' }
 StPlaygroundBindingPresenter >> setModelBeforeInitialization: aModel [
-	parent := aModel.
+	parent := aModel
 ]

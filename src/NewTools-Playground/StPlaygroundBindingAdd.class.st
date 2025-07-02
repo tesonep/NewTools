@@ -14,13 +14,14 @@ StPlaygroundBindingAdd >> buttonAction [
 		bindingValue text isEmpty ifTrue: [ self error: 'I need a value' . ^ nil  ].
 
 
-		test := bindingValue evaluate: bindingValue text onCompileError: [ ^ self ] onError: [ :e | ^ self ]. 		"wait more instruction about this possibility
+		test := bindingValue evaluate: bindingValue text onCompileError: [ ^ self ] onError: [ :e | ^ self ].
+		"wait more instruction about this possibility
 		test ifNil: [ self error:'test'. ^ nil ]."
 		
 		
 		interactionModel addBindingNamed: bindingName text with: test.
 		parent updatePresenterKeepingSelection.
-		self delete.
+		self delete
 ]
 
 { #category : 'accessing' }

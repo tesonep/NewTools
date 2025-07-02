@@ -34,13 +34,13 @@ StPlaygroundBindingModif >> buttonAction [
 		interactionModel addBindingNamed: bindingName text with: test.
 		
 		parent updatePresenterKeepingSelection.
-		self delete.
+		self delete
 ]
 
 { #category : 'initialization' }
 StPlaygroundBindingModif >> initializeTextInput [
 	super initializeTextInput.
-	bindingName text: oldBinding key. 
+	bindingName text: oldBinding key
 ]
 
 { #category : 'accessing' }
@@ -50,10 +50,10 @@ StPlaygroundBindingModif >> nameButton [
 
 { #category : 'accessing' }
 StPlaygroundBindingModif >> oldBinding: aBinding [
-	oldBinding := aBinding.
+	oldBinding := aBinding
 ]
 
 { #category : 'accessing' }
 StPlaygroundBindingModif >> windowTitle [ 
-	^ 'modif of ' , oldBinding key.
+	^ 'modif of ' , oldBinding key
 ]
