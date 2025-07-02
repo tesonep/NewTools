@@ -20,7 +20,7 @@ StProfStefLessonChooser class >> model: aModel [
 	profStef: ProfStef default;
 	setModelBeforeInitialization: aModel;
 	initialize;
-	yourself.
+	yourself
 ]
 
 { #category : 'layout' }
@@ -32,9 +32,7 @@ StProfStefLessonChooser >> defaultLayout [
 					add: okButton;
 				
 					yourself) withConstraints: [ :constraint | constraint width: 90 ; height: 30 ] ;
-				
-	
-	yourself).
+	yourself)
 ]
 
 { #category : 'initialization' }
@@ -45,7 +43,7 @@ StProfStefLessonChooser >> initializeButtons [
 	
 	cancelButton := self newButton.
 	cancelButton label: 'cancel'.
-	cancelButton action: [ self delete ].
+	cancelButton action: [ self delete ]
 ]
 
 { #category : 'initialization' }
@@ -59,13 +57,13 @@ StProfStefLessonChooser >> initializeListLesson [
 		whenSelectedDo: [ :selection |
 				selectedLesson := selection.
 		];
-		items: profStef player tutorial tutorial.
+		items: profStef player tutorial tutorial
 ]
 
 { #category : 'initialization' }
 StProfStefLessonChooser >> initializePresenter [ 
 	self initializeListLesson.
-	self initializeButtons.
+	self initializeButtons
 
 	
 	
@@ -74,13 +72,13 @@ StProfStefLessonChooser >> initializePresenter [
 { #category : 'layout' }
 StProfStefLessonChooser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter initialExtent: 500@200;
-	title: self windowTitle.
+	title: self windowTitle
 ]
 
 { #category : 'api' }
 StProfStefLessonChooser >> okAction [ 
 	profStef tutorial: profStef player tutorial class lesson: selectedLesson.
-	self delete.
+	self delete
 ]
 
 { #category : 'initialization' }
@@ -90,7 +88,7 @@ StProfStefLessonChooser >> profStef: aProfStef [
 
 { #category : 'layout' }
 StProfStefLessonChooser >> setModelBeforeInitialization: aModel [
-	parent := aModel.
+	parent := aModel
 ]
 
 { #category : 'layout' }

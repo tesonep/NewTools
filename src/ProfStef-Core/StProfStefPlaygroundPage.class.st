@@ -19,5 +19,5 @@ StProfStefPlaygroundPage class >> baseToolbarCommands [
 { #category : 'accessing' }
 StProfStefPlaygroundPage >> windowTitle: aString [
 	titleHolder := aString.
-	self update.
+	self update
 ]
