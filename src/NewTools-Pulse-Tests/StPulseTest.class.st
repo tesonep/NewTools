@@ -2,8 +2,7 @@ Class {
 	#name : 'StPulseTest',
 	#superclass : 'TestCase',
 	#instVars : [
-		'pulse',
-		'mutex'
+		'pulse'
 	],
 	#category : 'NewTools-Pulse-Tests',
 	#package : 'NewTools-Pulse-Tests'
@@ -13,8 +12,7 @@ Class {
 StPulseTest >> setUp [
 	
 	super setUp.
-	pulse := StPulse new.
-	mutex := Mutex new.
+	pulse := StPulse new
 ]
 
 { #category : 'running' }
@@ -23,27 +21,26 @@ StPulseTest >> testSearchingAllTypeOfCandidates [
 	| window candidates |	
 
 	[ 
-		mutex critical: [
-			window := pulse open.
-			candidates := pulse model candidatesFor: 'Test' inContext: pulse environmentContext ].
+		window := pulse open.
+		candidates := pulse model candidatesFor: 'Test' inContext: pulse environmentContext.
+		100 milliSeconds wait.
+		self assert: (candidates atWrap: 1) categoryLabel equals: 'class'.
 		
-		mutex critical: [ 
-			self assert: (candidates atWrap: 1) categoryLabel equals: 'class'.
-			candidates := pulse model candidatesFor: 'test' inContext: pulse environmentContext ].
+		candidates := pulse model candidatesFor: 'test' inContext: pulse environmentContext.
+		100 milliSeconds wait.
+		self assert: (candidates atWrap: 1) categoryLabel equals: 'method'.
 		
-		mutex critical: [ 
-			self assert: (candidates atWrap: 1) categoryLabel equals: 'method'.
-			candidates := pulse model candidatesFor: 'NewTools' inContext: pulse environmentContext ].
+		candidates := pulse model candidatesFor: 'NewTools' inContext: pulse environmentContext.
+		100 milliSeconds wait.
+		self assert: (candidates atWrap: 1) categoryLabel equals: 'package'.
 		
-		mutex critical: [ 
-			self assert: (candidates atWrap: 1) categoryLabel equals: 'package'.
-			candidates := pulse model candidatesFor: '' inContext: pulse windowsContext ].
-
-		mutex critical: [ 
-			self assert: (candidates atWrap: 1) categoryLabel equals: 'window'.
-			candidates := pulse model candidatesFor: '' inContext: pulse toolsContext ].
+		candidates := pulse model candidatesFor: '' inContext: pulse windowsContext.
+		100 milliSeconds wait.
+		self assert: (candidates atWrap: 1) categoryLabel equals: 'window'.
 		
-		mutex critical: [ self assert: (candidates atWrap: 1) categoryLabel equals: 'menu' ]	
+		candidates := pulse model candidatesFor: '' inContext: pulse toolsContext.
+		100 milliSeconds wait.
+		self assert: (candidates atWrap: 1) categoryLabel equals: 'menu'	
 	] ensure: [ window close ]
 ]
 
@@ -53,10 +50,10 @@ StPulseTest >> testSearchingCandidates [
 	| window candidates |
 	
 	[ 
-		mutex critical: [ 
-			window := pulse open.
-			candidates := pulse model candidatesFor: 'Test' inContext: pulse environmentContext ].
-		mutex critical: [ self assert: candidates size equals: 25 ]	
+		window := pulse open.
+		candidates := pulse model candidatesFor: 'Test' inContext: pulse environmentContext.
+		100 milliSeconds wait.
+		self assert: candidates size equals: 25.	
 	] ensure: [ window close ]
 ]
 
@@ -66,10 +63,9 @@ StPulseTest >> testSearchingInexistentCandidate [
 	| window candidates |	
 
 	[ 
-		mutex critical: [ 
-			window := pulse open.
-			candidates := pulse model candidatesFor: 'ClassThatDoesntExist' inContext: pulse environmentContext ].
-		self assert: candidates size equals: 0
+		window := pulse open.
+		candidates := pulse model candidatesFor: 'ClassThatDoesntExist' inContext: pulse environmentContext.
+		self assert: candidates size equals: 0.	
 	] ensure: [ window close ]
 ]
 
