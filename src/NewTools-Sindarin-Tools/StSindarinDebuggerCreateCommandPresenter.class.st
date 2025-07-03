@@ -34,35 +34,44 @@ StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createCommand [
-	| name className description class |
-	
-	name := commandName ifNil: ['NoName'].
-	className := 'Sindarin{1}Command' format: {name asCamelCase}.
-	description := descriptionInput text ifNil: [''].
-	
-	class := SindarinCommand << className 
-		package: package;
-		build;
-		install.
 
-	class compile: ('execute
+	| name className description class |
+	name := commandName ifNil: [ 'NoName' ].
+	className := 'Sindarin{1}{2}Command' format: {
+			             projectName asCamelCase.
+			             name asCamelCase }.
+	description := descriptionInput text ifNil: [ '' ].
+
+	class := (SindarinCommand << className)
+		         package: package;
+		         build;
+		         install.
+
+	class
+		compile: ('execute
 	|sindarin|
 	sindarin := self context sindarinDebugger.
 	self context debuggerActionModel preventUpdatesDuring: [
 		{1}
-	]' format: {code}) classified: 'executing'.
-	
-	class class compile: ('defaultIconName
-	^#{1}' format: {iconNameSelected}) classified: 'initialization'.
-	
-	class class compile: ('defaultDescription
-	^ ''{1}''' format: {description}) classified: 'initialization'.
-	
-	class class compile: ('defaultName
-	^ ''{1}''' format: {name}) classified: 'initialization'.
-	
-	self createMenu.
+	]' format: { code })
+		classified: 'executing'.
 
+	class class
+		compile: ('defaultIconName
+	^#{1}' format: { iconNameSelected })
+		classified: 'initialization'.
+
+	class class
+		compile: ('defaultDescription
+	^ ''{1}''' format: { description })
+		classified: 'initialization'.
+
+	class class
+		compile: ('defaultName
+	^ ''{1}''' format: { name })
+		classified: 'initialization'.
+
+	self createMenu
 ]
 
 { #category : 'actions' }
@@ -106,7 +115,9 @@ StSindarinDebuggerCreateCommandPresenter >> defaultLayout [
 StSindarinDebuggerCreateCommandPresenter >> deleteCommand [
 	| name className commandsLeft|
 	name := commandName ifNil: ['NoName'].
-	className := 'Sindarin{1}Command' format: {name asCamelCase}.
+	className := 'Sindarin{1}{2}Command' format: {
+			             projectName asCamelCase.
+			             name asCamelCase }.
 	
 	(Smalltalk globals includesKey: className asSymbol) ifTrue: [ 
 		(Smalltalk globals at: className asSymbol) removeFromSystem.
