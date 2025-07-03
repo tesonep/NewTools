@@ -35,7 +35,8 @@ StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	| name className description class |
-	name := commandName ifNil: ['Default'].
+	
+	name := commandName ifNil: ['NoName'].
 	className := 'Sindarin{1}Command' format: {name asCamelCase}.
 	description := descriptionInput text ifNil: [''].
 	
@@ -80,7 +81,7 @@ StSindarinDebuggerCreateCommandPresenter >> createMenu [
 	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarCommandGroup.
 	
 	commands do: [ :command | toolbarCommandGroup register: command ].' format: {projectName. projectName asCamelCase . package})
-	classified: 'extensions'
+	classified: '*',package
 ]
 
 { #category : 'layout' }
@@ -99,6 +100,33 @@ StSindarinDebuggerCreateCommandPresenter >> defaultLayout [
 		add: iconList;
 		add: buttonRow expand: false;
 		yourself.
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerCreateCommandPresenter >> deleteCommand [
+	| name className commandsLeft|
+	name := commandName ifNil: ['NoName'].
+	className := 'Sindarin{1}Command' format: {name asCamelCase}.
+	
+	(Smalltalk globals includesKey: className asSymbol) ifTrue: [ 
+		(Smalltalk globals at: className asSymbol) removeFromSystem.
+	].
+	
+	commandsLeft := (SindarinCommand subclasses select: [ :sub | sub packageName = package ]).
+	commandsLeft isEmpty ifTrue: [ self deleteMenu ] 	
+
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerCreateCommandPresenter >> deleteMenu [
+	| buildGroupMethodName |
+	buildGroupMethodName :=	'buildSindarin{1}ExtentionCommandsGroupWith:forRoot:' format: { projectName asCamelCase }.
+	
+	(StDebugger class includesSelector: buildGroupMethodName asSymbol) ifTrue: [
+		StDebugger class removeSelector: buildGroupMethodName asSymbol.
+	]
+
+	
 ]
 
 { #category : 'initialization' }

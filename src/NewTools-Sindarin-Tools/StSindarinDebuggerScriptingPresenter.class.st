@@ -37,7 +37,6 @@ StSindarinDebuggerScriptingPresenter >> accept: aVisitor [
 
 { #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> createCommandFromScript [
-	self flag: 'todo'.
 	self layout: self createCommandLayout.
 ]
 
@@ -233,8 +232,10 @@ StSindarinDebuggerScriptingPresenter >> loadScriptLayout [
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
-	self flag: 'todo'
+StSindarinDebuggerScriptingPresenter >> removeScriptCommand [			
+	commandCreater 
+		commandName: scriptNameInput text;
+		deleteCommand.
 ]
 
 { #category : 'actions' }
