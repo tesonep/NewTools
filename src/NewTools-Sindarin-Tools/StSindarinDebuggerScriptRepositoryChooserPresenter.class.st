@@ -7,21 +7,25 @@ Class {
 }
 
 { #category : 'api' }
-StSindarinDebuggerScriptRepositoryChooserPresenter >> display [ 
-	^ [ :e | e repositoryName ].
+StSindarinDebuggerScriptRepositoryChooserPresenter >> display [
+
+	^ [ :e | e repositoryName ]
 ]
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptRepositoryChooserPresenter >> findRepositories [
+
 	self items: StSindarinDebuggerScriptRepository subclasses
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerScriptRepositoryChooserPresenter >> loadScript: aString [
-	^ self selectedItem loadScript: aString 
+
+	^ self selectedItem loadScript: aString
 ]
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptRepositoryChooserPresenter >> saveScript: aStringKey code: aStringValue [
+
 	self selectedItem saveScript: aStringKey code: aStringValue
 ]

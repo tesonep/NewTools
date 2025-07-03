@@ -19,16 +19,19 @@ Class {
 
 { #category : 'accessing' }
 StSindarinDebuggerCreateCommandPresenter >> code: aCode [
-	code := aCode 
+
+	code := aCode
 ]
 
 { #category : 'accessing' }
 StSindarinDebuggerCreateCommandPresenter >> commandName: aName [
-	commandName := aName asCamelCase 
+
+	commandName := aName asCamelCase
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerCreateCommandPresenter >> connectPresenters [ 
+StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
+
 	iconList transmitTo: self
 ]
 
@@ -76,7 +79,10 @@ StSindarinDebuggerCreateCommandPresenter >> createCommand [
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> createMenu [
-	StDebugger class compile: ('buildSindarin{2}ExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup
+
+	StDebugger class
+		compile:
+			('buildSindarin{2}ExtentionCommandsGroupWith: stDebuggerInstance forRoot: rootCommandGroup
 	<extensionCommands>
 	| commands toolbarCommandGroup |
 	commands := (SindarinCommand subclasses select: [ :sub | sub packageName = ''{3}'']) collect: [ :each | each forSpecContext: stDebuggerInstance ].
@@ -89,104 +95,113 @@ StSindarinDebuggerCreateCommandPresenter >> createMenu [
 	
 	(self debuggerToolbarCommandGroupFor: rootCommandGroup) register: toolbarCommandGroup.
 	
-	commands do: [ :command | toolbarCommandGroup register: command ].' format: {projectName. projectName asCamelCase . package})
-	classified: '*',package
+	commands do: [ :command | toolbarCommandGroup register: command ].'
+				 format: {
+						 projectName.
+						 projectName asCamelCase.
+						 package })
+		classified: '*' , package
 ]
 
 { #category : 'layout' }
-StSindarinDebuggerCreateCommandPresenter >> defaultLayout [ 
-	|buttonRow|
-	
-	buttonRow := SpBoxLayout newLeftToRight
-		spacing: 6;
-		add: createButton;
-		add: cancelButton;
-		yourself.
+StSindarinDebuggerCreateCommandPresenter >> defaultLayout [
 
-	^ SpBoxLayout newTopToBottom 
-		spacing: 5;
-		add: descriptionInput expand: false;
-		add: iconList;
-		add: buttonRow expand: false;
-		yourself.
+	| buttonRow |
+	buttonRow := SpBoxLayout newLeftToRight
+		             spacing: 6;
+		             add: createButton;
+		             add: cancelButton;
+		             yourself.
+
+	^ SpBoxLayout newTopToBottom
+		  spacing: 5;
+		  add: descriptionInput expand: false;
+		  add: iconList;
+		  add: buttonRow expand: false;
+		  yourself
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> deleteCommand [
-	| name className commandsLeft|
-	name := commandName ifNil: ['NoName'].
+
+	| name className commandsLeft |
+	name := commandName ifNil: [ 'NoName' ].
 	className := 'Sindarin{1}{2}Command' format: {
 			             projectName asCamelCase.
 			             name asCamelCase }.
-	
-	(Smalltalk globals includesKey: className asSymbol) ifTrue: [ 
-		(Smalltalk globals at: className asSymbol) removeFromSystem.
-	].
-	
-	commandsLeft := (SindarinCommand subclasses select: [ :sub | sub packageName = package ]).
-	commandsLeft isEmpty ifTrue: [ self deleteMenu ] 	
 
+	(Smalltalk globals includesKey: className asSymbol) ifTrue: [
+		(Smalltalk globals at: className asSymbol) removeFromSystem ].
+
+	commandsLeft := SindarinCommand subclasses select: [ :sub |
+		                sub packageName = package ].
+	commandsLeft isEmpty ifTrue: [ self deleteMenu ]
 ]
 
 { #category : 'actions' }
 StSindarinDebuggerCreateCommandPresenter >> deleteMenu [
-	| buildGroupMethodName |
-	buildGroupMethodName :=	'buildSindarin{1}ExtentionCommandsGroupWith:forRoot:' format: { projectName asCamelCase }.
-	
-	(StDebugger class includesSelector: buildGroupMethodName asSymbol) ifTrue: [
-		StDebugger class removeSelector: buildGroupMethodName asSymbol.
-	]
 
-	
+	| buildGroupMethodName |
+	buildGroupMethodName := 'buildSindarin{1}ExtentionCommandsGroupWith:forRoot:'
+		                        format: { projectName asCamelCase }.
+
+	(StDebugger class includesSelector: buildGroupMethodName asSymbol)
+		ifTrue: [
+		StDebugger class removeSelector: buildGroupMethodName asSymbol ]
 ]
 
 { #category : 'initialization' }
 StSindarinDebuggerCreateCommandPresenter >> initializeIconList [
-	|icons|
+
+	| icons |
 	icons := ThemeIcons loadDefault.
-	iconList 
-		items: icons allIconNames ;
+	iconList
+		items: icons allIconNames;
 		display: [ :elm | ThemeIcons iconNamed: elm ]
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerCreateCommandPresenter >> initializePresenters [ 
-	
-	descriptionInput := self newTextInput.  
+StSindarinDebuggerCreateCommandPresenter >> initializePresenters [
+
+	descriptionInput := self newTextInput.
 	descriptionInput placeholder: 'Command description'.
-	
+
 	iconList := self newList.
 	self initializeIconList.
-	
+
 	createButton := self newButton.
 	createButton label: 'Create'.
-	
+
 	cancelButton := self newButton.
-	cancelButton label: 'Cancel'.
-	
+	cancelButton label: 'Cancel'
 ]
 
 { #category : 'accessing' }
 StSindarinDebuggerCreateCommandPresenter >> package: aPackageName [
+
 	package := aPackageName
 ]
 
 { #category : 'accessing' }
 StSindarinDebuggerCreateCommandPresenter >> projectName: aName [
-	projectName := aName.
+
+	projectName := aName
 ]
 
 { #category : 'transmission' }
 StSindarinDebuggerCreateCommandPresenter >> setModel: aIconName [
-	iconNameSelected := aIconName.
+
+	iconNameSelected := aIconName
 ]
 
 { #category : 'enumerating' }
 StSindarinDebuggerCreateCommandPresenter >> whenCancelButtonDo: aBlock [
-	cancelButton action: aBlock .
+
+	cancelButton action: aBlock
 ]
 
 { #category : 'enumerating' }
 StSindarinDebuggerCreateCommandPresenter >> whenCreateButtonDo: aBlock [
-	createButton action: aBlock .
+
+	createButton action: aBlock
 ]
