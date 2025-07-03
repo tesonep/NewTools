@@ -74,6 +74,17 @@ StSindarinDebuggerCreateCommandPresenter >> createCommand [
 	^ ''{1}''' format: { name })
 		classified: 'initialization'.
 
+	class comment:
+		('This command was generated dynamically on {1} at {2}.
+Project: {3}
+Name: {4}
+Description: {5}' format: {
+				 Date today yyyymmdd.
+				 Time now print24.
+				 projectName.
+				 name.
+				 description }).
+
 	self createMenu
 ]
 
