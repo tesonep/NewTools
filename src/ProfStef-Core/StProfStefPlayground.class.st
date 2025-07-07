@@ -1,3 +1,6 @@
+"
+a ProfStef Playground with some specific abilities
+"
 Class {
 	#name : 'StProfStefPlayground',
 	#superclass : 'StPlaygroundPresenter',

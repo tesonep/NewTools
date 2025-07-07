@@ -1,3 +1,6 @@
+"
+this presenter is for change easily between lessons
+"
 Class {
 	#name : 'StProfStefLessonChooser',
 	#superclass : 'SpPresenter',

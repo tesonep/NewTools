@@ -1,3 +1,6 @@
+"
+go to the previous lesson in the tutorial
+"
 Class {
 	#name : 'StPlaygroundPreviousProfStefCommand',
 	#superclass : 'StPlaygroundCommand',

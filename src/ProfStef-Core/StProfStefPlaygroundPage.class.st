@@ -1,3 +1,6 @@
+"
+page of the profStef Playground
+"
 Class {
 	#name : 'StProfStefPlaygroundPage',
 	#superclass : 'StPlaygroundPagePresenter',

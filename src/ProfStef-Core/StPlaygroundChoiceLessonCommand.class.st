@@ -1,3 +1,6 @@
+"
+open the StPlaygroundChoiceLessonCommand in a button of profStef
+"
 Class {
 	#name : 'StPlaygroundChoiceLessonCommand',
 	#superclass : 'StPlaygroundCommand',

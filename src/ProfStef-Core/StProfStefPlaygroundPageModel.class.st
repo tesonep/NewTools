@@ -1,3 +1,6 @@
+"
+this object to specify which object is used for the page of the playground
+"
 Class {
 	#name : 'StProfStefPlaygroundPageModel',
 	#superclass : 'StPlaygroundPage',
