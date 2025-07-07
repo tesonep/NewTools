@@ -27,6 +27,16 @@ StPlaygroundBindingPresenter class >> model: anModelPresenter [
 		initialize
 ]
 
+{ #category : 'accessing' }
+StPlaygroundBindingPresenter >> bindingName [
+	^ bindingName
+]
+
+{ #category : 'accessing' }
+StPlaygroundBindingPresenter >> bindingValue [
+	^ bindingValue
+]
+
 { #category : 'actions' }
 StPlaygroundBindingPresenter >> buttonAction [
 	self subclassResponsibility
@@ -87,6 +97,11 @@ StPlaygroundBindingPresenter >> initializeTextInput [
 	bindingName := self newTextInput.
 	labelName := self newLabel.
 	labelName label: 'name'
+]
+
+{ #category : 'accessing' }
+StPlaygroundBindingPresenter >> interactionModel [
+	^ interactionModel
 ]
 
 { #category : 'accessing' }
