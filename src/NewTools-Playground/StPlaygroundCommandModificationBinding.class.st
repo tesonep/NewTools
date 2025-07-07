@@ -1,3 +1,7 @@
+"
+I'm a modification binding command.
+I will open the modificationBinding presenter.
+"
 Class {
 	#name : 'StPlaygroundCommandModificationBinding',
 	#superclass : 'StPlaygroundCommand',

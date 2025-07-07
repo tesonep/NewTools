@@ -1,3 +1,7 @@
+"
+I'm a add binding command.
+I will open the addBinding presenter.
+"
 Class {
 	#name : 'StPlaygroundCommandAddBinding',
 	#superclass : 'StPlaygroundCommand',

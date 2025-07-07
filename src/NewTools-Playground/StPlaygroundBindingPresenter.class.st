@@ -1,8 +1,11 @@
+"
+I am a presenter change a bindings of parent Playground.
+I a super class to put in commun a big part of the code.
+"
 Class {
 	#name : 'StPlaygroundBindingPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
-		'binding',
 		'parent',
 		'bindingName',
 		'labelName',

@@ -1,3 +1,7 @@
+"
+I am a presenter where you can add a bindings of parent Playground.
+you can put the name of the binding and the value of this binding.
+"
 Class {
 	#name : 'StPlaygroundBindingAdd',
 	#superclass : 'StPlaygroundBindingPresenter',
