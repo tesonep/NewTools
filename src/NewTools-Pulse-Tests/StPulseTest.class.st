@@ -74,8 +74,6 @@ StPulseTest >> testSmoke [
 
 	| window |
 	
-	
-	
 	[ self shouldnt: [ 
 		SpWindowForceOpenNonModal during: [  window := StPulse open ] ] raise: Error ] ensure: [ window close ].
 
