@@ -46,3 +46,8 @@ TutorialTest >> testNotEmpty [
 TutorialTest >> testSizeReturnsNumberOfSelectors [
 	self assert: (self testedTutorial tutorial size) equals: self testedTutorial size
 ]
+
+{ #category : 'tests' }
+TutorialTest >> testedTutorial [
+	self subclassResponsibility 
+]
