@@ -12,7 +12,7 @@ Class {
 { #category : 'accessing' }
 StPlaygroundBindingModificationTest >> classToTest [
 
-	^ StPlaygroundBindingModifcation
+	^ StPlaygroundBindingModification
 ]
 
 { #category : 'running' }

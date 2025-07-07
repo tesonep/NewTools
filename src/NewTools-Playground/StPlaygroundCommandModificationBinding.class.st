@@ -27,7 +27,7 @@ StPlaygroundCommandModificationBinding class >> defaultName [
 
 { #category : 'executing' }
 StPlaygroundCommandModificationBinding >> execute [ 
-	(StPlaygroundBindingModifcation
+	(StPlaygroundBindingModification
 		model: context)
 		open
 ]

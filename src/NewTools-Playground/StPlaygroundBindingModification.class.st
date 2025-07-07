@@ -3,7 +3,7 @@ I am a presenter where you can midify a bindings of parent Playground.
 you can put the name of the binding and the value of this binding.
 "
 Class {
-	#name : 'StPlaygroundBindingModifcation',
+	#name : 'StPlaygroundBindingModification',
 	#superclass : 'StPlaygroundBindingPresenter',
 	#instVars : [
 		'oldBinding'
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StPlaygroundBindingModifcation class >> model: aModelPresenter [
+StPlaygroundBindingModification class >> model: aModelPresenter [
 	^ self basicNew 
 		interactionModel: aModelPresenter parent interactionModel;
 		setModelBeforeInitialization: aModelPresenter;
@@ -23,7 +23,7 @@ StPlaygroundBindingModifcation class >> model: aModelPresenter [
 ]
 
 { #category : 'actions' }
-StPlaygroundBindingModifcation >> buttonAction [
+StPlaygroundBindingModification >> buttonAction [
 	|test|	
 		bindingName text ifEmpty: [ self error: 'I need a string to by identify' . ^ nil ].
 		bindingValue text ifEmpty: [ self error: 'I need a value' . ^ nil  ].
@@ -42,23 +42,23 @@ StPlaygroundBindingModifcation >> buttonAction [
 ]
 
 { #category : 'initialization' }
-StPlaygroundBindingModifcation >> initializeTextInput [
+StPlaygroundBindingModification >> initializeTextInput [
 	super initializeTextInput.
 	bindingName text: oldBinding key
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModifcation >> nameButton [
+StPlaygroundBindingModification >> nameButton [
 	^ 'Modification'
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModifcation >> oldBinding: aBinding [
+StPlaygroundBindingModification >> oldBinding: aBinding [
 	aBinding ifNil: [ self error: 'you can''t ' , 'change a nil binding'. self delete.  ].
 	oldBinding := aBinding
 ]
 
 { #category : 'accessing' }
-StPlaygroundBindingModifcation >> windowTitle [ 
+StPlaygroundBindingModification >> windowTitle [ 
 	^ 'Modification of ' , oldBinding key
 ]
