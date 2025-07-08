@@ -764,6 +764,12 @@ StPulse >> isShowingPreview [
 ]
 
 { #category : 'private' }
+StPulse >> listPresenter [
+
+	^ listPresenter
+]
+
+{ #category : 'private' }
 StPulse >> mutex [ 
 
 	^ mutex ifNil: [ mutex := Mutex new ]
