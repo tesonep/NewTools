@@ -1,5 +1,5 @@
 Class {
-	#name : 'StSindarinDebuggerCreateCommandPresenter',
+	#name : 'StSindarinDebuggerCommandPresenter',
 	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'descriptionInput',
@@ -18,25 +18,72 @@ Class {
 }
 
 { #category : 'accessing' }
-StSindarinDebuggerCreateCommandPresenter >> code: aCode [
+StSindarinDebuggerCommandPresenter >> code: aCode [
 
 	code := aCode
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerCreateCommandPresenter >> commandName: aName [
+StSindarinDebuggerCommandPresenter >> commandName: aName [
 
 	commandName := aName asCamelCase
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerCreateCommandPresenter >> connectPresenters [
+StSindarinDebuggerCommandPresenter >> connectPresenters [
 
 	iconList transmitTo: self
 ]
 
+{ #category : 'layout' }
+StSindarinDebuggerCommandPresenter >> defaultLayout [
+
+	| buttonRow |
+	buttonRow := SpBoxLayout newLeftToRight
+		             spacing: 6;
+		             add: createButton;
+		             add: cancelButton;
+		             yourself.
+
+	^ SpBoxLayout newTopToBottom
+		  spacing: 5;
+		  add: descriptionInput expand: false;
+		  add: iconList;
+		  add: buttonRow expand: false;
+		  yourself
+]
+
 { #category : 'actions' }
-StSindarinDebuggerCreateCommandPresenter >> createCommand [
+StSindarinDebuggerCommandPresenter >> deleteCommand [
+
+	| name className commandsLeft |
+	name := commandName ifNil: [ 'NoName' ].
+	className := 'Sindarin{1}{2}Command' format: {
+			             projectName asCamelCase.
+			             name asCamelCase }.
+
+	(Smalltalk globals includesKey: className asSymbol) ifTrue: [
+		(Smalltalk globals at: className asSymbol) removeFromSystem ].
+
+	commandsLeft := SindarinCommand subclasses select: [ :sub |
+		                sub packageName = package ].
+	commandsLeft isEmpty ifTrue: [ self deleteMenu ]
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerCommandPresenter >> deleteMenu [
+
+	| buildGroupMethodName |
+	buildGroupMethodName := 'buildSindarin{1}ExtentionCommandsGroupWith:forRoot:'
+		                        format: { projectName asCamelCase }.
+
+	(StDebugger class includesSelector: buildGroupMethodName asSymbol)
+		ifTrue: [
+		StDebugger class removeSelector: buildGroupMethodName asSymbol ]
+]
+
+{ #category : 'actions' }
+StSindarinDebuggerCommandPresenter >> generateCommand [
 
 	| name className description class |
 	name := commandName ifNil: [ 'NoName' ].
@@ -85,11 +132,11 @@ Description: {5}' format: {
 				 name.
 				 description }).
 
-	self createMenu
+	self generateMenu
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerCreateCommandPresenter >> createMenu [
+StSindarinDebuggerCommandPresenter >> generateMenu [
 
 	StDebugger class
 		compile:
@@ -114,55 +161,8 @@ StSindarinDebuggerCreateCommandPresenter >> createMenu [
 		classified: '*' , package
 ]
 
-{ #category : 'layout' }
-StSindarinDebuggerCreateCommandPresenter >> defaultLayout [
-
-	| buttonRow |
-	buttonRow := SpBoxLayout newLeftToRight
-		             spacing: 6;
-		             add: createButton;
-		             add: cancelButton;
-		             yourself.
-
-	^ SpBoxLayout newTopToBottom
-		  spacing: 5;
-		  add: descriptionInput expand: false;
-		  add: iconList;
-		  add: buttonRow expand: false;
-		  yourself
-]
-
-{ #category : 'actions' }
-StSindarinDebuggerCreateCommandPresenter >> deleteCommand [
-
-	| name className commandsLeft |
-	name := commandName ifNil: [ 'NoName' ].
-	className := 'Sindarin{1}{2}Command' format: {
-			             projectName asCamelCase.
-			             name asCamelCase }.
-
-	(Smalltalk globals includesKey: className asSymbol) ifTrue: [
-		(Smalltalk globals at: className asSymbol) removeFromSystem ].
-
-	commandsLeft := SindarinCommand subclasses select: [ :sub |
-		                sub packageName = package ].
-	commandsLeft isEmpty ifTrue: [ self deleteMenu ]
-]
-
-{ #category : 'actions' }
-StSindarinDebuggerCreateCommandPresenter >> deleteMenu [
-
-	| buildGroupMethodName |
-	buildGroupMethodName := 'buildSindarin{1}ExtentionCommandsGroupWith:forRoot:'
-		                        format: { projectName asCamelCase }.
-
-	(StDebugger class includesSelector: buildGroupMethodName asSymbol)
-		ifTrue: [
-		StDebugger class removeSelector: buildGroupMethodName asSymbol ]
-]
-
 { #category : 'initialization' }
-StSindarinDebuggerCreateCommandPresenter >> initializeIconList [
+StSindarinDebuggerCommandPresenter >> initializeIconList [
 
 	| icons |
 	icons := ThemeIcons loadDefault.
@@ -172,7 +172,7 @@ StSindarinDebuggerCreateCommandPresenter >> initializeIconList [
 ]
 
 { #category : 'initialization' }
-StSindarinDebuggerCreateCommandPresenter >> initializePresenters [
+StSindarinDebuggerCommandPresenter >> initializePresenters [
 
 	descriptionInput := self newTextInput.
 	descriptionInput placeholder: 'Command description'.
@@ -188,31 +188,31 @@ StSindarinDebuggerCreateCommandPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerCreateCommandPresenter >> package: aPackageName [
+StSindarinDebuggerCommandPresenter >> package: aPackageName [
 
 	package := aPackageName
 ]
 
 { #category : 'accessing' }
-StSindarinDebuggerCreateCommandPresenter >> projectName: aName [
+StSindarinDebuggerCommandPresenter >> projectName: aName [
 
 	projectName := aName
 ]
 
 { #category : 'transmission' }
-StSindarinDebuggerCreateCommandPresenter >> setModel: aIconName [
+StSindarinDebuggerCommandPresenter >> setModel: aIconName [
 
 	iconNameSelected := aIconName
 ]
 
 { #category : 'enumerating' }
-StSindarinDebuggerCreateCommandPresenter >> whenCancelButtonDo: aBlock [
+StSindarinDebuggerCommandPresenter >> whenCancelDo: aBlock [
 
 	cancelButton action: aBlock
 ]
 
 { #category : 'enumerating' }
-StSindarinDebuggerCreateCommandPresenter >> whenCreateButtonDo: aBlock [
+StSindarinDebuggerCommandPresenter >> whenCreateDo: aBlock [
 
 	createButton action: aBlock
 ]

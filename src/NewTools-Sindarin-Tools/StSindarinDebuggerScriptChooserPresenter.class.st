@@ -84,13 +84,13 @@ StSindarinDebuggerScriptChooserPresenter >> setModel: aListElement [
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptChooserPresenter >> whenCancelButtonDo: aBlock [
+StSindarinDebuggerScriptChooserPresenter >> whenCancelDo: aBlock [
 
 	cancelButton action: aBlock
 ]
 
 { #category : 'actions' }
-StSindarinDebuggerScriptChooserPresenter >> whenLoadButtonDo: aBlock [
+StSindarinDebuggerScriptChooserPresenter >> whenLoadDo: aBlock [
 
 	loadButton action: aBlock
 ]

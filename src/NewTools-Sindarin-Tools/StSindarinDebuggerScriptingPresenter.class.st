@@ -110,16 +110,16 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializeCommandCreater [
-	commandCreater := StSindarinDebuggerCreateCommandPresenter newApplication: self application.
+	commandCreater := StSindarinDebuggerCommandPresenter newApplication: self application.
 	commandCreater 
 		package: (self defaultScriptRepository package name);
 		projectName: (self defaultScriptRepository repositoryName);
-		whenCancelButtonDo: [ self layout: self defaultLayout ];
-		whenCreateButtonDo: [
+		whenCancelDo: [ self layout: self defaultLayout ];
+		whenCreateDo: [
 			commandCreater 
 				commandName: scriptNameInput text;
 				code: code text.
-			commandCreater createCommand.
+			commandCreater generateCommand.
 			self layout: self defaultLayout 
 		].
 ]
@@ -153,7 +153,7 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptChooser [
 	scriptChooser := StSindarinDebuggerScriptChooserPresenter newApplication: self application.
 	scriptChooser repository: self defaultScriptRepository. 
 	
-	scriptChooser whenLoadButtonDo: [ 
+	scriptChooser whenLoadDo: [ 
 		scriptName := scriptChooser chooseElement.
 		scriptName ifNotNil: [
 			scriptNameInput text: scriptName .	
@@ -167,7 +167,7 @@ StSindarinDebuggerScriptingPresenter >> initializeScriptChooser [
 		self layout: self defaultLayout.
 	].
 
-	scriptChooser whenCancelButtonDo: [ 
+	scriptChooser whenCancelDo: [ 
 		self layout: self defaultLayout.
 	]
 ]

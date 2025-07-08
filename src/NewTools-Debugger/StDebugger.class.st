@@ -385,7 +385,7 @@ StDebugger >> buildToolbar [
 					  hAlignStart;
 					  vAlignCenter;
 					  yourself)
-			 expand: false;
+			 expand: true;
 			 yourself)
 ]
 
