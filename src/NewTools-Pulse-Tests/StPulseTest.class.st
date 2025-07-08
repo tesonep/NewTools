@@ -31,7 +31,7 @@ StPulseTest >> testDefaultKeyboardFocus [
 		self
 			assert: pulse defaultKeyboardFocus
 			equals: pulse listPresenter
-	 ] ensure: [ "window close "]
+	 ] ensure: [ window close ]
 ]
 
 { #category : 'running' }
