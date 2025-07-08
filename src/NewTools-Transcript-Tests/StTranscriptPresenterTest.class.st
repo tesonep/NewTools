@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'presenter',
 		'transcript',
-		'worker'
+		'backendForTest'
 	],
 	#category : 'NewTools-Transcript-Tests',
 	#package : 'NewTools-Transcript-Tests'
@@ -14,6 +14,7 @@ Class {
 StTranscriptPresenterTest >> setUp [ 
 
 	super setUp.
+	backendForTest := SpMorphicBackendForTest new.
 	presenter := StTranscriptPresenter new.
 	presenter transcript: (transcript := StThreadSafeTranscript createTestingInstance)
 ]
@@ -33,9 +34,9 @@ StTranscriptPresenterTest >> testAnnouncementIsWritten [
 	[
 		window := presenter open.
 		transcript show: 'test'.
-		self worker schedule: [ 
-			100 milliSeconds wait.
-			self assert: presenter text text equals: 'test' ] ]
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test' ]
 	ensure: [ window close ]
 ]
 
@@ -46,12 +47,12 @@ StTranscriptPresenterTest >> testClear [
 	[
 		window := presenter open.
 		transcript show: 'test'.
-		self worker schedule: [ 
-			100 milliSeconds wait.
-			self assert: presenter text text equals: 'test'.
-			presenter clear.
-			self assert: presenter text text equals: ''.
-			self assert: transcript contents equals: 'test' ] ]
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test'.
+		presenter clear.
+		self assert: presenter textPresenter text equals: ''.
+		self assert: transcript contents equals: 'test' ] 
 	ensure: [ window close ]
 ]
 
@@ -62,12 +63,12 @@ StTranscriptPresenterTest >> testFetchOld [
 	[
 		window := presenter open.
 		transcript show: 'test'.
-		self worker schedule: [ 
-		300 milliSeconds wait.
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
 		presenter clear.
-		self assert: presenter text text equals: ''.
+		self assert: presenter textPresenter text equals: ''.
 		presenter fetchOld.
-		self assert: transcript contents equals: 'test' ] ]
+		self assert: transcript contents equals: 'test' ]
 	ensure: [ window close ]
 ]
 
@@ -78,13 +79,13 @@ StTranscriptPresenterTest >> testReset [
 	[
 		window := presenter open.
 		transcript show: 'test'.
-		self worker schedule: [ 
-			100 milliSeconds wait.
-			self assert: presenter text text equals: 'test'.
-			self assert: transcript contents equals: 'test'.
-			presenter reset.
-			self assert: presenter text text equals: ''.
-			self assert: transcript contents equals: '' ] ]
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test'.
+		self assert: transcript contents equals: 'test'.
+		presenter reset.
+		self assert: presenter textPresenter text equals: ''.
+		self assert: transcript contents equals: '' ]
 	ensure: [ window close ]
 ]
 
@@ -102,11 +103,7 @@ StTranscriptPresenterTest >> testSmoke [
 ]
 
 { #category : 'running' }
-StTranscriptPresenterTest >> worker [
-	
-	^ (worker ifNil: [ 
-			worker := TKTWorker new 
-			name: 'StTranscriptPresenterTest worker: ', UUID new asString]) 
-		ensureIsWorking
-		
+StTranscriptPresenterTest >> waitUntilUIRedrawed [
+
+	backendForTest waitUntilUIRedrawed
 ]
