@@ -16,6 +16,25 @@ StPulseTest >> setUp [
 ]
 
 { #category : 'running' }
+StPulseTest >> tearDown [
+	
+	pulse := nil.
+	super tearDown
+]
+
+{ #category : 'running' }
+StPulseTest >> testDefaultKeyboardFocus [
+
+	| window |
+	[ 
+		window := pulse open.
+		self
+			assert: pulse defaultKeyboardFocus
+			equals: pulse listPresenter
+	 ] ensure: [ "window close "]
+]
+
+{ #category : 'running' }
 StPulseTest >> testSearchingAllTypeOfCandidates [
 
 	| window candidates |	
