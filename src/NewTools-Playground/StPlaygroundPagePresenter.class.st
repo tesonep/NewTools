@@ -13,8 +13,7 @@ Class {
 		'toggleLineNumberButton',
 		'page',
 		'activationBlock',
-		'loading',
-		'script'
+		'loading'
 	],
 	#classVars : [
 		'CacheDirectory'
@@ -92,6 +91,13 @@ StPlaygroundPagePresenter class >> openContents: aString [
 	^ self new
 		contents: aString;
 		open
+]
+
+{ #category : 'instance creation' }
+StPlaygroundPagePresenter class >> openUrl: anUrl [ [
+
+	self openContents: (ZnEasy get: anUrl ) contents
+]
 ]
 
 { #category : 'tools registry' }
@@ -334,11 +340,6 @@ StPlaygroundPagePresenter >> removeAllBindings [
 
 	self interactionModel removeAllBindings.
 	self text refreshStyling.
-]
-
-{ #category : 'accessing' }
-StPlaygroundPagePresenter >> script [ 
-	^ script.
 ]
 
 { #category : 'accessing' }

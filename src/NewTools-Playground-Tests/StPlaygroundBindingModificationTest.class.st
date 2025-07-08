@@ -17,6 +17,7 @@ StPlaygroundBindingModificationTest >> classToTest [
 
 { #category : 'running' }
 StPlaygroundBindingModificationTest >> setUp [
+	super setUp.
 	playground := StPlaygroundPagePresenter new.
 	playground interactionModel addBindingNamed: #this with: 0.
 	

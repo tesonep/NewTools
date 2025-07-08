@@ -16,6 +16,8 @@ StPlaygroundBindingsPresenterTest >> classToTest [
 
 { #category : 'running' }
 StPlaygroundBindingsPresenterTest >> setUp [
+	super setUp.
+
 	owner := StPlaygroundPagePresenter new.
 	owner interactionModel addBindingNamed: #this with: 0.
 	presenter := ((self classToTest) 

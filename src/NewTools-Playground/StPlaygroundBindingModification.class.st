@@ -31,8 +31,9 @@ StPlaygroundBindingModification >> buttonAction [
 
 
 		test := bindingValue evaluate: bindingValue text onCompileError: [ ^ self ] onError: [ :e | ^ self ]. 		
-		"wait more instruction about this possibility
-		test ifNil: [ self error:'test'. ^ nil ]."
+		self flag: #nil. "if you compile and you get an error like (Array new) @ 1 test gone to be nil
+		so did we need this (next line)
+		test ifNil: [ self error:'you got an error in your binding value'. ^ nil ]."
 		
 		interactionModel removeBindingNamed: oldBinding key.
 		interactionModel addBindingNamed: bindingName text with: test.
