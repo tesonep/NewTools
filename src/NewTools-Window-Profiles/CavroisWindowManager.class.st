@@ -926,18 +926,21 @@ CavroisWindowManager >> updatePreviousCurrentProfile [
 { #category : 'updating' }
 CavroisWindowManager >> updateProfile [
 
-	self updatePlaceholderBounds: self validPlaceholders.
+	| validPlaceHolders |
+	validPlaceHolders := self validPlaceholders.
+	self updatePlaceholderBounds: validPlaceHolders.
 	self currentProfile reset.
-	self validPlaceholders do: [ :ph | self currentProfile add: ph ].
+	validPlaceHolders do: [ :placeholder |
+		self currentProfile add: placeholder ].
 	self addNewWindowPlaceholders:
-		(self windowsFromPlaceholders: self validPlaceholders).
-	self addExtraWindowPlaceholders: self validPlaceholders
+		(self windowsFromPlaceholders: validPlaceHolders).
+	self addExtraWindowPlaceholders: validPlaceHolders
 ]
 
 { #category : 'accessing' }
 CavroisWindowManager >> validPlaceholders [
-	^ self currentProfile placeHolders select: [ :ph |
-		ph windows anySatisfy: [ :window | window owner notNil ] ]
+	^ self currentProfile placeHolders select: [ :placeholder |
+		placeholder windows anySatisfy: [ :window | window owner notNil ] ]
 
 ]
 
