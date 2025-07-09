@@ -18,7 +18,7 @@ StPlaygroundBindingAddTest >> classToTest [
 { #category : 'running' }
 StPlaygroundBindingAddTest >> setUp [
 	super setUp.
-		
+	"self halt."
 	playground := StPlaygroundPagePresenter new.
 	playground interactionModel addBindingNamed: #this with: 0.
 	
