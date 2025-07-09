@@ -41,6 +41,8 @@ StPlaygroundBindingsPresenter >> contextMenuActions [
 
 	^ CmCommandGroup forSpec
 		beRoot;
+		register: (StPlaygroundCommandAddBinding forSpecContext: self);
+		register: (StPlaygroundCommandModificationBinding forSpecContext: self);
 		register: (StRemoveBindingCommand forSpecContext: self);
 		register: (StToggleBindingCommand forSpecContext: self);
 		register: ((CmCommandGroup forSpecNamed: 'CRITICAL')
@@ -138,7 +140,6 @@ StPlaygroundBindingsPresenter >> initializePresenters [
 	self initializeInspectorPanel.
 	
 	bindingList transmitTo: inspector.
-
 ]
 
 { #category : 'testing' }
@@ -180,6 +181,11 @@ StPlaygroundBindingsPresenter >> newInspectorWithTransmission: aClass on: aBindi
 	^ self 
 		instantiate: aClass 
 		on: aBinding value
+]
+
+{ #category : 'accessing' }
+StPlaygroundBindingsPresenter >> parent [
+	^ parent
 ]
 
 { #category : 'actions' }
@@ -250,6 +256,8 @@ StPlaygroundBindingsPresenter >> toolbarActions [
 	^ CmCommandGroup forSpec
 		beRoot;
 		register: (StRemoveAllBindingsCommand forSpecContext: self);
+		register: (StPlaygroundCommandAddBinding forSpecContext: self);
+		register: (StPlaygroundCommandModificationBinding forSpecContext: self);
 		yourself
 ]
 
