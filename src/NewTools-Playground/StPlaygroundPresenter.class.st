@@ -206,7 +206,8 @@ StPlaygroundPresenter >> windowTitle [
 	^ title ifNil: [ ^ 'Playground' ]
 ]
 
-{ #category : 'initialization' }
+
+{ #category : 'accessing' }
 StPlaygroundPresenter >> windowTitle: aString [
 
 	title := aString.

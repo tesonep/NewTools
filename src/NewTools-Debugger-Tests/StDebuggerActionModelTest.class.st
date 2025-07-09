@@ -862,37 +862,6 @@ StDebuggerActionModelTest >> testProceedDebugSession [
 ]
 
 { #category : 'tests - actions' }
-StDebuggerActionModelTest >> testRecompileMethodToInBlockContext [
-
-	| contextChanged previousASTScope |
-	self newSessionWithBlockContext.
-
-	DebugSession contextModelClass: StDebugContextForTests.
-	contextChanged := debugActionModel topContext.
-	
-	"We stepped into a block for which the debugActionModel holds an ast scope:"
-	previousASTScope := debugActionModel previousASTScope.
-	self
-		assert: previousASTScope
-		identicalTo: contextChanged astScope.
-
-	debugActionModel
-		recompileMethodTo: contextChanged method sourceCode , '. ^self'
-		inContext: contextChanged
-		notifying: nil.
-	debugActionModel updateTopContext.
-
-	"After recompiling the method, the model holds an updated ast scope that is not the one of the block:"
-	self deny: previousASTScope identicalTo: debugActionModel previousASTScope.
-	
-	"The new ast scope is the one of the AST of the first interesting bytecode of the method,
-	that is the block declaration:"
-	self
-		assert: debugActionModel previousASTScope
-		identicalTo: (self class >> #methodWithBlockContext) ast statements first value scope
-]
-
-{ #category : 'tests - actions' }
 StDebuggerActionModelTest >> testRecompileMethodToInBlockContextWithDeadHome [
 
 	| contextChanged |

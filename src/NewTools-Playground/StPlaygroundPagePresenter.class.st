@@ -13,8 +13,7 @@ Class {
 		'toggleLineNumberButton',
 		'page',
 		'activationBlock',
-		'loading',
-		'script'
+		'loading'
 	],
 	#classVars : [
 		'CacheDirectory'
@@ -94,6 +93,13 @@ StPlaygroundPagePresenter class >> openContents: aString [
 		open
 ]
 
+{ #category : 'instance creation' }
+StPlaygroundPagePresenter class >> openUrl: anUrl [ [
+
+	self openContents: (ZnEasy get: anUrl ) contents
+]
+]
+
 { #category : 'tools registry' }
 StPlaygroundPagePresenter class >> registerToolsOn: registry [
 	"Add ourselves to registry. See [Smalltalk tools]" 
@@ -146,6 +152,11 @@ StPlaygroundPagePresenter >> basicPage: aPage [
 ]
 
 { #category : 'accessing' }
+StPlaygroundPagePresenter >> contents [
+	^ text text
+]
+
+{ #category : 'accessing' }
 StPlaygroundPagePresenter >> contents: aString [
 
 	text text: aString
@@ -192,10 +203,9 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 
 { #category : 'initialization' }
 StPlaygroundPagePresenter >> initialize [
-   loading := false.
-   super initialize.
-	
-	  
+	loading := false.
+ 	super initialize.
+		  
 ]
 
 { #category : 'initialization' }
@@ -327,11 +337,6 @@ StPlaygroundPagePresenter >> removeAllBindings [
 
 	self interactionModel removeAllBindings.
 	self text refreshStyling.
-]
-
-{ #category : 'accessing' }
-StPlaygroundPagePresenter >> script [ 
-	^ script.
 ]
 
 { #category : 'accessing' }
