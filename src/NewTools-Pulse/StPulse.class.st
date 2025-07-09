@@ -408,9 +408,6 @@ StPulse >> addKeyboardBehavior: aPresenter [
 			"28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
 			(#(28 29 30 31) includes: anEvent keyValue )
 				ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
-
-
-	
 ]
 
 { #category : 'initialization' }
@@ -455,7 +452,6 @@ StPulse >> candidateAdded: aCandidate [
 			ifTrue: [ ^ self ]. 
 		numCandidatesAdded := numCandidatesAdded + 1.
 		candidatesAddedList add: aCandidate ]
-	 
 ]
 
 { #category : 'initialization' }
@@ -482,7 +478,6 @@ StPulse >> connectPresenters [
 	paginator whenSelectedPageChangedDo: [ :newValue |
 		self application defer: [ 
 			self updateActivePresenter: newValue ] ]
-
 ]
 
 { #category : 'api - focus' }
@@ -530,8 +525,7 @@ StPulse >> doFullSearch: aString [
 	self searchWorker schedule: [ 
 		candidatesFullSearchList := self model 
 			allCandidatesFor: aString 
-			inContext: self selectedContext ] 
-
+			inContext: self selectedContext ]
 ]
 
 { #category : 'private - actions' }
@@ -544,8 +538,7 @@ StPulse >> doSearch: aString [
 	self searchWorker schedule: [ 
 		candidatesFullSearchList := self model 
 			candidatesFor: aString 
-			inContext: self selectedContext ] 
-
+			inContext: self selectedContext ]
 ]
 
 { #category : 'private - actions' }
@@ -675,7 +668,6 @@ StPulse >> initialize [
 	numCandidatesAdded := 0.
 	candidatesAddedList := OrderedCollection new.
 	doFullSearchNext := false
-	
 ]
 
 { #category : 'initialization' }
@@ -755,7 +747,7 @@ StPulse >> initializePaginator [
 
 	self addToPaginator: self environmentContext.
 	self addToPaginator: self windowsContext.
-	self addToPaginator: self toolsContext.
+	self addToPaginator: self toolsContext
 ]
 
 { #category : 'initialization' }
@@ -991,7 +983,6 @@ StPulse >> updatePresenter [
 
 { #category : 'private - updating' }
 StPulse >> updateResultListWith: aCollection [
-
 	"use defer to ensure UI loop" 
 	self updateWorker schedule: [ 
 		self application defer: [
@@ -1004,13 +995,10 @@ StPulse >> updateResultListWith: aCollection [
 								self hideSpinner. 
 								self historyEntries ]
 						ifFalse: [ aCollection ].
-				list emit.
 				emptyPresenter visible: list isEmpty.
-				listPresenter disableActivationDuring: [ 
-					listPresenter items: list ].
-				(listPresenter selectedItem isNil and: [ list isNotEmpty ])
+				listPresenter disableActivationDuring: [ listPresenter items: list ].
+				list isNotEmpty
 					ifTrue: [ listPresenter selectFirst ] ] ]
-			
 ]
 
 { #category : 'private - updating' }
@@ -1072,7 +1060,6 @@ StPulse >> windowClosed [
 	service := nil.
 	updateWorker := nil.
 	searchWorker := nil
-
 ]
 
 { #category : 'private - accessing' }
