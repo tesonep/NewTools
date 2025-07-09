@@ -11,8 +11,7 @@ Class {
 		'inspector',
 		'parent',
 		'bindingPanel',
-		'inspectorPanel',
-		'buttonAdd'
+		'inspectorPanel'
 	],
 	#category : 'NewTools-Playground-View',
 	#package : 'NewTools-Playground',
