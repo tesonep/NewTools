@@ -38,7 +38,7 @@ StPulseStyleContributor >> styleSheetContribution [
 		Draw { #backgroundColor: EnvironmentColor(#background), #color: EnvironmentColor(#background) },
 		Container { #borderWidth: 0 } ],
 	.stPulseHelp [  
-		Geometry { #height: 250, #width: 380 },
+		Geometry { #height: 300, #width: 380 },
 		Draw { #backgroundColor: EnvironmentColor(#background), #color: EnvironmentColor(#background) } ],
 	.stPulseInvisibleLabel [ 
 		Geometry { #width: 150 } ],

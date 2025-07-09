@@ -344,7 +344,9 @@ StPulse class >> tips [
 		'<shift + meta + enter>' -> 'opens Pulse on Commands' .
 		'<shift + alt + enter>' -> 'opens Pulse on Windows' .
 		'<shift + enter> while on Pulse' -> 'opens Finder' .
-		'you can resize the window' -> ''
+		'you can resize the window' -> 'the size will be saved' .
+		'arrow next to the category' -> 'makes a full search' .
+		'settings icon' -> 'history, size and insertSelection'
 	}
 ]
 
@@ -694,7 +696,7 @@ StPulse >> initializeButtons [
 		action: [ 
 			doFullSearchNext := true. 
 			self defaultKeyboardFocus takeKeyboardFocus ];
-		help: 'Open popover with tips for StPulse';
+		help: 'Gives you all the results of a search. Normal searchs only give you the first 25';
 		yourself.
 
 	helpButton := self newButton
