@@ -370,6 +370,7 @@ StDebuggerTest >> testContextTempVarListUpdatesAfterRestartingContext [
 
 	"We enter the inlined block (node `i + 1`)"
 	4 timesRepeat: [ dbg stepOver ].
+	dbg stepInto.
 
 	self assert: inspectorTable roots size equals: 9.
 
@@ -393,13 +394,14 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 	inspectorTable := dbg inspector getRawInspectorPresenterOrNil
 		                  attributeTable.
 
-	"We stop on the node `i = 1` node"
+	"We stop on (before) the node `i = 1`"
 	3 timesRepeat: [ dbg stepOver ].
 
 	contextItems := inspectorTable roots copy.
 	self assert: contextItems size equals: 8.
 
-	"We enter inlined block"
+	"We step on the ifTrue:, then we enter it"
+	dbg stepOver.
 	dbg stepOver.
 
 	newContextItems := inspectorTable roots.
