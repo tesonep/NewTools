@@ -56,7 +56,9 @@ Class {
 		'candidatesAddedList',
 		'candidatesFullSearchList',
 		'doFullSearchNext',
-		'findAllButtonLayout'
+		'findAllButton',
+		'listTitleLayout',
+		'listLabelCounterPresenter'
 	],
 	#classVars : [
 		'Activated',
@@ -494,7 +496,6 @@ StPulse >> defaultLayout [
     | contentsLayout result |
 	"Spinner should always be added after findAllButtonLayout or the invisible presenter findAllButtonLayout uses will cover spinner"
 	result := SpOverlayLayout new
-		addOverlay: findAllButtonLayout withConstraints: [ :c | c vAlignEnd; hAlignStart ];
 		addOverlay: spinner withConstraints: [ :c | c vAlignEnd; hAlignStart ];
 		addOverlay: buttonsToolbar withConstraints: [ :c | c vAlignEnd ; hAlignEnd ];
 		addOverlay: emptyPresenter withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
@@ -502,7 +503,7 @@ StPulse >> defaultLayout [
 			add: searchPresenter expand: false;
 			add: (contentsLayout := SpBoxLayout newLeftToRight
 				add: (SpBoxLayout newTopToBottom
-					add: listLabelPresenter expand: false;
+					add: listTitleLayout expand: false;
 					add: listPresenter;
 					yourself);
 				yourself);
@@ -680,24 +681,16 @@ StPulse >> initialize [
 { #category : 'initialization' }
 StPulse >> initializeButtons [
 
-	| helpButton settingsButton findAllButton |
-	
+	| helpButton settingsButton |
+
 	findAllButton := self newButton
 		addStyle: 'small';
 		addStyle: 'stPulseButton';
-		icon: (self iconNamed: #arrowDown);
-		label: 'find all';
-		action: [ doFullSearchNext := true ];
+		icon: (self iconNamed: #glamorousDown);
+		action: [ 
+			doFullSearchNext := true. 
+			self defaultKeyboardFocus takeKeyboardFocus ];
 		help: 'Open popover with tips for StPulse';
-		yourself.
-				
-	findAllButtonLayout := self newPresenter
-		layout: (SpBoxLayout newLeftToRight
-			add: (self newLabel
-				addStyle: 'stPulseInvisibleLabel';
-				yourself);
-			add: findAllButton;
-			yourself)
 		yourself.
 
 	helpButton := self newButton
@@ -707,12 +700,13 @@ StPulse >> initializeButtons [
 		action: [ self showPopover: helpButton ];
 		help: 'Open popover with tips for StPulse'.
 
-	
 	settingsButton := self newButton
 		addStyle: 'small';
 		addStyle: 'stPulseButton';
 		icon: (self application iconNamed: #configuration);
-		action: [ self openSettingsBrowser ];
+		action: [ 
+			self defaultKeyboardFocus takeKeyboardFocus.
+			self openSettingsBrowser ];
 		help: 'Open settings browser to configure StPulse'.
 	self addKeyboardBehavior: findAllButton.
 	self addKeyboardBehavior: helpButton.
@@ -728,6 +722,26 @@ StPulse >> initializeButtons [
 StPulse >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter closeOnBackdropClick: true
+]
+
+{ #category : 'initialization' }
+StPulse >> initializeListLabel [
+
+	listLabelPresenter := self newLabel
+		addStyle: 'stPulseLabel';
+		yourself.
+		
+	listLabelCounterPresenter := self newLabel
+		addStyle: 'dim';
+		yourself.
+	
+	listTitleLayout := self newPresenter
+		layout: (SpBoxLayout newLeftToRight 
+			add: listLabelPresenter expand: true;
+			add: listLabelCounterPresenter expand: false;
+			add: findAllButton expand: false;
+			yourself);
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -750,6 +764,7 @@ StPulse >> initializePresenters [
 	self addStyle: 'stPulse'.
 	self initializePaginator.
 	self initializeButtons.
+	self initializeListLabel.
 	
 	spinner := (self instantiate: StPulseLoadingPresenter)
 		addStyle: 'stPulseSpinner';
@@ -765,10 +780,6 @@ StPulse >> initializePresenters [
 		addStyle: 'stPulseSearch';
 		yourself.
 
-	listLabelPresenter := self newLabel
-		addStyle: 'stPulseLabel';
-		yourself.
-	
 	listPresenter := self newEasyListView
 		addStyle: 'stPulseList';
 		rowPresenterClass: StPulseRowPresenter;
@@ -829,7 +840,6 @@ StPulse >> processAddedCandidates [
 	candidates := candidatesAddedList asArray.
 	candidatesAddedList removeAll.
 	self updateResultListWith: candidates
-	
 ]
 
 { #category : 'private - service' }
@@ -848,9 +858,12 @@ StPulse >> processFullAddedCandidates [
 { #category : 'private - service' }
 StPulse >> processSearch [
 
-	spinner isVisible ifTrue: [ spinner updateStep ].
-	
 	waitingSearchText := searchPresenter text.
+	spinner isVisible ifTrue: [ spinner updateStep ].
+
+	listLabelCounterPresenter label: (
+		listPresenter selectedIndex asString, '/', listPresenter items size asString).
+
 	doFullSearchNext
 		ifTrue: [
 			doFullSearchNext := false.
@@ -866,7 +879,6 @@ StPulse >> processSearch [
 			self showSpinner.
 			lastSearchText := waitingSearchText.
 			self doSearch: waitingSearchText ]
-
 ]
 
 { #category : 'private - accessing' }
