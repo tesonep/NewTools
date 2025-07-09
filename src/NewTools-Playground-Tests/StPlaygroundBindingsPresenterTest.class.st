@@ -28,7 +28,7 @@ StPlaygroundBindingsPresenterTest >> setUp [
 { #category : 'tests' }
 StPlaygroundBindingsPresenterTest >> testInit [
 
-	self assert: presenter notNil.
+	self assert: presenter isNotNil.
 	self assert: (presenter isKindOf: self classToTest )
 ]
 

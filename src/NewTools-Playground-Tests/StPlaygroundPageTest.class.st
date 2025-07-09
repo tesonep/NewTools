@@ -122,7 +122,7 @@ StPlaygroundPageTest >> testIsEmpty [
 	|page|
 	page := self newPage .
 	
-	self assert: page isEmpty.
+	self assertEmpty: page.
 	page contents: 'coucou'.
 	page flush.
 	self deny: page isEmpty.
