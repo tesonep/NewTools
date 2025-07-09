@@ -58,7 +58,7 @@ Class {
 		'doFullSearchNext',
 		'findAllButton',
 		'listTitleLayout',
-		'listLabelCounterPresenter'
+		'listCounterPresenter'
 	],
 	#classVars : [
 		'Activated',
@@ -444,6 +444,16 @@ StPulse >> addToPaginator: aPresenter [
 	paginator addPage: aPresenter
 ]
 
+{ #category : 'private - actions' }
+StPulse >> calculateListCounterPresenter [
+
+	listCounterPresenter label: 
+		listPresenter selectedIndex asString, 
+		'/', 
+		listPresenter items size asString
+
+]
+
 { #category : 'private - updating' }
 StPulse >> candidateAdded: aCandidate [
 	
@@ -472,7 +482,9 @@ StPulse >> connectPresenters [
 			shortcutKey: Character arrowUp asKeyCombination;
 			action: [ self giveFocusToResultListAtLast ] ] ;
 		takeKeyboardFocus.
-	listPresenter whenActivatedDo: [ self acceptSelection ].
+	listPresenter 
+		whenActivatedDo: [ self acceptSelection ];
+		whenSelectionChangedDo:[ self calculateListCounterPresenter ].
 	self addKeyboardBehavior: listPresenter.
 	
 	paginator whenSelectedPageChangedDo: [ :newValue |
@@ -723,14 +735,14 @@ StPulse >> initializeListLabel [
 		addStyle: 'stPulseLabel';
 		yourself.
 		
-	listLabelCounterPresenter := self newLabel
+	listCounterPresenter := self newLabel
 		addStyle: 'dim';
 		yourself.
 	
 	listTitleLayout := self newPresenter
 		layout: (SpBoxLayout newLeftToRight 
 			add: listLabelPresenter expand: true;
-			add: listLabelCounterPresenter expand: false;
+			add: listCounterPresenter expand: false;
 			add: findAllButton expand: false;
 			yourself);
 		yourself
@@ -852,10 +864,7 @@ StPulse >> processSearch [
 
 	waitingSearchText := searchPresenter text.
 	spinner isVisible ifTrue: [ spinner updateStep ].
-
-	listLabelCounterPresenter label: (
-		listPresenter selectedIndex asString, '/', listPresenter items size asString).
-
+	
 	doFullSearchNext
 		ifTrue: [
 			doFullSearchNext := false.
