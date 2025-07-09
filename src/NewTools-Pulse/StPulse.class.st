@@ -42,7 +42,6 @@ Class {
 		'toolsContext',
 		'environmentContext',
 		'previewContainer',
-		'helpButton',
 		'popover',
 		'service',
 		'searchWorker',
@@ -50,13 +49,14 @@ Class {
 		'waitingSearchText',
 		'lastSearchText',
 		'buttonsToolbar',
-		'settingsButton',
 		'spinner',
 		'listLabelPresenter',
 		'numCandidatesAdded',
 		'mutex',
 		'candidatesAddedList',
-		'candidatesFullSearchList'
+		'candidatesFullSearchList',
+		'doFullSearchNext',
+		'findAllButtonLayout'
 	],
 	#classVars : [
 		'Activated',
@@ -492,8 +492,9 @@ StPulse >> defaultKeyboardFocus [
 { #category : 'layout' }
 StPulse >> defaultLayout [
     | contentsLayout result |
-
+	"Spinner should always be added after findAllButtonLayout or the invisible presenter findAllButtonLayout uses will cover spinner"
 	result := SpOverlayLayout new
+		addOverlay: findAllButtonLayout withConstraints: [ :c | c vAlignEnd; hAlignStart ];
 		addOverlay: spinner withConstraints: [ :c | c vAlignEnd; hAlignStart ];
 		addOverlay: buttonsToolbar withConstraints: [ :c | c vAlignEnd ; hAlignEnd ];
 		addOverlay: emptyPresenter withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
@@ -517,6 +518,19 @@ StPulse >> defaultLayout [
 	self isShowingPreview ifTrue: [ 
 		self addPreviewPanelTo: contentsLayout ].
     ^ result
+]
+
+{ #category : 'private - actions' }
+StPulse >> doFullSearch: aString [
+	
+	self owner 
+		ifNil: [ ^ self ].
+	self searchWorker purge.
+	self searchWorker schedule: [ 
+		candidatesFullSearchList := self model 
+			allCandidatesFor: aString 
+			inContext: self selectedContext ] 
+
 ]
 
 { #category : 'private - actions' }
@@ -658,12 +672,33 @@ StPulse >> initialize [
 			yourself).
 	super initialize.
 	numCandidatesAdded := 0.
-	candidatesAddedList := OrderedCollection new
+	candidatesAddedList := OrderedCollection new.
+	doFullSearchNext := false
 	
 ]
 
 { #category : 'initialization' }
 StPulse >> initializeButtons [
+
+	| helpButton settingsButton findAllButton |
+	
+	findAllButton := self newButton
+		addStyle: 'small';
+		addStyle: 'stPulseButton';
+		icon: (self iconNamed: #arrowDown);
+		label: 'find all';
+		action: [ doFullSearchNext := true ];
+		help: 'Open popover with tips for StPulse';
+		yourself.
+				
+	findAllButtonLayout := self newPresenter
+		layout: (SpBoxLayout newLeftToRight
+			add: (self newLabel
+				addStyle: 'stPulseInvisibleLabel';
+				yourself);
+			add: findAllButton;
+			yourself)
+		yourself.
 
 	helpButton := self newButton
 		addStyle: 'small';
@@ -679,7 +714,7 @@ StPulse >> initializeButtons [
 		icon: (self application iconNamed: #configuration);
 		action: [ self openSettingsBrowser ];
 		help: 'Open settings browser to configure StPulse'.
-	
+	self addKeyboardBehavior: findAllButton.
 	self addKeyboardBehavior: helpButton.
 	self addKeyboardBehavior: settingsButton.
 	buttonsToolbar := self newPresenter
@@ -713,10 +748,14 @@ StPulse >> initializePaginator [
 StPulse >> initializePresenters [
 
 	self addStyle: 'stPulse'.
-
 	self initializePaginator.
 	self initializeButtons.
-
+	
+	spinner := (self instantiate: StPulseLoadingPresenter)
+		addStyle: 'stPulseSpinner';
+		yourself.
+	spinner hide.
+	
 	emptyPresenter := self newLabel 
 		label: 'No results yet...';
 		visible: false;
@@ -725,11 +764,6 @@ StPulse >> initializePresenters [
 	searchPresenter := self newSearchInput
 		addStyle: 'stPulseSearch';
 		yourself.
-
-	spinner := (self instantiate: StPulseLoadingPresenter)
-		addStyle: 'stPulseSpinner';
-		yourself.
-	spinner hide.
 
 	listLabelPresenter := self newLabel
 		addStyle: 'stPulseLabel';
@@ -817,15 +851,21 @@ StPulse >> processSearch [
 	spinner isVisible ifTrue: [ spinner updateStep ].
 	
 	waitingSearchText := searchPresenter text.
+	doFullSearchNext
+		ifTrue: [
+			doFullSearchNext := false.
+			self showSpinner.
+			^ self doFullSearch: waitingSearchText ].
+
 	waitingSearchText = lastSearchText 
-		ifTrue: [ 
+		ifTrue: [
 			candidatesFullSearchList
 				ifNil: [ self processAddedCandidates ]
 				ifNotNil: [ self processFullAddedCandidates ] ]
-		ifFalse: [ 
+		ifFalse: [
 			self showSpinner.
 			lastSearchText := waitingSearchText.
-			self doSearch: waitingSearchText ].
+			self doSearch: waitingSearchText ]
 
 ]
 
