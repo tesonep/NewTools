@@ -34,29 +34,31 @@ Class {
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'searchPresenter',
-		'listPresenter',
 		'emptyPresenter',
+		'searchPresenter',
+		'listLabelPresenter',
+		'listCounterPresenter',
+		'listTitleLayout',
+		'findAllButton',
+		'listPresenter',
+		'previewContainer',
+		'popover',
+		'buttonsToolbar',
+		'spinner',
 		'paginator',
 		'windowsContext',
 		'toolsContext',
 		'environmentContext',
-		'previewContainer',
-		'helpButton',
-		'popover',
 		'service',
 		'searchWorker',
 		'updateWorker',
+		'mutex',
 		'waitingSearchText',
 		'lastSearchText',
-		'buttonsToolbar',
-		'settingsButton',
-		'spinner',
-		'listLabelPresenter',
 		'numCandidatesAdded',
-		'mutex',
 		'candidatesAddedList',
-		'candidatesFullSearchList'
+		'candidatesFullSearchList',
+		'doFullSearchNext'
 	],
 	#classVars : [
 		'Activated',
@@ -334,15 +336,17 @@ StPulse class >> tips [
 
 	^ {
 		'arrows' -> 'navigation shortkeys'.
-		'ctrl + arrows' -> 'navigation on search bar'.
+		'<ctrl + arrows>' -> 'navigation on search bar'.
+		'<ctrl + arrow down>' -> 'makes a full search' .
 		'<meta+b>'  -> 'filters for Classes' .
 		'<meta+m>' -> 'filters for Implementors' .
 		'<meta+p>' -> 'filters for Packages' .
+		'you can resize the window' -> 'the size will be saved' .
+		'settings icon' -> 'history, size and insertSelection' .
 		'<shift + enter>' -> 'opens Pulse on Environment' .
 		'<shift + meta + enter>' -> 'opens Pulse on Commands' .
 		'<shift + alt + enter>' -> 'opens Pulse on Windows' .
-		'<shift + enter> while on Pulse' -> 'opens Finder' .
-		'you can resize the window' -> ''
+		'<shift + enter> while on Pulse' -> 'opens Finder' 
 	}
 ]
 
@@ -400,15 +404,15 @@ StPulse >> addKeyboardBehavior: aPresenter [
 			action: [ self giveFocusToNextResultList ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey left asKeyCombination actionModifier;
-			action: [ self giveFocusToPreviousResultList ] ].
+			action: [ self giveFocusToPreviousResultList ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
+			action: [ self findAllButtonAction ] ].
 	
 	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
-			"28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
-			(#(28 29 30 31) includes: anEvent keyValue )
+			"0 = Left Control | 28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
+			(#(0 28 29 30 31) includes: anEvent keyValue )
 				ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
-
-
-	
 ]
 
 { #category : 'initialization' }
@@ -445,6 +449,16 @@ StPulse >> addToPaginator: aPresenter [
 	paginator addPage: aPresenter
 ]
 
+{ #category : 'private - actions' }
+StPulse >> calculateListCounterPresenter [
+
+	listCounterPresenter label: 
+		listPresenter selectedIndex asString, 
+		'/', 
+		listPresenter items size asString
+
+]
+
 { #category : 'private - updating' }
 StPulse >> candidateAdded: aCandidate [
 	
@@ -453,7 +467,6 @@ StPulse >> candidateAdded: aCandidate [
 			ifTrue: [ ^ self ]. 
 		numCandidatesAdded := numCandidatesAdded + 1.
 		candidatesAddedList add: aCandidate ]
-	 
 ]
 
 { #category : 'initialization' }
@@ -472,14 +485,18 @@ StPulse >> connectPresenters [
 			action: [ self giveFocusToPreviousResultList ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: Character arrowUp asKeyCombination;
-			action: [ self giveFocusToResultListAtLast ] ].
-	listPresenter whenActivatedDo: [ self acceptSelection ].
+			action: [ self giveFocusToResultListAtLast ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
+			action: [ self findAllButtonAction ] ].
+	listPresenter 
+		whenActivatedDo: [ self acceptSelection ];
+		whenSelectionChangedDo:[ self calculateListCounterPresenter ].
 	self addKeyboardBehavior: listPresenter.
 	
 	paginator whenSelectedPageChangedDo: [ :newValue |
 		self application defer: [ 
 			self updateActivePresenter: newValue ] ]
-
 ]
 
 { #category : 'api - focus' }
@@ -491,7 +508,7 @@ StPulse >> defaultKeyboardFocus [
 { #category : 'layout' }
 StPulse >> defaultLayout [
     | contentsLayout result |
-
+	"Spinner should always be added after findAllButtonLayout or the invisible presenter findAllButtonLayout uses will cover spinner"
 	result := SpOverlayLayout new
 		addOverlay: spinner withConstraints: [ :c | c vAlignEnd; hAlignStart ];
 		addOverlay: buttonsToolbar withConstraints: [ :c | c vAlignEnd ; hAlignEnd ];
@@ -500,7 +517,7 @@ StPulse >> defaultLayout [
 			add: searchPresenter expand: false;
 			add: (contentsLayout := SpBoxLayout newLeftToRight
 				add: (SpBoxLayout newTopToBottom
-					add: listLabelPresenter expand: false;
+					add: listTitleLayout expand: false;
 					add: listPresenter;
 					yourself);
 				yourself);
@@ -519,6 +536,18 @@ StPulse >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+StPulse >> doFullSearch: aString [
+	
+	self owner 
+		ifNil: [ ^ self ].
+	self searchWorker purge.
+	self searchWorker schedule: [ 
+		candidatesFullSearchList := self model 
+			allCandidatesFor: aString 
+			inContext: self selectedContext ]
+]
+
+{ #category : 'private - actions' }
 StPulse >> doSearch: aString [
 	
 	self owner 
@@ -528,8 +557,7 @@ StPulse >> doSearch: aString [
 	self searchWorker schedule: [ 
 		candidatesFullSearchList := self model 
 			candidatesFor: aString 
-			inContext: self selectedContext ] 
-
+			inContext: self selectedContext ]
 ]
 
 { #category : 'private - actions' }
@@ -563,6 +591,13 @@ StPulse >> environmentContext [
 
 	^ environmentContext ifNil: [ 
 		environmentContext := StPulseSearchContext searchEnvironment ]
+]
+
+{ #category : 'private - actions' }
+StPulse >> findAllButtonAction [
+
+	doFullSearchNext := true. 
+	self defaultKeyboardFocus takeKeyboardFocus
 ]
 
 { #category : 'private - actions' }
@@ -657,12 +692,22 @@ StPulse >> initialize [
 			yourself).
 	super initialize.
 	numCandidatesAdded := 0.
-	candidatesAddedList := OrderedCollection new
-	
+	candidatesAddedList := OrderedCollection new.
+	doFullSearchNext := false
 ]
 
 { #category : 'initialization' }
 StPulse >> initializeButtons [
+
+	| helpButton settingsButton |
+
+	findAllButton := self newButton
+		addStyle: 'small';
+		addStyle: 'stPulseButton';
+		icon: (self iconNamed: #glamorousDown);
+		action: [ self findAllButtonAction ];
+		help: 'Gives you all the results of a search. Normal searchs only give you the first 25';
+		yourself.
 
 	helpButton := self newButton
 		addStyle: 'small';
@@ -671,14 +716,15 @@ StPulse >> initializeButtons [
 		action: [ self showPopover: helpButton ];
 		help: 'Open popover with tips for StPulse'.
 
-	
 	settingsButton := self newButton
 		addStyle: 'small';
 		addStyle: 'stPulseButton';
 		icon: (self application iconNamed: #configuration);
-		action: [ self openSettingsBrowser ];
+		action: [ 
+			self defaultKeyboardFocus takeKeyboardFocus.
+			self openSettingsBrowser ];
 		help: 'Open settings browser to configure StPulse'.
-	
+	self addKeyboardBehavior: findAllButton.
 	self addKeyboardBehavior: helpButton.
 	self addKeyboardBehavior: settingsButton.
 	buttonsToolbar := self newPresenter
@@ -695,6 +741,26 @@ StPulse >> initializeDialogWindow: aDialogWindowPresenter [
 ]
 
 { #category : 'initialization' }
+StPulse >> initializeListLabel [
+
+	listLabelPresenter := self newLabel
+		addStyle: 'stPulseLabel';
+		yourself.
+		
+	listCounterPresenter := self newLabel
+		addStyle: 'dim';
+		yourself.
+	
+	listTitleLayout := self newPresenter
+		layout: (SpBoxLayout newLeftToRight 
+			add: listLabelPresenter expand: true;
+			add: listCounterPresenter expand: false;
+			add: findAllButton expand: false;
+			yourself);
+		yourself
+]
+
+{ #category : 'initialization' }
 StPulse >> initializePaginator [
 
 	paginator := SpPaginatorPresenter new
@@ -705,17 +771,22 @@ StPulse >> initializePaginator [
 
 	self addToPaginator: self environmentContext.
 	self addToPaginator: self windowsContext.
-	self addToPaginator: self toolsContext.
+	self addToPaginator: self toolsContext
 ]
 
 { #category : 'initialization' }
 StPulse >> initializePresenters [
 
 	self addStyle: 'stPulse'.
-
 	self initializePaginator.
 	self initializeButtons.
-
+	self initializeListLabel.
+	
+	spinner := (self instantiate: StPulseLoadingPresenter)
+		addStyle: 'stPulseSpinner';
+		yourself.
+	spinner hide.
+	
 	emptyPresenter := self newLabel 
 		label: 'No results yet...';
 		visible: false;
@@ -725,15 +796,6 @@ StPulse >> initializePresenters [
 		addStyle: 'stPulseSearch';
 		yourself.
 
-	spinner := (self instantiate: StPulseLoadingPresenter)
-		addStyle: 'stPulseSpinner';
-		yourself.
-	spinner hide.
-
-	listLabelPresenter := self newLabel
-		addStyle: 'stPulseLabel';
-		yourself.
-	
 	listPresenter := self newEasyListView
 		addStyle: 'stPulseList';
 		rowPresenterClass: StPulseRowPresenter;
@@ -802,7 +864,6 @@ StPulse >> processAddedCandidates [
 	candidates := candidatesAddedList asArray.
 	candidatesAddedList removeAll.
 	self updateResultListWith: candidates
-	
 ]
 
 { #category : 'private - service' }
@@ -821,19 +882,24 @@ StPulse >> processFullAddedCandidates [
 { #category : 'private - service' }
 StPulse >> processSearch [
 
+	waitingSearchText := searchPresenter text.
 	spinner isVisible ifTrue: [ spinner updateStep ].
 	
-	waitingSearchText := searchPresenter text.
+	doFullSearchNext
+		ifTrue: [
+			doFullSearchNext := false.
+			self showSpinner.
+			^ self doFullSearch: waitingSearchText ].
+
 	waitingSearchText = lastSearchText 
-		ifTrue: [ 
+		ifTrue: [
 			candidatesFullSearchList
 				ifNil: [ self processAddedCandidates ]
 				ifNotNil: [ self processFullAddedCandidates ] ]
-		ifFalse: [ 
+		ifFalse: [
 			self showSpinner.
 			lastSearchText := waitingSearchText.
-			self doSearch: waitingSearchText ].
-
+			self doSearch: waitingSearchText ]
 ]
 
 { #category : 'private - accessing' }
@@ -946,7 +1012,6 @@ StPulse >> updatePresenter [
 
 { #category : 'private - updating' }
 StPulse >> updateResultListWith: aCollection [
-
 	"use defer to ensure UI loop" 
 	self updateWorker schedule: [ 
 		self application defer: [
@@ -959,13 +1024,10 @@ StPulse >> updateResultListWith: aCollection [
 								self hideSpinner. 
 								self historyEntries ]
 						ifFalse: [ aCollection ].
-				list emit.
 				emptyPresenter visible: list isEmpty.
-				listPresenter disableActivationDuring: [ 
-					listPresenter items: list ].
-				(listPresenter selectedItem isNil and: [ list isNotEmpty ])
+				listPresenter disableActivationDuring: [ listPresenter items: list ].
+				list isNotEmpty
 					ifTrue: [ listPresenter selectFirst ] ] ]
-			
 ]
 
 { #category : 'private - updating' }
@@ -1027,7 +1089,6 @@ StPulse >> windowClosed [
 	service := nil.
 	updateWorker := nil.
 	searchWorker := nil
-
 ]
 
 { #category : 'private - accessing' }
