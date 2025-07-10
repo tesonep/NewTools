@@ -3,7 +3,8 @@ Class {
 	#superclass : 'TestCase',
 	#instVars : [
 		'presenter',
-		'transcript'
+		'transcript',
+		'backendForTest'
 	],
 	#category : 'NewTools-Transcript-Tests',
 	#package : 'NewTools-Transcript-Tests'
@@ -13,6 +14,7 @@ Class {
 StTranscriptPresenterTest >> setUp [ 
 
 	super setUp.
+	backendForTest := SpMorphicBackendForTest new.
 	presenter := StTranscriptPresenter new.
 	presenter transcript: (transcript := StThreadSafeTranscript createTestingInstance)
 ]
@@ -20,6 +22,7 @@ StTranscriptPresenterTest >> setUp [
 { #category : 'running' }
 StTranscriptPresenterTest >> tearDown [ 
 
+	presenter reset.
 	presenter withWindowDo: #close.
 	super tearDown
 ]
@@ -28,12 +31,12 @@ StTranscriptPresenterTest >> tearDown [
 StTranscriptPresenterTest >> testAnnouncementIsWritten [
 
 	| window |
-	
-	[ 
+	[
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test' ]
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test' ]
 	ensure: [ window close ]
 ]
 
@@ -41,15 +44,15 @@ StTranscriptPresenterTest >> testAnnouncementIsWritten [
 StTranscriptPresenterTest >> testClear [
 
 	| window |
-	
-	[ 
+	[
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test'.
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test'.
 		presenter clear.
-		self assert: presenter text text equals: ''.
-		self assert: transcript contents equals: 'test' ]
+		self assert: presenter textPresenter text equals: ''.
+		self assert: transcript contents equals: 'test' ] 
 	ensure: [ window close ]
 ]
 
@@ -57,13 +60,13 @@ StTranscriptPresenterTest >> testClear [
 StTranscriptPresenterTest >> testFetchOld [
 
 	| window |
-	
-	[ 
+	[
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
 		presenter clear.
-		self assert: presenter text text equals: ''.
+		self assert: presenter textPresenter text equals: ''.
 		presenter fetchOld.
 		self assert: transcript contents equals: 'test' ]
 	ensure: [ window close ]
@@ -73,15 +76,15 @@ StTranscriptPresenterTest >> testFetchOld [
 StTranscriptPresenterTest >> testReset [
 
 	| window |
-	
-	[ 
+	[
 		window := presenter open.
 		transcript show: 'test'.
-		300 milliSeconds wait.
-		self assert: presenter text text equals: 'test'.
+		100 milliSeconds wait.
+		self waitUntilUIRedrawed.
+		self assert: presenter textPresenter text equals: 'test'.
 		self assert: transcript contents equals: 'test'.
 		presenter reset.
-		self assert: presenter text text equals: ''.
+		self assert: presenter textPresenter text equals: ''.
 		self assert: transcript contents equals: '' ]
 	ensure: [ window close ]
 ]
@@ -97,4 +100,10 @@ StTranscriptPresenterTest >> testSmoke [
 	[ self shouldnt: [ window := StTranscriptPresenter exampleNonGlobalTranscript ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
 	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ]
+]
+
+{ #category : 'running' }
+StTranscriptPresenterTest >> waitUntilUIRedrawed [
+
+	backendForTest waitUntilUIRedrawed
 ]
