@@ -412,7 +412,7 @@ StPulse >> addKeyboardBehavior: aPresenter [
 	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
 			"0 = Left Control | 28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
 			(#(0 28 29 30 31) includes: anEvent keyValue )
-				ifFalse:  [ searchPresenter takeKeyboardFocus. anEvent keyValue crTrace ] ]
+				ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
 ]
 
 { #category : 'initialization' }
