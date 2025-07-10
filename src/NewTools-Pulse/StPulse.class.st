@@ -336,17 +336,17 @@ StPulse class >> tips [
 
 	^ {
 		'arrows' -> 'navigation shortkeys'.
-		'ctrl + arrows' -> 'navigation on search bar'.
+		'<ctrl + arrows>' -> 'navigation on search bar'.
+		'<ctrl + arrow down>' -> 'makes a full search' .
 		'<meta+b>'  -> 'filters for Classes' .
 		'<meta+m>' -> 'filters for Implementors' .
 		'<meta+p>' -> 'filters for Packages' .
+		'you can resize the window' -> 'the size will be saved' .
+		'settings icon' -> 'history, size and insertSelection' .
 		'<shift + enter>' -> 'opens Pulse on Environment' .
 		'<shift + meta + enter>' -> 'opens Pulse on Commands' .
 		'<shift + alt + enter>' -> 'opens Pulse on Windows' .
-		'<shift + enter> while on Pulse' -> 'opens Finder' .
-		'you can resize the window' -> 'the size will be saved' .
-		'arrow next to the category' -> 'makes a full search' .
-		'settings icon' -> 'history, size and insertSelection'
+		'<shift + enter> while on Pulse' -> 'opens Finder' 
 	}
 ]
 
@@ -404,12 +404,15 @@ StPulse >> addKeyboardBehavior: aPresenter [
 			action: [ self giveFocusToNextResultList ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey left asKeyCombination actionModifier;
-			action: [ self giveFocusToPreviousResultList ] ].
+			action: [ self giveFocusToPreviousResultList ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
+			action: [ self findAllButtonAction ] ].
 	
 	aPresenter eventHandler whenKeyDownDo: [ :anEvent | 
-			"28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
-			(#(28 29 30 31) includes: anEvent keyValue )
-				ifFalse:  [ searchPresenter takeKeyboardFocus ] ]
+			"0 = Left Control | 28 = Left Arrow | 29 = Right Arrow | 30 = Arrow up | 31 = Arrow down"
+			(#(0 28 29 30 31) includes: anEvent keyValue )
+				ifFalse:  [ searchPresenter takeKeyboardFocus. anEvent keyValue crTrace ] ]
 ]
 
 { #category : 'initialization' }
@@ -482,8 +485,10 @@ StPulse >> connectPresenters [
 			action: [ self giveFocusToPreviousResultList ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: Character arrowUp asKeyCombination;
-			action: [ self giveFocusToResultListAtLast ] ] ;
-		takeKeyboardFocus.
+			action: [ self giveFocusToResultListAtLast ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
+			action: [ self findAllButtonAction ] ].
 	listPresenter 
 		whenActivatedDo: [ self acceptSelection ];
 		whenSelectionChangedDo:[ self calculateListCounterPresenter ].
@@ -586,6 +591,13 @@ StPulse >> environmentContext [
 
 	^ environmentContext ifNil: [ 
 		environmentContext := StPulseSearchContext searchEnvironment ]
+]
+
+{ #category : 'private - actions' }
+StPulse >> findAllButtonAction [
+
+	doFullSearchNext := true. 
+	self defaultKeyboardFocus takeKeyboardFocus
 ]
 
 { #category : 'private - actions' }
@@ -693,9 +705,7 @@ StPulse >> initializeButtons [
 		addStyle: 'small';
 		addStyle: 'stPulseButton';
 		icon: (self iconNamed: #glamorousDown);
-		action: [ 
-			doFullSearchNext := true. 
-			self defaultKeyboardFocus takeKeyboardFocus ];
+		action: [ self findAllButtonAction ];
 		help: 'Gives you all the results of a search. Normal searchs only give you the first 25';
 		yourself.
 
