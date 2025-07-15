@@ -15,16 +15,15 @@ Class {
 
 { #category : 'world menu' }
 StFileBrowserAbstractPresenter class >> menuFileSystemBrowserCommandOn: aBuilder [
+
 	<worldMenu>
-
 	(aBuilder item: #NewFileBrowser)
-		parent: #NewToolsMenu;	
+		parent: #System;
 		action: [ StFileSystemPresenter open ];
-		label: 'New File Browser';
-		order: 1; 
-		help: 'Open the new File Browser.';
-		iconName: #smallOpen.
-
+		label: 'File Browser';
+		order: 1;
+		help: 'Open the File Browser.';
+		iconName: #smallOpen
 ]
 
 { #category : 'instance creation' }

@@ -60,9 +60,9 @@ StProtocolNameChooserPresenterTest >> testCreatingProtocolThatExists [
 StProtocolNameChooserPresenterTest >> testSmoke [
 
 	| window |
-	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := presenter open ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
-	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window close ].
+	[ self shouldnt: [ window := presenter openDialog ] raise: Error ] ensure: [ window ifNotNil: [ window close ] ].
 
 	presenter concernedClass: self class.
 	presenter protocolName: 'test'.

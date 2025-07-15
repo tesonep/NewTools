@@ -101,13 +101,13 @@ StPlaygroundBindingsPresenterTest >> testRemoveAllBindings [
 { #category : 'tests' }
 StPlaygroundBindingsPresenterTest >> testRemoveSelectedBinding [
 	|selected|
-
 	selected := presenter selectedBinding.
 	self assert: (owner interactionModel hasBindingOf: selected key).
 
 	presenter removeSelectedBinding.
 	
 	self deny: (owner interactionModel hasBindingOf: selected key).
+
 ]
 
 { #category : 'tests' }

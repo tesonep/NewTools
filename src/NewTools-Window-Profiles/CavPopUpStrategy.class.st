@@ -33,6 +33,7 @@ CavPopUpStrategy >> findSameKindWindowAs: aWidget [
 CavPopUpStrategy >> placePresenter: aWindow [
 
 	| sameKindWindow windowToDelete |
+	super placePresenter: aWindow.
 	aWindow position: placeHolder position.
 	aWindow extent: placeHolder extent.
 

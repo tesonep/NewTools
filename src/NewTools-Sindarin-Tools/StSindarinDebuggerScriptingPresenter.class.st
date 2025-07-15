@@ -18,7 +18,9 @@ Class {
 		'toolbar',
 		'sindarinDebugger',
 		'resultLabel',
-		'hasUnsavedCodeChanges'
+		'hasUnsavedCodeChanges',
+		'scriptNameInput',
+		'scriptRepository'
 	],
 	#category : 'NewTools-Sindarin-Tools-Presenters',
 	#package : 'NewTools-Sindarin-Tools',
@@ -51,6 +53,10 @@ StSindarinDebuggerScriptingPresenter >> debuggerExtensionToolName [
 StSindarinDebuggerScriptingPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: #toolbar expand: false;
+		add: #scriptNameInput 
+			expand: false
+			fill: false
+			padding: 2;
 		add: #code;
 		add: #resultLabel 
 			expand: false 
@@ -88,17 +94,23 @@ StSindarinDebuggerScriptingPresenter >> hasUnsavedCodeChanges [
 
 { #category : 'initialization' }
 StSindarinDebuggerScriptingPresenter >> initializePresenters [
+	scriptNameInput := self newTextInput.
+	resultLabel := self newLabel.
 	code := self newCode.
-	code interactionModel: StSindarinContextInteractionModel new.
+	self loadLastScript.
 	code syntaxHighlight: true.
-	"code contextMenu: [  ]."
-	code text: 'sindarin stepOver'.
+	code whenTextChangedDo: [
+			hasUnsavedCodeChanges := true.
+			self updateLabel ].
 	self updateCode.
-	self flag: 'Build a generic sindarin script class with sidnarin as an instance var and its instance should be the receiver of the code'.
-	self flag: 'set the doit conetxt of the code to the current selected context'.
 	resultInspection := nil inspectionRaw: self.
 	resultInspection owner: self.
-	self initializeToolbar
+	self initializeToolbar.
+	self updateLabel.
+	
+	scriptRepository := StSindarinDebuggerScriptRepositoryPresenter newApplication: self application.
+	
+
 ]
 
 { #category : 'initialization' }
@@ -111,8 +123,45 @@ StSindarinDebuggerScriptingPresenter >> initializeToolbar [
 ]
 
 { #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> loadLastScript [
+	|script|
+	script := (StSindarinDebuggerScriptRepository loadScript: 'Last updated') ifNil: ['sindarin stepOver'].
+	scriptNameInput text: 'Last updated'.
+	code text: script .
+]
+
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> loadScript [
-	self flag: 'todo'
+	|scriptName|
+	
+	self layout: self loadScriptLayout.
+	
+	scriptRepository applyFilter.
+	
+	scriptRepository whenLoadButtonDo: [ 
+		scriptName := scriptRepository chooseElement.
+		scriptName ifNotNil: [
+			scriptNameInput text: scriptName .	
+			code text: (StSindarinDebuggerScriptRepository loadScript: scriptName) .
+			hasUnsavedCodeChanges := false.
+	
+			self updateLabel .
+			self updatePresenter .
+		].
+	
+		self layout: self defaultLayout.
+	].
+
+	scriptRepository whenCancelButtonDo: [ 
+		self layout: self defaultLayout.
+	]
+]
+
+{ #category : 'layout' }
+StSindarinDebuggerScriptingPresenter >> loadScriptLayout [ 
+	^ SpBoxLayout newTopToBottom
+		add: #scriptRepository;
+		yourself
 ]
 
 { #category : 'actions' }
@@ -121,8 +170,15 @@ StSindarinDebuggerScriptingPresenter >> removeScriptCommand [
 ]
 
 { #category : 'actions' }
+StSindarinDebuggerScriptingPresenter >> saveLastScript [
+	StSindarinDebuggerScriptRepository saveScript: 'Last updated' code: code text.
+]
+
+{ #category : 'actions' }
 StSindarinDebuggerScriptingPresenter >> saveScript [
-	self flag: 'todo'.
+
+	StSindarinDebuggerScriptRepository saveScript: (scriptNameInput text) code: (code text).
+
 	hasUnsavedCodeChanges := false.
 	self updateLabel 
 ]
@@ -182,4 +238,10 @@ StSindarinDebuggerScriptingPresenter >> updatePresenter [
 
 	self updateCode.
 	super updatePresenter
+]
+
+{ #category : 'updating' }
+StSindarinDebuggerScriptingPresenter >> windowIsClosing [ 
+	self saveLastScript.
+	super windowIsClosing.
 ]

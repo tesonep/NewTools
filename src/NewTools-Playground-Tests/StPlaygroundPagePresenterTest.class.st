@@ -27,7 +27,7 @@ StPlaygroundPagePresenterTest >> initializeInstanceBeforeInitialization: aPresen
 ]
 
 { #category : 'running' }
-StPlaygroundPagePresenterTest >> setUp [
+StPlaygroundPagePresenterTest >> setUp [ 
 	super setUp.
 
 	presenter initialize.
@@ -72,9 +72,9 @@ StPlaygroundPagePresenterTest >> testContents [
 	string := 'coucou'.
 	self openInstance.
 	
-	self assert: presenter text text equals:''.
+	self assert: presenter contents equals:''.
 	presenter contents: string.
-	self assert: presenter text text equals: string.
+	self assert: presenter contents equals: string.
 ]
 
 { #category : 'tests - commands' }
@@ -195,11 +195,10 @@ StPlaygroundPagePresenterTest >> testPageIsSavedWhenExecutingACommand [
 StPlaygroundPagePresenterTest >> testRemoveAllBindings [
 	self newPage.
 	
-	presenter text interactionModel addBindingNamed: #thisPlayground with: 0.
-	
-	self assert: (presenter text interactionModel hasBindingOf: #thisPlayground ).
+	presenter interactionModel addBindingNamed: #this with: 0. 
+	self assert: (presenter text interactionModel hasBindingOf: #this ).
 	presenter removeAllBindings.
-	self deny: (presenter text interactionModel hasBindingOf: #thisPlayground ).
+	self deny: (presenter text interactionModel hasBindingOf: #this ).
 ]
 
 { #category : 'tests' }

@@ -163,7 +163,7 @@ StPlaygroundInteractionModelTest >> testMakeBindingShared [
 ]
 
 { #category : 'tests' }
-StPlaygroundInteractionModelTest >> testremoveBindingNamed [
+StPlaygroundInteractionModelTest >> testRemoveBindingNamed [
 	|im1 dico|
 	
 	im1 := self newInteractionModel.
