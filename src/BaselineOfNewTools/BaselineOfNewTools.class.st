@@ -53,7 +53,7 @@ BaselineOfNewTools >> baseline: spec [
 			
 			"profStef"
 			package: 'ProfStef-Core' with: [ spec requires: #( 'NewTools-Playground' ) ];
-			package: 'ProfStef-Tests' with: [ spec required: #( 'ProfStef-Core' ) ];
+			package: 'ProfStef-Tests' with: [ spec requires: #( 'ProfStef-Core' ) ];
 		
 			"closed windows"
 			package: 'NewTools-WindowManager';
