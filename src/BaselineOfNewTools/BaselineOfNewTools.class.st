@@ -175,6 +175,8 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 
 			group: 'Playground' with: #( 'NewTools-Playground' 'NewTools-Playground-Tests' );
+			
+			group: 'ProfStef' with: #( 'ProfStef-Core' 'ProfStef-Tests' );
 
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 
