@@ -50,10 +50,6 @@ BaselineOfNewTools >> baseline: spec [
 			"playground"
 			package: 'NewTools-Playground' with: [ spec requires: #( 'NewTools-Core'  'NewTools-Inspector' ) ];
 			package: 'NewTools-Playground-Tests' with: [ spec requires: #( 'NewTools-Playground' ) ];
-			
-			"profStef"
-			package: 'ProfStef-Core' with: [ spec requires: #( 'NewTools-Playground' ) ];
-			package: 'ProfStef-Tests' with: [ spec requires: #( 'ProfStef-Core' ) ];
 		
 			"closed windows"
 			package: 'NewTools-WindowManager';
@@ -72,6 +68,8 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Spotter-Processors-Tests' with: [ spec requires: #( 'NewTools-Spotter-Processors' ) ];
 			package: 'NewTools-Spotter-Tests' with: [ spec requires: #( 'NewTools-Spotter' ) ];
 			package: 'NewTools-Morphic-Spotter' with: [ spec requires: #( 'NewTools-Morphic' ) ];
+			package: 'NewTools-Pulse' with: [ spec requires: #( 'NewTools-Spotter' ) ];
+			package: 'NewTools-Pulse-Tests' with: [ spec requires: #( 'NewTools-Pulse' ) ];
 	
 			"file browser"
 			package: 'NewTools-FileBrowser' with: [ spec requires: #( 'NewTools-Core' ) ];
@@ -93,17 +91,15 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-FontChooser' with: [ spec requires: #( 'NewTools-Core' ) ];
 			package: 'NewTools-FontChooser-Tests' with: [ spec requires: #( 'NewTools-FontChooser' ) ];
 			package: 'NewTools-SpTextPresenterDecorators';
-			package: 'NewTools-Debugger-Breakpoints-Tools' with: [ spec requires: #( 'NewTools-Inspector' ) ];
 	
 			"Debug points"
 			package: 'NewTools-DebugPointsBrowser' with: [spec requires: #( 'NewTools-Core' 'NewTools-SpTextPresenterDecorators' )];
-			package: 'NewTools-DebugPointsBrowser-Tests' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' ) ];
 			package: 'NewTools-ObjectCentricDebugPoints' with: [ spec requires: #( 'NewTools-DebugPointsBrowser' 'NewTools-Inspector' 'NewTools-Debugger' )];
 			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
 			package: 'NewTools-ProjectLoader-Microdown';
 	
 			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector' 'NewTools-Debugger-Breakpoints-Tools') ] ;
+			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector') ] ;
 	
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
@@ -120,8 +116,8 @@ BaselineOfNewTools >> baseline: spec [
 			
 			"Window Profile"
 			package: 'NewTools-Window-Profiles' with: [ spec requires: #('NewTools-Core')] ;
-			
-			
+			package: 'NewTools-Window-Profiles-Tests' with: [spec requires: #( 'NewTools-Core' 'NewTools-Window-Profiles' ) ]; 
+	
 			"Fuel"
 			package: 'NewTools-Debugger-Fuel';
 			package: 'NewTools-Debugger-Fuel-Tests' with: [ spec requires: #( 'NewTools-Debugger-Fuel' ) ];
@@ -175,17 +171,14 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'Core' with: #( 'NewTools-Core' 'NewTools-Core-Tests' 'NewTools-Morphic' );
 
 			group: 'Playground' with: #( 'NewTools-Playground' 'NewTools-Playground-Tests' );
-			
-			group: 'ProfStef' with: #( 'ProfStef-Core' 'ProfStef-Tests' );
 
 			group: 'Inspector' with: #( 'Core' 'NewTools-Inspector' 'NewTools-Inspector-Tests' );
 
 			group: 'ClosedWindows' with: #( 'Core' 'NewTools-WindowManager' 'NewTools-WindowManager-Tests' );
 			
-			group: 'Profile' with: #( 'NewTools-Window-Profiles' );
+			group: 'Profile' with: #( 'NewTools-Window-Profiles' 'NewTools-Window-Profiles-Tests' );
 			
 			group: 'Transcript' with: #( 'Core' 'NewTools-Transcript-Tests' 'NewTools-ObjectTranscript' );
-			
 			
 			group: 'Debugger' with: #( 
 					 	'Core' 
@@ -200,13 +193,11 @@ BaselineOfNewTools >> baseline: spec [
 
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
-				    	'NewTools-Debugger-Breakpoints-Tools'
 				    	'NewTools-Debugger-Tests' 
 					 	'NewTools-Debugger-Fuel'
 				    	'NewTools-Debugger-Fuel-Tests' 
 					 	'NewTools-Utils'
 						'NewTools-DebugPointsBrowser'
-						'NewTools-DebugPointsBrowser-Tests'
 						'NewTools-ObjectCentricDebugPoints' );
 
 			group: 'Spotter' with: #( 
@@ -215,7 +206,9 @@ BaselineOfNewTools >> baseline: spec [
 				   		'NewTools-Spotter' 
 						'NewTools-Spotter-Extensions'
 				   		'NewTools-Spotter-Tests' 
-						'NewTools-Spotter-Processors-Tests' );
+						'NewTools-Spotter-Processors-Tests'
+						'NewTools-Pulse'
+						'NewTools-Pulse-Tests' );
 
 			group: 'SystemReporter' with: #( 'Core' 'NewTools-SystemReporter' );
 
