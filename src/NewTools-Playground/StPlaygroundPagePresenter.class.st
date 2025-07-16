@@ -205,10 +205,7 @@ StPlaygroundPagePresenter >> hasOutputActivationPort [
 StPlaygroundPagePresenter >> initialize [
 	loading := false.
  	super initialize.
-	
-	
-   
-	  
+		  
 ]
 
 { #category : 'initialization' }

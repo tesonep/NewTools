@@ -29,7 +29,7 @@ StPlaygroundPagePresenterTest >> initializeInstanceBeforeInitialization: aPresen
 { #category : 'running' }
 StPlaygroundPagePresenterTest >> setUp [ 
 	super setUp.
-	
+
 	presenter initialize.
 ]
 

@@ -64,7 +64,6 @@ StPlaygroundBaseTest >> setUp [
 	presenter := self classToTest basicNew. 
 	self initializeInstanceBeforeInitialization: presenter.
 	presenter application: application.
-	"presenter initialize."
 
 	self initializeInstance: presenter
 ]

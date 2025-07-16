@@ -29,7 +29,7 @@ StPlaygroundPagesPresenterTest >> initializeMemoryFileSystem: aFileSystem [
 { #category : 'running' }
 StPlaygroundPagesPresenterTest >> setUp [ 
 	super setUp.
-	
+
 	presenter initialize.
 ]
 

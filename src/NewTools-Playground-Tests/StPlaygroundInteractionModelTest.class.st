@@ -185,5 +185,4 @@ StPlaygroundInteractionModelTest >> testRemoveBindingNamed [
 	im1 removeBindingNamed: 'whereIsTheOnePiece'. "because we don't know where it is"
 	
 	self deny: (im1 hasBindingOf: #whereIsTheOnePiece).
-	
 ]

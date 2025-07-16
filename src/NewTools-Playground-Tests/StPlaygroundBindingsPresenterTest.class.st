@@ -35,7 +35,9 @@ StPlaygroundBindingsPresenterTest >> testInit [
 { #category : 'tests' }
 StPlaygroundBindingsPresenterTest >> testIsLocalBinding [
 	|selected|
+	owner text interactionModel addBindingNamed: #this with: 0.
 	presenter selectedBindingIsLocal ifFalse: [ presenter moveSelectedBindingToLocalScope ].
+	
 	
 	selected := presenter selectedBinding.
 	self assert: (presenter isLocalBinding: selected).
@@ -99,14 +101,12 @@ StPlaygroundBindingsPresenterTest >> testRemoveAllBindings [
 { #category : 'tests' }
 StPlaygroundBindingsPresenterTest >> testRemoveSelectedBinding [
 	|selected|
-	
-	
 	selected := presenter selectedBinding.
 	self assert: (owner interactionModel hasBindingOf: selected key).
-	
+
 	presenter removeSelectedBinding.
 	
-	self deny: (owner interactionModel hasBindingOf: selected key). 
+	self deny: (owner interactionModel hasBindingOf: selected key).
 
 ]
 
