@@ -275,6 +275,7 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'default' with: #( 
 			         'Profile'
 						'Playground'
+						'ProfStef'
 						'Transcript'
 						'Inspector' 
 						'ClosedWindows'
