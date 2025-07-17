@@ -8,8 +8,7 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'page',
-		'window',
-		'sourceTextModel'
+		'window'
 	],
 	#category : 'ProfStef-Core-Base',
 	#package : 'ProfStef-Core',
