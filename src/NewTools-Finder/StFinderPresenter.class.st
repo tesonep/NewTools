@@ -289,6 +289,9 @@ StFinderPresenter >> cleanResults [
 StFinderPresenter >> connectPresenters [
 
 	self connectSearchBar.
+	previewSourcePresenter whenSubmitDo: [ :text |
+		resultTree selectedItem 
+			acceptText: text in: previewSourcePresenter ].
 
 	configButton action: [
 		SettingBrowser new
@@ -456,6 +459,18 @@ StFinderPresenter >> notifySearchStarted [
 ]
 
 { #category : 'accessing' }
+StFinderPresenter >> previewSourcePresenter [
+
+	^ previewSourcePresenter
+]
+
+{ #category : 'accessing' }
+StFinderPresenter >> previewSourcePresenter: anObject [
+
+	previewSourcePresenter := anObject
+]
+
+{ #category : 'accessing' }
 StFinderPresenter >> resultButtonBar [
 
 	^ resultButtonBar
@@ -465,6 +480,12 @@ StFinderPresenter >> resultButtonBar [
 StFinderPresenter >> resultTree [
 
 	^ resultTree
+]
+
+{ #category : 'accessing' }
+StFinderPresenter >> results [
+	
+	^ self resultTree roots
 ]
 
 { #category : 'accessing' }
