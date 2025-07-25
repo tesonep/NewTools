@@ -50,7 +50,7 @@ StInspectorTempNode >> rawValue [
 		"we use #tempNamed: to force a re-lookup of the variable"
 		self hostObject tempNamed: tempVariable name]
 		  on: Exception
-		  do: [ :err | 'cannot read ' , tempVariable name ]
+		  do: [ :err | 'Error: ' , err messageText ]
 ]
 
 { #category : 'accessing' }
