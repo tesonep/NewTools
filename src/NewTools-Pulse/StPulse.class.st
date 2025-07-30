@@ -452,11 +452,14 @@ StPulse >> addToPaginator: aPresenter [
 { #category : 'private - actions' }
 StPulse >> calculateListCounterPresenter [
 
-	listCounterPresenter label: 
-		listPresenter selectedIndex asString, 
-		'/', 
+	| selectedIndex |
+	selectedIndex := listPresenter selectedIndex.
+	(selectedIndex < 10 and: [ listPresenter items size > 10 ])
+		ifTrue: [ selectedIndex := '0', (selectedIndex asString) ].
+	listCounterPresenter label:
+		selectedIndex asString,
+		'/',
 		listPresenter items size asString
-
 ]
 
 { #category : 'private - updating' }
