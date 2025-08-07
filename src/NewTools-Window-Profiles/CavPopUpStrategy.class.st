@@ -38,6 +38,7 @@ CavPopUpStrategy >> placePresenter: aWindow [
 	aWindow extent: placeHolder extent.
 
 	sameKindWindow := self findSameKindWindowAs: aWindow.
+
 	windowToDelete := (aWindow isKindOf: SystemWindow)
 		                  ifTrue: [ aWindow ]
 		                  ifFalse: [ aWindow owner ].
