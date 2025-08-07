@@ -99,7 +99,7 @@ StFileBrowserAbstractPresenter >> defaultColumns [
 StFileBrowserAbstractPresenter >> defaultDirectory [
 	"See class side comment"
 
-	^ self model defaultDirectory.
+	^ self model defaultDirectory
 ]
 
 { #category : 'accessing - history' }
