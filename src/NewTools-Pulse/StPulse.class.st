@@ -579,7 +579,7 @@ StPulse >> ensurePulseService [
 	
 	service := TKTParameterizableService new.
 	service name: 'Pulse service: ', UUID new asString.
-	service stepDelay: 50 milliSeconds.
+	service stepDelay: 200 milliSeconds.
 	service step: [ self processSearch ].
 	service start.
 	
