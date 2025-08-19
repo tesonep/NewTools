@@ -452,11 +452,14 @@ StPulse >> addToPaginator: aPresenter [
 { #category : 'private - actions' }
 StPulse >> calculateListCounterPresenter [
 
-	listCounterPresenter label: 
-		listPresenter selectedIndex asString, 
-		'/', 
+	| selectedIndex |
+	selectedIndex := listPresenter selectedIndex.
+	(selectedIndex < 10 and: [ listPresenter items size > 10 ])
+		ifTrue: [ selectedIndex := '0', (selectedIndex asString) ].
+	listCounterPresenter label:
+		selectedIndex asString,
+		'/',
 		listPresenter items size asString
-
 ]
 
 { #category : 'private - updating' }
@@ -870,7 +873,6 @@ StPulse >> processAddedCandidates [
 StPulse >> processFullAddedCandidates [
 "We candidatesAddedList removeAll to evade it updating the list again after the whole result is added to the list"
 	| candidates |
-	
 	candidatesFullSearchList ifNil: [ ^ self ].
 	candidatesAddedList removeAll.
 	candidates := candidatesFullSearchList.
@@ -1025,7 +1027,9 @@ StPulse >> updateResultListWith: aCollection [
 								self historyEntries ]
 						ifFalse: [ aCollection ].
 				emptyPresenter visible: list isEmpty.
-				listPresenter disableActivationDuring: [ listPresenter items: list ].
+				listPresenter disableActivationDuring: [
+					listPresenter items: list.
+					self calculateListCounterPresenter ].
 				list isNotEmpty
 					ifTrue: [ listPresenter selectFirst ] ] ]
 ]
