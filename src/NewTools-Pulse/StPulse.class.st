@@ -125,7 +125,7 @@ StPulse class >> hidePreview [
 { #category : 'accessing' }
 StPulse class >> historize: aStEntry [
 
-	History add: aStEntry
+	self history add: aStEntry
 ]
 
 { #category : 'accessing' }
