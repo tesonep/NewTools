@@ -78,6 +78,16 @@ StPulseHistoryCollectionTest >> testEntries [
 ]
 
 { #category : 'running' }
+StPulseHistoryCollectionTest >> testEntryUnderstandContentString [ 
+	
+	| entry1 |
+
+	entry1 := StClassEntry new content: 'entry1'.
+	self assert: entry1 contentString equals: 'entry1'
+	
+]
+
+{ #category : 'running' }
 StPulseHistoryCollectionTest >> testMaxEntries [
 	
 	| entry1 entry2 |
