@@ -169,23 +169,6 @@ StDebuggerTest >> testAcceptCodeChangesForContext [
 	self assert: dbg code text equals: newSource
 ]
 
-{ #category : 'tests' }
-StDebuggerTest >> testActionModelSubscription [
-
-	self assert: self debugger debuggerClientModel isNil.
-
-	debugger session: session.
-
-	self assert: debugger debuggerClientModel isNotNil.
-	self assert:
-		(debugger debuggerClientModel hasSubscriber: debugger).
-
-	debugger unsubscribeFromActionModel.
-
-	self deny:
-		(debugger debuggerClientModel hasSubscriber: debugger)
-]
-
 { #category : 'tests - code pane' }
 StDebuggerTest >> testCancelCodeChangesFor [
 	| firstContext lastContext |
@@ -214,6 +197,23 @@ StDebuggerTest >> testClearUnsavedChanges [
 	dbg unsavedCodeChanges at: 4 put: 2.
 	dbg clearUnsavedCodeChanges.
 	self assertEmpty: dbg unsavedCodeChanges
+]
+
+{ #category : 'tests' }
+StDebuggerTest >> testClientModelSubscription [
+
+	self assert: self debugger debuggerClientModel isNil.
+
+	debugger session: session.
+
+	self assert: debugger debuggerClientModel isNotNil.
+	self assert:
+		(debugger debuggerClientModel hasSubscriber: debugger).
+
+	debugger unsubscribeFromActionModel.
+
+	self deny:
+		(debugger debuggerClientModel hasSubscriber: debugger)
 ]
 
 { #category : 'tests - actions' }

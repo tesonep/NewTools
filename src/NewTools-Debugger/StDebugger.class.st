@@ -82,12 +82,12 @@ Class {
 		'extensionTools',
 		'extensionToolsNotebook',
 		'toolbarCommandGroup',
-		'debuggerActionModel',
 		'unsavedCodeChanges',
 		'programmaticallyClosed',
 		'stackAndCodeContainer',
 		'toolbarPresenter',
-		'previousASTScope'
+		'previousASTScope',
+		'debuggerClientModel'
 	],
 	#classVars : [
 		'EnableStackColoring'
@@ -512,7 +512,7 @@ StDebugger >> close [
 
 	programmaticallyClosed := true.
 	[ self withWindowDo: #close ] ensure: [
-		debuggerActionModel ifNotNil: [ :actionModel |
+		debuggerClientModel ifNotNil: [ :actionModel |
 			actionModel clearDebugSession ] ]
 ]
 
@@ -593,7 +593,7 @@ StDebugger >> currentContext [
 
 { #category : 'accessing - model' }
 StDebugger >> debuggerClientModel [
-	^ debuggerActionModel
+	^ debuggerClientModel
 ]
 
 { #category : 'subscription' }
@@ -1171,11 +1171,11 @@ StDebugger >> session [
 { #category : 'accessing - model' }
 StDebugger >> session: aSession [
 
-	debuggerActionModel
+	debuggerClientModel
 		ifNil: [ 
-			debuggerActionModel := StDebuggerClientModel on: aSession.
+			debuggerClientModel := StDebuggerClientModel on: aSession.
 			self subscribeToActionModel ]
-		ifNotNil: [ debuggerActionModel session: aSession ]
+		ifNotNil: [ debuggerClientModel session: aSession ]
 ]
 
 { #category : 'initialization' }
