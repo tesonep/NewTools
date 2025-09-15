@@ -35,6 +35,16 @@ StPulseTest >> testDefaultKeyboardFocus [
 ]
 
 { #category : 'running' }
+StPulseTest >> testHistoryIsWellInitialized [
+
+	StPulse reset.
+	self 
+		shouldnt: [ StPulse historize: (StClassEntry on: self class)  ]
+		raise: Error 
+	
+]
+
+{ #category : 'running' }
 StPulseTest >> testSearchingAllTypeOfCandidates [
 
 	| window candidates |	

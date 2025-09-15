@@ -67,6 +67,7 @@ StFinderClassResult >> forFinderPreview: aSpCodePresenter [
 				displaySource: self getCompiledMethod
 				in: aSpCodePresenter ]
 		ifFalse: [ 
+			acceptTextCallback := nil.
 			aSpCodePresenter 
 				beForScripting;
 				text: self content definitionString ]

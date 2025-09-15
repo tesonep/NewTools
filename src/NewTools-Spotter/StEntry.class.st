@@ -77,6 +77,12 @@ StEntry >> content: anObject [
 	content := anObject
 ]
 
+{ #category : 'accessing' }
+StEntry >> contentString [
+
+	^ content asString
+]
+
 { #category : 'spotter-extensions' }
 StEntry >> displayString [
 

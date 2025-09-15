@@ -45,17 +45,6 @@ StFileSystemPresenter class >> defaultPreferredExtent [
 	^ (1100 @ 700)
 ]
 
-{ #category : 'defaults' }
-StFileSystemPresenter class >> lastVisitedDirectory [
-
-	(LastVisitedDirectory isNotNil and: [ 
-		 [ LastVisitedDirectory exists ]
-			 on: ResolutionRequest
-			 do: [ false ] ]) ifFalse: [ 
-		LastVisitedDirectory := StFileBrowserSettings defaultDirectory ].
-	^ LastVisitedDirectory 
-]
-
 { #category : 'hooks' }
 StFileSystemPresenter class >> navigationSystemClass [
 

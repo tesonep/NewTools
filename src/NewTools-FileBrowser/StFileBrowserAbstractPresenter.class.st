@@ -5,8 +5,7 @@ Class {
 		'model'
 	],
 	#classVars : [
-		'Bookmarks',
-		'LastVisitedDirectory'
+		'Bookmarks'
 	],
 	#category : 'NewTools-FileBrowser-UI',
 	#package : 'NewTools-FileBrowser',
@@ -99,7 +98,7 @@ StFileBrowserAbstractPresenter >> defaultColumns [
 StFileBrowserAbstractPresenter >> defaultDirectory [
 	"See class side comment"
 
-	^ self model defaultDirectory.
+	^ self model defaultDirectory
 ]
 
 { #category : 'accessing - history' }
@@ -143,6 +142,11 @@ StFileBrowserAbstractPresenter >> model [
 StFileBrowserAbstractPresenter >> navigationSystemClass [
 
 	^ self class navigationSystemClass
+]
+
+{ #category : 'utilities' }
+StFileBrowserAbstractPresenter >> openFolder: aFileReference [ 
+	^ self subclassResponsibility
 ]
 
 { #category : 'utilities' }
