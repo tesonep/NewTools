@@ -774,7 +774,6 @@ StDebugger >> filterStack: aStack [
 StDebugger >> findFirstRelevantStackIndexIn: aStack [
 	| counter |
 	counter := 1.
-	StDebuggerSettings forceDebuggerStackSelection ifFalse: [ ^ counter ].
 	aStack do: [ :context | 
 		context method methodClass == TestAsserter ifFalse: [ ^ counter ].
 		counter := counter + 1 ].

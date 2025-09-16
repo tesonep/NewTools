@@ -30,7 +30,6 @@ Class {
 	#name : 'StDebuggerSettings',
 	#superclass : 'Object',
 	#classVars : [
-		'ForceDebuggerStackSelection',
 		'LastKnownPosition',
 		'PreserveWindowPosition'
 	],
@@ -40,41 +39,10 @@ Class {
 }
 
 { #category : 'accessing' }
-StDebuggerSettings class >> defaultForceDebuggerStackSelection [
-	^ false
-]
-
-{ #category : 'accessing' }
 StDebuggerSettings class >> defaultPosition [
 
 	^ 10 @ 10
 
-]
-
-{ #category : 'accessing' }
-StDebuggerSettings class >> forceDebuggerStackSelection [
-	"Force the stack to not select TestAsserter contexts by default"
-
-	^ ForceDebuggerStackSelection
-		ifNil: [ ForceDebuggerStackSelection := self defaultForceDebuggerStackSelection ]
-]
-
-{ #category : 'accessing' }
-StDebuggerSettings class >> forceDebuggerStackSelection: aBoolean [
-
-	ForceDebuggerStackSelection := aBoolean 
-]
-
-{ #category : 'accessing' }
-StDebuggerSettings class >> forceDebuggerStackSelectionSetting: aBuilder [
-	<systemsettings>
-	
-	(aBuilder setting: #forceDebuggerStackSelection)
-		label: 'Force Debugger Stack Selection';
-		target: self;
-		parent: #debugging;
-		default: self defaultForceDebuggerStackSelection;
-		description: 'Force the stack to not select TestAsserter context by default'.
 ]
 
 { #category : 'class initialization' }
