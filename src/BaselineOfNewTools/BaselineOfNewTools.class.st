@@ -102,8 +102,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
 			package: 'NewTools-ProjectLoader-Microdown';
 	
-			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector') ] ;
 	
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
@@ -194,7 +192,6 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger'
 
 						'NewTools-Debugger-Morphic'
-				    	'NewTools-ObjectCentricBreakpoints'
 				    	'NewTools-Sindarin-Tools' 
 
 					 	'NewTools-Sindarin-Commands'
