@@ -311,7 +311,7 @@ BaselineOfNewTools >> graphAlgorithms: spec [
 	spec
 		baseline: 'AIGraphAlgorithms'
 		with: [
-		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.9/src' ]
+		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.10/src' ]
 ]
 
 { #category : 'actions' }
