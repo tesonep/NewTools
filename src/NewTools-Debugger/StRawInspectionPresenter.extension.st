@@ -50,15 +50,14 @@ StRawInspectionPresenter >> updateNodesFromScope: oldTemps to: newTemps [
 	tempsToRemove := oldTemps difference: newTemps.
 	tempsToAdd := newTemps difference: oldTemps.
 	nodes := self attributeTable roots.
-
 	nodes removeAllSuchThat: [ :node |
-		node class = StInspectorTempNode and: [
-			tempsToRemove includes: node tempVariable ] ].
+		node class = StInspectorNewTempNode and: [
+			tempsToRemove includes: node tempName ] ].
 	tempsToAdd do: [ :temp |
 		nodes add:
-			((StInspectorTempNode hostObject:
+			((StInspectorNewTempNode hostObject:
 					  self model inspectedObject context)
-				 tempVariable: temp;
+				 tempName: temp;
 				 yourself) ].
 
 	self attributeTable roots: nodes

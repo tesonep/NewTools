@@ -87,7 +87,7 @@ Class {
 		'programmaticallyClosed',
 		'stackAndCodeContainer',
 		'toolbarPresenter',
-		'previousASTScope'
+		'namesVisibleInPreviousScope'
 	],
 	#classVars : [
 		'EnableStackColoring'
@@ -847,6 +847,7 @@ StDebugger >> initializeInspector [
 	inspector := self
 		instantiate: self debuggerInspectorClass
 		on: (self debuggerInspectorModelClass on: self newDebuggerContext).
+	namesVisibleInPreviousScope := self newDebuggerContext context temporaryVariableNames.
 	inspector label: 'Receiver'
 ]
 
@@ -1602,25 +1603,26 @@ StDebugger >> updateStackFromSession: aSession [
 { #category : 'updating' }
 StDebugger >> updateStep [
 
-	| previousContext currentASTScope currentContext |
+	| previousContext currentlyVisibleNames currentContext |
 	previousContext := self currentContext.
 	self updateStackFromSession: self session.
 	self updateWindowTitle.
 	self updateExtensionsFromSession: self session.
 	self updateToolbar.
-
+1haltOnce.
 	currentContext := self currentContext.
-	currentASTScope := currentContext temporaryVariables.
+	currentlyVisibleNames := currentContext temporaryVariableNames.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.
+
 	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p |
 			previousContext == currentContext ifTrue: [ "otherwise, if contexts have changed, updating the stack has already updated all nodes.""Here it is necessary to update temporary nodes if we are still in the same context but in a different scope. This is possible when leaving or entering an optimized block scope."
 					p
 						updateNodesFromScope:
-						(previousASTScope ifNil: [ currentASTScope ])
-						to: currentASTScope ].
+						(namesVisibleInPreviousScope ifNil: [ currentlyVisibleNames ])
+						to: currentlyVisibleNames ].
 			p update ].
 
-	previousASTScope := currentASTScope
+	namesVisibleInPreviousScope := currentlyVisibleNames
 ]
 
 { #category : 'toolbar' }
