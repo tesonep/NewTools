@@ -63,8 +63,12 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	presenter selectProtocolName.
 	dialog open.
 
-	dialog cancelled ifTrue: [ CmCommandAborted signal ].
-	protocolName := presenter selectedProtocolName ifNil: [ CmCommandAborted signal ].
+	dialog cancelled ifTrue: [ CmCommandAborted new 
+											application: StPharoApplication current; 
+											signal ].
+	protocolName := presenter selectedProtocolName ifNil: [ CmCommandAborted new 
+											application: StPharoApplication current; 
+											signal  ].
 	(protocolName beginsWith: '*') ifTrue: [
 			presenter inform: 'Star is forbidden for protocol name since this is used for method extensions.'.
 			^ CmCommandAborted signal ].
