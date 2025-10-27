@@ -51,9 +51,9 @@ StBrowserSearchPresenter class >> open [
 
 { #category : 'instance creation' }
 StBrowserSearchPresenter class >> searchConfiguring: aBlock [
-
 	<script>
-	| presenter dialog |
+	
+	| presenter dialog aborted |
 	dialog := (presenter := self new) asBlockedDialogWindow.
 
 	aBlock cull: presenter cull: dialog.
@@ -61,12 +61,15 @@ StBrowserSearchPresenter class >> searchConfiguring: aBlock [
 	presenter selectSearchPattern.
 
 	dialog open.
-
-	dialog cancelled ifTrue: [ ^ CmCommandAborted signal ].
+	aborted := CmCommandAborted new 
+												application: StPharoApplication current;  
+												signal.
+												
+	dialog cancelled ifTrue: [ ^ aborted ].
 
 	^ presenter itemsList isMultipleSelection
-		  ifTrue: [ presenter selectedItems ifEmpty: [ CmCommandAborted signal ] ]
-		  ifFalse: [ presenter selectedItem ifNil: [ CmCommandAborted signal ] ]
+		  ifTrue: [ presenter selectedItems ifEmpty: [ aborted ] ]
+		  ifFalse: [ presenter selectedItem ifNil: [ aborted ] ]
 ]
 
 { #category : 'initialization' }
