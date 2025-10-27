@@ -5,7 +5,10 @@ Morph >> application [
 
 	^ self 
 		valueOfProperty: #application 
-		ifAbsent: [ StPharoApplication current ]
+		ifAbsent: [ 
+			self owner 
+				ifNotNil: [ self owner application ]
+				ifNil: [ StPharoApplication current ] ]
 ]
 
 { #category : '*NewTools-Morphic' }
