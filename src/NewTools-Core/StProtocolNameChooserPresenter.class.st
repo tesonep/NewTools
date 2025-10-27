@@ -52,7 +52,6 @@ StProtocolNameChooserPresenter class >> requestProtocolNameConfiguring: aBlock [
 	I allow the user to configure the presenter or the dialog via a configuration block."
 	
 	self flag: #TODO. "Remove once integrated changes in Pharo14"
-
 	^ (self newApplication: StPharoApplication current) requestProtocolNameConfiguring: aBlock
 ]
 

@@ -46,8 +46,8 @@ StBrowserSearchPresenter class >> exampleConfiguringPresenterForMultipleSelectio
 
 { #category : 'instance creation' }
 StBrowserSearchPresenter class >> searchConfiguring: aBlock [
-	
-	self flag: #TODO. "Remove once integrated changes in Pharo14"
+
+  self flag: #TODO. "Remove once integrated changes in Pharo14"
 	^ (self newApplication: StPharoApplication current) searchConfiguring: aBlock
 ]
 
