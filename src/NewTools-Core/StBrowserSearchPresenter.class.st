@@ -56,9 +56,7 @@ StBrowserSearchPresenter >> connectPresenters [
 
 	super connectPresenters.
 
-	searchField whenTextChangedDo: [ self updateList ].
-	
-	searchOptions substringRadioButton click.
+	searchField whenTextChangedDo: [ self updateList ]
 ]
 
 { #category : 'layout' }
