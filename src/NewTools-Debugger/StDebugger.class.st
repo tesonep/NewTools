@@ -847,7 +847,6 @@ StDebugger >> initializeInspector [
 	inspector := self
 		instantiate: self debuggerInspectorClass
 		on: (self debuggerInspectorModelClass on: self newDebuggerContext).
-	namesVisibleInPreviousScope := self newDebuggerContext context temporaryVariableNames.
 	inspector label: 'Receiver'
 ]
 
@@ -1556,8 +1555,7 @@ StDebugger >> updateInspectorFromContext: aContext [
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
 	inspector updateWith: (self newDebuggerContextFor: aContext).
-	self flag: #DBG_INSPECTOR_UPDATE_BUG.
-	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
+	self updateStep
 ]
 
 { #category : 'updating' }
