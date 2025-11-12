@@ -28,6 +28,6 @@ String >> inspectionString: aBuilder [
 
 	<inspectorPresentationOrder: -10 title: 'Preview'>
 	^ aBuilder newText
-		  text: self printString ;
+		  text: (self truncateWithElipsisTo: 1000) printString;
 		  yourself
 ]
