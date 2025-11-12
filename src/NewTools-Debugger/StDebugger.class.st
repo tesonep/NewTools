@@ -1609,7 +1609,7 @@ StDebugger >> updateStep [
 	self updateWindowTitle.
 	self updateExtensionsFromSession: self session.
 	self updateToolbar.
-1haltOnce.
+
 	currentContext := self currentContext.
 	currentlyVisibleNames := currentContext temporaryVariableNames.
 	self flag: #DBG_INSPECTOR_UPDATE_BUG.

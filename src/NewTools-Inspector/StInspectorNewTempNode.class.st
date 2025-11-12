@@ -103,5 +103,5 @@ StInspectorNewTempNode >> tempName: anObject [
 { #category : 'accessing' }
 StInspectorNewTempNode >> variableTag [
 
-	^ 'temp. var'
+	^ self isArgumentVariable ifTrue: [ 'arg' ] ifFalse: [ 'temp. var' ]
 ]

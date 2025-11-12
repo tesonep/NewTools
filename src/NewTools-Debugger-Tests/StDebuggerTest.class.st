@@ -458,11 +458,10 @@ StDebuggerTest >> testContextTempVarListUpdatesTempsWhenEnteringOrLeavingInlined
 			identicalTo: (contextItems at: i) ].
 
 	self assert:
-		(newContextItems at: contextItems size + 1) tempVariable
-			isTempVariable.
+		(newContextItems at: contextItems size + 1) isTempVariable.
 	self
 		assert:
-		(newContextItems at: contextItems size + 1) tempVariable name
+		(newContextItems at: contextItems size + 1) tempName
 		equals: 'list'.
 
 	"We leave inlined block"
