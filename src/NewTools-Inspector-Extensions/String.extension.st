@@ -25,9 +25,9 @@ String >> inspectionFullString: aBuilder [
 
 { #category : '*NewTools-Inspector-Extensions' }
 String >> inspectionString: aBuilder [
+
 	<inspectorPresentationOrder: -10 title: 'Preview'>
-	
 	^ aBuilder newText
-		text: (self truncateWithElipsisTo: 1000);
-		yourself
+		  text: (self printStringLimitedTo: 1000);
+		  yourself
 ]
