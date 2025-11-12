@@ -25,7 +25,7 @@ DebugPointSelectDialogPresenter >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		  borderWidth: 5;
 		  spacing: 5;
-		  add: label expand: false;
+		  add: messagePresenter expand: false;
 		  add: (SpPanedLayout newTopToBottom
 				   add: list;
 				   add: code;
@@ -36,13 +36,13 @@ DebugPointSelectDialogPresenter >> defaultLayout [
 { #category : 'private' }
 DebugPointSelectDialogPresenter >> getLabel [
 
-	^ label label
+	^ messagePresenter label
 ]
 
 { #category : 'initialization' }
 DebugPointSelectDialogPresenter >> initializePresenters [
 
-	label := self newLabel.
+	messagePresenter := self newLabel.
 
 	list := self instantiate: DebugPointTablePresenter.
 	code := DebugPointCodePresenter new
@@ -83,7 +83,7 @@ DebugPointSelectDialogPresenter >> scope: anObject [
 { #category : 'private' }
 DebugPointSelectDialogPresenter >> setLabel: aString [
 
-	label label: aString
+	messagePresenter label: aString
 ]
 
 { #category : 'layout' }
@@ -116,7 +116,7 @@ DebugPointSelectDialogPresenter >> variableTargetLayout [
 	^ SpBoxLayout newTopToBottom
 		  borderWidth: 5;
 		  spacing: 5;
-		  add: label expand: false;
+		  add: messagePresenter expand: false;
 		  add: (SpPanedLayout newTopToBottom
 				   add: list;
 				   add: variableTargetPresenter;
