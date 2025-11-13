@@ -27,7 +27,8 @@ EpLogBrowserOperationVisitor class >> new [
 ]
 
 { #category : 'accessing' }
-EpLogBrowserOperationVisitor >> application: anApplication [ 
+EpLogBrowserOperationVisitor >> application: anApplication [
+
 	application := anApplication
 ]
 

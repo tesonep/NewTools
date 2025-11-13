@@ -3,7 +3,7 @@ I am a toolbar to be used in the EpLogBrowserModel.
 "
 Class {
 	#name : 'EpLogBrowserToolbarPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'logBrowserPresenter',
 		'filtersButton',

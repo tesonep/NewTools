@@ -7,7 +7,7 @@ self open.
 "
 Class {
 	#name : 'EpLogNodeGraphPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'directory',
 		'monitor',

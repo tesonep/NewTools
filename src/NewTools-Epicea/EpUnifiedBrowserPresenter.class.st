@@ -6,7 +6,7 @@ self open
 "
 Class {
 	#name : 'EpUnifiedBrowserPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'refreshDeferrer',
 		'logPresenter',
@@ -28,7 +28,7 @@ EpUnifiedBrowserPresenter class >> defaultPreferredExtent [
 EpUnifiedBrowserPresenter class >> open [
 
 	<script>
-	^ (self newApplication: StPharoApplication current)
+	^ self new
 		  refresh;
 		  open;
 		  yourself
@@ -173,7 +173,7 @@ EpUnifiedBrowserPresenter >> monitorLogAnnouncer [
 { #category : 'actions' }
 EpUnifiedBrowserPresenter >> openDashboard [
 
-	(EpDashboardPresenter newApplication: self application) open
+	EpDashboardPresenter open
 ]
 
 { #category : 'refreshing' }

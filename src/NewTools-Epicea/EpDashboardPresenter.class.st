@@ -6,7 +6,7 @@ self open
 "
 Class {
 	#name : 'EpDashboardPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'monitor',
 		'createLogButton',

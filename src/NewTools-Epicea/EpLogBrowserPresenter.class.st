@@ -8,7 +8,7 @@ self open
 "
 Class {
 	#name : 'EpLogBrowserPresenter',
-	#superclass : 'SpPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'log',
 		'andFilter',
