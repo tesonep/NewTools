@@ -37,8 +37,7 @@ Class {
 		'placeHolderIndices',
 		'cellSize',
 		'cells',
-		'previousClosestPlaceholder',
-		'application'
+		'previousClosestPlaceholder'
 	],
 	#classVars : [
 		'Current'
