@@ -40,7 +40,6 @@ EpLogNodeGraphPresenter >> directory [
 EpLogNodeGraphPresenter >> directory: aFileReference [
 
 	directory := aFileReference.
-
 	self refresh
 ]
 
@@ -154,8 +153,17 @@ EpLogNodeGraphPresenter >> rowHeight [
 
 { #category : 'private' }
 EpLogNodeGraphPresenter >> selectDirectory [
-	(self application selectDirectoryTitle: self directory basename)
-		ifNotNil: [ :selectedDirectory | self directory: selectedDirectory ]
+	"(self application selectDirectoryTitle: self directory basename 
+		openAt: FileLocator image)"
+
+	"should be revisited when selectDirectoryTitle: will offer a way to specify a folder
+	https://github.com/pharo-spec/Spec/issues/1854
+	"
+
+	(StOpenDirectoryPresenter new
+		 title: 'Select an ombu-sessions folder';
+		 defaultFolder: FileLocator image parent asFileReference;
+		 openModal) ifNotNil: [ :selectedDirectory | self directory: selectedDirectory first ]
 ]
 
 { #category : 'accessing' }
