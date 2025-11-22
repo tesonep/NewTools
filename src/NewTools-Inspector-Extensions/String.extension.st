@@ -27,7 +27,8 @@ String >> inspectionFullString: aBuilder [
 String >> inspectionString: aBuilder [
 
 	<inspectorPresentationOrder: -10 title: 'Preview'>
-	^ aBuilder newText
+	^ aBuilder newCode 
 		  text: (self printStringLimitedTo: 1000);
+		  beNotEditable;
 		  yourself
 ]
