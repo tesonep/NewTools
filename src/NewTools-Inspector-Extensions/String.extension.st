@@ -29,5 +29,6 @@ String >> inspectionString: aBuilder [
 	<inspectorPresentationOrder: -10 title: 'Preview'>
 	^ aBuilder newCode 
 		  text: (self printStringLimitedTo: 1000);
+		  beNotEditable;
 		  yourself
 ]
