@@ -1555,7 +1555,8 @@ StDebugger >> updateInspectorFromContext: aContext [
 		isAssertionFailure:
 		self debuggerActionModel isInterruptedContextAnAssertEqualsFailure.
 	inspector updateWith: (self newDebuggerContextFor: aContext).
-	self updateStep
+	self flag: #DBG_INSPECTOR_UPDATE_BUG.
+	inspector getRawInspectorPresenterOrNil ifNotNil: [ :p | p update ]
 ]
 
 { #category : 'updating' }
