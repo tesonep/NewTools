@@ -151,6 +151,15 @@ StTestDebuggerProvider >> debuggerWithMissingSubclassResponsibilityContextWithSt
 ]
 
 { #category : 'helpers' }
+StTestDebuggerProvider >> debuggerWithObjectClassDNUContext [
+	[ self methodProducingDNUonObject ]
+		on: Error
+		do: [ :err | 
+			self sessionFor: err signalerContext exception: err.					
+			^ self newDebugger ]
+]
+
+{ #category : 'helpers' }
 StTestDebuggerProvider >> debuggerWithObjectHalting [
 	[ StDebuggerObjectForTests new haltingMethod ]
 		on: Halt
@@ -193,6 +202,12 @@ StTestDebuggerProvider >> intermediateRecursiveMethodCall [
 StTestDebuggerProvider >> methodProducingDNU [
 
 	^ self foobar
+]
+
+{ #category : 'helpers' }
+StTestDebuggerProvider >> methodProducingDNUonObject [
+
+	^ Object foobar
 ]
 
 { #category : 'helpers' }

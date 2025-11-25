@@ -54,17 +54,20 @@ StDebuggerMethodImplementorPresenter >> addProtocolsFrom: aClassOrTrait [
 	aClassOrTrait ifNil: [ ^ self ].
 
 	allProtocolsWithDuplicates := Dictionary new.
+	
 	(aClassOrTrait isTrait
 		 ifTrue: [ aClassOrTrait protocols ]
 		 ifFalse: [
-				 (aClassOrTrait withAllSuperclasses copyWithoutAll: {
+			((aClassOrTrait withAllSuperclasses copyWithoutAll: ({
 						  Object.
 						  ProtoObject.
 						  Class.
 						  Behavior.
 						  ClassDescription.
 						  Object class.
-						  ProtoObject class }) flatCollect: #protocols ]) do: [ :protocol |
+						  ProtoObject class } copyWithout: aClassOrTrait)) flatCollect: #protocols) asSet .
+						
+					 ]) do: [ :protocol |
 		allProtocolsWithDuplicates at: protocol name put: protocol ].
 	self addProtocols: allProtocolsWithDuplicates values
 ]
