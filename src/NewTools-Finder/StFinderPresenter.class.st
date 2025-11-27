@@ -292,11 +292,6 @@ StFinderPresenter >> connectPresenters [
 	previewSourcePresenter whenSubmitDo: [ :text |
 		resultTree selectedItem ifNotNil: [ :selected | selected acceptText: text in: previewSourcePresenter ] ].
 
-	configButton action: [
-			SettingBrowser new
-				rootNodes: (SettingBrowser currentTree nodeNamed: #finder) allChildren;
-				open ].
-
 	self connectSearchOptions.
 	searchOptions substringRadioButton click.
 
