@@ -66,7 +66,7 @@ StDebuggerMNUExtensionTest >> testExtensionDisplaysFilteredProtocolsDNU [
 		application: debugger class currentApplication;
 		initialize.
 
-	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self displayExtensionInDebugger.
@@ -85,7 +85,7 @@ StDebuggerMNUExtensionTest >> testExtensionDisplaysObjectProtocolsDNU [
 		application: debugger class currentApplication;
 		initialize.
 
-	self assert: debugger debuggerActionModel isInterruptedContextDoesNotUnderstand.
+	self assert: debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
 	self assert: debugger canExecuteCreateMissingMethodCommand.
 
 	self displayExtensionInDebugger.
