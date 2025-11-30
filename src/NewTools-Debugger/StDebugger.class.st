@@ -87,7 +87,7 @@ Class {
 		'stackAndCodeContainer',
 		'toolbarPresenter',
 		'previousASTScope',
-		'debuggerClientModel'
+		'debuggerClientModel',
 		'namesVisibleInPreviousScope'
 	],
 	#classVars : [
