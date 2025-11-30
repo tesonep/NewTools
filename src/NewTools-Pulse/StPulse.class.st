@@ -356,20 +356,6 @@ StPulse class >> windowClosed [
 	pulse := nil
 ]
 
-{ #category : 'world menu' }
-StPulse class >> worldMenuOn: aBuilder [
-	<worldMenu>
-	
-	(aBuilder item: #Pulse)
-		parent: #NewToolsMenu ;
-		keyText: 'Shift + Enter';
-		label: 'Pulse' ;
-		order: 5 ;
-		iconName: #smallFind ;
-		help: 'Search tool to explore Pharo system effectively.' ;
-		action: [ self open ]
-]
-
 { #category : 'private - actions' }
 StPulse >> acceptSelection [
 
@@ -492,9 +478,11 @@ StPulse >> connectPresenters [
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey down asKeyCombination actionModifier;
 			action: [ self findAllButtonAction ] ].
+	
 	listPresenter 
 		whenActivatedDo: [ self acceptSelection ];
 		whenSelectionChangedDo:[ self calculateListCounterPresenter ].
+	
 	self addKeyboardBehavior: listPresenter.
 	
 	paginator whenSelectedPageChangedDo: [ :newValue |
@@ -689,10 +677,9 @@ StPulse >> historyEntries [
 { #category : 'initialization' }
 StPulse >> initialize [
 	
-	self setModelBeforeInitialization: 
-		(StPulseModel new
-			whenCandidateAddedDo: [ :aCandidate | self candidateAdded: aCandidate ];
-			yourself).
+	self setModelBeforeInitialization: (StPulseModel new
+		whenCandidateAddedDo: [ :aCandidate | self candidateAdded: aCandidate ];
+		yourself).
 	super initialize.
 	numCandidatesAdded := 0.
 	candidatesAddedList := OrderedCollection new.
