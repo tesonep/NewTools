@@ -13,8 +13,7 @@ Class {
 		'environmentBar',
 		'searchOptions',
 		'resultStatusBar',
-		'previewSourcePresenter',
-		'configButton'
+		'previewSourcePresenter'
 	],
 	#category : 'NewTools-Finder-Core',
 	#package : 'NewTools-Finder',
@@ -345,7 +344,6 @@ StFinderPresenter >> defaultLayout [
 		  add: (SpBoxLayout newLeftToRight
 				   spacing: 2;
 				   add: searchBar;
-				   addLast: configButton;
 				   yourself)
 		  expand: false;
 		  add: (SpBoxLayout newLeftToRight
@@ -379,22 +377,19 @@ StFinderPresenter >> initializePresenters [
 	searchBar := self instantiate: StFinderSearchBar.
 	searchBar searchModes: self model availableSearchTargets.
 
-	configButton := self newButton
-		              icon: (self iconNamed: #config);
-		              yourself.
 
 	searchOptions := self instantiate: StFinderSearchOptions.
 
 	environmentBar := self instantiate: StFinderEnvironmentBar.
 
 	self initializeResultTree.
-		
+
 	previewSourcePresenter := self newCode.
 
 	resultButtonBar := self instantiate: StFinderResultButtonBar.
 
 	resultStatusBar := self newStatusBar.
-	self initializeFocus.
+	self initializeFocus
 ]
 
 { #category : 'initialization' }
