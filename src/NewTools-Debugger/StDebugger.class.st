@@ -527,7 +527,7 @@ StDebugger >> codeLayout [
 
 	^ SpBoxLayout newTopToBottom
 		  add: self toolbarPresenter expand: false;
-		  add: #code;
+		  add: code;
 		  yourself
 ]
 
@@ -642,7 +642,7 @@ StDebugger >> defaultLayout [
 	^ SpPanedLayout newTopToBottom
 		positionOfSlider: 65 percent;
 		add: stackAndCodeContainer;
-		add: #inspector;
+		add: inspector;
 		yourself
 ]
 
@@ -890,22 +890,18 @@ StDebugger >> initializeShortcuts: aWindowPresenter [
 { #category : 'stack' }
 StDebugger >> initializeStack [
 
-	stackTable := self newList.
-	stackTable
-		activateOnDoubleClick;
-		whenActivatedDo: [ :selection | self doBrowseClass ].
-	stackTable display:[:selection| StContextPrinter printContext: selection].
-	stackTable displayColor:[ :context | self stackColorForContext: context ].
-	stackTable displayIcon: [ :context| self stackIconForContext: context ].	
-	stackTable transmitDo: [ :context |
-		stackTable selection isEmpty ifFalse: [
-			self updateInspectorFromContext: context.
-			self updateCodeFromContext: context.
-			self updateExtensionsFromSession: self session.
-			self expandStackIfLastItemIsSelected.
-			self updateWindowTitle ] ].
 	stackHeader := self instantiate: StHeaderBar.
-	stackHeader label: 'Stack'
+	stackHeader label: 'Stack'.
+
+	stackTable := self newEasyListView
+		activateOnDoubleClick;
+		rowPresenterClass: StDebuggerStackRowPresenter;
+		whenActivatedDo: [ :selection | self doBrowseClass ].		
+		
+	stackTable outputActivationPort 
+		transmitDo: [ :aContext | self doBrowseClass ].
+		
+	stackTable transmitDo: [ :aContext | self selectedContext: aContext ]
 ]
 
 { #category : 'initialization' }
@@ -1164,6 +1160,18 @@ StDebugger >> selectedContext [
 	^ self stackTable selection selectedItem
 ]
 
+{ #category : 'stack' }
+StDebugger >> selectedContext: aContext [
+
+	stackTable selection isEmpty ifTrue: [ ^ self ].
+	
+	self updateInspectorFromContext: aContext.
+	self updateCodeFromContext: aContext.
+	self updateExtensionsFromSession: self session.
+	self expandStackIfLastItemIsSelected.
+	self updateWindowTitle
+]
+
 { #category : 'accessing - model' }
 StDebugger >> session [
 	^ self debuggerClientModel session
@@ -1267,12 +1275,10 @@ StDebugger >> stackIconForContext: context [
 
 { #category : 'layout' }
 StDebugger >> stackLayout [
+
 	^ SpBoxLayout newTopToBottom
-		add: #stackHeader
-			expand: false
-			fill: false
-			padding: 5;
-		add: #stackTable;
+		add: stackHeader expand: false;
+		add: stackTable;
 		yourself
 ]
 
