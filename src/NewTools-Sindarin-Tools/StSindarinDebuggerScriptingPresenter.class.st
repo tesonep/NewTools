@@ -79,7 +79,7 @@ StSindarinDebuggerScriptingPresenter >> defaultLayout [
 
 { #category : 'accessing' }
 StSindarinDebuggerScriptingPresenter >> defaultScriptRepository [
-	^ SindarinDefaultScriptRepository
+	^ StSindarinDebuggerScriptRepository
 ]
 
 { #category : 'actions' }
