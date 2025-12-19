@@ -70,7 +70,7 @@ StMessageToolbarPresenter >> initializePresenters [
 StMessageToolbarPresenter >> owner: aPresenter [
 
 	super owner: aPresenter.
-	messageList := aPresenter messageList.
+	messageList := aPresenter methodList
 ]
 
 { #category : 'events' }
