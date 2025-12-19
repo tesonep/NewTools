@@ -2,7 +2,7 @@
 I'm a style contributor
 "
 Class {
-	#name : 'StMessageBrowserContributor',
+	#name : 'StMethodBrowserContributor',
 	#superclass : 'StPharoStyleContributor',
 	#category : 'NewTools-MethodBrowsers-Senders',
 	#package : 'NewTools-MethodBrowsers',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'styles' }
-StMessageBrowserContributor >> styleSheetContribution [
+StMethodBrowserContributor >> styleSheetContribution [
 	
 	^ SpStyle newApplication 
 		addClass: 'stMessageBrowserScopeList' with: [ :class | class 

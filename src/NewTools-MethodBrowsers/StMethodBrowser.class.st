@@ -479,7 +479,7 @@ StMethodBrowser >> methods: aCollection [
 { #category : 'initialization' }
 StMethodBrowser >> newMethodToolbar [
 
-	^ (self instantiate: StMessageToolbarPresenter)
+	^ (self instantiate: StMethodBrowserToolbarPresenter)
 		whenFlipLayoutDo: [ self flipLayout ];
 		yourself
 ]
@@ -696,5 +696,8 @@ StMethodBrowser >> windowIsClosing [
 { #category : 'private' }
 StMethodBrowser >> windowTitle [
 
-	^ (title ifNil: [ 'Message Browser' ]), ' [' , self numberOfElements printString , ']'
+	| msg |
+	msg := methodList ifNil: [ '' ] ifNotNil: [ ' [' , methodList numberOfElements printString , ']' ].
+	^ (title ifNil: [ 'Message Browser' ]), msg 
+	
 ]

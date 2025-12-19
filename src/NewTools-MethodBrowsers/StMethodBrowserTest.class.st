@@ -46,3 +46,12 @@ StMethodBrowserTest >> testMethodBrowserSenders [
 		ensure: [ window delete ]
 	
 ]
+
+{ #category : 'tests - smoke' }
+StMethodBrowserTest >> testOpenWithoutMessageShouldNotDNU [
+
+	| br |
+	[ br := StMethodBrowser new.
+	self shouldnt: [ br open ] raise: MessageNotUnderstood.
+		] ensure: [ br window close ]
+]
