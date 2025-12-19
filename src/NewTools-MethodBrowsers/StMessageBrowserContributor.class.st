@@ -1,3 +1,6 @@
+"
+I'm a style contributor
+"
 Class {
 	#name : 'StMessageBrowserContributor',
 	#superclass : 'StPharoStyleContributor',

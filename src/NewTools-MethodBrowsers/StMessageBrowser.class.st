@@ -34,7 +34,7 @@ StMessageBrowser class >> beDefaultBrowser [
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection [
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
+
 	^ self new
 		messages: aCollection;
 		open
@@ -42,12 +42,24 @@ StMessageBrowser class >> browse: aCollection [
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browse: aCollection asImplementorsOf: aSymbol [ 
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	"Special Version that sets the correct refreshing Block for Implementors Browser"
 
 	^ self new
 		setRefreshingBlockForImplementorsOf: aSymbol;
 		messages: aCollection;
 		title: 'Implementors of ', aSymbol printString;
+		open
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browse: aCollection asReferencesTo: aClassName [ 
+	"Special Version that sets the correct refreshing Block for class references"
+
+	^ self new
+		setRefreshingBlockForClassReferencesOf: aClassName;
+		highlight: aClassName;
+		messages: aCollection;
+		title: 'References of ', aClassName printString;
 		open
 ]
 
@@ -88,14 +100,28 @@ StMessageBrowser class >> browse: aCollection title: aString highlight: aSelectS
 StMessageBrowser class >> browseImplementorsOf: aSymbol [ 
 	"Special Version that sets the correct refreshing Block for Implentors Browser"
 	
-	^ self browse: aSymbol implementors asImplementorsOf: aSymbol
+	^ self browse: (self implementorsOf: aSymbol) asImplementorsOf: aSymbol
+]
+
+{ #category : 'instance creation' }
+StMessageBrowser class >> browseReferencesOf: aClassName [
+	"Special version that sets the correct refreshing block for senders"
+
+	^ self browse: (self referencesOf: aClassName) asReferencesTo: aClassName
 ]
 
 { #category : 'instance creation' }
 StMessageBrowser class >> browseSendersOf: aSymbol [
-	"Special Version that sets the correct refreshing Block for Implentors Browser"
+	"Special version that sets the correct refreshing block for senders"
 
-	^ self browse: aSymbol senders asSendersOf: aSymbol
+	^ self browse: (self sendersOf: aSymbol) asSendersOf: aSymbol
+]
+
+{ #category : 'private' }
+StMessageBrowser class >> implementorsOf: aSymbol [
+	"Do not use aSymbol implementors because it is a disguised global"
+	
+	^ SystemNavigation new allImplementorsOf: aSymbol 
 ]
 
 { #category : 'instance creation - old' }
@@ -115,11 +141,26 @@ StMessageBrowser class >> openMessageList: messageList name: aString autoSelect:
 
 ]
 
+{ #category : 'private' }
+StMessageBrowser class >> referencesOf: aSymbol [
+	"Do not use aSymbol implementors because it is a disguised global"
+	
+	^ SystemNavigation new allReferencesTo: aSymbol 
+]
+
 { #category : 'tool registration' }
 StMessageBrowser class >> registerToolsOn: registry [
 
 	"Add ourselves to registry. See [Smalltalk tools]" 
 	registry register: self as: #messageList
+]
+
+{ #category : 'private' }
+StMessageBrowser class >> sendersOf: aSymbol [
+	"Do not use aSymbol senders because it is a disguised global"
+
+	^ SystemNavigation default allSendersOf: aSymbol
+	
 ]
 
 { #category : 'icons' }
@@ -540,12 +581,22 @@ StMessageBrowser >> selectedMethod [
 ]
 
 { #category : 'api' }
+StMessageBrowser >> setRefreshingBlockForClassReferencesOf: aString [
+	
+	self refreshingBlock: [ :method | 
+		method accessesRef: (self class environment at: aString asSymbol) ]
+]
+
+{ #category : 'api' }
 StMessageBrowser >> setRefreshingBlockForImplementorsOf: aSelector [
+
 	self refreshingBlock: [ :message | message selector = aSelector ]
 ]
 
 { #category : 'api' }
 StMessageBrowser >> setRefreshingBlockForSendersOf: aSelector [
+	"Refresh the list of senders taking into account the selectors that are not stored in the literal frame."
+	
 	| specialIndex |
 	specialIndex := Smalltalk specialSelectorIndexOrNil: aSelector.
 	self refreshingBlock: [:method | 
