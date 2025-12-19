@@ -50,7 +50,7 @@ StMissingMethodNode >> messageSendNodes [
 
 { #category : 'api' }
 StMissingMethodNode >> methodImplementationNodes [
-	^ (self content implementors collect:
+	^ ((self class implementorsOf: content) collect:
 		[ :method |
 		StMethodImplementationNode new
 			content: method;
