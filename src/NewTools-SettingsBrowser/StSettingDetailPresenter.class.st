@@ -46,7 +46,7 @@ StSettingDetailPresenter >> newSettingCardPresenter: aNode children: aCollection
 				yourself);
 			yourself).
 		"now all settings"
-		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode | 
+		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
 			| presenter |
 			presenter := eachNode asPresenterOn: self.
 			newSettingPresenter layout add: presenter ] ].

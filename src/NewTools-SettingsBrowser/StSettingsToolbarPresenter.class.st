@@ -7,8 +7,7 @@ Class {
 	#name : 'StSettingsToolbarPresenter',
 	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
-		'searchInputPresenter',
-		'searchButtonPresenter'
+		'searchInputPresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -20,10 +19,6 @@ StSettingsToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight 
 		add: searchInputPresenter;
-		add: searchButtonPresenter withConstraints: [ : constraints | 
-			constraints 
-				expand: false;
-				width: 30 ]
 		yourself
 ]
 
@@ -47,12 +42,7 @@ StSettingsToolbarPresenter >> doSettingSearch: aString [
 StSettingsToolbarPresenter >> initializePresenters [
 
 	searchInputPresenter := self newSearchInput
-		                        placeholder: 'Find in settings';
-		                        whenTextChangedDo: [ :aString | self doSettingSearch: aString trimBoth ];
-		                        yourself.
-	searchButtonPresenter := self newButton
-		                         iconName: #smallFind;
-		                         disable;
-		                         action: [ self doSettingSearch: searchInputPresenter text trimmed ];
-		                         yourself
+        placeholder: 'Find in settings';
+        whenTextChangedDo: [ :aString | self doSettingSearch: aString trimBoth ];
+        yourself
 ]
