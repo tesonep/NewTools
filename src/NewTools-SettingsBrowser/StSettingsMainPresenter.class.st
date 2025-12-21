@@ -14,7 +14,6 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
-		'mainCategoriesPresenter',
 		'buttonBarPresenter',
 		'exporter',
 		'categoriesPresenter'
@@ -66,7 +65,6 @@ StSettingsMainPresenter >> defaultInputPort [
 StSettingsMainPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
-		spacing: 5;
 		add: (SpPanedLayout newHorizontal
 			positionOfSlider: 250;
 			add: (SpBoxLayout newTopToBottom
@@ -75,14 +73,8 @@ StSettingsMainPresenter >> defaultLayout [
 				yourself);
 			add: detailsPresenter;
 			yourself);
-		  add: buttonBarPresenter expand: false;
-		  yourself
-]
-
-{ #category : 'transmission' }
-StSettingsMainPresenter >> defaultOutputPort [ 
-
-	^ mainCategoriesPresenter
+		add: buttonBarPresenter expand: false;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -125,27 +117,23 @@ StSettingsMainPresenter >> initialize [
 StSettingsMainPresenter >> initializeButtonBar [
 
 	buttonBarPresenter := self newPresenter
+		addStyle: 'settingBrowserButtonBar';
 		layout: (SpBoxLayout newLeftToRight
 			hAlignEnd;
 			vAlignCenter;
 			add: (self newButton
 				addStyle: 'large';
-				icon: (self iconNamed: #openFromUrl);
+				"icon: (self iconNamed: #openFromUrl);"
 				label: 'Load';
 				help: 'Load settings from a file';
 				action: [ self loadSettings ];
 				enabled: self settingsTree hasSettingsFile;
 				yourself);
 			add: (self newButton
-				icon: (self application iconNamed: #save);
+				"icon: (self application iconNamed: #save);"
 				label: 'Export';
 				help: 'Save settings into a file';
 				action: [ self exportSettings ];
-				yourself);
-			add: (self newButton
-				icon: (self iconNamed: #cancel);
-				action: [ self delete ];
-				label: 'Cancel';
 				yourself);
 			yourself);
 		yourself
@@ -156,15 +144,15 @@ StSettingsMainPresenter >> initializeFocus [
 
 	self focusOrder 
 		add: toolbarPresenter;
-		add: mainCategoriesPresenter;
+		add: categoriesPresenter;
 		add: detailsPresenter
 ]
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> initializePresenters [
+	self addStyle: 'stSettingsBrowser'.
 
 	toolbarPresenter := self instantiate: StSettingsToolbarPresenter on: self.
-	mainCategoriesPresenter := self instantiate: StSettingsCategoriesPresenter on: self.
 	
 	categoriesPresenter := self newEasyTreeListView
 		display: [ :aNode | aNode label ];
@@ -177,7 +165,7 @@ StSettingsMainPresenter >> initializePresenters [
 	detailsPresenter := self instantiate: StSettingDetailPresenter.
 	
 	self initializeButtonBar.
-	self initializeFocus.
+	self initializeFocus
 ]
 
 { #category : 'loading' }
