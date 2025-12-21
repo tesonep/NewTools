@@ -16,15 +16,16 @@ Class {
 
 { #category : 'initialization' }
 StSettingMultipleDropListPresenterItem >> initializePresenters [ 
-
 	| modelDefault |
 
 	modelDefault := self model default.
 	modelDefault color
 		ifNil: [ modelDefault color: Color transparent ].
-	colorSettingItemPresenter := modelDefault color asSettingPresenter: model.
+	colorSettingItemPresenter := modelDefault color 
+		asSettingPresenter: model
+		owner: self.
 
-	setterPresenter := self newDropList 
+	setterPresenter := self newDropDown 
 		items: #(#bold #italic #normal 'bold italic' );
 		selectItem: modelDefault emphasis;		
 		yourself.

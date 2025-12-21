@@ -9,7 +9,7 @@ Class {
 { #category : 'initialization' }
 StSettingDropListPresenterItem >> initializePresenters [ 
 
-	setterPresenter := self newDropList
+	setterPresenter := self newDropDown
 		items: self model domainValues;
 		display: [ : item | item asString ];
 		selectIndex: self model index;

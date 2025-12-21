@@ -1,8 +1,10 @@
 Extension { #name : 'PragmaSetting' }
 
 { #category : '*NewTools-SettingsBrowser' }
-PragmaSetting >> asSettingPresenter [
-	"Answer an appropriate <SpPresenter> for the receiver"
+PragmaSetting >> asSettingPresenterWithOwner: aPresenter [
+	"Answer an appropriate <SpPresenter> container for the receiver's value"
 
-	^ self label asPresenter
+	^ aPresenter newLabel 
+		label: self label;
+		yourself
 ]

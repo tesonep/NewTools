@@ -47,12 +47,12 @@ StSettingsToolbarPresenter >> doSettingSearch: aString [
 StSettingsToolbarPresenter >> initializePresenters [
 
 	searchInputPresenter := self newSearchInput
-		placeholder: 'Find in settings';
-		whenTextChangedDo: [ : aString | self doSettingSearch: aString trimmed ];
-		yourself.
+		                        placeholder: 'Find in settings';
+		                        whenTextChangedDo: [ :aString | self doSettingSearch: aString trimBoth ];
+		                        yourself.
 	searchButtonPresenter := self newButton
-		iconName: #smallFind;	
-		disable;			
-		action: [ self doSettingSearch: searchInputPresenter text trimmed ];
-		yourself.
+		                         iconName: #smallFind;
+		                         disable;
+		                         action: [ self doSettingSearch: searchInputPresenter text trimmed ];
+		                         yourself
 ]

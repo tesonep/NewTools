@@ -10,13 +10,14 @@ The class side holds application assets (icons and styles) and initializers for 
 "
 Class {
 	#name : 'StSettingsMainPresenter',
-	#superclass : 'StSettingsAbstractPresenter',
+	#superclass : 'StPresenter',
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
 		'mainCategoriesPresenter',
 		'buttonBarPresenter',
-		'exporter'
+		'exporter',
+		'categoriesPresenter'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -27,12 +28,6 @@ Class {
 StSettingsMainPresenter class >> defaultPreferredExtent [
 
 	 ^ 1200 @ 700
-]
-
-{ #category : 'adding' }
-StSettingsMainPresenter class >> descriptionBackgroundColor [
-
-	^ Smalltalk ui theme lightBackgroundColor asHexString
 ]
 
 { #category : 'world menu' }
@@ -48,59 +43,19 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 		order: 3
 ]
 
-{ #category : 'accessing - styles' }
-StSettingsMainPresenter class >> styleSheet [
-
-	^ SpStyle defaultStyleSheet , 
-	    (SpStyleVariableSTONReader fromString: self styleSheetString)
-
-]
-
-{ #category : 'accessing - styles' }
-StSettingsMainPresenter class >> styleSheetString [
-
-	^ '.application [
-    .superCategoryList [ Geometry { #height: 70 } ],
-	.pageTitle [ 
-		Font { #name : EnvironmentFont(#default), #size : 20 },
-		Geometry { #height: 15 } ],
-	.pageStyle [ 
-		Draw { #backgroundColor: #transparent },
-		Container { #padding: 2 } ],
-	.sectionTitleL1 [ 
-		Draw { #backgroundColor: #gray },
-		Font { #size: 16 } ],
-	.sectionTitleL2 [ 
-		Draw { #backgroundColor: #lightGray },
-		Font { #size: 14 } ],
-	.sectionTitleL3 [ 
-		Draw { #backgroundColor: #veryLightGray },
-		Font { #size: 12 } ],
-	.sectionTitleL4 [ 
-		Draw { #backgroundColor: #veryVeryLightGray },
-		Font { #size: 10 } ],
-	.sectionStyle [ 
-		Draw { #backgroundColor: #transparent }
-	 ],
-	.settingDocTitle [ 
-		Draw { #backgroundColor: #veryVeryLightGray } ], 
-	.settingItemStyle [ 
-		Container { #borderWidth: 5 } ],
-	.descriptionStyle [ 
-		Draw { #backgroundColor: #' , self descriptionBackgroundColor , ' } ]
-]'.
-]
-
 { #category : 'initialization' }
 StSettingsMainPresenter >> connectPresenters [ 
 
-	mainCategoriesPresenter 
+	"mainCategoriesPresenter 
 		transmitTo: detailsPresenter
 		transform: [ : aCategoryItemPresenter | aCategoryItemPresenter node ]
-		postTransmission: [ : selectedPage | selectedPage selectFirstPage  ]
+		postTransmission: [ : selectedPage | selectedPage selectFirstPage  ]"
+		
+		
+	categoriesPresenter transmitTo: detailsPresenter
 ]
 
-{ #category : 'layout' }
+{ #category : 'transmission' }
 StSettingsMainPresenter >> defaultInputPort [ 
 
 	^ SpListItemsPort newPresenter: detailsPresenter
@@ -112,21 +67,19 @@ StSettingsMainPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		spacing: 5;
-		  add: (SpPanedLayout newHorizontal
-				   positionOfSlider: 0.2;
-				   add: (SpBoxLayout newTopToBottom
-						    add: toolbarPresenter withConstraints: [ :constraints |
-							    constraints
-								    height: self class toolbarHeight + 10;
-								    padding: 5 ];
-						    add: mainCategoriesPresenter;
-						    yourself);
-				   add: detailsPresenter);
+		add: (SpPanedLayout newHorizontal
+			positionOfSlider: 250;
+			add: (SpBoxLayout newTopToBottom
+				add: toolbarPresenter expand: false;
+				add: categoriesPresenter;
+				yourself);
+			add: detailsPresenter;
+			yourself);
 		  add: buttonBarPresenter expand: false;
 		  yourself
 ]
 
-{ #category : 'ports' }
+{ #category : 'transmission' }
 StSettingsMainPresenter >> defaultOutputPort [ 
 
 	^ mainCategoriesPresenter
@@ -164,37 +117,38 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 { #category : 'initialization' }
 StSettingsMainPresenter >> initialize [
 
-	self currentApplication
-		propertyAt: #settingsTree ifAbsentPut: [ StSettingsTree new ];
-		styleSheet: self class styleSheet.
-  super initialize.
-	exporter := StSettingsExporter new.
+	super initialize.
+	exporter := StSettingsExporter new
 ]
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> initializeButtonBar [
 
-	buttonBarPresenter := self newButtonBar
-		placeAtEnd;
-		add: (self newButton
-			addStyle: 'large';
-			icon: (self iconNamed: #openFromUrl);
-			label: 'Load';
-			help: 'Load settings from a file';
-			action: [ self loadSettings ];
-			enabled: self settingsTree hasSettingsFile;
+	buttonBarPresenter := self newPresenter
+		layout: (SpBoxLayout newLeftToRight
+			hAlignEnd;
+			vAlignCenter;
+			add: (self newButton
+				addStyle: 'large';
+				icon: (self iconNamed: #openFromUrl);
+				label: 'Load';
+				help: 'Load settings from a file';
+				action: [ self loadSettings ];
+				enabled: self settingsTree hasSettingsFile;
+				yourself);
+			add: (self newButton
+				icon: (self application iconNamed: #save);
+				label: 'Export';
+				help: 'Save settings into a file';
+				action: [ self exportSettings ];
+				yourself);
+			add: (self newButton
+				icon: (self iconNamed: #cancel);
+				action: [ self delete ];
+				label: 'Cancel';
+				yourself);
 			yourself);
-		add: (self newButton
-			icon: (self application iconNamed: #save);
-			label: 'Export';
-			help: 'Save settings into a file';
-			action: [ self exportSettings ];
-			yourself);
-		add: (self newButton
-			icon: (self iconNamed: #cancel);
-			action: [ self delete ];
-			label: 'Cancel';
-			yourself).
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -211,9 +165,18 @@ StSettingsMainPresenter >> initializePresenters [
 
 	toolbarPresenter := self instantiate: StSettingsToolbarPresenter on: self.
 	mainCategoriesPresenter := self instantiate: StSettingsCategoriesPresenter on: self.
-	detailsPresenter := self instantiate: StSettingsDetailsPresenter on: self.
+	
+	categoriesPresenter := self newEasyTreeListView
+		display: [ :aNode | aNode label ];
+		children: [ :aNode | 
+			(aNode level < 2) 
+				ifTrue: [ self sortNodes: (aNode allChildren select: [ :each | each hasChildren ]) ]
+				ifFalse: [ #() ] ];
+		yourself.
+	
+	detailsPresenter := self instantiate: StSettingDetailPresenter.
+	
 	self initializeButtonBar.
-
 	self initializeFocus.
 ]
 
@@ -253,6 +216,29 @@ StSettingsMainPresenter >> selectDialog: fileReferneces [
 		displayIcon: [ :each | self iconNamed: each systemIconName ];
 		openModal.
 
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> settingsTree [
+	"Answer the receiver's <StSettingsTree>, the settings model"
+
+	^ self application 
+		propertyAt: #settingsTree
+		ifAbsentPut: [ StSettingsTree new ]
+]
+
+{ #category : 'private' }
+StSettingsMainPresenter >> sortNodes: aCollection [ 
+
+	^ aCollection sorted: #order ascending, #label ascending
+]
+
+{ #category : 'initialization' }
+StSettingsMainPresenter >> updatePresenter [
+
+	categoriesPresenter 
+		roots: (self sortNodes: self settingsTree treeRoots);
+		expandRoots
 ]
 
 { #category : 'initialization' }
