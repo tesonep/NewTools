@@ -202,7 +202,7 @@ StDebuggerContextTest >> testFailingAssertionNodes [
 StDebuggerContextTest >> testNoDuplicatesBetweenArgsAndTemps [
 	|nodes nodesNamesArray nodesNamesSet|
 	debuggerContext context: self contextWithArgs.
-	nodes := debuggerContext allInspectorNodes.	
+	nodes := debuggerContext allModelInspectorNodes.	
 	nodesNamesArray := (nodes collect:[:n| n key]) asSortedCollection.
 	nodesNamesSet := nodesNamesArray asSet asSortedCollection.
 	self assertCollection: nodesNamesArray equals: nodesNamesSet

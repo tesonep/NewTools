@@ -33,7 +33,7 @@ StRawInspectionPresenter >> beForDebugger [
 	self addValuesColumn.	
 
 	attributeTable
-		roots: self inspectorNodes;
+		roots: self modelInspectorNodes;
 		children: [ :node | #() ]
 ]
 

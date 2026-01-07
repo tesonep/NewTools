@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'accessing' }
-StSindarinBytecodeContextInspectorModel >> allInspectorNodes [
+StSindarinBytecodeContextInspectorModel >> allModelInspectorNodes [
 	| tempNodes slotNodes stackTopNode |
 	tempNodes := self contextTempNodes.
 	slotNodes := self contextReceiverSlotNodes.
