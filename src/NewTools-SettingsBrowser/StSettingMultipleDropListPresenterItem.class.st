@@ -25,7 +25,7 @@ StSettingMultipleDropListPresenterItem >> initializePresenters [
 		asSettingPresenter: model
 		owner: self.
 
-	setterPresenter := self newDropDown 
+	setterPresenter := self newDropList 
 		items: #(#bold #italic #normal 'bold italic' );
 		selectItem: modelDefault emphasis;		
 		yourself.

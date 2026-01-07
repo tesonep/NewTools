@@ -27,34 +27,6 @@ StSettingDetailPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-StSettingDetailPresenter >> newSettingCardPresenter: aNode children: aCollection [
-	| newSettingPresenter |
-
-	newSettingPresenter := self newPresenter 
-		addStyle: 'settingPanel';
-		layout: (SpBoxLayout newTopToBottom
-			vAlignStart;
-			yourself);
-		yourself.
-		
-	aCollection ifNotEmpty: [
-		"Add a header"
-		newSettingPresenter layout add: (self newPresenter
-			addStyle: 'header';
-			layout: (SpBoxLayout newHorizontal 
-				add: aNode label capitalized;
-				yourself);
-			yourself).
-		"now all settings"
-		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
-			| presenter |
-			presenter := eachNode asPresenterOn: self.
-			newSettingPresenter layout add: presenter ] ].
-	
-	^ newSettingPresenter
-]
-
-{ #category : 'initialization' }
 StSettingDetailPresenter >> newSettingPresenter: aNode [
 	
 	^ self newSettingPresenter: aNode children: aNode allChildren
@@ -76,15 +48,48 @@ StSettingDetailPresenter >> newSettingPresenter: aNode children: children [
 					vAlignStart;
 					in: [ :this | 
 						general ifNotEmpty: [
-							this add: (self newSettingCardPresenter: self model children: general) ].
+							this add: (self newSettingSectionPresenter: self model children: general) ].
 						groups do: [ :each | 
 							"recursive, because we don't know :P"
 							this add: (self newSettingPresenter: each) ] ];
 					yourself);
 				yourself ]
 		ifFalse: [
-			self newSettingCardPresenter: aNode children: general ].
+			self newSettingSectionPresenter: aNode children: general ].
 
+	^ newSettingPresenter
+]
+
+{ #category : 'Protocol (initialization) - 5 selector(s)' }
+StSettingDetailPresenter >> newSettingSectionPresenter: aNode children: aCollection [
+	| newSettingPresenter |
+
+	newSettingPresenter := self newPresenter 
+		addStyle: 'settingPanel';
+		layout: (SpBoxLayout newTopToBottom
+			vAlignStart;
+			yourself);
+		yourself.
+		
+	self haltIf: (aNode label beginsWith: 'Syntax Highlig'). 
+		
+	aCollection ifNotEmpty: [
+		"Add a header"
+		newSettingPresenter layout add: (self newPresenter
+			addStyle: 'header';
+			layout: (SpBoxLayout newHorizontal 
+				add: (newSettingPresenter newLabel 
+					label: aNode label capitalized;
+					yourself);
+				yourself);
+			yourself).
+		"now all settings"
+		newSettingPresenter layout add: (aNode asPresenterOn: self).
+		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
+			| presenter |
+			presenter := eachNode asPresenterOn: self.
+			newSettingPresenter layout add: presenter ] ].
+	
 	^ newSettingPresenter
 ]
 

@@ -44,13 +44,6 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> connectPresenters [ 
-
-	"mainCategoriesPresenter 
-		transmitTo: detailsPresenter
-		transform: [ : aCategoryItemPresenter | aCategoryItemPresenter node ]
-		postTransmission: [ : selectedPage | selectedPage selectFirstPage  ]"
-		
-		
 	categoriesPresenter transmitTo: detailsPresenter
 ]
 
@@ -65,6 +58,7 @@ StSettingsMainPresenter >> defaultInputPort [
 StSettingsMainPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
+		add: buttonBarPresenter expand: false;
 		add: (SpPanedLayout newHorizontal
 			positionOfSlider: 250;
 			add: (SpBoxLayout newTopToBottom
@@ -73,7 +67,6 @@ StSettingsMainPresenter >> defaultLayout [
 				yourself);
 			add: detailsPresenter;
 			yourself);
-		add: buttonBarPresenter expand: false;
 		yourself
 ]
 
@@ -116,25 +109,21 @@ StSettingsMainPresenter >> initialize [
 { #category : 'initialization' }
 StSettingsMainPresenter >> initializeButtonBar [
 
-	buttonBarPresenter := self newPresenter
-		addStyle: 'settingBrowserButtonBar';
-		layout: (SpBoxLayout newLeftToRight
-			hAlignEnd;
-			vAlignCenter;
-			add: (self newButton
-				addStyle: 'large';
-				"icon: (self iconNamed: #openFromUrl);"
-				label: 'Load';
-				help: 'Load settings from a file';
-				action: [ self loadSettings ];
-				enabled: self settingsTree hasSettingsFile;
-				yourself);
-			add: (self newButton
-				"icon: (self application iconNamed: #save);"
-				label: 'Export';
-				help: 'Save settings into a file';
-				action: [ self exportSettings ];
-				yourself);
+	buttonBarPresenter := self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		add: (self newToolbarButton
+			addStyle: 'large';
+			icon: (self iconNamed: #openFromUrl);
+			label: 'Load';
+			help: 'Load settings from a file';
+			action: [ self loadSettings ];
+			enabled: self settingsTree hasSettingsFile;
+			yourself);
+		add: (self newToolbarButton
+			icon: (self application iconNamed: #save);
+			label: 'Export';
+			help: 'Save settings into a file';
+			action: [ self exportSettings ];
 			yourself);
 		yourself
 ]
@@ -150,6 +139,7 @@ StSettingsMainPresenter >> initializeFocus [
 
 { #category : 'initialization' }
 StSettingsMainPresenter >> initializePresenters [
+
 	self addStyle: 'stSettingsBrowser'.
 
 	toolbarPresenter := self instantiate: StSettingsToolbarPresenter on: self.
@@ -157,6 +147,7 @@ StSettingsMainPresenter >> initializePresenters [
 	categoriesPresenter := self newEasyTreeListView
 		display: [ :aNode | aNode label ];
 		children: [ :aNode | 
+			"show just two levels as this is annoying otherwise"
 			(aNode level < 2) 
 				ifTrue: [ self sortNodes: (aNode allChildren select: [ :each | each hasChildren ]) ]
 				ifFalse: [ #() ] ];
@@ -196,14 +187,13 @@ StSettingsMainPresenter >> pagePresenter [
 { #category : 'execution' }
 StSettingsMainPresenter >> selectDialog: fileReferneces [
 
-	^ SpSelectDialog new 
-		title: 'Settings Browser Selector';
-		label: 'Select a Stored Settings File';
-		items: fileReferneces;
-		display: [ :each | each basename ];
-		displayIcon: [ :each | self iconNamed: each systemIconName ];
-		openModal.
-
+	^ SpSelectDialog new
+		  title: 'Settings Browser Selector';
+		  message: 'Select a Stored Settings File';
+		  items: fileReferneces;
+		  display: [ :each | each basename ];
+		  displayIcon: [ :each | self iconNamed: each systemIconName ];
+		  openModal
 ]
 
 { #category : 'accessing' }
