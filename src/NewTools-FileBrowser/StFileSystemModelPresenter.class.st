@@ -8,7 +8,7 @@ It provides the following file system services to UI:
 - Bookmarks
 "
 Class {
-	#name : 'StFileSystemModel',
+	#name : 'StFileSystemModelPresenter',
 	#superclass : 'StPresenter',
 	#instVars : [
 		'currentDirectory',
@@ -24,14 +24,14 @@ Class {
 }
 
 { #category : 'adding' }
-StFileSystemModel class >> addBookmarkNamed: aString location: aLocation iconName: aName [
+StFileSystemModelPresenter class >> addBookmarkNamed: aString location: aLocation iconName: aName [
 	"Example: `StFileSystemModel addBookmarkNamed: 'pharo' location: FileLocator preferences / 'pharo' iconName: #git`"
 
 	self bookmarks anyOne addBookmark: (StFileBrowserBookmark name: aString location: aLocation icon: (self iconNamed: aName))
 ]
 
 { #category : 'accessing - bookmarks' }
-StFileSystemModel class >> bookmarks [
+StFileSystemModelPresenter class >> bookmarks [
 
 	^ Bookmarks ifNil: [
 			  self initializeBookmarks.
@@ -39,14 +39,14 @@ StFileSystemModel class >> bookmarks [
 ]
 
 { #category : 'defaults' }
-StFileSystemModel class >> defaultDirectory [
+StFileSystemModelPresenter class >> defaultDirectory [
 	"Answer a <FileReference> with the default directory for opening the file browser and dialogs"
 
 	^ StFileBrowserSettings defaultDirectory.
 ]
 
 { #category : 'initialization' }
-StFileSystemModel class >> initializeBookmarks [
+StFileSystemModelPresenter class >> initializeBookmarks [
 	"Set the initial <Collection> of receiver's bookmarks"
 
 	<script>
@@ -54,7 +54,7 @@ StFileSystemModel class >> initializeBookmarks [
 ]
 
 { #category : 'defaults' }
-StFileSystemModel class >> lastVisitedDirectory [
+StFileSystemModelPresenter class >> lastVisitedDirectory [
 	"Answer a <FileLocator> representing the last visited location"
 
 	(LastVisitedDirectory isNotNil and: [ 
@@ -66,7 +66,7 @@ StFileSystemModel class >> lastVisitedDirectory [
 ]
 
 { #category : 'adding' }
-StFileSystemModel >> addBookmark: aFileReference [ 
+StFileSystemModelPresenter >> addBookmark: aFileReference [ 
 	"Add aFileRefefence to the global receiver's bookmarks"
 
 	self bookmarks add: (StFileBrowserBookmark 
@@ -76,28 +76,28 @@ StFileSystemModel >> addBookmark: aFileReference [
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> bookmarks [
+StFileSystemModelPresenter >> bookmarks [
 	"Answer the receiver's <Collection> of bookmarks, each one an instance of a subclass of <StFileBrowserAbstractBookMark>"
 
 	^ self class bookmarks
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> bookmarks: aCollectionOfGroupBookMark [
+StFileSystemModelPresenter >> bookmarks: aCollectionOfGroupBookMark [
 	"Set the receiver's global bookmarks to aCollectionOfGroupBookMark"
 
 	Bookmarks := aCollectionOfGroupBookMark ifNotNil: [ aCollectionOfGroupBookMark asOrderedCollection ]
 ]
 
 { #category : 'utilities' }
-StFileSystemModel >> createDirectory [
+StFileSystemModelPresenter >> createDirectory [
 	"Create a directory with a default name"
 
 	^ self createDirectory: 'new-folder'
 ]
 
 { #category : 'utilities' }
-StFileSystemModel >> createDirectory: initialName [
+StFileSystemModelPresenter >> createDirectory: initialName [
 	"Create a directory named initialName <String>"
 
 	| name path |
@@ -117,13 +117,13 @@ StFileSystemModel >> createDirectory: initialName [
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> currentDirectory [
+StFileSystemModelPresenter >> currentDirectory [
 
 	^ currentDirectory
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> currentDirectory: aFileReference [
+StFileSystemModelPresenter >> currentDirectory: aFileReference [
 
 	(aFileReference exists and: [ aFileReference isDirectory ]) 
 		ifFalse: [ DirectoryDoesNotExist signalWith: aFileReference ].
@@ -132,22 +132,22 @@ StFileSystemModel >> currentDirectory: aFileReference [
 ]
 
 { #category : 'defaults' }
-StFileSystemModel >> defaultDirectory [
+StFileSystemModelPresenter >> defaultDirectory [
 	^ self class defaultDirectory
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> history [
+StFileSystemModelPresenter >> history [
 	^ history
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> history: aConfigurableHistoryIterator [ 
+StFileSystemModelPresenter >> history: aConfigurableHistoryIterator [ 
 	history := aConfigurableHistoryIterator
 ]
 
 { #category : 'initialization' }
-StFileSystemModel >> initialize [
+StFileSystemModelPresenter >> initialize [
 	"Private - Initialize the receiver using stored settings"
 
 	super initialize.
@@ -156,20 +156,20 @@ StFileSystemModel >> initialize [
 ]
 
 { #category : 'accessing' }
-StFileSystemModel >> lastVisitedDirectory [
+StFileSystemModelPresenter >> lastVisitedDirectory [
 	"Answer the <FileReference> of the last visited directory"
 
 	^ self class lastVisitedDirectory.
 ]
 
 { #category : 'utilities' }
-StFileSystemModel >> openFolder: aFileReference [
+StFileSystemModelPresenter >> openFolder: aFileReference [
 
 	self history register: self currentDirectory.
 ]
 
 { #category : 'utilities' }
-StFileSystemModel >> requestUserDirectory: initialName [
+StFileSystemModelPresenter >> requestUserDirectory: initialName [
 	"Open a dialog to request a directory from the user"
 
 	| answer |
@@ -183,7 +183,7 @@ StFileSystemModel >> requestUserDirectory: initialName [
 ]
 
 { #category : 'initialization' }
-StFileSystemModel >> resetBookmarks [ 
+StFileSystemModelPresenter >> resetBookmarks [ 
 	"Reset the global bookmarks"
 
 	self bookmarks: nil.
