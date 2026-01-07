@@ -102,13 +102,12 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-ProjectLoader' with: [ spec requires: #( 'NewTools-Core') ] ;
 			package: 'NewTools-ProjectLoader-Microdown';
 	
-			"Object-centric breakpoints"
-			package: 'NewTools-ObjectCentricBreakpoints'  with: [ spec requires: #( 'NewTools-Inspector') ] ;
 	
 			"Sindarin"
 			package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
+			package: 'NewTools-Sindarin-Scripts' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
 	
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
@@ -134,6 +133,10 @@ BaselineOfNewTools >> baseline: spec [
 			
 			"Profiler"
 			package: 'NewTools-ProfilerUI'  with: [ spec requires: #('NewTools-Core' 'NewTools-SpTextPresenterDecorators') ];
+			
+			"Epicea"
+			package: 'NewTools-Epicea' with: [ spec requires: #('NewTools-Core')  ];
+			package: 'NewTools-Epicea-Tests' with: [ spec requires: #('NewTools-Epicea')  ];
 			
 			"Scopes Editor"
 			package: 'NewTools-Scopes';
@@ -194,7 +197,6 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger'
 
 						'NewTools-Debugger-Morphic'
-				    	'NewTools-ObjectCentricBreakpoints'
 				    	'NewTools-Sindarin-Tools' 
 
 					 	'NewTools-Sindarin-Commands'
@@ -270,32 +272,14 @@ BaselineOfNewTools >> baseline: spec [
 			group: 'ColorPickerGroup' with: #('ColorPicker' 'ColorPicker-Tests');
 			group: 'ProcessBrowser' with: #('NewTools-ProcessBrowser');
 			group: 'DependencyAnalyser' with: #('NewTools-DependencyAnalyser-UI' 'NewTools-DependencyAnalyser-Tests');
+			group: 'Epicea' with: #( 'NewTools-Epicea' 'NewTools-Epicea-Tests' );
 			
 
-			group: 'default' with: #( 
-			         'Profile'
-						'Playground'
-						'ProfStef'
-						'Transcript'
-						'Inspector' 
-						'ClosedWindows'
-						'CritiqueBrowser' 
-						'Debugger'
-				   		'SystemReporter' 
-						'FontChooser' 
-						'Methods'
-				   		'Spotter'
-		            	'RewriterTools'
-						'ScopesEditor'
-						'FileBrowser'
-						'Finder'
-						'Profiler'
-						'SettingsBrowser'
-						'WelcomeBrowser'
-						'ShortcutsBrowser'
-						'ColorPickerGroup'
-						'ProcessBrowser'
-						'DependencyAnalyser' ) ]
+			group: 'default'
+				with:
+					#( 'Profile' 'Epicea' 'Playground' 'ProfStef' 'Transcript' 'Inspector' 'ClosedWindows' 'CritiqueBrowser' 'Debugger' 'SystemReporter' 'FontChooser'
+					   'Methods' 'Spotter' 'RewriterTools' 'ScopesEditor' 'FileBrowser' 'Finder' 'Profiler' 'SettingsBrowser' 'WelcomeBrowser' 'ShortcutsBrowser'
+					   'ColorPickerGroup' 'ProcessBrowser' 'DependencyAnalyser' )  ]
 ]
 
 { #category : 'external projects' }
@@ -314,7 +298,7 @@ BaselineOfNewTools >> graphAlgorithms: spec [
 	spec
 		baseline: 'AIGraphAlgorithms'
 		with: [
-		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.7/src' ]
+		spec repository: 'github://pharo-ai/graph-algorithms:v1.2.10/src' ]
 ]
 
 { #category : 'actions' }
