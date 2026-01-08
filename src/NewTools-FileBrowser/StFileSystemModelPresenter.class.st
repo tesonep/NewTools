@@ -46,6 +46,12 @@ StFileSystemModelPresenter class >> defaultDirectory [
 ]
 
 { #category : 'initialization' }
+StFileSystemModelPresenter class >> initialize [ 
+
+	self deprecatedAliases: #( StFileSystemModel )
+]
+
+{ #category : 'initialization' }
 StFileSystemModelPresenter class >> initializeBookmarks [
 	"Set the initial <Collection> of receiver's bookmarks"
 
