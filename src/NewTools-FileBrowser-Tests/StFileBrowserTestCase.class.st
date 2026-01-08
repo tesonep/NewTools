@@ -36,7 +36,7 @@ StFileBrowserTestCase >> inspectRoot [
 StFileBrowserTestCase >> setUp [
 
 	super setUp.
-	fileSystemModel := StFileSystemModelPresenter new.
+	fileSystemModel := StFileSystemModel new.
 	fileSystemPresenter := StFileSystemPresenter on: fileSystemModel.
 	root := StFileSystemResource current root
 ]

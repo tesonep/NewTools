@@ -93,7 +93,7 @@ StFileDialogPresenter class >> chooseThenDo: aBlock [
 	"Return selected item immediately (blocking/modal). Returns nil if no valid item selected"
 
 	<example>
-	^ (self on: StFileSystemModelPresenter new)
+	^ (self on: StFileSystemModel new)
 		  okAction: aBlock;
 		  open
 ]

@@ -22,7 +22,7 @@ StFileBrowserOpenTerminalCommandTest >> terminalShellCommandTest: aBlock withPat
 	| command |
 	command := aBlock
 		           value: (StFileBrowserOpenTerminalCommand forContext:
-				            StFileSystemModelPresenter new)
+				            StFileSystemModel new)
 		           value: aPath.
 	self assert: (command includesSubstring: 'dev').
 	self assert: (command includesSubstring: 'null').

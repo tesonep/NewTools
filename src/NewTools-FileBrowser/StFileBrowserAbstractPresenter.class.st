@@ -15,7 +15,7 @@ Class {
 { #category : 'instance creation' }
 StFileBrowserAbstractPresenter class >> defaultModel [
 
-	^ StFileSystemModelPresenter new
+	^ StFileSystemModel new
 ]
 
 { #category : 'world menu' }

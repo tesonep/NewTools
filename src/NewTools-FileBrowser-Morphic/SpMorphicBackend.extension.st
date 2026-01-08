@@ -4,7 +4,7 @@ Extension { #name : 'SpMorphicBackend' }
 SpMorphicBackend >> executeOpenDirectoryDialog: aFileDialog [
 
 	^ StOpenDirectoryPresenter new
-		defaultFolder: (aFileDialog path ifNil: [ StFileSystemModelPresenter defaultDirectory ]);
+		defaultFolder: (aFileDialog path ifNil: [ StFileSystemModel defaultDirectory ]);
 		title: (aFileDialog title ifNil: [ 'Choose Directory' translated ]);
 		openModal;
 		selectedEntry
