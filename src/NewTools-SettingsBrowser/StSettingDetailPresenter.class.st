@@ -71,20 +71,15 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode children: aCollect
 			yourself);
 		yourself.
 		
-	self haltIf: (aNode label beginsWith: 'Syntax Highlig'). 
-		
 	aCollection ifNotEmpty: [
 		"Add a header"
 		newSettingPresenter layout add: (self newPresenter
 			addStyle: 'header';
 			layout: (SpBoxLayout newHorizontal 
-				add: (newSettingPresenter newLabel 
-					label: aNode label capitalized;
-					yourself);
+				add: (aNode asPresenterOn: self);
 				yourself);
 			yourself).
 		"now all settings"
-		newSettingPresenter layout add: (aNode asPresenterOn: self).
 		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
 			| presenter |
 			presenter := eachNode asPresenterOn: self.

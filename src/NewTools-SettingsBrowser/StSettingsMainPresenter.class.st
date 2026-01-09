@@ -10,7 +10,7 @@ The class side holds application assets (icons and styles) and initializers for 
 "
 Class {
 	#name : 'StSettingsMainPresenter',
-	#superclass : 'StPresenter',
+	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'toolbarPresenter',
 		'detailsPresenter',
