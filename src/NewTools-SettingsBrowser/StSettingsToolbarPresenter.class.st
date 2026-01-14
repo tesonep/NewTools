@@ -24,18 +24,19 @@ StSettingsToolbarPresenter >> defaultLayout [
 
 { #category : 'initialization' }
 StSettingsToolbarPresenter >> doSettingSearch: aString [
-	"Private - Callback to search aString in the receiver's descriptions and label. For performance reasons, start to search from the third character typed "
-
+	"Private - Callback to search aString in the receiver's descriptions and label. 
+	 For performance reasons, start to search from the third character typed "
 	| colOfStSettingNode mainPresenter |
-	aString
-		ifNotEmpty: [ searchButtonPresenter enable ]
-		ifEmpty: [ searchButtonPresenter disable ].
-	aString size >= 3
-		ifFalse: [ ^ self ].
+	
+	mainPresenter := self owner.
+	
+	aString size >= 3 ifFalse: [ 
+		mainPresenter ifNotNil: [
+			mainPresenter resetSearchResult ].
+		^ self ].
 
 	colOfStSettingNode := self settingsTree processSearch: aString.
-	mainPresenter := self owner.
-	mainPresenter pagePresenter addSearchResultTabFrom: colOfStSettingNode.
+	mainPresenter addSearchResultFrom: colOfStSettingNode
 ]
 
 { #category : 'initialization' }

@@ -16,7 +16,8 @@ Class {
 		'detailsPresenter',
 		'buttonBarPresenter',
 		'exporter',
-		'categoriesPresenter'
+		'categoriesPresenter',
+		'searchResult'
 	],
 	#category : 'NewTools-SettingsBrowser-UI',
 	#package : 'NewTools-SettingsBrowser',
@@ -40,6 +41,19 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> addSearchResultFrom: colOfStSettingNode [
+
+	searchResult := colOfStSettingNode.
+	categoriesPresenter roots: colOfStSettingNode asOrderedCollection
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> addSearchResultTabFrom: colOfStSettingNode [
+
+	categoriesPresenter items: colOfStSettingNode asOrderedCollection
 ]
 
 { #category : 'initialization' }
@@ -184,6 +198,21 @@ StSettingsMainPresenter >> pagePresenter [
 	^ detailsPresenter
 ]
 
+{ #category : 'accessing' }
+StSettingsMainPresenter >> resetSearchResult [
+
+	searchResult ifNil: [ ^ self ].
+	
+	searchResult := nil.
+	self updatePresenter
+]
+
+{ #category : 'accessing' }
+StSettingsMainPresenter >> rootItems [
+
+	^ self sortNodes: self settingsTree treeRoots
+]
+
 { #category : 'execution' }
 StSettingsMainPresenter >> selectDialog: fileReferneces [
 
@@ -215,7 +244,7 @@ StSettingsMainPresenter >> sortNodes: aCollection [
 StSettingsMainPresenter >> updatePresenter [
 
 	categoriesPresenter 
-		roots: (self sortNodes: self settingsTree treeRoots);
+		roots: self rootItems;
 		expandRoots
 ]
 
