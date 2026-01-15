@@ -37,7 +37,7 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 	(aBuilder item: #'New Settings Browser')
 		parent: #NewToolsMenu;
 		label: 'New Settings Browser';
-		action: [ (self newApplication: self currentApplication) open ];
+		action: [ (self newApplication: StPharoApplication current) open ];
 		iconName: self taskbarIconName;
 		help: 'New Settings Browser';
 		order: 3
