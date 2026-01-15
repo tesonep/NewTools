@@ -24,8 +24,8 @@ StSettingsToolbarPresenter >> defaultLayout [
 
 { #category : 'initialization' }
 StSettingsToolbarPresenter >> doSettingSearch: aString [
-	"Private - Callback to search aString in the receiver's descriptions and label. 
-	 For performance reasons, start to search from the third character typed "
+	"Callback to search aString in the receiver's descriptions and label. 
+	 For performance reasons, start to search from the third character typed."
 	| colOfStSettingNode mainPresenter |
 	
 	mainPresenter := self owner.
