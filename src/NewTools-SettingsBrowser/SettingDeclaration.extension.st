@@ -21,7 +21,7 @@ SettingDeclaration >> asSettingPresenterWithOwner: aPresenter [
 			self hasValue
 				ifTrue: [ self realValue asSettingPresenter: self owner: aPresenter ]
 				ifFalse: [ self default asSettingPresenter: self owner: aPresenter ] ]
-		ifFalse: [ SpNullPresenter new ]
+		ifFalse: [ SpNullPresenter owner: aPresenter ]
 ]
 
 { #category : '*NewTools-SettingsBrowser' }

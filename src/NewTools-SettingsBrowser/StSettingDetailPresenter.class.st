@@ -74,7 +74,7 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode children: aCollect
 	aCollection ifNotEmpty: [
 		"Add a header"
 		newSettingPresenter layout add: (self newPresenter
-			addStyle: 'header';
+			addStyle: 'settingHeader';
 			layout: (SpBoxLayout newHorizontal 
 				add: (aNode asPresenterOn: self);
 				yourself);
