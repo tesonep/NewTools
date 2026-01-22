@@ -83,7 +83,12 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode children: aCollect
 		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
 			| presenter |
 			presenter := eachNode asPresenterOn: self.
-			newSettingPresenter layout add: presenter ] ].
+			newSettingPresenter layout 
+				add: (SpBoxLayout newLeftToRight
+					borderWidth: 3;
+					add:  presenter;
+					yourself)
+				expand: false ] ].
 	
 	^ newSettingPresenter
 ]
