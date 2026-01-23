@@ -81,12 +81,12 @@ StMethodBrowserTest >> testExplicitBrowseImplementors [
 ]
 
 { #category : 'tests - smoke' }
-StMethodBrowserTest >> testExplicitlyMethodBrowserSenders [
+StMethodBrowserTest >> testExplicitBrowseSenders [
 
 	| window |
 	[
-	window := StMethodBrowser browse: { } asSendersOf: #browseImplementorsOf:.
-	self assert: window presenter methods size equals: 1 ] ensure: [ window ifNotNil: [ window delete ] ]
+		window := StMethodBrowser browse: { (StMethodBrowserTest >> #testMethodBrowserSenders) } asSendersOf: #browseImplementorsOf:.
+		self assert: window presenter methods size equals: 1 ] ensure: [ window ifNotNil: [ window delete ] ]
 ]
 
 { #category : 'tests - smoke' }
