@@ -104,7 +104,7 @@ StMethodBrowser class >> browseImplementorsOf: aSymbol [
 StMethodBrowser class >> browseReferencesOf: aClassName [
 	"Special version that sets the correct refreshing block for senders"
 
-	^ self browse: (self referencesOf: aClassName) asReferencesTo: aClassName
+	^ self browse: (self referencesOf: aClassName) asReferencesToClass: aClassName
 ]
 
 { #category : 'opening' }
