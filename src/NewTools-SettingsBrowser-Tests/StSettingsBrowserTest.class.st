@@ -4,17 +4,17 @@ Class {
 	#instVars : [
 		'categoriesPresenter',
 		'toolbarPresenter',
-		'detailsPresenter'
+		'detailsPresenter',
+		'application'
 	],
 	#category : 'NewTools-SettingsBrowser-Tests',
 	#package : 'NewTools-SettingsBrowser-Tests'
 }
 
 { #category : 'running' }
-StSettingsBrowserTest >> application [
+StSettingsBrowserTest >> application [ 
 
-	^  self classToTest currentApplication
-
+	^ application ifNil: [ application := StPharoApplication new ]
 ]
 
 { #category : 'accessing' }
@@ -29,6 +29,13 @@ StSettingsBrowserTest >> setUp [
 	categoriesPresenter := presenter presenterAt: #mainCategoriesPresenter.
 	toolbarPresenter := presenter presenterAt: #toolbarPresenter.
 	detailsPresenter := presenter presenterAt: #detailsPresenter. 
+]
+
+{ #category : 'running' }
+StSettingsBrowserTest >> tearDown [ 
+
+	application := nil.
+	super tearDown
 ]
 
 { #category : 'tests' }
