@@ -9,7 +9,7 @@ The class side holds application assets (icons and styles) and initializers for 
 
 "
 Class {
-	#name : 'StSettingsMainPresenter',
+	#name : 'StSettingsBrowser',
 	#superclass : 'StSettingsAbstractPresenter',
 	#instVars : [
 		'toolbarPresenter',
@@ -25,13 +25,13 @@ Class {
 }
 
 { #category : 'accessing' }
-StSettingsMainPresenter class >> defaultPreferredExtent [
+StSettingsBrowser class >> defaultPreferredExtent [
 
 	 ^ 1200 @ 700
 ]
 
 { #category : 'world menu' }
-StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
+StSettingsBrowser class >> menuSettingsBrowserCommandOn: aBuilder [
 	<worldMenu>
 
 	(aBuilder item: #'New Settings Browser')
@@ -44,36 +44,38 @@ StSettingsMainPresenter class >> menuSettingsBrowserCommandOn: aBuilder [
 ]
 
 { #category : 'accessing' }
-StSettingsMainPresenter >> addSearchResultFrom: colOfStSettingNode [
+StSettingsBrowser >> addSearchResultFrom: colOfStSettingNode [
 
 	searchResult := colOfStSettingNode.
 	categoriesPresenter roots: colOfStSettingNode asOrderedCollection
 ]
 
 { #category : 'accessing' }
-StSettingsMainPresenter >> addSearchResultTabFrom: colOfStSettingNode [
+StSettingsBrowser >> addSearchResultTabFrom: colOfStSettingNode [
 
 	categoriesPresenter items: colOfStSettingNode asOrderedCollection
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> connectPresenters [ 
+StSettingsBrowser >> connectPresenters [ 
+
 	categoriesPresenter transmitTo: detailsPresenter
 ]
 
 { #category : 'transmission' }
-StSettingsMainPresenter >> defaultInputPort [ 
+StSettingsBrowser >> defaultInputPort [ 
 
-	^ SpListItemsPort newPresenter: detailsPresenter
-
+	^ (SpListItemsPort newPresenter: self) 
+		delegateTo: [ detailsPresenter ];
+		yourself
 ]
 
 { #category : 'layout' }
-StSettingsMainPresenter >> defaultLayout [
+StSettingsBrowser >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: buttonBarPresenter expand: false;
-		add: (SpPanedLayout newHorizontal
+		add: (SpPanedLayout newLeftToRight
 			positionOfSlider: 250;
 			add: (SpBoxLayout newTopToBottom
 				add: toolbarPresenter expand: false;
@@ -85,7 +87,7 @@ StSettingsMainPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> exportSettings [
+StSettingsBrowser >> exportSettings [
 	| nodes actions |
 
 	nodes := self settingsTree nodeList.
@@ -99,13 +101,13 @@ StSettingsMainPresenter >> exportSettings [
 ]
 
 { #category : 'accessing' }
-StSettingsMainPresenter >> exporter [
+StSettingsBrowser >> exporter [
 
 	^ exporter
 ]
 
 { #category : 'searching' }
-StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
+StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 
 	^ aStSettingNode hasParent
 		ifTrue: [ (self followPath: aStSettingNode parentNode in: aCollection) ]
@@ -114,14 +116,14 @@ StSettingsMainPresenter >> followPath: aStSettingNode in: aCollection [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> initialize [
+StSettingsBrowser >> initialize [
 
 	super initialize.
 	exporter := StSettingsExporter new
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> initializeButtonBar [
+StSettingsBrowser >> initializeButtonBar [
 
 	buttonBarPresenter := self newToolbar
 		displayMode: self application toolbarDisplayMode;
@@ -143,7 +145,7 @@ StSettingsMainPresenter >> initializeButtonBar [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> initializeFocus [
+StSettingsBrowser >> initializeFocus [
 
 	self focusOrder 
 		add: toolbarPresenter;
@@ -152,7 +154,7 @@ StSettingsMainPresenter >> initializeFocus [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> initializePresenters [
+StSettingsBrowser >> initializePresenters [
 
 	self addStyle: 'stSettingsBrowser'.
 
@@ -174,7 +176,7 @@ StSettingsMainPresenter >> initializePresenters [
 ]
 
 { #category : 'loading' }
-StSettingsMainPresenter >> loadSettings [
+StSettingsBrowser >> loadSettings [
 	"Load the settings from the system settings file, if exists"
 
 	self settingsTree settingsFileDirectory
@@ -185,7 +187,7 @@ StSettingsMainPresenter >> loadSettings [
 ]
 
 { #category : 'loading' }
-StSettingsMainPresenter >> loadSettingsFrom: aFileReference [ 
+StSettingsBrowser >> loadSettingsFrom: aFileReference [ 
 
 	self settingsTree persistence fileReference: aFileReference.
 	self settingsTree updateSettingNodes.
@@ -193,13 +195,13 @@ StSettingsMainPresenter >> loadSettingsFrom: aFileReference [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> pagePresenter [ 
+StSettingsBrowser >> pagePresenter [ 
 
 	^ detailsPresenter
 ]
 
 { #category : 'accessing' }
-StSettingsMainPresenter >> resetSearchResult [
+StSettingsBrowser >> resetSearchResult [
 
 	searchResult ifNil: [ ^ self ].
 	
@@ -208,13 +210,27 @@ StSettingsMainPresenter >> resetSearchResult [
 ]
 
 { #category : 'accessing' }
-StSettingsMainPresenter >> rootItems [
+StSettingsBrowser >> rootItems [
 
 	^ self sortNodes: self settingsTree treeRoots
 ]
 
+{ #category : 'accessing' }
+StSettingsBrowser >> select: aString [
+	| node path |
+
+	node := self settingsTree nodeList 
+		detect: [ :each | each name = aString ]
+		ifNone: [ nil ].
+	node ifNil: [ ^ self ].
+	
+	path := categoriesPresenter selectionMode pathOf: node.
+		
+	categoriesPresenter selectPath: path scrollToSelection: true. 
+]
+
 { #category : 'execution' }
-StSettingsMainPresenter >> selectDialog: fileReferneces [
+StSettingsBrowser >> selectDialog: fileReferneces [
 
 	^ SpSelectDialog new
 		  title: 'Settings Browser Selector';
@@ -225,23 +241,14 @@ StSettingsMainPresenter >> selectDialog: fileReferneces [
 		  openModal
 ]
 
-{ #category : 'accessing' }
-StSettingsMainPresenter >> settingsTree [
-	"Answer the receiver's <StSettingsTree>, the settings model"
-
-	^ self application 
-		propertyAt: #settingsTree
-		ifAbsentPut: [ StSettingsTree new ]
-]
-
 { #category : 'private' }
-StSettingsMainPresenter >> sortNodes: aCollection [ 
+StSettingsBrowser >> sortNodes: aCollection [ 
 
 	^ aCollection sorted: #order ascending, #label ascending
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> updatePresenter [
+StSettingsBrowser >> updatePresenter [
 
 	categoriesPresenter 
 		roots: self rootItems;
@@ -249,7 +256,7 @@ StSettingsMainPresenter >> updatePresenter [
 ]
 
 { #category : 'initialization' }
-StSettingsMainPresenter >> windowTitle [ 
+StSettingsBrowser >> windowTitle [ 
 
 	^ 'Settings Browser'
 ]

@@ -19,7 +19,7 @@ StSettingsBrowserTest >> application [
 
 { #category : 'accessing' }
 StSettingsBrowserTest >> classToTest [
-	^ StSettingsMainPresenter
+	^ StSettingsBrowser
 ]
 
 { #category : 'running' }

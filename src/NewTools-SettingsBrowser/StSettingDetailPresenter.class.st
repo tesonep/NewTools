@@ -11,6 +11,14 @@ Class {
 	#tag : 'UI'
 }
 
+{ #category : 'initialization' }
+StSettingDetailPresenter >> asPath: aPath [
+	
+	aPath ifEmpty: [ ^ '' ].
+	
+	^ ('.' join: (aPath collect: #asString)), ':'
+]
+
 { #category : 'layout' }
 StSettingDetailPresenter >> defaultLayout [
 
@@ -29,11 +37,11 @@ StSettingDetailPresenter >> initializePresenters [
 { #category : 'initialization' }
 StSettingDetailPresenter >> newSettingPresenter: aNode [
 	
-	^ self newSettingPresenter: aNode children: aNode allChildren
+	^ self newSettingPresenter: aNode path: #() children: aNode allChildren
 ]
 
 { #category : 'initialization' }
-StSettingDetailPresenter >> newSettingPresenter: aNode children: children [
+StSettingDetailPresenter >> newSettingPresenter: aNode path: aPath children: children [
 	| general groups newSettingPresenter |
 
 	general := children reject: #hasChildren.
@@ -47,45 +55,57 @@ StSettingDetailPresenter >> newSettingPresenter: aNode children: children [
 				layout: (SpBoxLayout newVertical
 					vAlignStart;
 					in: [ :this | 
-						general ifNotEmpty: [
-							this add: (self newSettingSectionPresenter: self model children: general) ].
-						groups do: [ :each | 
+						this add: (self 
+							newSettingSectionPresenter: aNode 
+							path: aPath 
+							children: general).
+						groups withIndexDo: [ :each :index | 
 							"recursive, because we don't know :P"
-							this add: (self newSettingPresenter: each) ] ];
+							this add: (self 
+								newSettingPresenter: each 
+								path: (aPath copyWith: index) 
+								children: each allChildren) ] ];
 					yourself);
 				yourself ]
 		ifFalse: [
-			self newSettingSectionPresenter: aNode children: general ].
+			self newSettingSectionPresenter: aNode path: aPath children: general ].
 
 	^ newSettingPresenter
 ]
 
-{ #category : 'Protocol (initialization) - 5 selector(s)' }
-StSettingDetailPresenter >> newSettingSectionPresenter: aNode children: aCollection [
+{ #category : 'initialization' }
+StSettingDetailPresenter >> newSettingSectionPresenter: aNode path: aPath children: aCollection [
 	| newSettingPresenter |
 
 	newSettingPresenter := self newPresenter 
 		addStyle: 'settingPanel';
+		addStyle: ('settingPanelLevel', aPath size asString);
 		layout: (SpBoxLayout newTopToBottom
 			vAlignStart;
 			yourself);
 		yourself.
 		
+	"Add a header"
+	newSettingPresenter layout add: (self newPresenter
+		addStyle: 'settingHeader';
+		addStyle: ('settingHeaderLevel', aPath size asString);
+		layout: (SpBoxLayout newHorizontal 
+			borderWidth: 3;
+			spacing: 3;
+			add: (self asPath: aPath) expand: false;
+			add: (aNode asPresenterOn: self);
+			yourself);
+		yourself).
+	
+	"now all settings"
 	aCollection ifNotEmpty: [
-		"Add a header"
-		newSettingPresenter layout add: (self newPresenter
-			addStyle: 'settingHeader';
-			layout: (SpBoxLayout newHorizontal 
-				add: (aNode asPresenterOn: self);
-				yourself);
-			yourself).
-		"now all settings"
-		(aCollection sorted: #order ascending, #name ascending) do: [ :eachNode |
+		(aCollection sorted: #order ascending, #name ascending) withIndexDo: [ :eachNode :index |
 			| presenter |
 			presenter := eachNode asPresenterOn: self.
 			newSettingPresenter layout 
 				add: (SpBoxLayout newLeftToRight
 					borderWidth: 3;
+					spacing: 3;
 					add:  presenter;
 					yourself)
 				expand: false ] ].
