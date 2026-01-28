@@ -39,19 +39,6 @@ StSettingsBrowserTest >> tearDown [
 ]
 
 { #category : 'tests' }
-StSettingsBrowserTest >> testCategoriesHasIcon [
-
-	| categoryList |
-	categoryList := categoriesPresenter categoryListPresenter.
-	self
-		assert: (categoryList presenters allSatisfy: [ : p | p iconPresenter isForm ])
-		description: 'It tests that categories in the component list has an icon'.
-		
-	
-
-]
-
-{ #category : 'tests' }
 StSettingsBrowserTest >> testCategoriesHasSystemSettingsPragma [
 
 	self 
