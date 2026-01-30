@@ -105,7 +105,7 @@ FLDebuggerStackSerializer >> vmInformationString [
 				  nextPutAll: ' - ';
 				  nextPutAll: OSPlatform current subtype asString;
 				  nextPutAll: ' - ';
-				  nextPutAll: Smalltalk os version asString;
+				  nextPutAll: OSPlatform current version asString;
 				  nextPutAll: ' - ';
 				  nextPutAll: Smalltalk vm version asString ]
 ]
