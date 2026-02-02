@@ -107,17 +107,17 @@ StRawInspectionPresenter >> initializePresenters [
 	self setAttributeTable
 ]
 
-{ #category : 'accessing' }
-StRawInspectionPresenter >> inspectorNodes [
-
-	^ self model allInspectorNodes
-]
-
 { #category : 'accessing - model' }
 StRawInspectionPresenter >> model: aModel [
 
 	super model: aModel.
 	self setAttributeTable
+]
+
+{ #category : 'accessing' }
+StRawInspectionPresenter >> modelInspectorNodes [
+
+	^ self model allModelInspectorNodes
 ]
 
 { #category : 'ports' }
@@ -189,7 +189,7 @@ StRawInspectionPresenter >> step [
 { #category : 'building' }
 StRawInspectionPresenter >> updatePresenter [
 
-	attributeTable roots: self inspectorNodes
+	attributeTable roots: self modelInspectorNodes
 ]
 
 { #category : 'building' }
