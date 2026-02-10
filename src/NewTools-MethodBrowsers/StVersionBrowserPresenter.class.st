@@ -91,7 +91,7 @@ StVersionBrowserPresenter >> buildChangeList [
 
 	rgMethod sourcePointer ifNil: [ ^ #(  ) ].
 
-	^ (SourceFileArray default changeRecordsFor: rgMethod) collectWithIndex: [ :c :i |
+	^ (SourcesManager current changeRecordsFor: rgMethod) collectWithIndex: [ :c :i |
 			  | rg |
 			  rg := c asRingDefinition.
 			  rg annotationNamed: #versionIndex put: i ]
