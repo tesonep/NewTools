@@ -71,7 +71,8 @@ StDirectoryTreePresenter >> expandPath: aFileLocator [
 
 	directoryTreePresenter selectPath: aPathForSpec scrollToSelection: true. "The Morphic `configureScrolling` is executed **AFTER** the desired scroll was configured from the `StDirectoryTreePresenter`. Furthermore, the `configureScrolling` uses the `desiredVisibleRow` which is always set to 1. This statement updates the desired visible row to the last visible index of whatever the selection is pointing to."
 
-	directoryTreePresenter verticalAlignment lastVisibleRowIndex ifNotNil: [ :index | directoryTreePresenter verticalAlignment desiredVisibleRow: index ]
+	directoryTreePresenter verticalAlignment lastVisibleRowIndex ifNotNil: [ :index |
+		directoryTreePresenter verticalAlignment desiredVisibleRow: index ]
 ]
 
 { #category : 'initialization' }

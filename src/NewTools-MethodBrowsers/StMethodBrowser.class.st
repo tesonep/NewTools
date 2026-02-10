@@ -455,7 +455,7 @@ StMethodBrowser >> installIconStylerFor: anItem [
 	
 	IconStyler withStaticStylers 
 		styleText: textPresenter 
-		withAst: anItem ast.
+		withAst: anItem ast
 ]
 
 { #category : 'private' }
