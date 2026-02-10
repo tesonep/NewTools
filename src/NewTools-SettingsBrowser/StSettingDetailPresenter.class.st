@@ -115,7 +115,7 @@ StSettingDetailPresenter >> newSettingSectionPresenter: aNode path: aPath childr
 
 { #category : 'initialization' }
 StSettingDetailPresenter >> updatePresenter [
-	| newSettingPresenter children general groups |
+	| newSettingPresenter |
 
 	self model ifNil: [ ^ self ].
 	
