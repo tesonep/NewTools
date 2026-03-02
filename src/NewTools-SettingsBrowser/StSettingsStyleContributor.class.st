@@ -46,13 +46,13 @@ StSettingsStyleContributor class >> styleSheetData [
 		Draw { #backgroundColor: EnvironmentColor(lightBackground) } ] ]'
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorForLevel: aNumber [
 
 	^ self headerColors at: aNumber + 1
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColors [
 
 	^ self isDarkTheme 
@@ -60,7 +60,7 @@ StSettingsStyleContributor >> headerColors [
 		ifFalse: [ self headerColorsForLightTheme ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorsForDarkTheme [
 	| baseColor |
 
@@ -75,7 +75,7 @@ StSettingsStyleContributor >> headerColorsForDarkTheme [
 	 }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - accessing' }
 StSettingsStyleContributor >> headerColorsForLightTheme [
 	| baseColor |
 
@@ -90,7 +90,7 @@ StSettingsStyleContributor >> headerColorsForLightTheme [
 	 }
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 StSettingsStyleContributor >> isDarkTheme [
 	
 	"hacky, but works"
