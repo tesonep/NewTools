@@ -33,14 +33,14 @@ StSettingsBrowser class >> defaultPreferredExtent [
 { #category : 'world menu' }
 StSettingsBrowser class >> menuSettingsBrowserCommandOn: aBuilder [
 	<worldMenu>
-
-	(aBuilder item: #'New Settings Browser')
-		parent: #NewToolsMenu;
-		label: 'New Settings Browser';
+		
+	(aBuilder item: #Settings)
+		parent: #Pharo;
+		order: 1;
+		iconName: #smallConfiguration;
 		action: [ (self newApplication: StPharoApplication current) open ];
-		iconName: self taskbarIconName;
-		help: 'New Settings Browser';
-		order: 3
+		keyText: 'o, s';
+		help: 'Opens a Settings Browser which allows you to alter many system settings.'
 ]
 
 { #category : 'accessing' }
