@@ -791,9 +791,7 @@ StDebugger >> forceSessionUpdate [
 StDebugger >> implementMissingMethod [
 
 	self debuggerClientModel implementMissingMethod.
-	self selectTopContext.
-	self flag: 'why do we need to give code the keyboard focus?'
-	"code takeKeyboardFocus"
+	self selectTopContext
 ]
 
 { #category : 'initialization' }
