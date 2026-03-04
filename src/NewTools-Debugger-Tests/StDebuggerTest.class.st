@@ -127,7 +127,9 @@ StDebuggerTest >> tearDown [
 			actionModel clear.
 			actionModel session ifNotNil: [ :s | s clear ] ] ].
 
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
+
 	StDebuggerObjectForTests
 		compile:
 		'haltingMethod <haltOrBreakpointForTesting> self halt. ^self'
