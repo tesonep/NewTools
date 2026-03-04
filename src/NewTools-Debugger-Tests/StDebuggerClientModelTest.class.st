@@ -226,11 +226,18 @@ StDebuggerClientModelTest >> tearDown [
 	debugger ifNotNil: [ debugger clear].
 	session ifNotNil: [ session clear ].
 	session := nil.
-	StDebuggerUsingSpecSelectorMock removeSelector: #testMethod.
-	StDebuggerUsingSpecSelectorMock removeSelector: #method.
-	StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod.
-	StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext.
-	StTestDebuggerProvider removeSelector: #foobar.
+	(StDebuggerUsingSpecSelectorMock includesSelector: #testMethod)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #testMethod ].
+	(StDebuggerUsingSpecSelectorMock includesSelector: #method)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #method ].
+	(StDebuggerUsingSpecSelectorMock includesSelector: #unclassifiedMethod)
+		ifTrue: [ StDebuggerUsingSpecSelectorMock removeSelector: #unclassifiedMethod ].
+
+	(StTestDebuggerProvider includesSelector: #buildDebuggerWithMissingClassContext)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #buildDebuggerWithMissingClassContext ].
+	(StTestDebuggerProvider includesSelector: #foobar)
+		ifTrue: [ StTestDebuggerProvider removeSelector: #foobar ].
+
 	StDebuggerClientModel shouldFilterStack: shouldFilterStack.
 	DebugSession contextModelClass: DebugContext.
 	self resetModifiedSourceCode.
