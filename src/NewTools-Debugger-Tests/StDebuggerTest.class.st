@@ -505,7 +505,7 @@ StDebuggerTest >> testCopyStackToClipboard [
 { #category : 'tests' }
 StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 
-	| dnuMessage method pcRangeForContext segments highlightSegment adapter |
+	| dnuMessage method pcRangeForContext segments highlightSegment adapter exception |
 	StDebuggerClientModel shouldFilterStack: false.
 	debugger := StTestDebuggerProvider new debuggerWithDNUContext.
 	debugger
@@ -517,16 +517,17 @@ StDebuggerTest >> testCreateMissingMethodWithUnfilteredStackUpdatesCodePane [
 	debugger code adapter buildWidget.
 	self assert:
 		debugger debuggerClientModel isInterruptedContextDoesNotUnderstand.
+	
+	exception := debugger debuggerClientModel contextPredicate exception.
 	self
-		assert: debugger interruptedContext receiver class
+		assert: exception receiver class
 		identicalTo: StTestDebuggerProvider.
-	dnuMessage := debugger debuggerClientModel contextPredicate exception
-		              message.
+	dnuMessage := exception message.
 
 	self assert: dnuMessage selector identicalTo: #foobar.
 
 	"stack is unfiltered. So the text shown should be the code from the DNU"
-	self assert: (debugger code text beginsWith: 'doesNotUnderstand:').
+	self assert: debugger code text equals: exception signalerContext method sourceCode.
 
 	"we create the missing method #foobar"
 	debugger implementMissingMethod.
