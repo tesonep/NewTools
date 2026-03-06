@@ -198,6 +198,7 @@ BaselineOfNewTools >> baseline: spec [
 
 						'NewTools-Debugger-Morphic'
 				    	'NewTools-Sindarin-Tools' 
+						'NewTools-Sindarin-Scripts'
 
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
