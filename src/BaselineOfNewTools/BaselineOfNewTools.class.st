@@ -107,7 +107,6 @@ BaselineOfNewTools >> baseline: spec [
 			package: 'NewTools-Sindarin-Commands';
 			package: 'NewTools-Sindarin-Commands-Tests' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
 			package: 'NewTools-Sindarin-Tools' with: [ spec requires: #( 'NewTools-Sindarin-Commands' 'Sindarin' ) ];
-			package: 'NewTools-Sindarin-Scripts' with: [ spec requires: #( 'NewTools-Sindarin-Tools') ];
 	
 			"package: 'NewTools-Sindarin-ProcessInspector' with: [ spec requires: #('NewTools-Sindarin-Commands' 'Sindarin') ];""Debugger Selector"
 			package: 'NewTools-DebuggerSelector' with: [ spec requires: #( 'NewTools-SpTextPresenterDecorators' ) ];
@@ -197,8 +196,7 @@ BaselineOfNewTools >> baseline: spec [
 					 	'NewTools-Debugger'
 
 						'NewTools-Debugger-Morphic'
-				    	'NewTools-Sindarin-Tools' 
-						'NewTools-Sindarin-Scripts'
+				    	'NewTools-Sindarin-Tools'
 
 					 	'NewTools-Sindarin-Commands'
 				    	'NewTools-Sindarin-Commands-Tests'
