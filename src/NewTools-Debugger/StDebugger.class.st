@@ -912,6 +912,12 @@ StDebugger >> initializeWindow: aWindowPresenter [
 	self initializeShortcuts: aWindowPresenter
 ]
 
+{ #category : 'accessing' }
+StDebugger >> inspector [
+
+	^ inspector
+]
+
 { #category : 'extensions' }
 StDebugger >> instantiateExtensionToolsPage: aToolClass [
 
