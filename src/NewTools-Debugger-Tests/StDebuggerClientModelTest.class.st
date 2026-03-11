@@ -284,12 +284,9 @@ StDebuggerClientModelTest >> testComputeInitialTopContext [
 
 { #category : 'tests - actions' }
 StDebuggerClientModelTest >> testCopyStackToClipboard [
+
 	debugActionModel copyStackToClipboard.
-	self
-		assert: Clipboard clipboardText string
-		equals:
-			(String
-				streamContents: [ :s | session interruptedContext shortDebugStackOn: s ])
+	self assert: Clipboard clipboardText string equals: session interruptedContext stackTraceString
 ]
 
 { #category : 'tests - actions' }

@@ -494,12 +494,10 @@ StDebuggerTest >> testContextUnchangedAfterStepOver [
 
 { #category : 'tests - actions' }
 StDebuggerTest >> testCopyStackToClipboard [
+
 	debugger := self debuggerOn: session.
 	debugger copyStackToClipboard.
-	self
-		assert: Clipboard clipboardText string
-		equals: (String streamContents: [ :s | 
-				 session interruptedContext shortDebugStackOn: s ])
+	self assert: Clipboard clipboardText string equals: session interruptedContext stackTraceString
 ]
 
 { #category : 'tests' }
