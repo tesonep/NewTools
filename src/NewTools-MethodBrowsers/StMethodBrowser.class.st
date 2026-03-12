@@ -128,6 +128,15 @@ StMethodBrowser class >> browseSendersOf: aSymbol [
 	^ self browse: (self sendersOf: aSymbol) asSendersOf: aSymbol
 ]
 
+{ #category : 'opening' }
+StMethodBrowser class >> browseSendersOfAll: aCollectionOfSymbols [
+
+	| methods |
+	methods := aCollectionOfSymbols flatCollect: [ :sym | self sendersOf: sym ].
+
+	^ self browse: methods asArray
+]
+
 { #category : 'private' }
 StMethodBrowser class >> implementorsOf: aSymbol [
 	"Do not use aSymbol implementors because it is a disguised global"
