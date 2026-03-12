@@ -101,6 +101,14 @@ StMethodBrowser class >> browseImplementorsOf: aSymbol [
 ]
 
 { #category : 'opening' }
+StMethodBrowser class >> browseImplementorsOfAll: aCollectionOfSymbols [
+
+	| methods |
+	methods := aCollectionOfSymbols flatCollect: [ :sym | self implementorsOf: sym ].
+	^ self browse: methods asArray
+]
+
+{ #category : 'opening' }
 StMethodBrowser class >> browseReferencesOf: aClassName [
 	"Special version that sets the correct refreshing block for senders"
 
