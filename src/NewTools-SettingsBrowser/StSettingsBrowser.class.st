@@ -106,6 +106,22 @@ StSettingsBrowser >> exporter [
 	^ exporter
 ]
 
+{ #category : 'private' }
+StSettingsBrowser >> findPathOf: pathCollection on: itemCollection [
+	| first node |
+	
+	pathCollection ifEmpty: [ ^ #() ].
+	
+	first := pathCollection first.
+	
+	node := itemCollection detect: [ :each | each name = first ] ifNone: [ nil ].
+	node ifNil: [ ^ self ].
+	
+	^ { node }, (self 
+		findPathOf: pathCollection allButFirst
+		on: node allChildren)
+]
+
 { #category : 'searching' }
 StSettingsBrowser >> followPath: aStSettingNode in: aCollection [
 
@@ -239,6 +255,21 @@ StSettingsBrowser >> selectDialog: fileReferneces [
 		  display: [ :each | each basename ];
 		  displayIcon: [ :each | self iconNamed: each systemIconName ];
 		  openModal
+]
+
+{ #category : 'accessing' }
+StSettingsBrowser >> selectPath: aCollection [
+	"selects a path of the settings tree (by name).
+	 e.g. aSettingsBrowser selectPath: #(tools epicea)"
+	
+	| pathItems |
+
+	pathItems := self findPathOf: aCollection on: categoriesPresenter roots.
+	pathItems isEmptyOrNil ifTrue: [ ^ self ].
+	
+	categoriesPresenter
+		selectPathByItems: pathItems 
+		scrollToSelection: true
 ]
 
 { #category : 'private' }
