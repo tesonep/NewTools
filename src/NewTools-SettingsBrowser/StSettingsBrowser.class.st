@@ -115,7 +115,7 @@ StSettingsBrowser >> findPathOf: pathCollection on: itemCollection [
 	first := pathCollection first.
 	
 	node := itemCollection detect: [ :each | each name = first ] ifNone: [ nil ].
-	node ifNil: [ ^ self ].
+	node ifNil: [ ^ #() ].
 	
 	^ { node }, (self 
 		findPathOf: pathCollection allButFirst
